@@ -33,30 +33,30 @@ From here onwards, the directory created in step one will be referred to as the 
 
 2. Make the necessary changes to the connection configuration file as shown below:
 
-  ```YAML
-  type: ORACLE
-  host: #Enter the hostname of the Oracle server
-  port: #Enter the port number to connect to the server
-  username: #Enter the username to connect to server
-  credential-store: #Edit the following configurations if you wish to specify the username and password in a credential store instead of specifying the user details in plain text in the configuration file
-    type: PKCS12 | JKS | JCEKS
-    path: #Enter the location of the key-store
-    Key-prefix: #Create entries in the credential store for username and password configs using a prefix and specify the prefix here
-    Password: #Entering a keystore password here is optional;
-    #however, if you do not specify the keystore password here,
-    #you must use the UUID from your license file as the keystore password.
-  max-connections: #Enter the maximum number of connections replicant would use to write data to the destination Oracle system.
-  Service-name: #Enter the service name that contains the schema which is going to be replicated
-  Stage: The ```shared``` directory must be specified in the stage configuration as below
-    a.	type: SHARED_FS
-    b.	root-dir: #Enter the path of the Shared Directory
-  max-retries: #Enter the maximum number of time an operation will be re-attempted when an operation fails
-  retry-wait-duration-ms: #Enter the duration, in milliseconds, replicant should wait before performing then next retry of a failed operation
-  charset [20.12.04.4]: #Enter the charset value in the source database connection configuration
+    ```YAML
+    type: ORACLE
+    host: #Enter the hostname of the Oracle server
+    port: #Enter the port number to connect to the server
+    username: #Enter the username to connect to server
+    credential-store: #Edit the following configurations if you wish to specify the username and password in a credential store instead of specifying the user details in plain text in the configuration file
+      type: PKCS12 | JKS | JCEKS
+      path: #Enter the location of the key-store
+      Key-prefix: #Create entries in the credential store for username and password configs using a prefix and specify the prefix here
+      Password: #Entering a keystore password here is optional;
+      #however, if you do not specify the keystore password here,
+      #you must use the UUID from your license file as the keystore password.
+    max-connections: #Enter the maximum number of connections replicant would use to write data to the destination Oracle system.
+    Service-name: #Enter the service name that contains the schema which is going to be replicated
+    Stage: The ```shared``` directory must be specified in the stage configuration as below
+      a.	type: SHARED_FS
+      b.	root-dir: #Enter the path of the Shared Directory
+    max-retries: #Enter the maximum number of time an operation will be re-attempted when an operation fails
+    retry-wait-duration-ms: #Enter the duration, in milliseconds, replicant should wait before performing then next retry of a failed operation
+    charset [20.12.04.4]: #Enter the charset value in the source database connection configuration
 
-  ```
+    ```
 
-## III. Setup Applier Configuration
+## IV. Setup Applier Configuration
 
 1. From ```HOME```, navigate to the Applier Configuration File:
    ```BASH
