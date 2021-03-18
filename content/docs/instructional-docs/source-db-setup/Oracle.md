@@ -147,23 +147,26 @@ In the proceeding steps, grant the instructed permissions to ```rep-usr```
     vi conf/conn/oracle.yaml
     ```
 
-2. Make the necessary changes shown below:
+2. Use the following sample configuration file as a guide to determine and make the necessary changes for your Replication process:
 
     ```YAML
     type: ORACLE
-    host: #Enter the hostname of the Oracle server
-    port: #Enter the port number to connect to the server
-    service-name: #Enter the service name that contains the schema to be replicated
-    username: #Enter the username to connect to the server
-    password: # Enter the user password
-    credential-store: #Edit the following configurations if you wish to specify the username and password in a credential store
-      type: PKCS12 | JKS | JCEKS
-      path: #Enter the location of the key-store
+    host: localhost #Replace localhost with your oracle host name
+    port: 1521#Enter the port number to connect to the server
+    service-name: ORCLCDB.localdomain #Replace ORCLDB.localdomain with the service name that contains the schema you will be replicated
+    username: 'REPLICANT' #Replace REPLICANT with your username of the user that connects to your oracle server
+    password: 'Replicant#123' #Replace Replicant#123 with the your user's password
+
+    ##You can specify the username and password of your user that is connected to the Oracle Server either through the credential store shown below or the username and password parameters shown above, but not through both.
+
+
+    credential-store:
+      type: PKCS12 | JKS | JCEKS #Enter the type of your credential store
+      path: full/path/to/script/file #Replace full/path/to/script/file with the path to your credential file
       Key-prefix: #Create entries in the credential store for username and password configs using a prefix and specify the prefix here
-      Password: #Entering a keystore password here is optional;
-      #however, if you do not specify the keystore password here,
-      #you must use the UUID from your license file as the keystore password.
-    max-connections: #Enter the maximum number of connections replicant can open in Oracle DB
+      Password: 'Replicant#123' #Replace Replicant#123 with a keystore password of your choice. You may leave this field empty in which case the UUiD from your license file will serve as the keystore password
+
+    max-connections: 30 #Depending on your replication needs, you can choose to replace 30 with a different maximum number of connections replicant can open in Oracle DB
     ```
 
 ## VI. Setup Extractor Configuration
@@ -186,91 +189,27 @@ For real-time replication, you must create a heartbeat table in the source Oracl
 4. Under the Realtime Section, make the necessary changes as follows
      ```YAML
      heartbeat:
-       enable: #Set to true
-       schema: #Enter the schema of the data being replicated
-       table-name [20.09.14.3]: #HB table name only if dif
-       column-name [20.10.07.9]: #HB column name only if dif
-       interval-ms: 10000 #Enter the interval at which the heartbeat table should be updated
-       #with the latest timestamp (milliseconds since epoch) by replicant.
-       fetch-interval-s: #Enter the interval in seconds after which Replicant will try to fetch the CDC log
+       enable: true #Leave this as true
+       schema: "REPLICANT" #Replace REPLCIANT with the schema name of the data being Replicated
+       table-name [20.09.14.3]: replicate_io_cdc_heartbeat #Replace replicate_io_cdc_heartbeat with your heartbeat table's name if you have named it something different
+       column-name [20.10.07.9]: timestamp #Replace timestamp with
+       interval-ms: 10000 #Depending on your replication needs, you can choose to change the default 10000 millisecond interval after which the heartbeat table will be updated
      ```
 
 
-Editing the rest of the extractor configurations is optional. Replicant will run with the default configurations. However, if you need to specify certain configurations for certain specific or change a few settings to enhance Replicant's performance you must edit the extractor configurations with the proceeding steps.
-
-
-
-5. For changes is Replicant's data snapshot, make the necessary adjustments as shown below:
+5. Depending on your replication needs, you can choose to edit the configurations of specific tables in Replicant's data snapshot, by making adjustments as necessary in the following parameters:
 
       ```YAML
-      threads: #Enter the maximum number of threads you would like replicant to use
-      #for data extraction
+      per-table-config:
+        i.	schema: <schema_name> #Replace <schema_name> with the name of the schema containing the data being replicated
+        ii.	tables: #Do not change
 
-      fetch-size-rows: #Enter the maximum number of records/documents you would like Replicant
-      #to fetch at once from the Oracle Database
+        <table1>: #Replace <table1> with the name of the table you want to specify configurations for
+            row-identifier-key: [column1, column2] #Replace [column1, column2] with a list of columns which uniquely identify the rows you need to specify for in this table  
+        <table2>: #Replace <table1> with the name of the table you want to specify configurations for
+            row-identifier-key: [column3, column4] #Replace [column3, column4] with a list of columns which uniquely identify the rows you need to specify for in this table  
 
-      lock: #You can edit the following settings to enable and configure object locking.
-      #No object locking is done by default.
-        enable: false
-        scope: table
-        force: false
-        timeout-sec: 5
-
-      min-job-size-rows: #Enter the minimum number of tables/collections you would like
-      #each replication job to contain
-
-      max-jobs-per-chunk: #Enter the maximum number of jobs created per
-      #source table/collection
-
-      split-key: #Edit this configuration to split the table/collection into
-      #multiple jobs in order to do parallel extraction
-
-      split-method: #Specify which of the two split methods, RANGE or MODULO, Replicant will use
-
-      fetch-PK: #what does this do?
-
-      fetch-UK: #what does this do?
-
-      fetch-FK: #what does this do?
-
-      fetch-Indexes: #fetch (and replicant) indexes for tables. (By default, this is false)
-
-      fetch-user-roles: #fetch (and replicant) user/roles. (By default, it is true)
-
-      fetch-schemas-from-system-tables: #Use system tables to fetch schema information
-
-      per-table-config: #Use this section if you want to override certain configuration in specific tables
-        i.	schema: <shema_name>
-        ii.	tables:
-
-        <table_name>:
-          a.	max-jobs-per-chunk: #Use this to control intra-table parallelism.
-          #Set it to 1 if there is no split-key candidate in a given collection/table
-          b.	row-identifier-key: #Enter a list of columns which uniquely
-          #identify a row in this table
-          c.	extraction-priority: # Enter the priority for scheduling the extraction
-          #of a table. Higher value is higher priority
-
-
-      ```
-6. For changes in Real-Time replication, make the necessary adjustments as shown below:
-
-      ```YAML
-      threads: #Enter the maximum number of threads to be used by replicant
-      #for real-time extraction
-
-      fetch-size-rows: #Enter the number of records/documents
-      #Replicant should fetch at one time from Oracle
-
-      fetch-duration-per-extractor-slot-s: #Specify the number of seconds a
-      #thread should continue extraction from a given replication channel/slot
-
-      start-position [20.09.14.1]: #Edit the configurations below to specify
-      #the log position from where replication should begin for real-time mode
-
-        start-scn: #Enter the scn from which replication should start
-
-        idempotent-replay [20.09.14.1]: #Enter one of the three possible values: ALWAYS/ NONE/ NEVER
+        ##Continue listing all the tables you would like to specify for in the same format as the example tables above
 
       ```
 
@@ -286,7 +225,7 @@ Editing the rest of the extractor configurations is optional. Replicant will run
 2. Make the necessary changes as shown below:
     ```YAML
     allow:
-      schema: #Specify the source database schema that needs to be replicated. Each schema must have a separate entry
+      schema: "REPLICANT" #Specify the source database schema that needs to be replicated. Each schema must have a separate entry
       types: [TABLE]
       allow:
         <table_name>: #Specify the collection name; each collection within the database must be a separate entry
