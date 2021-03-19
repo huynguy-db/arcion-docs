@@ -19,38 +19,28 @@ Title: "Additional Replicant Configurations"
 
 ## Statistics Configuration
 
+Replicant automatically creates a table with the name replicate_io_replication_statistics_history to log the full history of inserts/updates/deletes/upserts across all replicant jobs. The configuration for the statistcs log can be altered if necessary using the proceeding steps.
+
 1. Locate the sample statistics configuration file
     ```BASH
       cd conf/statistics/statistics.yaml
     ```
 
-Replicant provides a full statistical history of an ongoing replication. This configuration is used to set it up. A table with the name replicate_io_replication_statistics_history is created by replicant to log the full history of inserts/updates/deletes/upserts across all replicant jobs with following details. Each successful write on a target table has a log entry in this table in the following format.
-	replication_id
-	catalog_name
-	schema_name
-	Table_name
-	Snapshot_start_range
-	Snapshot_end_range
-	Start_time
-	End_time
-	Insert_count
-	Update_count
-	Upsert_count
-	Delete_count
-	Elapsed_time_sec
-	replicate_lag [20.10.07.10]
-	total_lag [20.10.07.10]
+2. Use the following sample configuration file as a guide to determine and make the necessary changes for your replication process:
 
-1.	enable: enable/disable statistics logging
-2.	purge-statistics: Configuration to specify purge rules for the statistics history
-a.	enable: enable purging of replication statistics history.
-b.	purge-stats-before-days: Number of days to keep the stats. E.g. If set to 30 then replicant will keep the history for the last 30 days.
-3.	storage [20.10.07.16]: Storage configuration for statistics.
-a.	stats-archive-type: Type of stats archive. Allowed values are METADATA_DB(stats will be stored in metadata DB), FILE_SYSTEM(stats will be stored in a file), DST_DB(stats will be stored in destination DB).
-b.	storage-location: Directory location where statistics files will be stored. Should be used only when stats-archive-type is FILE_SYSTEM
-c.	format: The format of statistics file. Allowed values are CSV and JSON.
-d.	catalog [20.12.04.2]: Catalog in which statistics will be stored when stats-archive-type is DST_DB.
-e.	schema [20.12.04.2]: Schema in which statistics will be stored when stats-archive-type is DST_DB.
+    ```YAML
+    enable: true #Change this to false only if you want to disable statistics logging
+    purge-statistics:
+      enable: true #Change this to false only if you want to disable purging of replication statistics history
+      purge-stats-before-days: 30 #You can increase or decrease the number of days the stats history is stored
+      purge-stats-interval-iterations: 100
+    storage:
+      stats-archive-type:  METADATA_DB #stats-archive-type can be  METADATA_DB, FILE_SYSTEM, DST_DB
+      storage-location: /path/to/storage-location #Should be used only when stats-archive-type is FILE_SYSTEM
+      format: CSV #format can be CSV, JSON. Default is CSV. Should be used only when stats-archive-type is FILE_SYSTEM
+      catalog: "io" #Should be used only when stats-archive-type is DST_DB
+      schema: "replicate" #Should be used only when stats-archive-type is DST_DB
+    ```
 
 
 ## Notification Configuration
@@ -59,66 +49,70 @@ e.	schema [20.12.04.2]: Schema in which statistics will be stored when stats-arc
     ```BASH
       cd conf/notification/notification.yaml
     ```
-2. For mail-alerts, make the necessary changes as follows:
+2. For mail-alerts, you make the necessary changes as follows:
 
-    ```BASH
+    ```YAML
     mail-alert:
-      enable: true/false
-      smtp-host: hostname
-      smtp-port: port
+      enable: true/false #Set to true if you want to enable email notifications
+      smtp-host: hostname #replace hostname with your smtp host name
+      smtp-port: port #replace port with your smtp port
       authentication:
-      enable: required for gmail/yahoo or other authenticated services
-      protocol: TLS/SSL. Note port for TLS and SSL are different
-      sender-username: To be used if username is different from sender-email
-      sender-email: <email-id>
-      sender-password: <password>
-      receiver-email: [<email_id1>,<email_id2>]
-      channels: alert channels to be monitored
-      subject-prefix: Prefix string in subject for mail notification
+      enable: #required for gmail/yahoo or other authenticated services
+      protocol: TLS/SSL. #Note port for TLS and SSL are different
+      sender-username: #To be used if username is different from sender-email
+      sender-email: <email-id> #Replace <email-id> with your email ID
+      sender-password: <password> #Replace <password? with the sender password
+      receiver-email: [<email_id1>,<email_id2>] #Replace [<email_id1>,<email_id2>] with a list of all the email IDs that will receive the notification
+      channels: #alert channels to be monitored
+      subject-prefix: #Prefix string in subject for mail notification
 
     mail-alerts [20.08.13.9]: Allows to specify multiple mail-alert configs as a list
-      enable: true/false
-      smtp-host: hostname
-      smtp-port: port
+      enable: true/false #Set to true if you want to enable email notifications
+      smtp-host: hostname #replace hostname with your smtp host name
+      smtp-port: port #replace port with your smtp port
       authentication:
-      enable: required for gmail/yahoo or other authenticated services
-      protocol: TLS/SSL. Note port for TLS and SSL are different
-      sender-username: To be used if username is different from sender-email
-      sender-email: <email-id>
-      sender-password: <password>
-      receiver-email: [<email_id1>,<email_id2>]
-      channels: alert channels to be monitored
-      subject-prefix: Prefix string in subject for mail notification
+      enable: #required for gmail/yahoo or other authenticated services
+      protocol: TLS/SSL. #Note port for TLS and SSL are different
+      sender-username: #To be used if username is different from sender-email
+      sender-email: <email-id> #Replace <email-id> with your email ID
+      sender-password: <password> #Replace <password? with the sender password
+      receiver-email: [<email_id1>,<email_id2>] #Replace [<email_id1>,<email_id2>] with a list of all the email IDs that will receive the notification
+      channels: #alert channels to be monitored
+      subject-prefix: #Prefix string in subject for mail notification
+      ```
 
 3. For script-alerts, make the necessary changes as follows:   
 
-    ```BASH
+    ```YAML
     script-alert:
-      enable: true/false.
-      script: full path to the script file
-      output-file: full path to the file where err/output of script will be written to
-      channels: alert channels to be monitored
-      alert-repetitively: true/false
+      enable: true/false #Set to true to enable script-alerts
+      script: /full/path/to/script_file #Replace /full/path/to/script_file with the path to the script file
+      output-file: /full/path/to/output/script/file #Replace /full/path/to/output/script/file with the path of the file where the output of the script will be written to
+      channels: alert channels to be monitored #Enter the channels to monitor
+      alert-repetitively: true/false #Set to true to send multiple alerts of the same job
     ```
 
 
 
 
 4. For lag-notifications, make the necessary changes as follows:
-    ```BASH
-    enable: true/false. Send notification if lag falls below threshold-s and stabilizes under stable-time-out-s. The global lag (across all replicant nodes in case of distributed replication) is computed every check-interval-s second.
-    threshold-ms:
-    stable-time-out-s:
+    ```YAML
+    enable: true/false. #Set this to true to send a notification if the lag falls below threshold-s and stabilizes under stable-time-out-s
+    threshold-ms: 10000 #Set the threshold-s here
+    stable-time-out-s: 10000 #Set the stable-time-out-s here
     ```
+
 5. For multiple mail alerts, specify the configurations as shown below:
-    ```BASH
-    Multiple mail alerts can be specified as shown below
+    ```YAML
     mail-alerts:  
-    - enable: true
-      receiver-email: ['replicant1@gmail.com']
+    - enable: true #Set this to true to enable multiple mail alerts
+      receiver-email: ['replicant1@gmail.com'] #Replace ['replicant1@gmail.com'] with the receiver email ID
       .
       .
-      channels: [GENERAL]
+      channels: [GENERAL] #Replace [GENERAL] with the channel
+
+      ##Continue listing receiver emails using the same format as shown both above and below, changing hte parameters as necessary
+
     - enable: true
       receiver-email: ['replicant2@gmail.com']
       .
@@ -132,10 +126,10 @@ e.	schema [20.12.04.2]: Schema in which statistics will be stored when stats-arc
 ## Distribution Configuration
 
 1. To distribute the nodes for data replication in Replicant, make the necessary changes as follows:
-    ```BASH
+    ```YAML
     group:
-      id: Name of the logical replication group
-      leader: Name of the replicant node acting as leader
-      workers: Names of all the slave replicant nodes
+      id: exID #Replace exID with the mame of the logical replication group
+      leader: node1 # Replace node1 with the name of the replicant node acting as leader
+      workers: node2, node3... #Replace node2, node3... with a list of the names of all the slave replicant nodes
 
     ```

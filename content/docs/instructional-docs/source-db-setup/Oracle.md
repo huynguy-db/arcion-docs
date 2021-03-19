@@ -3,7 +3,7 @@ title: Oracle
 ---
 
 # Source: Oracle
-**The first four steps (I-IV) are to prepare the Oracle Database for replication. The remaining steps (V-VII) are to configure Replicant.**
+**The first four steps (I-IV) are to prepare the Oracle Database for replication and must be executed in an Oracle client. The remaining steps (V-VII) are to configure Replicant.**
 
 ## I. Setup Oracle Driver
 
@@ -20,7 +20,7 @@ title: Oracle
        QUOTA unlimited on <user-defined-tablespace>
        TEMPORARY TABLESPACE TEMP;
     ```
-From here on, the newly created user will be refenced as ```rep-usr```, but you may name the user anything you like.
+From here on, the newly created user will be referenced as ```rep-usr```, but you may name the user anything you like.
 
 2. Provide ```rep-usr``` the permission to create a session
     ```SQL
@@ -147,26 +147,19 @@ In the proceeding steps, grant the instructed permissions to ```rep-usr```
     vi conf/conn/oracle.yaml
     ```
 
-2. Use the following sample configuration file as a guide to determine and make the necessary changes for your Replication process:
+2. Make the necessary changes as follows:
 
     ```YAML
     type: ORACLE
+
     host: localhost #Replace localhost with your oracle host name
-    port: 1521#Enter the port number to connect to the server
-    service-name: ORCLCDB.localdomain #Replace ORCLDB.localdomain with the service name that contains the schema you will be replicated
+    port: 1521 #Replace the default port number 1521 if needed
+    service-name: IO #Replace IO with the service name that contains the schema you will be replicated
+
     username: 'REPLICANT' #Replace REPLICANT with your username of the user that connects to your oracle server
     password: 'Replicant#123' #Replace Replicant#123 with the your user's password
 
-    ##You can specify the username and password of your user that is connected to the Oracle Server either through the credential store shown below or the username and password parameters shown above, but not through both.
-
-
-    credential-store:
-      type: PKCS12 | JKS | JCEKS #Enter the type of your credential store
-      path: full/path/to/script/file #Replace full/path/to/script/file with the path to your credential file
-      Key-prefix: #Create entries in the credential store for username and password configs using a prefix and specify the prefix here
-      Password: 'Replicant#123' #Replace Replicant#123 with a keystore password of your choice. You may leave this field empty in which case the UUiD from your license file will serve as the keystore password
-
-    max-connections: 30 #Depending on your replication needs, you can choose to replace 30 with a different maximum number of connections replicant can open in Oracle DB
+    max-connections: 30 #Maximum number of connections replicant can open in Oracle
     ```
 
 ## VI. Setup Extractor Configuration
@@ -189,30 +182,11 @@ For real-time replication, you must create a heartbeat table in the source Oracl
 4. Under the Realtime Section, make the necessary changes as follows
      ```YAML
      heartbeat:
-       enable: true #Leave this as true
-       schema: "REPLICANT" #Replace REPLCIANT with the schema name of the data being Replicated
-       table-name [20.09.14.3]: replicate_io_cdc_heartbeat #Replace replicate_io_cdc_heartbeat with your heartbeat table's name if you have named it something different
-       column-name [20.10.07.9]: timestamp #Replace timestamp with
-       interval-ms: 10000 #Depending on your replication needs, you can choose to change the default 10000 millisecond interval after which the heartbeat table will be updated
+       enable: true
+       schema: "REPLICANT" #Replace REPLCIANT with your schema name
+       table-name [20.09.14.3]: replicate_io_cdc_heartbeat #Replace replicate_io_cdc_heartbeat with your heartbeat table's name if applicable
+       column-name [20.10.07.9]: timestamp #Replace timestamp with your heartbeat table's column name if applicable
      ```
-
-
-5. Depending on your replication needs, you can choose to edit the configurations of specific tables in Replicant's data snapshot, by making adjustments as necessary in the following parameters:
-
-      ```YAML
-      per-table-config:
-        i.	schema: <schema_name> #Replace <schema_name> with the name of the schema containing the data being replicated
-        ii.	tables: #Do not change
-
-        <table1>: #Replace <table1> with the name of the table you want to specify configurations for
-            row-identifier-key: [column1, column2] #Replace [column1, column2] with a list of columns which uniquely identify the rows you need to specify for in this table  
-        <table2>: #Replace <table1> with the name of the table you want to specify configurations for
-            row-identifier-key: [column3, column4] #Replace [column3, column4] with a list of columns which uniquely identify the rows you need to specify for in this table  
-
-        ##Continue listing all the tables you would like to specify for in the same format as the example tables above
-
-      ```
-
 
 
 ## VII. Setup Filter Configuration
@@ -225,21 +199,21 @@ For real-time replication, you must create a heartbeat table in the source Oracl
 2. Make the necessary changes as shown below:
     ```YAML
     allow:
-      schema: "REPLICANT" #Specify the source database schema that needs to be replicated. Each schema must have a separate entry
-      types: [TABLE]
-      allow:
-        <table_name>: #Specify the collection name; each collection within the database must be a separate entry
-          allow: [column1, column2] #Enter a list of the columns which you want to replicate from this table; if you do not specify, all columns will be replicated
-          conditions: #Enter the predicate that you want Replicant to use while extracting data from Oracle
-          src-conditions: #If the target systems has a different column name for the column the above filtering condition is applied to,
-            #specify the same filtering condition in both column names in src-conditions and dst-conditions
-            #for the source and target systems, respectively
-          dst-conditions: #As explained in src-conditions
-          allow-update-any [20.05.12.3]: #only applicable to real-time replication;
-            #Specify a list of columns here if you want Replicant to only publish the updated operations in this table
-            #when any of those columns are found modified
-          allow-update-all [20.05.12.3]: #only applicable to real-time replication;
-            #Specify a list of columns here if you want Replicant to only publish the updated operations in this table
-            #when all of those columns are found modified
+      schema: "REPLICANT" #Replace REPLICANT with the name of your schema
+      types: [TABLE] #Enter the applicable object type: TABLE or VIEW or TABLE,VIEW
 
+      ##Below, you can specify which tables within the schema will be replicated. If not specified, all tables will be replicated.
+
+      allow:
+        Orders: #Replace Orders with the name of the table you want to replicate
+          #The parameters below are optional
+          allow: [column1, column2] #You may replace column1, column2 with a list of specific columns within this table you want to replicate.
+          #To replicate all columns in this table, remove this configuration
+          conditions: "O_ORDERKEY < 5000" #Enter the predicate that you want to apply during replication
+
+        Customers: #Replace Customers with the name of the table you want to replicate
+          #The parameters below are optional
+          block: [column1, column2] #You may replace column1, column2 with a list of columns to blacklist within this table;
+          #all other columns will be allowed
+          conditions: "C_CUSTKEY < 5000" #Enter the predicate that you want to apply during replication
     ```
