@@ -5,7 +5,7 @@ Title: Cluster Manager Setup
 
 # Cluster Manager Setup
 
-## I. Initialize CM
+## I. Initialize Cluster Manager
 
 1. Initialize Cluster Manager with the following command:
     ```BASH
@@ -13,7 +13,7 @@ Title: Cluster Manager Setup
     ```
 **Note: Run this command only once to clear all existing statistics**
 
-## II. Start CM
+## II. Start Cluster Manager
 
 1. Run the following command in every host you want to run Cluster Manager in:
     ```BASH
@@ -22,68 +22,61 @@ Title: Cluster Manager Setup
 
 ## III. Add Jobs
 
-1. Add a job to CM:
-    ```BASH
-    ./bin/replicant-cluster-manager alter-cluster --metadata conf/metadata/oracle.yaml --jobs conf/jobs/jobs.yaml
-    ```
-## IV. Configure Jobs
 
 1. Navigate to the sample job configuration file
     ```BASH
-    vi <CM_home_dir>/conf/jobs/jobs.yaml
+    vi $CM_HOME_DIR/conf/jobs/jobs.yaml
     ```
-2. Edit the following job configurations as necessary:
-    ```BASH
+
+2. Edit the following job configuration as necessary:
+    ```YAML
     add-jobs:
-      job-command:
-      job-command-list:
-      replicant-id: ##Specify the replicant id for the replicant job using the --id argument. If --id has not been used, “default” should be specified.
-      replicant-group: ##Enter the replicant group specified for the replicant job in the distribution config. If it is not a distributed job, this field can be left empty
-      host-affinity: ##Enter the host-id specified in the start-cluster command
-
-    restart-jobs:
-      replicant-id:
-      replicant-group:
-
-    resume-jobs:
-      replicant-id:
-      replicant-group:
-
-    stop-jobs:
-      replicant-id:
-      replicant-group:
-
-    remove-jobs:
-      replicant-id:
-      replicant-group:
-
-    alter-host-affinity-for-jobs:
-      replicant-id:
-      replicant-group:
-      host-affinity:
-
+      job-command: "Enter the command you use to run Replicant"
+      replicant-id: "Enter the value pf ```--id``` from the job command"
+      replicant-group: "Enter the group id specified in Replicant's distribution configuration" ##Only applicable is using distributed replication
+      host-affinity: "Enter the host-id of Cluster Manager"
     ```
 
+3. Add the job:
+    ```BASH
+    ./bin/replicant-cluster-manager alter-cluster --metadata conf/metadata/oracle.yaml --jobs conf/jobs/jobs.yaml
+    ```
 
-## V. Stopping Job(s)
+## Managing Jobs
+Using the job configuration file, the following operations can be performed on a previously added job in Cluster Manager
 
-To stop a job, navigate to the jobs configuration file (check step 4.1) and under the ```stop-jobs``` section, enter the ```replicant-id``` and ```replicant-group``` of the job you want to stop.
+* Stop a job
+  ```YAML
+  stop-jobs:
+    replicant-id:
+    replicant-group:
+  ```
+* Restart a job
+  ```YAML
+  restart-jobs:
+    replicant-id:
+    replicant-group:
+  ```
+* Resume a job
+  ```YAML
+  resume-jobs:
+    replicant-id:
+    replicant-group:
+  ```
+* Remove a job
+  ```YAML
+  remove-jobs:
+    replicant-id:
+    replicant-group:
+  ```
+* Change host affinity for a job
+  ```YAML
+  alter-host-affinity-for-jobs:
+    replicant-id:
+    replicant-group:
+    host-affinity:
+  ```
 
-## VI. Resuming Job(s)
-
-To resume a job, navigate to the jobs configuration file (check step 4.1) and under the ```resume-jobs``` section, enter the ```replicant-id``` and ```replicant-group``` of the job you want to resume.
-
-## VII. Restarting Job(s)
-
-To restart a job, navigate to the jobs configuration file (check step 4.1) and under the ```restart-jobs``` section, enter the ```replicant-id``` and ```replicant-group``` of the job you want to restart.
-
-## VIII. Removing Job(s)
-
-To remove a job, navigate to the jobs configuration file (check step 4.1) and under the ```remove-jobs``` section, enter the ```replicant-id``` and ```replicant-group``` of the job you want to remove.
-
-## IX. Altering Host Affinity
-
-To change the host of a job, navigate to the jobs configuration file (check step 4.1) and under the ```alter-host-affinity-for-jobs``` section, enter the ```replicant-id``` and ```replicant-group``` of the job for which you want to change the source. Enter the new host-id next to ```host-affinity```
 
 # Cluster Manager as a System Service Setup
 Setting up CM as a service system is optional but if you wish to do so, follow the proceeding steps.
@@ -95,9 +88,9 @@ Setting up CM as a service system is optional but if you wish to do so, follow t
     vim /etc/systemd/system/replicant-cluster-manager.service
     ```
 
-2. Copy-paste the following example content in the file and change it acoordingly:
+2. Copy-paste the following example content in the file and change it accordingly:
 
-    ```
+    ```service
     [Unit]
     Description=Replicant Cluster Manager
     After=network.target
@@ -112,8 +105,8 @@ Setting up CM as a service system is optional but if you wish to do so, follow t
     [Install]
     WantedBy=multi-user.target
     ```
-**Note: In the ```ExecStart``` field, please write the start-cluster command with absolute path for every file.
-You can keep the other configurations as it is.**
+  **Note: In the ```ExecStart``` field, please write the start-cluster command with absolute path for every file.
+  You can keep the other configurations as it is.**
 
 ## II. Start the Service
 
@@ -122,4 +115,21 @@ You can keep the other configurations as it is.**
     systemctl daemon-reload
     systemctl enable replicant-cluster-manager.service
     systemctl start replicant-cluster-manager
+    ```
+
+## III. Managing the Service
+
+To check the status of your service:
+    ```BASH
+    systemctl status replicant-cluster-manager
+    ```
+
+To stop you service:
+    ```BASH
+    systemctl stop replicant-cluster-manager
+    ```
+
+To view real-time CM output:
+    ```BASH
+    journalctl -f -u replicant-cluster-manager
     ```

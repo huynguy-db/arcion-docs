@@ -16,16 +16,16 @@ From here onwards, the directory created in step one will be considered to have 
 
   1. Grant the following privileges to the host replicant user
     ```SQL
-    GRANT CREATE TABLE TO $USERNAME;
+    GRANT CREATE TABLE TO <USERNAME>;
     --If you are unable to provide the permission above, you must manually create all the tables
 
-    GRANT CREATE ANY DIRECTORY TO $USERNAME;
+    GRANT CREATE ANY DIRECTORY TO <USERNAME>;
     --If you are unable to provide the permission above, you must manually create the following directories:
     CREATE OR REPLACE DIRECTORY csv_data_dir AS '/data/shared_fs';
     CREATE OR REPLACE DIRECTORY csv_log_dir AS '/data/shared_fs';
 
 
-    GRANT ALTER TABLE TO $USERNAME;
+    GRANT ALTER TABLE TO <USERNAME>;
     --
     ```
   2. Manually create user schema and a schema named io_replicate. Grant both of them permission to access a tablespace
@@ -59,7 +59,7 @@ From here onwards, the directory created in step one will be considered to have 
 
 ## IV. Setup Applier Configuration
 
-Replicant supports creating/loading tables at the partition and subpartition levels. Follow the instructions below if you want to disable the ability,
+Replicant supports creating/loading tables at the partition and subpartition levels. Follow the instructions below if you want to change the behavior.
 
 1. From ```HOME```, navigate to the Applier Configuration File:
    ```BASH

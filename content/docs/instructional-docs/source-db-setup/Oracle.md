@@ -14,7 +14,7 @@ title: Oracle
 ## II. Setup Oracle User
 
 1. Create a new user for Replicant with the following commands
-    ```BASH
+    ```SQL
        CREATE USER <USERNAME> IDENTIFIED BY <PASSWORD>
        DEFAULT TABLESPACE <user-defined-tablesace>
        QUOTA unlimited on <user-defined-tablespace>
@@ -28,7 +28,7 @@ From here on, the newly created user will be referenced as ```rep-usr```, but yo
     ```
 3. Grant the select permission for all the tables that are part of  the replication
     ```SQL
-      GRANT SELECT ON <TABLENAME> TO <USERNAME>;
+      GRANT SELECT ON <TABLENAME> TO $USERNAME;
     ```
 ## III. Setup Change Data Capture (CDC)
 In the proceeding steps, grant the instructed permissions to ```rep-usr```
@@ -41,7 +41,7 @@ In the proceeding steps, grant the instructed permissions to ```rep-usr```
    Note: To use log-based CDC, the Oracle database must be in ARCHIVELOG mode.
    To check what mode the database is in, use the ```ARCHIVE LOG LIST``` command.
    To set the database in ARCHIVELOG mode, use the following commands:
-   ```BASH
+   ```SQL
      SHUTDOWN IMMEDIATE
      STARTUP MOUNT
      ALTER DATABASE ARCHIVELOG
@@ -49,25 +49,25 @@ In the proceeding steps, grant the instructed permissions to ```rep-usr```
    ```
 2. Once the database is in ARCHIVELOG mode, grant the EXECUTE_CATALOG_ROLE role to use the DBMS_LOGMNR package:
     ```SQL
-      GRANT EXECUTE_CATALOG_ROLE TO $USERNAME;
+      GRANT EXECUTE_CATALOG_ROLE TO <USERNAME>
     ```
 3. Provide the following permissions to allow Replicant to access the START_LOGMNR procedure
     For Oracle 11g:
     ```SQL
-      GRANT SELECT ANY TRANSACTION TO $USERNAME;
+      GRANT SELECT ANY TRANSACTION TO <USERNAME>;
     ```
 
     For Oracle 12C and beyond:
     ```SQL
-      GRANT LOGMINING TO $USERNAME;
+      GRANT LOGMINING TO <USERNAME>;
     ```
 4. Provide the following permission to allow Replicant to access v_$logmnr_contents
     ```SQL
-      GRANT SELECT ON v_$logmnr_contents TO $USERNAME;
+      GRANT SELECT ON v_$logmnr_contents TO <USERNAME>;
     ```
     For Oracle 19C and beyond, Replicant requires additional access to v_$logfile
     ```SQL
-      GRANT SELECT ON v_$logfile TO $USERNAME;
+      GRANT SELECT ON v_$logfile TO <USERNAME>;
     ```
 5. Enable either primary key or all column logging at the database or table level
   * Note: If you use table level logging, you must enable it for the CDC heartbeat table as well
@@ -98,13 +98,13 @@ In the proceeding steps, grant the instructed permissions to ```rep-usr```
 
 1. Provide the following privilege for one time access:
     ```SQL
-      GRANT SELECT ON DBA_SEGMENTS TO $USERNAME
+      GRANT SELECT ON DBA_SEGMENTS TO <USERNAME>
     ```
 2. Provide the following continuous access permissions:
     ```SQL
-      GRANT SELECT ON gv_$database TO $USERNAME
-      GRANT SELECT ON gv_$transaction TO $USERNAME
-      GRANT SELECT ON gv_$session TO $USERNAME --Not required for replicant release 20.8.13.7 and above
+      GRANT SELECT ON gv_$database TO <USERNAME>
+      GRANT SELECT ON gv_$transaction TO <USERNAME>
+      GRANT SELECT ON gv_$session TO <USERNAME>--Not required for replicant release 20.8.13.7 and above
     ```
 3. Grant the following continuous access permission for all the tables involved in Replication:
     ```SQL
@@ -131,7 +131,7 @@ In the proceeding steps, grant the instructed permissions to ```rep-usr```
 2. Provide following additional permissions:
     ```SQL
       GRANT SET CONTAINER TO $USERNAME CONTAINER=ALL;
-      GRANT SELECT ON DBA_PDBS to $USERNAME CONTAINER=ALL;
+      GRANT SELECT ON DBA_PDBS to <USERNAME> CONTAINER=ALL;
     ```  
 3. Open pluggable database:
     ```SQL
@@ -168,8 +168,8 @@ For real-time replication, you must create a heartbeat table in the source Oracl
 
 1. Create a heartbeat table in the catalog/schema you are going to replicate with the following DDL
    ```SQL
-   CREATE TABLE "<schema>"."replicate_io_cdc_heartbeat"( \
-     "timestamp" NUMBER NOT NULL, \
+   CREATE TABLE "<schema>"."replicate_io_cdc_heartbeat"(
+     "timestamp" NUMBER NOT NULL,
      PRIMARY KEY("timestamp"));
    ```
 

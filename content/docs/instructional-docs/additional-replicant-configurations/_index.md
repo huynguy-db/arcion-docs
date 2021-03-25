@@ -128,7 +128,7 @@ Replicant automatically creates a table with the name replicate_io_replication_s
 1. To distribute the nodes for data replication in Replicant, make the necessary changes as follows:
     ```YAML
     group:
-      id: exID #Replace exID with the mame of the logical replication group
+      id: exID #Replace exID with the name of the logical replication group
       leader: node1 # Replace node1 with the name of the replicant node acting as leader
       workers: node2, node3... #Replace node2, node3... with a list of the names of all the slave replicant nodes
 
