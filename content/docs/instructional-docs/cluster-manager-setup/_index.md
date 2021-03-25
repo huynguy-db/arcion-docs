@@ -120,16 +120,16 @@ Setting up CM as a service system is optional but if you wish to do so, follow t
 ## III. Managing the Service
 
 To check the status of your service:
-    ```BASH
+    ```
     systemctl status replicant-cluster-manager
     ```
 
 To stop you service:
-    ```BASH
+    ```
     systemctl stop replicant-cluster-manager
     ```
 
 To view real-time CM output:
-    ```BASH
+    ```
     journalctl -f -u replicant-cluster-manager
     ```
