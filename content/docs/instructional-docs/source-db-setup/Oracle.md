@@ -1,5 +1,6 @@
 ---
 title: Oracle
+weight: 1
 ---
 
 # Source: Oracle

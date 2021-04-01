@@ -59,38 +59,6 @@ There are multiple different Cluster Manager modes, each of which is explained b
       -cluster: Cluster config (Optional)
   ```
 
-## Failure Scenarios
-There are a few scenarios explained below which may cause a failure to set up/run Cluster Manager.
-
-1.	You are trying to add the same job(s) multiple times.
-    Error:
-    ```BASH
-    2020-11-09 09:51:42 [main] ERROR Main:118 - Cluster manager failed
-    tech.clustermanager.config.ConfigException: [repl1, repl1]: Job already exists
-        at tech.clustermanager.AddOrAlterJobs.alter(AddOrAlterJobs.java:88)
-        at tech.clustermanager.AddOrAlterJobs.run(AddOrAlterJobs.java:194)
-        at tech.clustermanager.Main.main(Main.java:106)
-    Failed to execute ALTER_CLUSTER
-    ```
-
-2.	You cannot resume/restart a running job.
-    Error:
-    ```BASH
-    2020-11-09 04:31:58 [main] ERROR Main:118 - Cluster manager failed
-    tech.clustermanager.config.ConfigException: Cannot resume a running job. Please stop job first
-        at tech.clustermanager.AddOrAlterJobs.alter(AddOrAlterJobs.java:116)
-        at tech.clustermanager.AddOrAlterJobs.run(AddOrAlterJobs.java:194)
-        at tech.clustermanager.Main.main(Main.java:106)
-    Failed to execute ALTER_CLUSTER
-    ```
-    Cause: You are trying to resume or restart a job(S) which is currently running. If you would like to temporarily stop the
-
-  3.	You should wait for a few seconds before resuming/restarting a stopped job.
-
-  Error: Same as Scenario 2
-
-  Cause: When we push stop-job requests to CM, CM does a series of tasks in order to properly stop a job. This is why the request may not be acknowledged at once.
-  Solution: This is why it’s advisable to resume/restart a job after it’s stopped for 30 seconds.
 
 ## Using System Service
 
