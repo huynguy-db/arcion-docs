@@ -1,16 +1,15 @@
----
+              ---
 weight: 5
 Title: "Additional Replicant Configurations"
-
 ---
 
 # Additional Replicant Configurations
 
 ## Mapper Configuration
 
-1. Locate the sample mapper configuration file
+1. Locate the appropriate sample mapper configuration file based on your source and target database
     ```BASH
-      cd conf/mapper/oracle_to_oracle.yaml
+      vi conf/mapper/sourceDB_to_targetDB.yaml
     ```
 2. In situations where more control over source data mapping is required, you can providing a mapping file as follows:
     ```BASH
@@ -54,32 +53,10 @@ Replicant automatically creates a table with the name replicate_io_replication_s
     ```YAML
     mail-alert:
       enable: true/false #Set to true if you want to enable email notifications
-      smtp-host: hostname #replace hostname with your smtp host name
-      smtp-port: port #replace port with your smtp port
-      authentication:
-      enable: #required for gmail/yahoo or other authenticated services
-      protocol: TLS/SSL. #Note port for TLS and SSL are different
-      sender-username: #To be used if username is different from sender-email
-      sender-email: <email-id> #Replace <email-id> with your email ID
-      sender-password: <password> #Replace <password? with the sender password
       receiver-email: [<email_id1>,<email_id2>] #Replace [<email_id1>,<email_id2>] with a list of all the email IDs that will receive the notification
       channels: #alert channels to be monitored
       subject-prefix: #Prefix string in subject for mail notification
-
-    mail-alerts [20.08.13.9]: Allows to specify multiple mail-alert configs as a list
-      enable: true/false #Set to true if you want to enable email notifications
-      smtp-host: hostname #replace hostname with your smtp host name
-      smtp-port: port #replace port with your smtp port
-      authentication:
-      enable: #required for gmail/yahoo or other authenticated services
-      protocol: TLS/SSL. #Note port for TLS and SSL are different
-      sender-username: #To be used if username is different from sender-email
-      sender-email: <email-id> #Replace <email-id> with your email ID
-      sender-password: <password> #Replace <password? with the sender password
-      receiver-email: [<email_id1>,<email_id2>] #Replace [<email_id1>,<email_id2>] with a list of all the email IDs that will receive the notification
-      channels: #alert channels to be monitored
-      subject-prefix: #Prefix string in subject for mail notification
-      ```
+    ```
 
 3. For script-alerts, make the necessary changes as follows:   
 
@@ -88,12 +65,9 @@ Replicant automatically creates a table with the name replicate_io_replication_s
       enable: true/false #Set to true to enable script-alerts
       script: /full/path/to/script_file #Replace /full/path/to/script_file with the path to the script file
       output-file: /full/path/to/output/script/file #Replace /full/path/to/output/script/file with the path of the file where the output of the script will be written to
-      channels: alert channels to be monitored #Enter the channels to monitor
+      channels: [ALL] #Enter the channels to monitor
       alert-repetitively: true/false #Set to true to send multiple alerts of the same job
     ```
-
-
-
 
 4. For lag-notifications, make the necessary changes as follows:
     ```YAML
@@ -107,16 +81,12 @@ Replicant automatically creates a table with the name replicate_io_replication_s
     mail-alerts:  
     - enable: true #Set this to true to enable multiple mail alerts
       receiver-email: ['replicant1@gmail.com'] #Replace ['replicant1@gmail.com'] with the receiver email ID
-      .
-      .
       channels: [GENERAL] #Replace [GENERAL] with the channel
 
       ##Continue listing receiver emails using the same format as shown both above and below, changing hte parameters as necessary
 
     - enable: true
       receiver-email: ['replicant2@gmail.com']
-      .
-      .
       channels: [WARNING]
     ```
 

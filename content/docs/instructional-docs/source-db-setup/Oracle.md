@@ -163,7 +163,39 @@ In the proceeding steps, grant the instructed permissions to ```rep-usr```
     max-connections: 30 #Maximum number of connections replicant can open in Oracle
     ```
 
-## VI. Setup Extractor Configuration
+## VI. Setup Filter Configuration
+
+1. Navigate to the filter configuration file
+        ```BASH
+        vi filter/oracle_filter.yaml
+        ```
+
+2. Make the necessary changes as shown below:
+    ```YAML
+    allow:
+      schema: "REPLICANT" #Replace REPLICANT with the name of your schema
+      types: [TABLE] #Enter the applicable object type: TABLE or VIEW or TABLE,VIEW
+
+      ##Below, you can specify which tables within the schema will be replicated. If not specified, all tables will be replicated.
+
+      allow:
+        Orders: #Replace Orders with the name of the table you want to replicate
+
+          #The parameters below are optional
+          allow: [column1, column2] #You may replace column1, column2 with a list of specific columns within this table you want to replicate.
+          #To replicate all columns in this table, remove this configuration
+          conditions: "O_ORDERKEY < 5000" #Enter the predicate that you want to apply during replication
+
+        Customers: #Replace Customers with the name of the table you want to replicate
+
+          #The parameters below are optional
+          block: [column1, column2] #You may replace column1, column2 with a list of columns to blacklist within this table;
+          #all other columns will be allowed
+          conditions: "C_CUSTKEY < 5000" #Enter the predicate that you want to apply during replication
+        ```
+
+
+## VII. Setup Extractor Configuration
 
 For real-time replication, you must create a heartbeat table in the source Oracle.
 
@@ -176,45 +208,16 @@ For real-time replication, you must create a heartbeat table in the source Oracl
 
 2. Grant ```INSERT```, ```UPDATE```, and ```DELETE``` privileges to the user configured for Replicant
 
-3. Navigate to Oracle's extractor configurations
+3. Navigate to the extractor configuration file
    ```BASH
    vi conf/src/oracle.yaml
    ```
-4. Under the Realtime Section, make the necessary changes as follows
+4. Under the Realtime Section, make the necessary changes as follows:
      ```YAML
-     heartbeat:
-       enable: true
-       schema: "REPLICANT" #Replace REPLCIANT with your schema name
-       table-name [20.09.14.3]: replicate_io_cdc_heartbeat #Replace replicate_io_cdc_heartbeat with your heartbeat table's name if applicable
-       column-name [20.10.07.9]: timestamp #Replace timestamp with your heartbeat table's column name if applicable
+     realtime:
+       heartbeat:
+         enable: true
+         schema: "REPLICANT" #Replace REPLCIANT with your schema name
+         table-name [20.09.14.3]: replicate_io_cdc_heartbeat #Replace replicate_io_cdc_heartbeat with your heartbeat table's name if applicable
+         column-name [20.10.07.9]: timestamp #Replace timestamp with your heartbeat table's column name if applicable
      ```
-
-
-## VII. Setup Filter Configuration
-
-1. Navigate to the filter configuration file
-    ```BASH
-    vi filter/oracle_filter.yaml
-    ```
-
-2. Make the necessary changes as shown below:
-    ```YAML
-    allow:
-      schema: "REPLICANT" #Replace REPLICANT with the name of your schema
-      types: [TABLE] #Enter the applicable object type: TABLE or VIEW or TABLE,VIEW
-
-      ##Below, you can specify which tables within the schema will be replicated. If not specified, all tables will be replicated.
-
-      allow:
-        Orders: #Replace Orders with the name of the table you want to replicate
-          #The parameters below are optional
-          allow: [column1, column2] #You may replace column1, column2 with a list of specific columns within this table you want to replicate.
-          #To replicate all columns in this table, remove this configuration
-          conditions: "O_ORDERKEY < 5000" #Enter the predicate that you want to apply during replication
-
-        Customers: #Replace Customers with the name of the table you want to replicate
-          #The parameters below are optional
-          block: [column1, column2] #You may replace column1, column2 with a list of columns to blacklist within this table;
-          #all other columns will be allowed
-          conditions: "C_CUSTKEY < 5000" #Enter the predicate that you want to apply during replication
-    ```

@@ -11,11 +11,10 @@ title: Oracle
 From here onwards, the directory created in step one will be considered to have the following path: ```/data/shared_fs```.
 
 ## II. Setup Oracle User Permissions
+The following step must be executed in an Oracle client.
 
-  The following step must be executed in an Oracle client.
-
-  1. Grant the following privileges to the host replicant user
-    ```SQL
+1. Grant the following privileges to the host replicant user
+   ```SQL
     GRANT CREATE TABLE TO <USERNAME>;
     --If you are unable to provide the permission above, you must manually create all the tables
 
@@ -28,18 +27,16 @@ From here onwards, the directory created in step one will be considered to have 
     GRANT ALTER TABLE TO <USERNAME>;
     --
     ```
-  2. Manually create user schema and a schema named io_replicate. Grant both of them permission to access a tablespace
+2. Manually create user schema and a schema named io_replicate. Grant both of them permission to access a tablespace
 
 ## III. Setup Connection Configuration
 
 1. From ```HOME```, navigate to the sample connection configuration file
-
-  ```BASH
-  vi conf/conn/oracle_dst.yaml
-  ```
+    ```BASH
+    vi conf/conn/oracle_dst.yaml
+    ```
 
 2. Make the necessary changes as follows:
-
       ```YAML
       type: ORACLE
 

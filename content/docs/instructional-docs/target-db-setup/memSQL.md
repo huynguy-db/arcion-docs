@@ -1,6 +1,6 @@
 ---
 title: MemSQL
-weight:2
+weight: 2
 ---
 # Destination memSQL
 
@@ -21,7 +21,7 @@ weight:2
     username: 'REPLICANT' #Replace REPLICANT with your username of the user that connects to your oracle server
     password: 'Replicant#123' #Replace Replicant#123 with the your user's password
 
-    max-connections: 30 #Maximum number of connections replicant can open in Oracle
+    max-connections: 30 #Maximum number of connections replicant can open in MemSQL
     ```
 
 ## Setup Applier Configuration
