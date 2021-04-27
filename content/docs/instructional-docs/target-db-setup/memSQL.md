@@ -15,13 +15,13 @@ weight: 2
     ```YAML
     type: MEMSQL
 
-    host: localhost #Replace localhost with your oracle host name
-    port: 3306 #Replace the default port number 3306 if needed
+    host: localhost #Replace localhost with your MemSQL host name
+    port: 3306 #Replace the 57565 with the port of your host
 
-    username: 'REPLICANT' #Replace REPLICANT with your username of the user that connects to your oracle server
-    password: 'Replicant#123' #Replace Replicant#123 with the your user's password
+    username: 'replicant' #Replace replicant with the username of your user that connects to your MemSQL server
+    password: 'Replicant#123' #Replace Replicant#123 with your user's password
 
-    max-connections: 30 #Maximum number of connections replicant can open in MemSQL
+    max-connections: 30 #Specify the maximum number of connections replicant can open in MemSQL
     ```
 
 ## Setup Applier Configuration

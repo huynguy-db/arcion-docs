@@ -3,7 +3,7 @@ title: MariaDB
 weight: 5
 ---
 
-# Source: Maria Database
+# Source: MariaDB Database
 
 ## I. Setup Connection Configuration
 
@@ -16,14 +16,14 @@ weight: 5
     ```YAML
     type: MARIADB
 
-    host: 127.0.0.1 #Replace 127.0.0.1 with your MariaDB server host name
-    port: 3306 ##Replace 3306 with the port number to connect to your MariaDB server
+    host: 127.0.0.1 #Replace 127.0.0.1 with your MariaDB server host
+    port: 3306 #Replace 3306 with the port number to connect to your MariaDB server
 
-    username: "replicant" #Replace replicant with your username of the user that connects to your oracle server
+    username: "replicant" #Replace replicant with your username that connects to your MariaDB server
     password: "Replicant#123" #Replace Replicant#123 with the your user's password
 
     slave-server-ids: [1]
-    max-connections: 30 #Dictate the maximum number of connections replicant can open in MariaDB
+    max-connections: 30 #Maximum number of connections replicant can open in MariaDB
     ```
 
 
@@ -37,7 +37,7 @@ weight: 5
 2. Specify the data which is to be replicated as follows:
     ```yaml
     allow:
-    - catalog: "tpch" #Replace tpch with your schema name
+    - catalog: "tpch" #Replace tpch with your database name
       types: [TABLE] #Enter the applicable object type: TABLE or VIEW or TABLE,VIEW
 
       #Below, you can specify which tables within the schema will be replicated. If not specified, all tables will be replicated. Examples of tables are shown below
@@ -63,16 +63,16 @@ weight: 5
 
 ## III. Setup Extractor Configuration
 
-For real-time replication, you must create a heartbeat table in the source Maria
+In real-time replication, for accurate computation of latency, you must create a heartbeat table in the source MariaDB.
 
 1. Create a heartbeat table in the catalog/schema you are going to replicate with the following DDL
    ```SQL
-   CREATE TABLE "<user_database>"."<schema>"."replicate_io_cdc_heartbeat"(
+   CREATE TABLE "<user_database>"."replicate_io_cdc_heartbeat"(
      "timestamp" BIGINT NOT NULL,
      PRIMARY KEY("timestamp"));
    ```
 
-2. Grant ```INSERT```, ```UPDATE```, and ```DELETE``` privileges to the user configured for replication
+2. Grant ```INSERT```, ```UPDATE```, and ```DELETE``` privileges on the heartbeat table to the user configured for replication
 
 3. Navigate to the extractor configuration file
    ```BASH
@@ -84,6 +84,7 @@ For real-time replication, you must create a heartbeat table in the source Maria
     realtime:
       heartbeat:
         enable: true
+        catalog: “tpch” #Replace tpch with your database name
         table-name [20.09.14.3]: replicate_io_cdc_heartbeat #Replace replicate_io_cdc_heartbeat with your heartbeat table's name if applicable
         column-name [20.10.07.9]: timestamp #Replace timestamp with your heartbeat table's column name if applicable
     ```
