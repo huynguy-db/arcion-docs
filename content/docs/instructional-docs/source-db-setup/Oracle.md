@@ -27,10 +27,18 @@ From here on, the newly created user will be referenced as ```rep-usr```, but yo
     ```SQL
       GRANT CREATE SESSION TO <USERNAME>;
     ```
-3. Grant the select permission for all the tables that are part of  the replication
+3. Grant the select permission for all the tables that are part of the replication
     ```SQL
       GRANT SELECT ON <TABLENAME> TO $USERNAME;
     ```
+
+    OR
+
+    Grant the user the selected permission on all of the tables
+    ```SQL
+      GRANT SELECT ANY TABLE TO $USERNAME;
+    ```
+
 ## III. Setup Change Data Capture (CDC)
 In the proceeding steps, grant the instructed permissions to ```rep-usr```
 
@@ -109,8 +117,16 @@ In the proceeding steps, grant the instructed permissions to ```rep-usr```
     ```
 3. Grant the following continuous access permission for all the tables involved in Replication:
     ```SQL
-      GRANT FLASHBACK ON <TABLE_NAME> TO $USERNAME
+      GRANT FLASHBACK ON <TABLE_NAME> TO <USERNAME>;
     ```
+
+    OR
+
+    Flashback can be enabled for all tables
+     ```SQL
+     GRANT FLASHBACK ANY TABLE TO <USERNAME>
+     ```
+
 4. Provide ```rep-usr``` access to the below system views from Oracle during schema migration. The content depends on permissions given to the current user.
     ```SQL
       GRANT SELECT ON ALL_TABLES TO <USERNAME>;
@@ -155,9 +171,9 @@ In the proceeding steps, grant the instructed permissions to ```rep-usr```
 
     host: localhost #Replace localhost with your oracle host name
     port: 1521 #Replace the default port number 1521 if needed
-    service-name: IO #Replace IO with the service name that contains the schema you will be replicated
+    service-name: IO #Replace IO with the service name of your Oracle Listener
 
-    username: 'REPLICANT' #Replace REPLICANT with your username of the user that connects to your oracle server
+    username: 'REPLICANT' #Replace REPLICANT with your username to connect to Oracle
     password: 'Replicant#123' #Replace Replicant#123 with the your user's password
 
     max-connections: 30 #Maximum number of connections replicant can open in Oracle
@@ -170,30 +186,50 @@ In the proceeding steps, grant the instructed permissions to ```rep-usr```
         vi filter/oracle_filter.yaml
         ```
 
-2. Make the necessary changes as shown below:
+2. In accordance to you replication needs, specify the data which is to be replicated. Use the format of the example explained below.  
     ```YAML
     allow:
-      schema: "REPLICANT" #Replace REPLICANT with the name of your schema
-      types: [TABLE] #Enter the applicable object type: TABLE or VIEW or TABLE,VIEW
 
-      ##Below, you can specify which tables within the schema will be replicated. If not specified, all tables will be replicated.
+      #In this example, data of object type Table in the schema REPLICANT will be replicated
+      schema: "REPLICANT"
+      types: [TABLE]
+
+      #From the shemca REPLCIANT, only the Orders, Customers, and Returns tables will be replicated.
+      #Note: Unless specified, all tables in the schema will be replicated
 
       allow:
-        Orders: #Replace Orders with the name of the table you want to replicate
+        Orders:
+           #Within Orders, only the US and AUS columns will be replicated
+           allow: ["US, AUS"]
 
-          #The parameters below are optional
-          allow: [column1, column2] #You may replace column1, column2 with a list of specific columns within this table you want to replicate.
-          #To replicate all columns in this table, remove this configuration
-          conditions: "O_ORDERKEY < 5000" #Enter the predicate that you want to apply during replication
+        Customers:  
+           #Within Customers, only the product and service columns will be replicated as long as they meet the condition C_CUSTKEY < 5000
+           allow: ["product", "service"]
+           conditions: "C_CUSTKEY < 5000"
 
-        Customers: #Replace Customers with the name of the table you want to replicate
+        Returns: #All columns in the table Returns  will be replicated without any predicates
+      ```
+      The following is a template of the format you must follow:
 
-          #The parameters below are optional
-          block: [column1, column2] #You may replace column1, column2 with a list of columns to blacklist within this table;
-          #all other columns will be allowed
-          conditions: "C_CUSTKEY < 5000" #Enter the predicate that you want to apply during replication
-        ```
+      ```YAML
+      allow:
+        schema: <your_schema_name>
+        types: <your_object_type>
 
+
+        allow:
+          <your_table_name>:
+            allow: ["your_column_name"]
+            condtions: "your_condition"  
+
+          <your_table_name>:  
+            allow: ["your_column_name"]
+            conditions: "your_condition"
+
+          <your_table_name>:
+            allow: ["your_column_name"]
+            condtions: "your_condition"  
+      ```
 
 ## VII. Setup Extractor Configuration
 

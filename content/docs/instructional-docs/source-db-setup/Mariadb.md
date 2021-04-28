@@ -34,31 +34,50 @@ weight: 5
     vi filter/mariadb_filter.yaml
     ```
 
-2. Specify the data which is to be replicated as follows:
+2. In accordance to you replication needs, specify the data which is to be replicated. Use the format of the example explained below.  
+
     ```yaml
     allow:
-    - catalog: "tpch" #Replace tpch with your database name
-      types: [TABLE] #Enter the applicable object type: TABLE or VIEW or TABLE,VIEW
+      #In this example, data of object type Table in the catalog tpch will be replicated
+      catalog: "tpch"
+      types: [TABLE]
 
-      #Below, you can specify which tables within the schema will be replicated. If not specified, all tables will be replicated. Examples of tables are shown below
+      #From catalog tpch, only the NATION, ORDERS, and PART tables will be replicated.
+      #Note: Unless specified, all tables in the catalog will be replicated
       allow:
-        NATION: #Replace NATION with the name of the table you want to replicate   
-           allow: ["column1, column2"] #Replace column1 and column2 with your column names. If not specified, all columns in your table will be replicated
+        NATION:
+        #Within NATION, only the US and AUS columns will be replicated
+        allow: ["US, AUS"]
 
-        ORDERS: #Replace ORDERS with the name of the table you want to replicate   
-           #The parameters below are optional
-           allow: ["column1", "column2"] #Replace column1 and column2 with your column names. If not specified, all columns in your table will be replicated
-           conditions: "o_orderkey < 5000" #Enter the predicate that you want to apply during replication
+        ORDERS:  
+          #Within ORDERS, only the product and service columns will be replicated as long as they meet the condition o_orderkey < 5000
+          allow: ["product", "service"]
+          conditions: "o_orderkey < 5000"
 
-        PART: #Replace PART with the name of the table you want to replicate   
+        PART: #All columns in the table PART will be replicated without any predicates
+      ```
 
-      #Optionally, you may choose to specify replication patterns as shown below
-      allowPattern:
-         orders|nation|part #Replace orders|nation|part with your desired patten
-       allowPattern:
-         orders[0-9]+ #Replace orders[0-9]+ with your desired patten
-    ```
+      The following is a template of the format you must follow:
 
+      ```YAML
+      allow:
+        catalog: <your_catalog_name>
+        types: <your_object_type>
+
+
+        allow:
+          <your_table_name>:
+             allow: ["your_column_name"]
+             conditions: "your_condition"
+
+          <your_table_name>:  
+             allow: ["your_column_name"]
+             conditions: "your_condition"
+
+          <your_table_name>:
+            allow: "your_column_name"]
+            conditions: "your_condition"         
+      ```
 
 
 ## III. Setup Extractor Configuration
