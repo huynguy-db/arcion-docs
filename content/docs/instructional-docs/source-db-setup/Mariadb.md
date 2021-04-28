@@ -3,7 +3,7 @@ title: MariaDB
 weight: 5
 ---
 
-# Source: MariaDB Database
+# Source MariaDB Database
 
 ## I. Setup Connection Configuration
 
@@ -34,7 +34,7 @@ weight: 5
     vi filter/mariadb_filter.yaml
     ```
 
-2. In accordance to you replication needs, specify the data which is to be replicated. Use the format of the example explained below.  
+2. In accordance to you replication needs, specify the data which is to be replicated. Use the format of the example explained below:  
 
     ```yaml
     allow:

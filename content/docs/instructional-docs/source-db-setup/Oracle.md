@@ -3,7 +3,7 @@ title: Oracle
 weight: 1
 ---
 
-# Source: Oracle
+# Source Oracle
 **The first four steps (I-IV) are to prepare the Oracle Database for replication and must be executed in an Oracle client. The remaining steps (V-VII) are to configure Replicant.**
 
 ## I. Setup Oracle Driver
@@ -186,7 +186,7 @@ In the proceeding steps, grant the instructed permissions to ```rep-usr```
         vi filter/oracle_filter.yaml
         ```
 
-2. In accordance to you replication needs, specify the data which is to be replicated. Use the format of the example explained below.  
+2. In accordance to you replication needs, specify the data which is to be replicated. Use the format of the example explained below:  
     ```YAML
     allow:
 

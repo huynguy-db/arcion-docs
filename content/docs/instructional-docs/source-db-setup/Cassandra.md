@@ -55,31 +55,51 @@ weight: 5
     vi filter/cassandra_filter.yaml
     ```
 
-2. Specify the database, collections, documents you want to replicate in snapshot mode as follows:
+2. In accordance to you replication needs, specify the data which is to be replicated. Use the format of the example explained below:
 
-    ```YAML
+    ```yaml
     allow:
-    - schema: "tpch" #Replace tpch with your schema name
-      types: [TABLE] #Enter the applicable object type: TABLE or VIEW or TABLE,VIEW
+      #In this example, data of object type Table in the schema tpch will be replicated
+      schema: "tpch"
+      types: [TABLE]
 
-      #Below, you can specify which tables within the schema will be replicated. If not specified, all tables will be replicated.
+      #From schema tpch, only the lineitem, ng_test, and usertable tables will be replicated.
+      #Note: Unless specified, all tables in the catalog will be replicated
       allow:
-        lineitem: #Replace lineitem with the name of the table you want to replicate
+        lineitem:
+        #Within lineitem, only the item_one and item_two columns will be replicated
+        allow: ["item_one, item_two"]
 
-        #The parameters below are optional
-          allow: [column1, column2] #You may replace column1, column2 with a list of specific columns within this table you want to replicate.
-          #To replicate all columns in this table, remove this configuration
-          conditions: "{$and: [{c1: {$gt : 1}}, {c1: {$lt : 9}}]}" #Enter the predicate that you want to apply during replication
+        ng_test:  
+          #Within ORDERS, only the test_one and test_two columns will be replicated as long as they meet the condition $and: [{c1: {$gt : 1}}, {c1: {$lt : 9}}]}
+          allow: ["test_one", "test_two"]
+          conditions: "{$and: [{c1: {$gt : 1}}, {c1: {$lt : 9}}]}"
 
-        ng_test: #Replace ng_test with the name of the table you want to replicate
+        usertable: #All columns in the table usertable will be replicated without any predicates
+      ```
 
-          #The parameters below are optional
-          block: [column1, column2] #You may replace column1, column2 with a list of columns to blacklist within this table;
-          #all other columns will be allowed
-          conditions: "{$and: [{c1: {$gt : 1}}, {c1: {$lt : 9}}]}" #Enter the predicate that you want to apply during replication
+      The following is a template of the format you must follow:
 
-        usertable: #Replace usertable with the name of the table you want to replicant
-    ```
+      ```YAML
+      allow:
+        schema: <your_schema_name>
+        types: <your_object_type>
+
+
+        allow:
+          <your_table_name>:
+             allow: ["your_column_name"]
+             conditions: "your_condition"
+
+          <your_table_name>:  
+             allow: ["your_column_name"]
+             conditions: "your_condition"
+
+          <your_table_name>:
+            allow: "your_column_name"]
+            conditions: "your_condition"         
+      ```
+
 3. Using the format shown in the step above (step 2) specify the database, collections, or documents for which will you will be replicating real-time under the ```global-filter``` section
 
 ## III. Setup Extractor Configuration
