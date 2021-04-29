@@ -1,6 +1,6 @@
 ---
 title: Extractor Configuration
-weight: 2
+weight: 1
 ---
 
 # Extractor Configuration
