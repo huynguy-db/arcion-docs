@@ -171,13 +171,11 @@ The proceeding steps are only required if you intend to run Replicant in real-ti
    ```
 
 
-
-
-## Database Specifc Setup Overview
+## Database Specific Setup Overview
 
 Different source and target databases may have slightly more specific and different setup instructions than the general guidelines provided in the Quickstart Guide above. Follow the six steps below for a pipeline specific setup for Replicant.
 
 1. Source Database Setup
 2. Target Database Setup  
-3. Run Replicant
+3. Running Replicant
 4. Performance Enhancing and Troubleshoot

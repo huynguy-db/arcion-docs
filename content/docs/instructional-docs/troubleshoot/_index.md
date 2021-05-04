@@ -1,5 +1,5 @@
 ---
-weight: 5
+weight: 7
 title: Performance Enhancing and Troubleshoot
 ---
 
