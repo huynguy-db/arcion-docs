@@ -2,7 +2,7 @@
 title: PostgreSQL
 weight: 1
 ---
-# Source: PostgreSQL
+# Source PostgreSQL
 
 ## I. Create a user in postgresql
 

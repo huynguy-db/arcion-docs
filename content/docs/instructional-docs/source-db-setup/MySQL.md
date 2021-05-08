@@ -2,7 +2,7 @@
 title: MySQL
 weight: 4
 ---
-# Destination MySQL
+# Source MySQL
 
 ## I. Setup Connection Configuration
 
