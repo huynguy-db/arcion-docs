@@ -64,5 +64,5 @@ weight: 13
         serialize: true|false #Set to true if you want the generated files to be applied in serial/parallel fashion
 
     realtime:
-      threads: 16 #Specify the maximum number of threads Replicant should use for writing to the target 
+      threads: 16 #Specify the maximum number of threads Replicant should use for writing to the target
     ```
