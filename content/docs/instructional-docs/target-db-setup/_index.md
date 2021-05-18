@@ -1,5 +1,5 @@
 ---
 weight: 4
-title: "Target Database Setup"
+title: "Target Setup"
 bookCollapseSection: true
 ---

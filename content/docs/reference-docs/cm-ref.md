@@ -1,5 +1,6 @@
 ---
 title: Cluster Manager
+weight: 9
 ---
 # Cluster Manager Explanations
 

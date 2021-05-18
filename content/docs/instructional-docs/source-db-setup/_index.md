@@ -1,6 +1,6 @@
 ---
 weight: 3
-Title: "Source Database Setup"
+Title: "Source Setup"
 bookCollapseSection: true
 
 ---

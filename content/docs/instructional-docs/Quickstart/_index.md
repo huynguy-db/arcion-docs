@@ -5,7 +5,7 @@ weight: 2
 # Quickstart Guide
 
 
-## Step 1: Host Machine Prerequisites
+## I. Host Machine Prerequisites
 
 
 Please ensure your host machine that will run Replicant meets the following minimum hardware and software prerequisites.
@@ -20,7 +20,7 @@ Please ensure your host machine that will run Replicant meets the following mini
 
 
 
-##  Step 2: Download Replicant and Create a Home Repository
+## II. Download Replicant and Create a Home Repository
 
 
 1. Click the following to download the latest version of Replicant: [Replicant Download](https://blitzz-releases.s3-us-west-1.amazonaws.com/general/replicant/replicant-cli-21.02.01.7.zip)
@@ -31,7 +31,7 @@ Please ensure your host machine that will run Replicant meets the following mini
 This will create a directory named ```replicant-cli``` that will serve as Replicant's ```HOME```. For the proceeding steps, position yourself in ```HOME```.
 
 
-## Step 3: Licensing
+## III. Licensing
 1. Download the license file for Replicant and rename it to replicant.lic
   * Note: The license file must be named replicant.lic
 2. Copy replicant.lic into ```HOME```
@@ -39,7 +39,7 @@ This will create a directory named ```replicant-cli``` that will serve as Replic
 
 
 
-## Step 4: Setup Source Database Configuration
+## IV. Setup Source Database Configuration
 
 1. Edit the sample connection configuration file of the source database
     ```BASH
@@ -86,7 +86,7 @@ This will create a directory named ```replicant-cli``` that will serve as Replic
 
    ```
 
-## Step 5: Target Database Setup
+## V. Target Database Setup
 
 1. Edit the sample connection configuration file of the target database
 
@@ -116,7 +116,7 @@ This will create a directory named ```replicant-cli``` that will serve as Replic
     For database specific examples, please refer to Source Database Setup.
 
 
-## Step 6: Run Replicant Snapshot
+## VI. Run Replicant Snapshot
 
 Replicant is now ready to run in snapshot mode. The snapshot will only transfer existing data from the source database to the target database. If you would like to transfer real-time changes in addition to the snapshot, skip step 6 and proceed to steps 7 and 8 to run Replicant in full mode.
 
@@ -132,7 +132,7 @@ Replicant is now ready to run in snapshot mode. The snapshot will only transfer 
 
 The proceeding steps are only required if you intend to run Replicant in real-time mode.
 
-## Step 7: Heartbeat table setup
+## VII. Heartbeat table setup
 
 
 1. Create a heartbeat table in the catalog/schema you are going to replicate with the following DDL
@@ -159,7 +159,7 @@ The proceeding steps are only required if you intend to run Replicant in real-ti
 
 
 
-## Step 8: Run Replicant in full mode
+## VIII. Run Replicant in full mode
 
 1. From ```HOME``` enter the following to run Replicant in full mode
    ```BASH

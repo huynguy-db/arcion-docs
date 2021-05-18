@@ -68,4 +68,11 @@ Replicant supports creating/loading tables at the partition and subpartition lev
    snapshot:
      enable-partition-load: true #true by default only if source type is oracle
      disable-partition-wise-load-on-failure: false
+
+     bulk-load : Blitzz can leverage underlying support of FILEbased bulk loading into the target system.
+       enable: true|false #To enable/disable bulk loading.
+       type: FILE 
+       serialize: true/false. #If the files generated should be applied in serial/parallel fashion
+       method : EXTERNAL_TABLE|SQL_LOADER. #Either external table based approach or sql loader based approach can be taken to perform bulk load.
+
    ```
