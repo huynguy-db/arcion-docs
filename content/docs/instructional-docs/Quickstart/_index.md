@@ -2,7 +2,7 @@
 weight: 2
 ---
 
-# Quickstart Guide
+# Getting Started
 
 
 ## I. Host Machine Prerequisites

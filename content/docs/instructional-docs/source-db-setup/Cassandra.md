@@ -6,7 +6,7 @@ weight: 5
 
 ## I. Setup Connection Configuration
 
-1. Navigate to the connection configuration file
+1. Navigate to the connection configuration file:
     ```BASH
     vi conf/conn/cassadra.yaml
     ```
@@ -21,12 +21,14 @@ weight: 5
         port: 9042
         cdc-log-config:
           access-method: SFTP  # access-method can be LOCAL, SFTP
-          cdc-log-dir: '/var/lib/cassandra/commitlog' # Enter the path of the directory containing Cassandra commit log.
-          cdc-raw-dir: '/var/lib/cassandra/cdc_raw' # Enter the path of the directory containing Cassandra CDC log.
+          cdc-log-dir: '/var/lib/cassandra/commitlog' # Enter the path of the directory containing Cassandra commit log
+          cdc-raw-dir: '/var/lib/cassandra/cdc_raw' # Enter the path of the directory containing Cassandra CDC log
+
+          #Only specify the following configurations if your access method is SFTP
           sftp-config:
-            username: 'cassandra' # if access-method is SFTP, provide sftp-username to log on to host using SFTP
-            password: 'cassandra' # if access-method is SFTP, provide sftp-password to log on to host using SFTP
-            port: 22 # if access-method is SFTP, provide port on which SFTP service is running.
+            username: 'cassandra'
+            password: 'cassandra'
+            port: 22
 
       #If you are using multiple nodes, specify them in this section using the format above
 
@@ -37,7 +39,7 @@ weight: 5
       sftp-config:
         username: 'cassandra' # if access-method is SFTP, provide sftp-username to log on to host using SFTP
         password: 'cassandra' # if access-method is SFTP, provide sftp-password to log on to host using SFTP
-        port: 22 # if access-method is SFTP, provide port on which SFTP service is runnning.
+        port: 22 # if access-method is SFTP, provide port on which SFTP service is running
 
     username: 'cassandra'
     password: 'cassandra'
@@ -46,7 +48,7 @@ weight: 5
 
     auth-type: "PlainTextAuthProvider" #Enter one of the allowed values: DsePlainTextAuthProvider, PlainTextAuthProvider
 
-    max-connections: 30 #Enter the maximum number of connections Replicant can open in Cassandra    
+    max-connections: 30 #Maximum number of connections Replicant can open in Cassandra    
     ```
 ## II. Setup Filter Configuration
 
@@ -70,10 +72,10 @@ weight: 5
         #Within lineitem, only the item_one and item_two columns will be replicated
         allow: ["item_one, item_two"]
 
-        ng_test:  
-          #Within ORDERS, only the test_one and test_two columns will be replicated as long as they meet the condition $and: [{c1: {$gt : 1}}, {c1: {$lt : 9}}]}
+        ORDERS:  
+          #Within ORDERS, only the test_one and test_two columns will be replicated as long as they meet the condition "o_orderkey < 5000"
           allow: ["test_one", "test_two"]
-          conditions: "{$and: [{c1: {$gt : 1}}, {c1: {$lt : 9}}]}"
+          conditions: "o_orderkey <5000"
 
         usertable: #All columns in the table usertable will be replicated without any predicates
       ```
@@ -87,44 +89,65 @@ weight: 5
 
 
         allow:
-          <your_table_name>:
+          your_table_name_1:
+
+          your_table_name_2:  
              allow: ["your_column_name"]
              conditions: "your_condition"
 
-          <your_table_name>:  
-             allow: ["your_column_name"]
-             conditions: "your_condition"
-
-          <your_table_name>:
-            allow: "your_column_name"]
+          your_table_name_3:
+            allow: ["your_column_name"]
             conditions: "your_condition"         
       ```
 
-3. Using the format shown in the step above (step 2) specify the database, collections, or documents for which will you will be replicating real-time under the ```global-filter``` section
-
 ## III. Setup Extractor Configuration
 
-For real-time replication, you must create a heartbeat table in the source Mongo
+For real-time replication, you must create a heartbeat table in the source Casandra.
 
-1. Create a heartbeat table in the catalog/schema you are going to replicate with the following DDL
+1. Create a heartbeat table in the catalog you are going to replicate with the following DDL:
    ```SQL
-   CREATE TABLE "<user_database>"."<schema>"."replicate_io_cdc_heartbeat"(
+   CREATE TABLE "<user_keyspace>"."replicate_io_cdc_heartbeat"(
      "timestamp" BIGINT NOT NULL,
      PRIMARY KEY("timestamp"));
    ```
 
-2. Grant ```INSERT```, ```UPDATE```, and ```DELETE``` privileges to the user configured for replication
+2. Grant ```INSERT```, ```UPDATE```, and ```DELETE``` privileges to the user configured for replication.
 
-3. Navigate to the extractor configuration file
+3. Navigate to the extractor configuration file:
    ```BASH
    vi conf/src/cassandra.yaml
    ```
 
-4. Under the Realtime Section, make the necessary changes as follows:
+4. If required, make the necessary changes as follows:
     ```YAML
+    snapshot:
+       extraction-method: CSVLOAD #Allowed values are QUERY, CSVLOAD
+       native-extract-options:
+         control-chars:
+           delimiter: ','
+           quote: '"'
+           escape: "\u0000"
+           null-string: "NULL"
+           line-end: "\n"
+
     realtime:
       heartbeat:
         enable: true
-        table-name [20.09.14.3]: replicate_io_cdc_heartbeat #Replace replicate_io_cdc_heartbeat with your heartbeat table's name if applicable
-        column-name [20.10.07.9]: timestamp #Replace timestamp with your heartbeat table's column name if applicable
+        table-name [20.09.14.3]: replicate_io_cdc_heartbeat #Heartbeat table name if changed
+        column-name [20.10.07.9]: timestamp #Heartbeat table column name if changed
     ```
+## Limitations
+
+The following limitations will apply when replicating from Casandra as a source:
+
+1. Replication of counter tables is not supported.
+2. Changes resulted from any of these features are ignored:
+   * TTL on collection-type columns
+   * Range deletes
+   * Static columns
+   * Triggers
+   * Secondary indices
+   * Light-weight transactions
+3. Unsupported Datatypes:
+   * map
+   * set
