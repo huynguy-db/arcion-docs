@@ -232,28 +232,23 @@ Note: It is strongly recommended to supply a row-identifier-key in the per-table
 2. Under the delta snapshot section, make the necessary changes as follows:
   ```YAML
   delta-snapshot:
-    row-identifier-key:
-    update-key:
-    replicate-deletes:     
-    per-table-config:
-    - catalog: tpch
-      schema: public
-      tables:
-        <table_name>:
-          row-key-identifier:
-          update-key:
-          replicate-deletes:     
-  #      testTable
-  #        split-key: split-key-column  # Any numeric/timestamp column with sufficiently large number of distincts
-  #        split-hints:
-  #          row-count-estimate: 100000  # Estimated row count, if supplied replicant will leverage
-  #          split-key-min-value: 1      #Lower bound of split key value
-  #          split-key-max-value: 60_000 #Upper bound of split key value, if supplied replicant will leverage and avoid querying source database for the same
-  #        delta-snapshot-key: delta-snapshot-key-column  # A monotonic increasing numeric/timestamp column which gets new value on each INSERT/UPDATE
-  #        row-identifier-key: [col1, col2]   # A set of columns which uniquely identify a row
-  #        update-key: [col1, col2]  # A set of columns which replicant should use to perform deletes/updates during incremental replication
+    row-identifier-key: [orderkey,suppkey] #Replace orderkey, suppkey with your  global row-identifier-key identifier which specifies the column(s) that are unique in the data collections being replicated
+    update-key: [partkey] #Replace partkey with your global update key if your table does not have unique row-identifier-keys and you still want to perform incremental replication
+    replicate-deletes: true|false #Enable or disable delete replication
 
+    #In the following section, you can specify configurations for certain tables. For any specified tables, Replicant will override the global configurations and replicate the table in accordance to the configurations set for that table below.
+    per-table-config:
+    - catalog: tpch #Replace tpch with the catalog of the table is in
+      schema: public #Replace public with the schema the table is in
+      tables:
+        <table_name>: #Replace <table_name> with your table name
+          row-key-identifier: #Enter a row-key-identifier for this table if applicable
+          update-key: #Enter an update-key for this table if applicable
+          replicate-deletes: #Enable or disable  delete replication  
+
+        #The following is an example of a specified table named lineitem1. Replicant will use the configurations provided for lineitem1 when replicating the table instead of the global configurations specifed above the per-table-config section.
         lineitem1:
           row-identifier-key: [l_orderkey, l_linenumber]
           split-key: l_orderkey
+          replicate-deletes: false
   ```

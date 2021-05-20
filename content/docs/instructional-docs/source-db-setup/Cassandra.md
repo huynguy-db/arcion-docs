@@ -128,7 +128,3 @@ For real-time replication, you must create a heartbeat table in the source Mongo
         table-name [20.09.14.3]: replicate_io_cdc_heartbeat #Replace replicate_io_cdc_heartbeat with your heartbeat table's name if applicable
         column-name [20.10.07.9]: timestamp #Replace timestamp with your heartbeat table's column name if applicable
     ```
-
-## IV. S3 File Format
-
-[S3 File Format](http://localhost:1313/docs/reference-docs/s3-file-format/)
