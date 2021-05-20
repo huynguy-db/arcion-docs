@@ -1,5 +1,5 @@
 ---
 weight: 1
 bookFlatSection: true
-title: "Instructional Documentation"
+title: Instructional Documentation
 ---

@@ -1,4 +1,4 @@
 ---
 bookFlatSection: true
-title: Reference Documentation
+title: References
 ---
