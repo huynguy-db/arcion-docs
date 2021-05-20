@@ -2,7 +2,7 @@
 title: PostgreSQL
 weight: 1
 ---
-# Source PostgreSQL
+# Source: PostgreSQL
 
 ## I. Create a user in postgresql
 
@@ -11,7 +11,7 @@ weight: 1
     psql -U $POSTGRESQL_ROOT_USER
     ```
 
-2. Create the user
+2. Create a user used for replication
     ```sql
     CREATE USER <username> PASSWORD '<password>';
     ```
@@ -37,15 +37,15 @@ weight: 1
 
 
 ## II. Setup PostgreSQL for Replication
-1. Edit postgresql.conf
-    ```BASH
-    vi $PGDATA/postgresql.conf
-    ```
+  1. Edit postgresql.conf
+     ```BASH
+     vi $PGDATA/postgresql.conf
+     ```
 
 2. Change the parameters below as follows:
     ```Xorg
     wal_level = logical
-    max_replication_slots = 1 #Can be different as per requirements
+    max_replication_slots = 1 #Can be increased if more slots need to be created
     ```
 
 3. To perform log consumption for CDC replication from the PostgreSQL server, you must either use the test_decoding plugin that is by default installed in PostgreSQL or you must install the logical decoding plugin wal2json
@@ -70,12 +70,18 @@ weight: 1
         ```SQL
         SELECT 'init' FROM pg_create_logical_replication_slot('<replication_slot_name>', 'test_decoding');
         ```
+    2. Verify the slot has been created
+        ```sql
+        SELECT * from pg_replication_slots;
+        ```
 
-    2. Set the replicant identity to FULL for the tables  part of the replication process that do no have a primary key
+4. Set the replicant identity to FULL for the tables  part of the replication process that do no have a primary key
         ```SQL
         ALTER TABLE <table_name> REPLICA IDENTITY FULL;
         ```
+
 <br></br>
+
 **For the proceeding steps 3-5, position yourself in Replicant's ```HOME``` directory**
 ## III. Setup Connection Configuration
 
@@ -85,7 +91,6 @@ weight: 1
     ```
 
 2. Make the necessary changes as follows:
-
     ```YAML
     type: POSTGRESQL
 
@@ -97,7 +102,38 @@ weight: 1
     password: "Replicant#123" #Replace Replicant#123 with your user's password
 
     max-connections: 30 #Maximum number of connections replicant can open in postgresql
+
+   #List your replication slots (slots which hold the real-time changes of the source database) as follows
+      replication-slots:
+        io_replicate: #Replace "io-replicate" with your replication slot name
+          - wal2json #plugin used to create replication slot (wal2json | test_decoding)
+        io_replicate1: #Replace "io-replicate1" with your replication slot name
+          - wal2json
+
+    log-reader-type: SQL [SQL|STREAM]
     ```
+
+
+
+**Note**: If the log-reader-type is set to `STREAM`, the replication connection must be allowed as the <username> that will be used to perform the replication. To enable replication connection, the pg_hba.conf file needs to be modified with some of the following entries depending on the use-case:
+
+1. Navigate to the pg_hba file:
+   ```BASH
+   vi $PGDATA/pg_hba.conf
+   ```
+2. Make the necessary changes as follows:
+   ```BASH
+   # TYPE  DATABASE        USER                  ADDRESS                 METHOD
+
+   # allow local replication connection to <username> (IPv4 + IPv6)
+   local     replication         <username>                                         trust
+   host      replication         <username>    127.0.0.1/32                 <auth-method>
+   host      replication         <username>    ::1/128                           <auth-method>
+
+   # allow remote replication connection from any client machine  to <username> (IPv4 + IPv6)
+   host     replication          <username>    0.0.0.0/0                     <auth-method>
+   host     replication          <username>    ::0/0                             <auth-method>
+   ```
 
 ## IV. Setup Filter Configuration
 
@@ -105,40 +141,63 @@ weight: 1
     ```BASH
     vi filter/postgresql_filter.yaml
     ```
+2. In accordance to you replication needs, specify the data which is to be replicated. Use the format of the example explained below.  
 
-2. Make the necessary changes as shown below:
-    ```YAML
+    ```yaml
     allow:
-    - catalog: "postgres" #Replace postgres with your database name
-      schema: "public" #Replace public with the name of your schema
-      types: [TABLE] #Enter the applicable object type: TABLE or VIEW or TABLE,VIEW
+      #In this example, data of object type Table in the catalog postgres and schema public will be replicated
+      catalog: "postgres"
+      schema: "public"
+      types: [TABLE]
 
-      #Below, you can specify which tables within the schema will be replicated. If not specified, all tables will be replicated.
+      #From catalog postgres and schema public, only the CUSTOMERS, ORDERS, and RETURNS tables will be replicated.
+      #Note: Unless specified, all tables in the catalog will be replicated
       allow:
-        Orders: #Replace Orders with the name of the table you want to replicate
+        CUSTOMERS:
+        #Within CUSTOMERS, the FB and IG columns will be replicated  
+          allow: ["FB, IG"]
 
-        #The parameters below are optional
-          allow: [column1, column2] #You may replace column1, column2 with a list of specific columns within this table you want to replicate.
-          #To replicate all columns in this table, remove this configuration
-          conditions: "O_ORDERKEY < 5000" #Enter the predicate that you want to apply during replication
 
-        Customers: #Replace Customers with the name of the table you want to replicate
+        ORDERS:  
+          #Within ORDERS, only the product and service columns will be replicated as long as they meet the condition o_orderkey < 5000
+          allow: ["product", "service"]
+          conditions: "o_orderkey < 5000"
 
-          #The parameters below are optional
-          block: [column1, column2] #You may replace column1, column2 with a list of columns to blacklist within this table;
-          #all other columns will be allowed
-          conditions: "C_CUSTKEY < 5000" #Enter the predicate that you want to apply during replication
-    ```
+
+
+        RETURNS: #All columns in the table PART will be replicated without any predicates
+        ```
+
+The following is a template of the format you must follow:
+  ```YAML
+  allow:
+    catalog: <your_catalog_name>
+    schema: <your_schema_name>
+    types: <your_object_type>
+
+  #If not collections are specified, all the data tables in the provided catalog and schema will be replicated
+  allow:
+    <your_table_name>:
+      allow: ["your_column_name"] #if necessary
+      condtions: "your_condition" #if necessary
+
+    <your_table_name>:  
+      allow: ["your_column_name"] #if necessary
+      conditions: "your_condition" #if necessary
+
+    <your_table_name>:
+      allow: ["your_column_name"] #if necessary
+      conditions: "your_condition" #if necessary          
+  ```
+
 
 ## V. Setup Extractor Configuration
 
 For real-time replication, you must create a heartbeat table in the source PostgreSQL
 
-1. Create a heartbeat table in the catalog/schema you are going to replicate with the following DDL
+1. Create a heartbeat table in any schema of the database you are going to replicate with the following DDL
    ```SQL
-   CREATE TABLE "<user_database>"."<schema>"."replicate_io_cdc_heartbeat"(
-     "timestamp" BIGINT NOT NULL,
-     PRIMARY KEY("timestamp"));
+   CREATE TABLE "<user_database>"."public"."replicate_io_cdc_heartbeat"("timestamp" INT8 NOT NULL, PRIMARY KEY("timestamp"))
    ```
 
 2. Grant ```INSERT```, ```UPDATE```, and ```DELETE``` privileges to the user configured for replication
@@ -149,10 +208,52 @@ For real-time replication, you must create a heartbeat table in the source Postg
    ```
 4. Under the Realtime Section, make the necessary changes as follows
      ```YAML
-     heartbeat:
-       enable: true
-       catalog: "postgres" #Replace postgres with your database name
-       schema: "public" #Replace public with your schema name
-       table-name [20.09.14.3]: replicate_io_cdc_heartbeat #Replace replicate_io_cdc_heartbeat with your heartbeat table's name if applicable
-       column-name [20.10.07.9]: timestamp #Replace timestamp with your heartbeat table's column name if applicable
+     realtime:
+       heartbeat:
+         enable: true
+         catalog: "postgres" #Replace postgres with your database name
+         schema: "public" #Replace public with your schema name
+         table-name [20.09.14.3]: replicate_io_cdc_heartbeat #Heartbeat table name if changed
+         column-name [20.10.07.9]: timestamp #Heartbeat table column name if changed
      ```
+
+
+
+## VI. Setup PostgreSQL Delta-snapshot if Necessary
+
+If you are unable to create replication slots in postgresql using either wal2json or test_decoding then Replicant supports a mode delta-snapshot. In delta-snapshot Replicant uses postgres’s internal column to identify changes.
+
+Note: It is strongly recommended to supply a row-identifier-key in the per-table-config section for a table which does not have a PK/UK defined
+
+1. Navigate to the sample delta-snapshot configuration file
+  ```BASH
+  vi/conf/src/postgresql_delta.yaml
+  ```
+2. Under the delta snapshot section, make the necessary changes as follows:
+  ```YAML
+  delta-snapshot:
+    row-identifier-key:
+    update-key:
+    replicate-deletes:     
+    per-table-config:
+    - catalog: tpch
+      schema: public
+      tables:
+        <table_name>:
+          row-key-identifier:
+          update-key:
+          replicate-deletes:     
+  #      testTable
+  #        split-key: split-key-column  # Any numeric/timestamp column with sufficiently large number of distincts
+  #        split-hints:
+  #          row-count-estimate: 100000  # Estimated row count, if supplied replicant will leverage
+  #          split-key-min-value: 1      #Lower bound of split key value
+  #          split-key-max-value: 60_000 #Upper bound of split key value, if supplied replicant will leverage and avoid querying source database for the same
+  #        delta-snapshot-key: delta-snapshot-key-column  # A monotonic increasing numeric/timestamp column which gets new value on each INSERT/UPDATE
+  #        row-identifier-key: [col1, col2]   # A set of columns which uniquely identify a row
+  #        update-key: [col1, col2]  # A set of columns which replicant should use to perform deletes/updates during incremental replication
+
+        lineitem1:
+          row-identifier-key: [l_orderkey, l_linenumber]
+          split-key: l_orderkey
+  ```

@@ -67,7 +67,7 @@ Replicant can run on the default extractor configurations for the data snapshot.
             * **split-method**: Used to override the global split method in the specific table
             * **extraction-method**: Used to override the global extraction method in the specified table
             * **tpt-num-files-per-job**: Used to override the global Num files per TPT job in the specified table
-            * **row-identifier-key**: Here you can specify a list of columns which uniquely identify a row in this table. If a table does not have a PK/UK defined and if the table has a subset of columns that can uniquely identify rows in the table, it is strongly recommended to specify that subset of columns as a row-identifier key. Specifying an identifier can significantly improve the performance of the over replication of this table.
+            * **row-identifier-key**: Here you can specify a list of columns which uniquely identify a row in this table. If a table does not have a PK/UK defined and if the table has a subset of columns that can uniquely identify rows in the table, it is strongly recommended to specify that subset of columns as a row-identifier key. Specifying an identifier can significantly improve the performance of incremental replication of this table.
             * **extraction-priority**: Priority for scheduling extraction of table. Higher value is higher priority. Both positive and negative values are allowed. Default priority is 0 if unspecified.
             * **normalize**: This parameter is only supported for Mongo Database as a source. The configuration is used to configure the normalization of data.
               * **de-duplicate**: true/false (Default set to false) To de-duplicate data during normalization

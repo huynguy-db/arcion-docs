@@ -21,12 +21,12 @@ In realtime mode, after being converted into a CSV file, if the original table c
 
 
 In realtime mode, after being converted into either type of file, if the original table contained x columns a row in the CSV/JSON file will contain data for 3x+3 columns. Every row will correspond to a single DML operation. The first 3x columns of a row can be treated as x triplets where every triplet denotes:
-    * **New_Val**: New value for that column coming via DML operation
-    * **Old_Val**: Old value of that column which is to be changed via DML operation Exists_Val: An Integer. It can have values:
-      * 0: The column value is not present in neither New_Val nor Old_Val section of the DML
-      * 1: The column value is present in New_Val section of the DML
-      * 2: The column value is present in Old_Val section of the DML  
-      * 3: The column value is present in both New_Val and Old_Val section of the DML
+* **New_Val**: New value for that column coming via DML operation
+* **Old_Val**: Old value of that column which is to be changed via DML operation Exists_Val: An Integer. It can have values:
+  - 0: The column value is not present in neither New_Val nor Old_Val section of the DML
+  - 1: The column value is present in New_Val section of the DML
+  - 2: The column value is present in Old_Val section of the DML  
+  - 3: The column value is present in both New_Val and Old_Val section of the DML
 
 **Note**:
 * Exists_Val is needed to differentiate when a column value is NULL. If the corresponding Exists_Val is non-zero, that means the user has provided NULL value in the DML. If it’s zero, that means that user hasn’t mentioned the column in the DML.
@@ -197,7 +197,5 @@ If the update command is applied to the source system, the JSON file in S3 will 
       "operationcount":
       "{\"insertCount\":6,\"updateCount\":1,\"deleteCount\":1,\"replaceCount\":0}"
   }
-
-
 
   ```
