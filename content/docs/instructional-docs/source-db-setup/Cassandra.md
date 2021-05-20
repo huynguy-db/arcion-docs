@@ -4,9 +4,11 @@ weight: 5
 ---
 # Source Cassandra
 
+The directory in which you have downloaded `replicant-cli` in will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
+
 ## I. Setup Connection Configuration
 
-1. Navigate to the connection configuration file:
+1. From `$REPLICANT_HOME` navigate to the connection configuration file:
     ```BASH
     vi conf/conn/cassadra.yaml
     ```
@@ -52,7 +54,7 @@ weight: 5
     ```
 ## II. Setup Filter Configuration
 
-1. Navigate to the filter configuration file
+1. From `$REPLICANT_HOME` navigate to the filter configuration file
     ```BASH
     vi filter/cassandra_filter.yaml
     ```
@@ -113,7 +115,7 @@ For real-time replication, you must create a heartbeat table in the source Casan
 
 2. Grant ```INSERT```, ```UPDATE```, and ```DELETE``` privileges to the user configured for replication.
 
-3. Navigate to the extractor configuration file:
+3. From `$REPLICANT_HOME` navigate to the extractor configuration file:
    ```BASH
    vi conf/src/cassandra.yaml
    ```
@@ -151,3 +153,5 @@ The following limitations will apply when replicating from Casandra as a source:
 3. Unsupported Datatypes:
    * map
    * set
+
+**Note**: The operation(Insert/Update/Delete) count during real-time replication will be displayed on the dashboard as (number of operations)*(number of replication factors).
