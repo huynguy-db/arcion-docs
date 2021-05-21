@@ -18,7 +18,7 @@ bookHidden: true
 
 1. Run the following command in every host you want to run Cluster Manager in:
     ```BASH
-    ./bin/replicant-cluster-manager start-cluster --host-id host1 --metadata conf/metadata/oracle.yaml
+    ./bin/replicant-cluster-manager start-cluster --host-id host1 --cluster conf/cluster/cluster.yaml --metadata conf/metadata/oracle.yaml
     ```
 
 ## III. Add Jobs
@@ -32,11 +32,12 @@ bookHidden: true
 2. Edit the following job configuration as necessary:
     ```YAML
     add-jobs:
-      job-command: "Enter the command you use to run Replicant"
-      replicant-id: "Enter the value pf ```--id``` from the job command"
-      replicant-group: "Enter the group id specified in Replicant's distribution configuration" ##Only applicable is using distributed replication
-      host-affinity: "Enter the host-id of Cluster Manager"
+      job-command: "/home/replicate/core/bin/replicate full /home/replicate/core/conf/conn/oracle_src.yaml /home/replicate/core/conf/conn/memsql_dst.yaml --extractor /home/replicate/core/conf/src/oracle.yaml --applier /home/replicate/core/conf/dst/memsql.yaml --replace-existing --filter /home/replicate/core/filter/oracle_filter.yaml --metadata /home/replicate/core/conf/metadata/memsql.yaml --general /home/replicate/core/conf/general/general.yaml --distribute /home/replicate/core/conf/distribution/distribution.yaml --id repl1 --overwrite"
+      replicant-id: "repl1" #Replace repl1 with the value of ```--id``` from the job command
+      replicant-group: "test_group" #Only applicable if using distributed replication
+      host-affinity: "host1" #Replace host1 with the host-id of the intended host in the cluster
     ```
+
 
 3. Add the job:
     ```BASH
@@ -49,33 +50,33 @@ Using the job configuration file, the following operations can be performed on a
 * Stop a job
   ```YAML
   stop-jobs:
-    replicant-id:
-    replicant-group:
+    replicant-id: "repl1" #Replace repl1 the replicant ID of the job you want to stop
+    #replicant-group: "test_group" #If applicable, replace test_group with the replicant group of the job you want to stop
   ```
 * Restart a job
   ```YAML
   restart-jobs:
-    replicant-id:
-    replicant-group:
+    replicant-id: "repl1" #Replace repl1 the replicant ID of the job you want to restart
+    #replicant-group: "test_group" #If applicable, replace test_group with the replicant group of the job you want to restart
   ```
 * Resume a job
   ```YAML
   resume-jobs:
-    replicant-id:
-    replicant-group:
+    replicant-id:  "repl1" #Replace repl1 the replicant ID of the job you want to resume
+    #replicant-group:  "test_group" #If applicable, replace test_group with the replicant group of the job you want to resume
   ```
 * Remove a job
   ```YAML
   remove-jobs:
-    replicant-id:
-    replicant-group:
+    replicant-id: "repl1" #Replace repl1 the replicant ID of the job you want to remove
+    #replicant-group: #If applicable, replace test_group with the replicant group of the job you want to remove
   ```
 * Change host affinity for a job
   ```YAML
   alter-host-affinity-for-jobs:
-    replicant-id:
-    replicant-group:
-    host-affinity:
+    replicant-id: "repl1" #Replace repl1 the replicant ID of the job you want to alter hosts for
+    #replicant-group: "test_group" #If applicable, replace test_group with the replicant group of the job you want to alter hosts for
+    host-affinity: "host1" #Replace host1 with the new host-id
   ```
 
 
