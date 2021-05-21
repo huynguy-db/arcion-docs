@@ -1,6 +1,7 @@
 ---
 title: Cluster Manager
 weight: 9
+bookHidden: true
 ---
 # Cluster Manager Explanations
 
