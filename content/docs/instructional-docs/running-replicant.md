@@ -22,13 +22,13 @@ Replicant must be run in one of three replication modes: full, snapshot, and rea
   ./bin/replicant full conf/conn/source_database_name.yaml conf/conn/target_database_name.yaml --extractor conf/src/source_database_name.yaml --applier conf/dst/target_database_name.yaml  --notify conf/notification/notification.yaml –statistics conf/statistics/statistics.yaml --metadata conf/metadata/database_name.yaml --filter filter/source_database_name_filter.yaml --id repl1 --replace --overwrite
   ```  
 
-  In full mode, Replicant transfers all existing data from the source to the target database setup with a one-time data snapshot. Replicant first creates the destination schemas after that is complete, Replicant transfers the existing data from the source to the destination  Additionally, Replicant will continue synchronizing the destination with the source, even after the snapshot is completed.
+In full mode, Replicant transfers all existing data from the source to the target database setup with a one-time data snapshot. Replicant first creates the destination schemas after that is complete, Replicant transfers the existing data from the source to the destination  Additionally, Replicant will continue synchronizing the destination with the source, even after the snapshot is completed.
 
-  As soon as the snapshot data movement is done, Replicant will seamlessly transition from snapshot migration to continuous replication. Once the smooth transition is ensured, Replicant will start listening for incoming changes in the source database using log-based CDC.
+As soon as the snapshot data movement is done, Replicant will seamlessly transition from snapshot migration to continuous replication. Once the smooth transition is ensured, Replicant will start listening for incoming changes in the source database using log-based CDC.
 
-  Finally, Replicant in full mode can either be run with only the bare minimum required configurations which are outlined in the `source and target database setup instructions`, or it can be run with the advanced configurations, outlined in `additional replicant configurations` setup instructions.
+Finally, Replicant in full mode can either be run with only the bare minimum required configurations which are outlined in the `source and target database setup instructions`, or it can be run with the advanced configurations, outlined in `additional replicant configurations` setup instructions.
 
-  **Note**: Replicant shows various useful replication statistics in the dashboard while the replication is in progress.
+**Note**: Replicant shows various useful replication statistics in the dashboard while the replication is in progress.
 
 
 ## Replicant Snapshot Mode
@@ -58,7 +58,6 @@ In real-time mode, replicant first creates the destination schemas if they are n
   ```
 
 In init mode, Replicant will retrieve the existing source schemas and create equivalent schemas on the destination.
-
 
 
 ## Fetch-Schemas
