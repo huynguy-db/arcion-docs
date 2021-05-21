@@ -1,12 +1,11 @@
 ---
+title: Quickstart
 weight: 2
 ---
 
-# Getting Started
-
+# Quickstart
 
 ## I. Host Machine Prerequisites
-
 
 Please ensure your host machine that will run Replicant meets the following minimum hardware and software prerequisites.
 
@@ -18,30 +17,26 @@ Please ensure your host machine that will run Replicant meets the following mini
 * Linux (CentOS/Ubuntu/Redhat)
 * Java 8 or above either from a JRE or JDK installation
 
-
-
 ## II. Download Replicant and Create a Home Repository
-
 
 1. Click the following to download the latest version of Replicant: [Replicant Download](https://blitzz-releases.s3-us-west-1.amazonaws.com/general/replicant/replicant-cli-21.02.01.7.zip)
 2. Unzip the downloaded Replicant archive
    ```BASH
    unzip replicant-cli-<version>.zip
    ```
-This will create a directory named ```replicant-cli``` that will serve as Replicant's ```HOME```. For the proceeding steps, position yourself in ```HOME```.
+This will create a directory named ```replicant-cli``` that will serve as ```REPLICANT_HOME```. For the proceeding steps, position yourself in ```REPLICANT_HOME```.
 
 
 ## III. Licensing
 1. Download the license file for Replicant and rename it to replicant.lic
   * Note: The license file must be named replicant.lic
-2. Copy replicant.lic into ```HOME```
+2. Copy replicant.lic into ```REPLICANT_HOME```
   * Note: You must copy the replicant.lic file into Replicant's home directory and not in the licenses folder of Replicant
-
 
 
 ## IV. Setup Source Database Configuration
 
-1. Edit the sample connection configuration file of the source database
+1. From ```REPLICANT_HOME``` navigate to the sample connection configuration file of the source database
     ```BASH
     vi conf/conn/<database-name>.yaml
     ```
@@ -68,7 +63,7 @@ This will create a directory named ```replicant-cli``` that will serve as Replic
 
     For further database specific examples, please refer to Source Database Setup.
 
-2. Edit the sample filter file of the source database
+2. From ```REPLICANT_HOME``` navigate to the sample filter file of the source database
    ```BASH
    vi filter/<source-database-name>_filter.yaml
    ```
@@ -88,7 +83,7 @@ This will create a directory named ```replicant-cli``` that will serve as Replic
 
 ## V. Target Database Setup
 
-1. Edit the sample connection configuration file of the target database
+1. From ```REPLICANT_HOME``` navigate to the sample connection configuration file of the target database
 
     ```BASH
     vi conf/conn/<database-name>.yaml
@@ -112,7 +107,6 @@ This will create a directory named ```replicant-cli``` that will serve as Replic
     retry-wait-duration-ms: 1000
     ```
 
-
     For database specific examples, please refer to Source Database Setup.
 
 
@@ -120,7 +114,7 @@ This will create a directory named ```replicant-cli``` that will serve as Replic
 
 Replicant is now ready to run in snapshot mode. The snapshot will only transfer existing data from the source database to the target database. If you would like to transfer real-time changes in addition to the snapshot, skip step 6 and proceed to steps 7 and 8 to run Replicant in full mode.
 
-1. Execute the following command from ```HOME``` to run Replicant in snapshot mode
+1. Execute the following command from ```REPLICANT_HOME``` to run Replicant in snapshot mode
 
    ``` BASH
    ./bin/replicant snapshot conf/conn/<source-database-name>.yaml \
@@ -134,7 +128,6 @@ The proceeding steps are only required if you intend to run Replicant in real-ti
 
 ## VII. Heartbeat table setup
 
-
 1. Create a heartbeat table in the catalog/schema you are going to replicate with the following DDL
    ``` BASH
    CREATE TABLE <catalog>.<schema>.replicate_io_cdc_heartbeat( \
@@ -143,7 +136,7 @@ The proceeding steps are only required if you intend to run Replicant in real-ti
 
 2. Grant ```INSERT```, ```UPDATE```, and ```DELETE``` privileges to the user configured for Replicant
 
-3. Navigate to the heartbeat table's configuration
+3. From ```REPLICANT_HOME``` navigate to the heartbeat table's configuration
    ```BASH
    vi conf/src/<source-database-name>.yaml
    ```
@@ -157,11 +150,9 @@ The proceeding steps are only required if you intend to run Replicant in real-ti
      interval-ms: 10000
     ```
 
-
-
 ## VIII. Run Replicant in full mode
 
-1. From ```HOME``` enter the following to run Replicant in full mode
+1. From ```REPLICANT_HOME``` enter the following to run Replicant in full mode
    ```BASH
    ./bin/replicant full conf/conn/<source-database-name>.yaml \
    conf/conn/<destination-database-name>.yaml \
@@ -169,7 +160,6 @@ The proceeding steps are only required if you intend to run Replicant in real-ti
    --applier conf/dst/<destination-database-name>.yaml \
    --filter filter/<source-database-name>_filter.yaml \
    ```
-
 
 ## Database Specific Setup Overview
 
