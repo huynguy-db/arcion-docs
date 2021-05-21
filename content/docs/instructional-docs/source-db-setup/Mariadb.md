@@ -1,6 +1,7 @@
 ---
 title: MariaDB
 weight: 5
+bookHidden: false
 ---
 
 # Source MariaDB Database

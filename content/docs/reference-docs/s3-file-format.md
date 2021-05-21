@@ -199,5 +199,4 @@ Example S3 JSON file outputs for three different sample commands/changes in the 
       "operationcount":
       "{\"insertCount\":6,\"updateCount\":1,\"deleteCount\":1,\"replaceCount\":0}"
   }
-
   ```

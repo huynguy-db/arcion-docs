@@ -1,6 +1,7 @@
 ---
 title: MySQL
 weight: 4
+bookHidden: false
 ---
 # Source MySQL
 

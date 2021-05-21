@@ -1,10 +1,11 @@
 ---
 title: Cassandra
 weight: 5
+bookHidden: false
 ---
 # Source Cassandra
 
-The directory in which you have downloaded `replicant-cli` in will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
+The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
 
 ## I. Setup Connection Configuration
 
