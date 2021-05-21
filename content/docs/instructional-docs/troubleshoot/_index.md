@@ -1,6 +1,7 @@
 ---
 weight: 7
 title: Performance Enhancing and Troubleshoot
+bookHidden: true
 ---
 
 ## Extractor Configuration

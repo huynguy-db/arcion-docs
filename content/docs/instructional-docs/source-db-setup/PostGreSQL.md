@@ -1,7 +1,7 @@
 ---
 title: PostgreSQL
 weight: 1
-bookHidden: false
+bookHidden: true
 ---
 # Source: PostgreSQL
 

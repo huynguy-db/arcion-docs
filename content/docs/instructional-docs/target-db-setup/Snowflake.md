@@ -1,6 +1,7 @@
 ---
 title: Snowflake
 weight: 10
+bookHidden: true
 ---
 # Destination Snowflake
 
@@ -46,7 +47,7 @@ weight: 10
 
         #For versions 20.09.14.3 and beyond
         native-load-configs: #Specify the user-provided LOAD configuration string which will be appended to the s3 specific LOAD SQL command
-        
+
     realtime:
       threads: 8 #Specify the maximum number of threads Replicant should use for writing to the target
       max-retries-per-op: 30 #Specify the maximum amount of retries for a failed operation

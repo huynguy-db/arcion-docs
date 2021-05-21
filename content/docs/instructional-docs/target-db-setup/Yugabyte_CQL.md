@@ -1,6 +1,7 @@
 ---
 title: YugabyteCQL
 weight: 8
+bookHidden: true
 ---
 # Destination YugabyteCQL
 

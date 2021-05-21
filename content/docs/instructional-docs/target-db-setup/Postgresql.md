@@ -1,6 +1,7 @@
 ---
 title: PostgreSQL
 weight: 5
+bookHidden: true
 ---
 # Destination PostgreSQL
 

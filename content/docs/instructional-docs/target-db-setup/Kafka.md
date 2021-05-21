@@ -1,6 +1,7 @@
 ---
 title: Kafka
 weight: 11
+bookHidden: true
 ---
 # Destination Kafka
 

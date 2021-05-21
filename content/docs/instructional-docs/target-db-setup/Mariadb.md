@@ -1,6 +1,7 @@
 ---
 title: MariaDB
 weight: 9
+bookHidden: true
 ---
 # Destination Maria Database  
 

@@ -1,7 +1,7 @@
 ---
 title: Oracle
 weight: 1
-bookHidden: false
+bookHidden: true
 ---
 
 # Source Oracle

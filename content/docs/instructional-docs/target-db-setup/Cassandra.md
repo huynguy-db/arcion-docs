@@ -1,6 +1,7 @@
 ---
 title: Cassandra
 weight: 6
+bookHidden: true
 ---
 # Destination Cassandra
 

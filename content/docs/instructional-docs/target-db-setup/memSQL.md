@@ -1,6 +1,7 @@
 ---
 title: MemSQL
 weight: 2
+bookHidden: true
 ---
 # Destination memSQL
 

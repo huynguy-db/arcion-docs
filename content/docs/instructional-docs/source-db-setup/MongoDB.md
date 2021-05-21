@@ -1,7 +1,7 @@
 ---
 title: Mongo Database
 weight: 3
-bookHidden: false
+bookHidden: true
 ---
 
 # Source Mongo Database

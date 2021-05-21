@@ -1,4 +1,4 @@
-baseURL = "https://docs.blitzz.io"
+baseURL = "https://docs.blitzz.io/"
 languageCode = "en-us"
 theme = "book"
 [markup]
@@ -25,5 +25,5 @@ theme = "book"
 
 [deployment]
   [[deployment.targets]]
-    name="blitzz-docs"
+    name="replicant-docs"
     URL="gs://docs.blitzz.io"

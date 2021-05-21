@@ -1,6 +1,7 @@
 ---
 title: Cockroach
 weight: 4
+bookHidden: true
 ---
 # Destination Cockroach
 
