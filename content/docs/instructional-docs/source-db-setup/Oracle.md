@@ -304,4 +304,4 @@ For real-time replication, you must create a heartbeat table in the source Oracl
       #start-position:
         #start-scn: 2362927
     ```
-    For a detailed explanation of configuration parameters in the extractor file, read: [Extractor Reference]({{< ref "/docs/reference-docs/extractor-reference" >}} "Extractor Reference")
+For a detailed explanation of configuration parameters in the extractor file, read: [Extractor Reference]({{< ref "/docs/reference-docs/extractor-reference" >}} "Extractor Reference")
