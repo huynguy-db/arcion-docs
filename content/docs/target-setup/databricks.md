@@ -29,16 +29,20 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
     #lob-store-path: "/LOB_STORAGE"
 
-    stage: #Note: You must use DATABRICKS_DBFS or an external stage like S3 to hold the data files
-      type: S3 | DATABRICKS_DBFS #Specify your stage type
-      root-dir: "replicate-stage/databricks-stage" #Specify the path to a directory in S3 which can be used to stage bulk-load files
-      conn-url: "replicate-stage" #Specify the conn-url for your stage; For S3 replace replicate-stage with your bucket name
-
-      #For DATABRICKS_DBFS only
+    #For Databricks DBFS Stage:
+    stage:
+      type: DATABRICKS_DBFS #Specify your stage type
+      root-dir: "replicate-stage/databricks-stage" #Specify the path to DBFS stage
       use-credentials: true|false #Default is false; When true, you must set  host, port, username, and password in the connection configuration section
 
-      #For S3 only:
+    #OR
+
+    #For S3 Stage:
+    stage:
+      type: S3
+      root-dir: "replicate-stage/s3-stage" #Specify the path to S3 stage
       key-id: "<S3 access key>"  #Replace <S3 access key> with your S3 access key
+      conn-url: "replicate-stage" #Replace replicate-stage with your bucket name
       secret-key: "<S3 secret key>" #Replace <S3 secret key> with your S3 secret key
 
     max-retries: 100 #Enter the maximum number of times Replicant can re-attempt a failed operation
@@ -58,8 +62,8 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
       #If bulk-load is used, Replicant will use the native bulk-loading capabilities of the target database
       bulk-load:
-        enable: true|false #Set to true if you want to enable bulk loading
-        type: PIPE|FILE #Specify the type of bulk loading between FILE and PIPE
+        enable: true
+        type: FILE
         serialize: true|false #Set to true if you want the generated files to be applied in serial/parallel fashion
 
     realtime:
