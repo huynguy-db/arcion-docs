@@ -176,11 +176,12 @@ bookHidden: true
     ALTER PLUGGABLE DATABASE $PDB_NAME OPEN READ WRITE FORCE;
     ```
 <br> </br>
-The proceeding steps are to set up Replicant. Position yourself at the `$REPLCIANT_HOME` directory.
+The proceeding steps are to set up Replicant. The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
+
 
 ## V. Setup Connection Configuration
 
-1. Navigate to the connection configuration file:
+1. From `$REPLICANT_HOME`, navigate to the connection configuration file:
     ```BASH
     vi conf/conn/oracle.yaml
     ```
@@ -201,7 +202,7 @@ The proceeding steps are to set up Replicant. Position yourself at the `$REPLCIA
 
 ## VI. Setup Filter Configuration
 
-1. Navigate to the filter configuration file:
+1. From `$REPLICANT_HOME`, navigate to the filter configuration file:
     ```BASH
     vi filter/oracle_filter.yaml
     ```
@@ -262,7 +263,7 @@ For real-time replication, you must create a heartbeat table in the source Oracl
 
 2. Grant ```INSERT```, ```UPDATE```, and ```DELETE``` privileges to the user configured for replication
 
-3. Navigate to the extractor configuration file:
+3. From `$REPLICANT_HOME`, navigate to the extractor configuration file:
    ```BASH
    vi conf/src/oracle.yaml
    ```
