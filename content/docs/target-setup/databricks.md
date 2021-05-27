@@ -65,4 +65,4 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     realtime:
       threads: 4 #Maximum number of threads Replicant should use for writing to the target
     ```
-For a detailed explanation of configuration parameters in the applier file, read: [Applier Reference]({{< ref "/docs/reference-docs/applier-reference" >}} "Applier Reference")
+For a detailed explanation of configuration parameters in the applier file, read: [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference")

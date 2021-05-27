@@ -1,6 +1,6 @@
 ---
 title: Running Replicant
-weight: 6
+weight: 4
 ---
 # Running Replicant
 
@@ -151,7 +151,7 @@ Replicant has four replication options: overwrite, resume, terminate-post-snapsh
   * **terminate-post-snapshot**: When --terminate-post-snapshot is specified for a replicant job in full mode, Replicant will start in full mode (existing + realtime data replication) and once the snapshot (transfer of existing data) is complete, Replicant will terminate the job. You can resume the replication later on with the --resume option. Upon resumption of the job, Replicant will immediately start realtime replication as previously existing data in the source database will have already been replicated in the data snapshot.
   * **continue-inconsistent-post-failure**: When this option is specified, replicant logs a failed transaction in a failed_txn table and continues replication without stopping. Note that using this option may introduce inconsistencies in the destination database.
 
-## Encrypting Replicant 
+## Encrypting Replicant
 
 If necessary, you may encrypt your configuration files that Replicant will be using to run.  
 

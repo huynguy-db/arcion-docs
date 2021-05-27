@@ -95,4 +95,4 @@ Edit the applier configurations if required.
     # replay-shard-key-update-as-delete-insert: true
     # retry-failed-txn-idempotently: true
     ```
-For a detailed explanation of configuration parameters in the applier file, read: [Applier Reference]({{< ref "/docs/reference-docs/applier-reference" >}} "Applier Reference")
+For a detailed explanation of configuration parameters in the applier file, read: [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference")
