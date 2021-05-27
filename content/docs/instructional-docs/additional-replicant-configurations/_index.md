@@ -26,7 +26,6 @@ Replicant automatically creates a table with the name replicate_io_replication_s
     ```
 
 2. Use the following sample configuration file as a guide to determine and make the necessary changes based on your requirements:
-
     ```YAML
     enable: true #Change this to true/false to enable/disable statistics logging
     purge-statistics:
@@ -49,7 +48,6 @@ Replicant automatically creates a table with the name replicate_io_replication_s
       vi conf/notification/notification.yaml
     ```
 2. For mail-alerts, you make the necessary changes as follows:
-
     ```YAML
     mail-alert:
       enable: true/false #Set to true if you want to enable email notifications
@@ -77,16 +75,11 @@ Replicant automatically creates a table with the name replicate_io_replication_s
       stable-time-out-s: 10000 #Set the stable-time-out-s here
     ```
 
-
-
-
 ## Distribution Configuration
-
 1. To run a distributed replication to divide the load between multiple nodes, make the necessary changes as follows:
     ```YAML
     group:
       id: group_id #Replace group_id with the name of the logical replication group
       leader: node1 # Replace node1 with the name of the replicant node acting as leader
       workers: [node1,node2, node3] #Replace node1,node2, node3 with a list of the replicant ids involved in the distributed replication.
-
     ```

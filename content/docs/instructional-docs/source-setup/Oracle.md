@@ -280,6 +280,7 @@ For real-time replication, you must create a heartbeat table in the source Oracl
     ```YAML
     snapshot:
        threads: 16
+
        fetch-size-rows: 10_000
 
     #   per-table-config:

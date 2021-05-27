@@ -11,16 +11,29 @@ Replicant must be run in one of three replication modes: full, snapshot, and rea
 
 **With Basic Configurations**
 
-1. Enter the following command to run Replicant in full mode with only minimal configurations:
-  ```BASH
-  ./bin/replicant full conf/conn/source_database_name_src.yaml conf/conn/target_database_name.yaml --extractor conf/src/source_database_name.yaml --applier conf/dst/target_database_name.yaml  --filter filter/source_database_name_filter.yaml --id repl1 --replace --overwrite
-  ```
+Enter the following command to run Replicant in full mode with only minimal configurations:
+```BASH
+./bin/replicant full conf/conn/source_database_name_src.yaml \
+conf/conn/target_database_name.yaml \
+--extractor conf/src/source_database_name.yaml \
+--applier conf/dst/target_database_name.yaml  \
+--filter filter/source_database_name_filter.yaml \
+--id repl1 --replace --overwrite
+```
 **With Advanced Configurations**
 
-1. Enter the following command to run Replicant in full mode with advanced configurations:
-  ```BASH
-  ./bin/replicant full conf/conn/source_database_name.yaml conf/conn/target_database_name.yaml --extractor conf/src/source_database_name.yaml --applier conf/dst/target_database_name.yaml  --notify conf/notification/notification.yaml –statistics conf/statistics/statistics.yaml --metadata conf/metadata/database_name.yaml --filter filter/source_database_name_filter.yaml --id repl1 --replace --overwrite
-  ```  
+Enter the following command to run Replicant in full mode with advanced configurations:
+```BASH
+./bin/replicant full conf/conn/source_database_name.yaml \
+conf/conn/target_database_name.yaml \
+--extractor conf/src/source_database_name.yaml \
+--applier conf/dst/target_database_name.yaml \
+--notify conf/notification/notification.yaml \
+–statistics conf/statistics/statistics.yaml \
+--metadata conf/metadata/database_name.yaml \
+--filter filter/source_database_name_filter.yaml \
+--id repl1 --replace --overwrite
+```  
 
 In full mode, Replicant transfers all existing data from the source to the target database setup with a one-time data snapshot. Replicant first creates the destination schemas after that is complete, Replicant transfers the existing data from the source to the destination  Additionally, Replicant will continue synchronizing the destination with the source, even after the snapshot is completed.
 
@@ -33,29 +46,41 @@ Finally, Replicant in full mode can either be run with only the bare minimum req
 
 ## Replicant Snapshot Mode
 
-1. Use the following command to run Replicant in snapshot mode:
-  ```Bash
-  ./bin/replicant snapshot conf/conn/source_database_name_src.yaml conf/conn/target_database_name_dst.yaml --extractor conf/src/source_database_name.yaml --applier conf/dst/target_database_name.yaml  --filter filter/source_database_name_filter.yaml --id repl2 --replace –overwrite
-  ```
+Use the following command to run Replicant in snapshot mode:
+```Bash
+./bin/replicant snapshot \
+ conf/conn/source_database_name_src.yaml \
+ conf/conn/target_database_name_dst.yaml \
+ --extractor conf/src/source_database_name.yaml \
+ --applier conf/dst/target_database_name.yaml  \
+ --filter filter/source_database_name_filter.yaml \
+ --id repl2 --replace –overwrite
+```
 
 In snapshot mode, Replicant first creates the destination schemas, just as in full mode. Once the schemas are created, Replicant captures all the existing data from the source and transfers it to the destination, also known as Replicant's data snapshot. Once all data has been moved to the destination, a summary file will be generated and sent in an email notification if you have configured Replicant to do so. After finishing the snapshot, Replicant will immediately shutdown.
 
 
 ## Replicant Realtime Mode
 
-1. Use the following command to run Replicant in realtime mode:
-  ```Bash
-  ./bin/replicant realtime conf/conn/source_database_name_src.yaml conf/conn/target_database_name_dst.yaml --extractor conf/src/source_database_name.yaml --applier conf/dst/target_database_name.yaml  --filter filter/source_database_name_filter.yaml --id repl2 --replace –overwrite
-  ```
+Use the following command to run Replicant in realtime mode:
+```Bash
+./bin/replicant realtime conf/conn/source_database_name_src.yaml \
+conf/conn/target_database_name_dst.yaml \
+--extractor conf/src/source_database_name.yaml \
+--applier conf/dst/target_database_name.yaml  \
+--filter filter/  source_database_name_filter.yaml \
+--id repl2 --replace –overwrite
+```
 
 In real-time mode, replicant first creates the destination schemas if they are not already present. If the destination schemas are present, Replicant  appends to the existing tables. In real-time mode Replicant starts replicating real-time operations obtained from log-based CDC. By default, real-time mode starts replicating from latest log position, but a custom start position can be specified by the user in real-time section of extractor configuration file.
 
 ## Replicant Init Mode
 
-1. Use the following command to run Replicant in init mode:
-  ```BASH
-  ./bin/replicant init conf/conn/source_database_name_src.yaml conf/conn/target_database_name_dst.yaml
-  ```
+Use the following command to run Replicant in init mode:
+```BASH
+./bin/replicant init conf/conn/source_database_name_src.yaml \
+conf/conn/target_database_name_dst.yaml
+```
 
 In init mode, Replicant will retrieve the existing source schemas and create equivalent schemas on the destination.
 
@@ -64,10 +89,10 @@ In init mode, Replicant will retrieve the existing source schemas and create equ
 
 Replicant can fetch schemas to analyze the current contents of a source or destination.
 
-1. To view the current contents, start Replicant with:
-  ```BASH
-  ./bin/replicant fetch-schemas <conn_config_file>
-  ```
+To view the current contents, start Replicant with:
+```BASH
+./bin/replicant fetch-schemas <conn_config_file>
+```
 Doing so will generate a file named schemas.yaml in the current directory, containing descriptions of all tables.
 
 By, providing an option --output-file <output_path> you can change the default destination for the schemas file. You can also fetch the Filter configuration using  `--filter <filter_file>`  
@@ -79,10 +104,10 @@ Once the schema is fetched, it is possible to modify the file to specify custom 
 
 Inferring schemas is the process of fetching a schema from the source database and conforming it to the destination database.
 
-1. To infer schemas, user should start replicant with
-  ```BASH
-  ./bin/replicant infer-schemas conf/conn/database_name> <dst_type>
-  ```
+To infer schemas, user should start replicant with:
+```BASH
+./bin/replicant infer-schemas conf/conn/database_name> <dst_type>
+```
 For example, for the command  `./bin/replicant infer-schemas conf/conn/oracle_src.yaml ORACLE `, Replicant will fetch schemas from the source Oracle database and modify them so that they conform to the target Oracle database.
 
 Before transferring the database content, it is recommended to examine the schemas on the destination and tailor them to the your specific needs by inferring schemas. Such modified inferred schemas file can be supplied to replicant through `--dst-schemas switch`.
@@ -107,7 +132,12 @@ Replicant has another write mode, `--synchronize-deletes`,  which is relevant on
 * You can stop replication with the CTRL C signal.
 * If you stop replication for any reason, you can restart the job exactly where Replicant had stopped by replacing the `--overwrite` argument `by --resume` in the replicant command:
 ```BASH
-./bin/replicant full conf/conn/source_database_name_src.yaml conf/conn/target_database_name_dst.yaml --extractor conf/src/source_database_name.yaml --applier conf/dst/target_database_name.yaml  --filter filter/source_database_name_filter.yaml --id rep11 --replace --resume
+./bin/replicant full conf/conn/source_database_name_src.yaml \
+conf/conn/target_database_name_dst.yaml \
+--extractor conf/src/source_database_name.yaml \
+--applier conf/dst/target_database_name.yaml \
+--filter filter/source_database_name_filter.yaml \
+--id rep11 --replace --resume
 ```
 
 ## Various Replication Options Explanation
@@ -121,16 +151,17 @@ Replicant has four replication options: overwrite, resume, terminate-post-snapsh
   * **terminate-post-snapshot**: When --terminate-post-snapshot is specified for a replicant job in full mode, Replicant will start in full mode (existing + realtime data replication) and once the snapshot (transfer of existing data) is complete, Replicant will terminate the job. You can resume the replication later on with the --resume option. Upon resumption of the job, Replicant will immediately start realtime replication as previously existing data in the source database will have already been replicated in the data snapshot.
   * **continue-inconsistent-post-failure**: When this option is specified, replicant logs a failed transaction in a failed_txn table and continues replication without stopping. Note that using this option may introduce inconsistencies in the destination database.
 
-## Encryption While Running Replicant
+## Encrypting Replicant 
 
 If necessary, you may encrypt your configuration files that Replicant will be using to run.  
 
-1. Once you have finished editing a particular configuration file with all the necessary values specified, run the following command to encrypt that configuration file:
-  ```BASH
-  ./bin/replicant encrypt-config path/of/configuration/file
-  ```
-2. To encrypt all the configuration files in a given directory, run:
-  ```BASH
-  ./bin/replicant encrypt-config path/of/directory
-  ```
+Once you have finished editing a particular configuration file with all the necessary values specified, run the following command to encrypt that configuration file:
+```BASH
+./bin/replicant encrypt-config path/of/configuration/file
+```
+
+To encrypt all the configuration files in a given directory, run:
+```BASH
+./bin/replicant encrypt-config path/of/directory
+```
 **Note**: There is no command to decrypt an encrypted configuration file. This is to avoid any unwanted attempts of decryption of sensitive information which is present in the configuration files. If you needs to modify a configuration file that you have already encrypted, you must bring the original plain text configuration file from your own backup storage, modify it, and encrypt it again using encrypt-config command.
