@@ -238,13 +238,13 @@ The proceeding steps are to set up Replicant. Position yourself at the `$REPLCIA
 
 
         allow:
-          <your_table_name>:
+          your_table_name_1:
             allow: ["your_column_name"]
             conditions: "your_condition"  
 
-          <your_table_name>:
+          your_table_name_2:
 
-          <your_table_name>:
+          your_table_name_3:
             allow: ["your_column_name"]
             conditions: "your_condition"  
       ```

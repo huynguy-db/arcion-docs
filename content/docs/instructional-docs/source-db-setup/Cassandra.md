@@ -129,12 +129,12 @@ Blitzz Replicant supports two mechanisms for accessing the Cassandra CDC log fil
         types: <your_object_type>
 
 
-        allow:
-          your_table_name_1:
-
-          your_table_name_2:  
+        allow:        
+          your_table_name_1:  
              allow: ["your_column_name"]
              conditions: "your_condition"
+
+          your_table_name_2:
 
           your_table_name_3:
             allow: ["your_column_name"]
