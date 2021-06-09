@@ -1,13 +1,13 @@
 ---
 title: MySQL
 weight: 4
-bookHidden: true
+bookHidden: false
 ---
 # Source MySQL
 
 ## I. Setup Connection Configuration
 
-1. From ```HOME```, navigate to the connection configuration file
+1. From ```$REPLICANT_HOME```, navigate to the connection configuration file
     ```BASH
     vi conf/conn/mysql_src.yaml
     ```
@@ -23,7 +23,7 @@ bookHidden: true
     password: "Replicant#123" #Replace Replicant#123 with the your user's password
 
     slave-server-ids: [1]
-    max-connections: 30 #Specify the maximum number of connections replicant can open in MySQL
+    max-connections: 30 #Maximum number of connections replicant can open in MySQL
     ```
 
 ## II. Setup Filter Configuration

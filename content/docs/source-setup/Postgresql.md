@@ -1,7 +1,7 @@
 ---
 title: PostgreSQL
 weight: 1
-bookHidden: true
+bookHidden: false
 ---
 # Source: PostgreSQL
 
@@ -25,11 +25,8 @@ bookHidden: true
 
     ```sql
     GRANT
-    SELECT,
-    INSERT,
-    UPDATE,
-    DELETE,
-    REFERENCES ON ALL TABLES IN SCHEMA "<schema>" TO <username>;
+    SELECT
+    ON ALL TABLES IN SCHEMA "<schema>" TO <username>;
     ```
 
     ```SQL
@@ -83,7 +80,7 @@ bookHidden: true
 
 <br></br>
 
-**For the proceeding steps 3-5, position yourself in Replicant's ```HOME``` directory**
+**For the proceeding steps 3-5, position yourself in Replicant's ```$REPLICANT_HOME``` directory**
 ## III. Setup Connection Configuration
 
 1. Navigate to the connection configuration file
@@ -128,12 +125,12 @@ bookHidden: true
 
    # allow local replication connection to <username> (IPv4 + IPv6)
    local     replication         <username>                                         trust
-   host      replication         <username>    127.0.0.1/32                 <auth-method>
-   host      replication         <username>    ::1/128                           <auth-method>
+   host      replication         <username>    127.0.0.1/32                     <auth-method>
+   host      replication         <username>    ::1/128                          <auth-method>
 
    # allow remote replication connection from any client machine  to <username> (IPv4 + IPv6)
-   host     replication          <username>    0.0.0.0/0                     <auth-method>
-   host     replication          <username>    ::0/0                             <auth-method>
+   host     replication          <username>    0.0.0.0/0                        <auth-method>
+   host     replication          <username>    ::0/0                            <auth-method>
    ```
 
 ## IV. Setup Filter Configuration
@@ -144,7 +141,7 @@ bookHidden: true
     ```
 2. In accordance to you replication needs, specify the data which is to be replicated. Use the format of the example explained below.  
 
-    ```yaml
+    ```YAML
     allow:
       #In this example, data of object type Table in the catalog postgres and schema public will be replicated
       catalog: "postgres"
@@ -167,29 +164,30 @@ bookHidden: true
 
 
         RETURNS: #All columns in the table PART will be replicated without any predicates
-        ```
+    ```
 
-The following is a template of the format you must follow:
-  ```YAML
-  allow:
-    catalog: <your_catalog_name>
-    schema: <your_schema_name>
-    types: <your_object_type>
+    The following is a template of the format you must follow:
 
-  #If not collections are specified, all the data tables in the provided catalog and schema will be replicated
-  allow:
-    <your_table_name>:
-      allow: ["your_column_name"] #if necessary
-      condtions: "your_condition" #if necessary
+      ```YAML
+      allow:
+        catalog: <your_catalog_name>
+        schema: <your_schema_name>
+        types: <your_object_type>
 
-    <your_table_name>:  
-      allow: ["your_column_name"] #if necessary
-      conditions: "your_condition" #if necessary
+      #If not collections are specified, all the data tables in the provided catalog and schema will be replicated
+      allow:
+        <your_table_name>:
+          allow: ["your_column_name"] #if necessary
+          condtions: "your_condition" #if necessary
 
-    <your_table_name>:
-      allow: ["your_column_name"] #if necessary
-      conditions: "your_condition" #if necessary          
-  ```
+        <your_table_name>:  
+          allow: ["your_column_name"] #if necessary
+          conditions: "your_condition" #if necessary
+
+        <your_table_name>:
+          allow: ["your_column_name"] #if necessary
+          conditions: "your_condition" #if necessary          
+      ```
 
 
 ## V. Setup Extractor Configuration
