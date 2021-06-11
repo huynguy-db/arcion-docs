@@ -80,7 +80,7 @@ bookHidden: false
 
 <br></br>
 
-**For the proceeding steps 3-5, position yourself in Replicant's ```$REPLICANT_HOME``` directory**
+**For the proceeding steps 3-5, position yourself in ```$REPLICANT_HOME``` directory**
 ## III. Setup Connection Configuration
 
 1. Navigate to the connection configuration file

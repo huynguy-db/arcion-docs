@@ -1,14 +1,94 @@
 ---
 title: MariaDB
 weight: 5
-bookHidden: true
+bookHidden: false
 ---
 
 # Source MariaDB Database
 
-## I. Setup Connection Configuration
+## I. Install mysqlbinlog Utility on Replicate Host
 
-1. From ```HOME```, navigate to the connection configuration file
+1. You need to have a compatible mysqlbinlog utility (compatible with the source MySQL server) installed on the machine where replicate will be running
+2. Easiest way to install the correct mysqlbinlog utility is to install the correct MySQL server (having the exact same version as your source MySQL system) on the replicate host and stop the MySQL server. After installation, you can stop this MySQL server running on replicate’s host using the command
+    ```BASH
+    sudo systemctl stop mysql
+    ```
+
+## II. Enable binlogging in MariaDB server
+1. Edit MySQL config file var/lib/my.cnf (create the file if does not exist) and add below lines
+    ```SHELL
+    [mysqld]
+    log-bin=mysql-log.bin
+    ```
+2. Export `$MYSQL_HOME` path
+    ```SQL
+    export MYSQL_HOME=/var/lib/mysql
+    ```
+3. Restart MySQL
+    ```BASH
+    sudo systemctl restart mysql
+    ```
+4. Verify if binlogging is turned on
+    ```BASH
+    mysql -u root -p
+    ```
+    ```SQL
+    MariaDB [(none)]> show variables like "%log_bin%";
+    +---------------------------------+--------------------------------+
+    | Variable_name                   | Value                          |
+    +---------------------------------+--------------------------------+
+    | log_bin                         | ON                             |
+    | log_bin_basename                | /var/lib/mysql/mysql-bin       |
+    | log_bin_compress                | OFF                            |
+    | log_bin_compress_min_len        | 256                            |
+    | log_bin_index                   | /var/lib/mysql/mysql-bin.index |
+    | log_bin_trust_function_creators | OFF                            |
+    | sql_log_bin                     | ON                             |
+    +---------------------------------+--------------------------------+
+    7 rows in set (0.011 sec)
+    ```
+5. Set binglog format
+    ```BASH
+    mysql -u root -p
+    ```
+    ```MYSQL
+    mysql> SET GLOBAL binlog_format = 'ROW'
+    ```
+
+## III. Setup MySQL User for Replicant
+1.	Create MySQL user
+    ```SQL
+    CREATE USER 'username'@'replicate_host' IDENTIFIED BY 'password';
+    ```
+2.	Grant below privileges on all tables involved in replication
+    ```SQL
+    GRANT SELECT ON "<user_database>"."<table_name>" TO 'username'@'replicate_host';
+    ```
+3.	Grant below Replication privileges
+    ```SQL
+    GRANT REPLICATION CLIENT ON *.* TO 'username'@'replicate_host';
+    GRANT REPLICATION SLAVE ON *.* TO 'username'@'replicate_host';
+    ```
+4.	Verify if created user can access bin logs
+    ```SQL
+    MariaDB [(none)]> show binary logs;
+    +------------------+-----------+
+    | Log_name         | File_size |
+    +------------------+-----------+
+    | mysql-bin.000001 |       351 |
+    | mysql-bin.000002 |      4635 |
+    | mysql-bin.000003 |       628 |
+    | mysql-bin.000004 | 195038185 |
+    +------------------+-----------+
+    4 rows in set (0.001 sec)
+    ```
+
+
+**For the proceeding steps 4-6, position yourself in ```$REPLICANT_HOME``` directory**
+
+## IV. Setup Connection Configuration
+
+1. From ```$REPLICANT_HOME```, navigate to the connection configuration file
     ```BASH
     vi conf/conn/mariadb_src.yaml
     ```
@@ -27,8 +107,7 @@ bookHidden: true
     max-connections: 30 #Maximum number of connections replicant can open in MariaDB
     ```
 
-
-## II. Setup Filter Configuration
+## V. Setup Filter Configuration
 
 1. Navigate to the filter configuration file
     ```BASH
@@ -43,8 +122,8 @@ bookHidden: true
       catalog: "tpch"
       types: [TABLE]
 
-      #From catalog tpch, only the NATION, ORDERS, and PART tables will be replicated.
-      #Note: Unless specified, all tables in the catalog will be replicated
+      #From database tpch, only the NATION, ORDERS, and PART tables will be replicated.
+      #Note: Unless specified, all tables in the database will be replicated
       allow:
         NATION:
         #Within NATION, only the US and AUS columns will be replicated
@@ -75,13 +154,11 @@ bookHidden: true
              allow: ["your_column_name"]
              conditions: "your_condition"
 
-          <your_table_name>:
-            allow: "your_column_name"]
-            conditions: "your_condition"         
+          <your_table_name>:         
       ```
 
 
-## III. Setup Extractor Configuration
+## VI. Setup Extractor Configuration
 
 In real-time replication, for accurate computation of latency, you must create a heartbeat table in the source MariaDB.
 
@@ -104,7 +181,32 @@ In real-time replication, for accurate computation of latency, you must create a
     realtime:
       heartbeat:
         enable: true
-        catalog: “tpch” #Replace tpch with your database name
+        catalog: "tpch" #Replace tpch with your database name
         table-name [20.09.14.3]: replicate_io_cdc_heartbeat #Replace replicate_io_cdc_heartbeat with your heartbeat table's name if applicable
         column-name [20.10.07.9]: timestamp #Replace timestamp with your heartbeat table's column name if applicable
+    ```
+5. Below is a sample extractor file with commonly used configuration parameters:
+    ```YAML
+    snapshot:
+      threads: 16
+      fetch-size-rows: 15_000
+
+    #  per-table-config:
+    #  - catalog: tpch
+    #    tables:
+    #      ORDERS:
+    #        num-jobs: 1
+    #      LINEITEM:
+    #        row-identifier-key: [L_ORDERKEY]
+    #        split-key: l_orderkey
+
+    realtime:
+      threads: 4
+      fetch-size-rows: 10_000
+
+      heartbeat:
+        enable: true
+        catalog: tpch
+        interval-ms: 10000
+
     ```
