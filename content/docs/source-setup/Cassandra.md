@@ -5,11 +5,11 @@ bookHidden: false
 ---
 # Source Cassandra
 
-The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
+The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory.
 
 ## CDC Prerequisites
 
-Blitzz Replicant supports two mechanisms for accessing the Cassandra CDC log files. The working method dependd on whether the CDC log files are accessible locally to the Replicant.
+Blitzz Replicant supports two mechanisms for accessing the Cassandra CDC log files. The working method depends on whether the CDC log files are accessible locally to the Replicant.
 
 1. If Replicant is running on the same node as the source Cassandra server or the Cassandra CDC log files are accessible to Replicant using NFS mount, then you must configure the access-method as LOCAL and provide the locations of cdc-log-dir and cdc-raw-dir in the connection configuration file (explained in step I).
    ```yaml
@@ -31,7 +31,7 @@ Blitzz Replicant supports two mechanisms for accessing the Cassandra CDC log fil
        port: 22
    ```
 **Steps to enable CDC Replication**
-1. Enable the CDC logging for the desired tables by setting the cdc property of table to true when creating or altering the table
+1. Enable the CDC logging for the desired tables by setting the cdc property of table to true when creating or altering the table:
    ```SQL
    CREATE TABLE foo (a int, b text, PRIMARY KEY(a)) WITH cdc=true;
    OR
@@ -93,7 +93,7 @@ Blitzz Replicant supports two mechanisms for accessing the Cassandra CDC log fil
     ```
 ## II. Setup Filter Configuration
 
-1. From `$REPLICANT_HOME` navigate to the filter configuration file
+1. From `$REPLICANT_HOME` navigate to the filter configuration file:
     ```BASH
     vi filter/cassandra_filter.yaml
     ```
@@ -140,6 +140,7 @@ Blitzz Replicant supports two mechanisms for accessing the Cassandra CDC log fil
             allow: ["your_column_name"]
             conditions: "your_condition"         
       ```
+For a detailed explanation of configuration parameters in the filter file, read: [Filter Reference]({{< ref "/docs/references/filter-reference" >}} "Filter Reference")
 
 ## III. Setup Extractor Configuration
 

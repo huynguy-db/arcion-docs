@@ -249,6 +249,7 @@ The proceeding steps are to set up Replicant. The extracted `replicant-cli` will
             allow: ["your_column_name"]
             conditions: "your_condition"  
       ```
+For a detailed explanation of configuration parameters in the filter file, read: [Filter Reference]({{< ref "/docs/references/filter-reference" >}} "Filter Reference")
 
 ## VII. Setup Extractor Configuration
 

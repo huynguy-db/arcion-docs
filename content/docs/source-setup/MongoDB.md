@@ -6,9 +6,11 @@ bookHidden: true
 
 # Source Mongo Database
 
+The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory.
+
 ## I. Setup Connection Configuration
 
-1. Navigate to the connection configuration file
+1.From `$REPLICANT_HOME`, navigate to the connection configuration file:
     ```BASH
     vi conf/conn/mongodb.yaml
     ```
@@ -32,7 +34,7 @@ bookHidden: true
 
 ## II. Setup Filter Configuration
 
-1. 1. Navigate to the filter configuration file
+1. From `$REPLICANT_HOME`, navigate to the filter configuration file:
     ```BASH
     vi filter/mongodb_filter.yaml
     ```
@@ -79,9 +81,7 @@ bookHidden: true
             allow: "your_column_name"]
             conditions: "your_condition"         
       ```
-
-
-
+For a detailed explanation of configuration parameters in the filter file, read: [Filter Reference]({{< ref "/docs/references/filter-reference" >}} "Filter Reference")
 
 3. Using the format shown in the step above (step 2) specify the database, collections, or documents  which will be part of real-time replication under the ```global-filter``` section
 
@@ -89,7 +89,7 @@ bookHidden: true
 
 For real-time replication, you must create a heartbeat table in the source Mongo
 
-1. Create a heartbeat table in the schema you are going to replicate with the following DDL
+1. Create a heartbeat table in the schema you are going to replicate with the following DDL:
    ```SQL
    CREATE TABLE "<user_database>"."<schema>"."replicate_io_cdc_heartbeat"(
      "timestamp" BIGINT NOT NULL,
@@ -98,7 +98,7 @@ For real-time replication, you must create a heartbeat table in the source Mongo
 
 2. Grant ```INSERT```, ```UPDATE```, and ```DELETE``` privileges to the user configured for replication
 
-3. Navigate to the extractor configuration file
+3. From `$REPLICANT_HOME`, navigate to the extractor configuration file:
    ```BASH
    vi conf/src/mongodb.yaml
    ```

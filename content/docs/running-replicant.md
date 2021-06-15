@@ -127,18 +127,16 @@ Additionally, while using `--truncate-existing` or `--replace-existing`, a you c
 Replicant has another write mode, `--synchronize-deletes`,  which is relevant only for delta-snapshot mode (incremental replication) of operation. When replicant is started in delta-snapshot mode and you specify the `--synchronize-deletes` write mode, Replicant deletes all rows from a target table which are not present in the respective source table. Once the row synchronization is done, Replicant shuts down. Replicant can be started again in `resume mode` by taking off this write mode, after which Replicant will resume the incremental replication that it was performing.
 
 ## Additional Replicant Commands
-
-**Command**
 * You can stop replication with the CTRL C signal.
 * If you stop replication for any reason, you can restart the job exactly where Replicant had stopped by replacing the `--overwrite` argument `by --resume` in the replicant command:
-```BASH
-./bin/replicant full conf/conn/source_database_name_src.yaml \
-conf/conn/target_database_name_dst.yaml \
---extractor conf/src/source_database_name.yaml \
---applier conf/dst/target_database_name.yaml \
---filter filter/source_database_name_filter.yaml \
---id rep11 --replace --resume
-```
+  ```BASH
+  ./bin/replicant full conf/conn/source_database_name_src.yaml \
+  conf/conn/target_database_name_dst.yaml \
+  --extractor conf/src/source_database_name.yaml \
+  --applier conf/dst/target_database_name.yaml \
+  --filter filter/source_database_name_filter.yaml \
+  --id rep11 --replace --resume
+  ```
 
 ## Various Replication Options Explanation
 

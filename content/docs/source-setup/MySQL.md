@@ -5,15 +5,18 @@ bookHidden: false
 ---
 # Source MySQL
 
+The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory.
+
 ## I. Install mysqlbinlog Utility on Replicate Host
 
-1. You need to have a compatible mysqlbinlog utility (compatible with the source MySQL server) installed on the machine where replicate will be running
-2. Easiest way to install the correct mysqlbinlog utility is to install the correct MySQL server (having the exact same version as your source MySQL system) on the replicate host and stop the MySQL server. After installation, you can stop this MySQL server running on replicate’s host using the command
+1. Install a compatible mysqlbinlog utility (compatible with the source MySQL server) on the machine where replicate will be running
+  * **Note**: The easiest way to install the correct mysqlbin log utility is to install the the the same MySQL server version as your source MySQL System. After installation, you can stop this MySQL server running on replicate’s host using the command
     ```BASH
     sudo systemctl stop mysql
     ```
 
 ## II. Enable binlogging in MySQL server
+
 1. Edit MySQL config file var/lib/my.cnf (create the file if does not exist) and add below lines
     ```SHELL
     [mysqld]
@@ -63,7 +66,7 @@ bookHidden: false
     ```SQL
     GRANT SELECT ON "<user_database>"."<table_name>" TO 'username'@'replicate_host';
     ```
-3.	Grant below Replication privileges
+3.	Grant the following Replication privileges
     ```SQL
     GRANT REPLICATION CLIENT ON *.* TO 'username'@'replicate_host';
     GRANT REPLICATION SLAVE ON *.* TO 'username'@'replicate_host';
@@ -81,9 +84,6 @@ bookHidden: false
     +------------------+-----------+
     4 rows in set (0.001 sec)
     ```
-
-
-**For the proceeding steps 4-6, position yourself in ```$REPLICANT_HOME``` directory**
 
 ## IV. Setup Connection Configuration
 
@@ -108,7 +108,7 @@ bookHidden: false
 
 ## V. Setup Filter Configuration
 
-1. Navigate to the filter configuration file
+1. From ```$REPLICANT_HOME```, navigate to the filter configuration file
     ```BASH
     vi filter/mysql_filter.yaml
     ```
@@ -155,7 +155,7 @@ bookHidden: false
 
         <your_table_name>:
     ```
-
+For a detailed explanation of configuration parameters in the filter file, read: [Filter Reference]({{< ref "/docs/references/filter-reference" >}} "Filter Reference")
 
 ## VI. Setup Extractor Configuration
 
@@ -170,7 +170,7 @@ For real-time replication, you must create a heartbeat table in the source MySQL
 
 2. Grant ```INSERT```, ```UPDATE```, and ```DELETE``` privileges for the heartbeat table to the user configured for replication
 
-3. Navigate to the extractor configuration file
+3. From ```$REPLICANT_HOME```, navigate to the extractor configuration file
    ```BASH
    vi conf/src/mysql.yaml
    ```
@@ -206,5 +206,8 @@ For real-time replication, you must create a heartbeat table in the source MySQL
         enable: true
         catalog: tpch
         interval-ms: 10000
-
     ```
+<<<<<<< HEAD
+=======
+For a detailed explanation of configuration parameters in the extractor file, read: [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference")
+>>>>>>> 0f42dea (Sources punctuatuioon/indenatation consistent; Links complete)

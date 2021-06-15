@@ -6,29 +6,30 @@ bookHidden: false
 
 # Source MariaDB Database
 
+The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory.
+
 ## I. Install mysqlbinlog Utility on Replicate Host
 
-1. You need to have a compatible mysqlbinlog utility (compatible with the source MySQL server) installed on the machine where replicate will be running
-2. Easiest way to install the correct mysqlbinlog utility is to install the correct MySQL server (having the exact same version as your source MySQL system) on the replicate host and stop the MySQL server. After installation, you can stop this MySQL server running on replicate’s host using the command
+1. Install a compatible mysqlbinlog utility (compatible with the source MySQL server) on the machine where replicate will be running
+  * **Note**: The easiest way to install the correct mysqlbin log utility is to install the the the same MySQL server version as your source MySQL System. After installation, you can stop this MySQL server running on replicate’s host using the command
     ```BASH
     sudo systemctl stop mysql
     ```
-
 ## II. Enable binlogging in MariaDB server
-1. Edit MySQL config file var/lib/my.cnf (create the file if does not exist) and add below lines
+1. Edit MySQL config file var/lib/my.cnf (create the file if does not exist) and add the lines shown below:
     ```SHELL
     [mysqld]
     log-bin=mysql-log.bin
     ```
-2. Export `$MYSQL_HOME` path
+2. Export `$MYSQL_HOME` path:
     ```SQL
     export MYSQL_HOME=/var/lib/mysql
     ```
-3. Restart MySQL
+3. Restart MySQL:
     ```BASH
     sudo systemctl restart mysql
     ```
-4. Verify if binlogging is turned on
+4. Verify if binlogging is turned on:
     ```BASH
     mysql -u root -p
     ```
@@ -47,7 +48,7 @@ bookHidden: false
     +---------------------------------+--------------------------------+
     7 rows in set (0.011 sec)
     ```
-5. Set binglog format
+5. Set binglog format:
     ```BASH
     mysql -u root -p
     ```
@@ -56,20 +57,20 @@ bookHidden: false
     ```
 
 ## III. Setup MySQL User for Replicant
-1.	Create MySQL user
+1.	Create MySQL user:
     ```SQL
     CREATE USER 'username'@'replicate_host' IDENTIFIED BY 'password';
     ```
-2.	Grant below privileges on all tables involved in replication
+2.	Grant the following privileges on all tables involved in replication:
     ```SQL
     GRANT SELECT ON "<user_database>"."<table_name>" TO 'username'@'replicate_host';
     ```
-3.	Grant below Replication privileges
+3.	Grant the following Replication privileges:
     ```SQL
     GRANT REPLICATION CLIENT ON *.* TO 'username'@'replicate_host';
     GRANT REPLICATION SLAVE ON *.* TO 'username'@'replicate_host';
     ```
-4.	Verify if created user can access bin logs
+4.	Verify if created user can access bin logs:
     ```SQL
     MariaDB [(none)]> show binary logs;
     +------------------+-----------+
@@ -84,11 +85,10 @@ bookHidden: false
     ```
 
 
-**For the proceeding steps 4-6, position yourself in ```$REPLICANT_HOME``` directory**
 
 ## IV. Setup Connection Configuration
 
-1. From ```$REPLICANT_HOME```, navigate to the connection configuration file
+1. From ```$REPLICANT_HOME```, navigate to the connection configuration file:
     ```BASH
     vi conf/conn/mariadb_src.yaml
     ```
@@ -109,7 +109,7 @@ bookHidden: false
 
 ## V. Setup Filter Configuration
 
-1. Navigate to the filter configuration file
+1. From ```$REPLICANT_HOME```, navigate to the filter configuration file:
     ```BASH
     vi filter/mariadb_filter.yaml
     ```
@@ -156,13 +156,13 @@ bookHidden: false
 
           <your_table_name>:         
       ```
-
+For a detailed explanation of configuration parameters in the filter file, read: [Filter Reference]({{< ref "/docs/references/filter-reference" >}} "Filter Reference")
 
 ## VI. Setup Extractor Configuration
 
 In real-time replication, for accurate computation of latency, you must create a heartbeat table in the source MariaDB.
 
-1. Create a heartbeat table in the catalog/schema you are going to replicate with the following DDL
+1. Create a heartbeat table in the catalog/schema you are going to replicate with the following DDL:
    ```SQL
    CREATE TABLE "<user_database>"."replicate_io_cdc_heartbeat"(
      "timestamp" BIGINT NOT NULL,
@@ -171,7 +171,7 @@ In real-time replication, for accurate computation of latency, you must create a
 
 2. Grant ```INSERT```, ```UPDATE```, and ```DELETE``` privileges on the heartbeat table to the user configured for replication
 
-3. Navigate to the extractor configuration file
+3. From ```$REPLICANT_HOME```, navigate to the extractor configuration file:
    ```BASH
    vi conf/src/mariadb.yaml
    ```
@@ -208,5 +208,5 @@ In real-time replication, for accurate computation of latency, you must create a
         enable: true
         catalog: tpch
         interval-ms: 10000
-
     ```
+For a detailed explanation of configuration parameters in the extractor file, read: [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference")
