@@ -1,7 +1,7 @@
 ---
 title: Cassandra
 weight: 6
-bookHidden: true
+bookHidden: false
 ---
 # Destination Cassandra
 
@@ -24,11 +24,7 @@ bookHidden: true
         port: 9042 #Replace 9042 with your node's port
       node2: #Replace node2 with your node name
         host: 172.17.0.3 #Replace 172.17.0.3 with your node's host
-        port: 9043 #Replace 9042 with your node's port    
-      .
-      .
-      .
-      .
+        port: 9043 #Replace 9042 with your node's port
 
     username: 'cassandra' #Replace cassandra with your username that connects to your Cassandra server
     password: 'cassandra' #Replace 'cassandra' with your user's password
@@ -71,7 +67,7 @@ If you want to change the table definitions in destination Cassandra, change the
 
       bulk-load:
         enable: true|false #Set to true if you want to enable bulk loading
-        type: FILE|PIPE #Specify the type of bulk loading between FILE and PIPE
+        type: FILE
         serialize: true|false #Set to true if you want the generated files to be applied in serial/parallel fashion
 
         #For versions 20.09.14.3 and beyond

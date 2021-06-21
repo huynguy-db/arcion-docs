@@ -37,17 +37,10 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
 
 ## II. Setup PostgreSQL for Replication
-<<<<<<< HEAD
-  1. Edit postgresql.conf
-     ```BASH
-     vi $PGDATA/postgresql.conf
-     ```
-=======
 1. Edit postgresql.conf:
    ```BASH
    vi $PGDATA/postgresql.conf
    ```
->>>>>>> 0f42dea (Sources punctuatuioon/indenatation consistent; Links complete)
 
 2. Change the parameters below as follows:
     ```Xorg
@@ -82,17 +75,10 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
         SELECT * from pg_replication_slots;
         ```
 
-<<<<<<< HEAD
-4. Set the replicant identity to FULL for the tables  part of the replication process that do no have a primary key
-        ```SQL
-        ALTER TABLE <table_name> REPLICA IDENTITY FULL;
-        ```
-=======
 4. Set the replicant identity to FULL for the tables  part of the replication process that do no have a primary key:
    ```SQL
    ALTER TABLE <table_name> REPLICA IDENTITY FULL;
    ```
->>>>>>> 0f42dea (Sources punctuatuioon/indenatation consistent; Links complete)
 
 <br></br>
 
@@ -193,45 +179,21 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
       #If not collections are specified, all the data tables in the provided catalog and schema will be replicated
       allow:
         <your_table_name>:
-          allow: ["your_column_name"] #if necessary
-          condtions: "your_condition" #if necessary
+          allow: ["your_column_name"]
+          condtions: "your_condition"
 
-<<<<<<< HEAD
         <your_table_name>:  
-          allow: ["your_column_name"] #if necessary
-          conditions: "your_condition" #if necessary
+          allow: ["your_column_name"]
+          conditions: "your_condition"
 
-        <your_table_name>:
-          allow: ["your_column_name"] #if necessary
-          conditions: "your_condition" #if necessary          
-      ```
-
-=======
-          <your_table_name>:
-            allow: ["your_column_name"] #if necessary
-            conditions: "your_condition" #if necessary    
+        <your_table_name>:    
         ```
 For a detailed explanation of configuration parameters in the filter file, read: [Filter Reference]({{< ref "/docs/references/filter-reference" >}} "Filter Reference")
->>>>>>> 0f42dea (Sources punctuatuioon/indenatation consistent; Links complete)
 
 ## V. Setup Extractor Configuration
 
 For real-time replication, you must create a heartbeat table in the source PostgreSQL
 
-<<<<<<< HEAD
-1. Create a heartbeat table in any schema of the database you are going to replicate with the following DDL
-   ```SQL
-   CREATE TABLE "<user_database>"."public"."replicate_io_cdc_heartbeat"("timestamp" INT8 NOT NULL, PRIMARY KEY("timestamp"))
-   ```
-
-2. Grant ```INSERT```, ```UPDATE```, and ```DELETE``` privileges to the user configured for replication
-
-3. Navigate to the extractor configurations
-   ```BASH
-   vi conf/src/postgresql.yaml
-   ```
-4. Under the Realtime Section, make the necessary changes as follows
-=======
 1. Create a heartbeat table in any schema of the database you are going to replicate with the following DDL:
     ```SQL
     CREATE TABLE "<user_database>"."public"."replicate_io_cdc_heartbeat"("timestamp" INT8 NOT NULL, PRIMARY  KEY("timestamp"))
@@ -244,7 +206,6 @@ For real-time replication, you must create a heartbeat table in the source Postg
     vi conf/src/postgresql.yaml
     ```
 4. Under the Realtime Section, make the necessary changes as follows:
->>>>>>> 0f42dea (Sources punctuatuioon/indenatation consistent; Links complete)
      ```YAML
      realtime:
        heartbeat:
@@ -257,36 +218,36 @@ For real-time replication, you must create a heartbeat table in the source Postg
 
 
 
-## VI. Setup PostgreSQL Delta-snapshot if Necessary
+## Replication without replication-slots
 
 If you are unable to create replication slots in postgresql using either wal2json or test_decoding then Replicant supports a mode delta-snapshot. In delta-snapshot Replicant uses postgres’s internal column to identify changes.
 
 Note: It is strongly recommended to supply a row-identifier-key in the per-table-config section for a table which does not have a PK/UK defined
 
-1. From `$REPLICANT_HOME`, navigate to the sample delta-snapshot configuration file:
+1. From `$REPLICANT_HOME`, navigate to the extractor configuration file:
     ```BASH
     vi/conf/src/postgresql_delta.yaml
     ```
 2. Under the delta snapshot section, make the necessary changes as follows:
-  ```YAML
-  delta-snapshot:
-    row-identifier-key: [orderkey,suppkey] #Replace orderkey, suppkey with your  global row-identifier-key identifier which specifies the column(s) that are unique in the data collections being replicated
-    update-key: [partkey] #Replace partkey with your global update key if your table does not have unique row-identifier-keys and you still want to perform incremental replication
-    replicate-deletes: true|false #Enable or disable delete replication
+      ```YAML
+      delta-snapshot:
+        row-identifier-key: [orderkey,suppkey] #Replace orderkey, suppkey with your  global row-identifier-key identifier which specifies the column(s) that are unique in the data collections being replicated
+        update-key: [partkey] #Replace partkey with your global update key if your table does not have unique row-identifier-keys and you still want to perform incremental replication
+        replicate-deletes: true|false #Enable or disable delete replication
 
-    #In the following section, you can specify configurations for certain tables. For any specified tables, Replicant will override the global configurations and replicate the table in accordance to the configurations set for that table below.
-    per-table-config:
-    - catalog: tpch #Replace tpch with the catalog of the table is in
-      schema: public #Replace public with the schema the table is in
-      tables:
-        <table_name>: #Replace <table_name> with your table name
-          row-key-identifier: #Enter a row-key-identifier for this table if applicable
-          update-key: #Enter an update-key for this table if applicable
-          replicate-deletes: #Enable or disable  delete replication  
+        #In the following section, you can specify configurations for certain tables. For any specified tables, Replicant will override the global configurations and replicate the table in accordance to the configurations set for that table below.
+        per-table-config:
+        - catalog: tpch #Replace tpch with the catalog of the table is in
+          schema: public #Replace public with the schema the table is in
+          tables:
+            <table_name>: #Replace <table_name> with your table name
+              row-key-identifier: #Enter a row-key-identifier for this table if applicable
+              update-key: #Enter an update-key for this table if applicable
+              replicate-deletes: #Enable or disable  delete replication  
 
-        #The following is an example of a specified table named lineitem1. Replicant will use the configurations provided for lineitem1 when replicating the table instead of the global configurations specifed above the per-table-config section.
-        lineitem1:
-          row-identifier-key: [l_orderkey, l_linenumber]
-          split-key: l_orderkey
-          replicate-deletes: false
-  ```
+            #The following is an example of a specified table named lineitem1. Replicant will use the configurations provided for table lineitem1 when replicating the table instead of the global configurations specifed above the per-table-config section.
+            lineitem1:
+              row-identifier-key: [l_orderkey, l_linenumber]
+              split-key: l_orderkey
+              replicate-deletes: false
+       ```

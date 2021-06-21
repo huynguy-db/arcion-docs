@@ -207,7 +207,4 @@ For real-time replication, you must create a heartbeat table in the source MySQL
         catalog: tpch
         interval-ms: 10000
     ```
-<<<<<<< HEAD
-=======
 For a detailed explanation of configuration parameters in the extractor file, read: [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference")
->>>>>>> 0f42dea (Sources punctuatuioon/indenatation consistent; Links complete)
