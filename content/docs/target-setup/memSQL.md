@@ -32,7 +32,7 @@ If memsql user does not have create database permission then you must create a d
     max-connections: 30 #Maximum number of connections replicant can open in memSQL
     ```
 
-## Setup Applier Configuration
+## II. Setup Applier Configuration
 
 Edit the applier configurations if required.  
 
