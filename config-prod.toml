@@ -20,7 +20,7 @@ theme = "book"
       unsafe = true
       xhtml = false
 [params]
-  BookTheme = 'Light'
+  BookTheme = 'light'
   BookLogo = '/blitzz-gradient.png'
 
 [deployment]
