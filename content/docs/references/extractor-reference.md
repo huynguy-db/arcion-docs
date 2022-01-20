@@ -177,3 +177,121 @@ Unless you have given your heartbeat table different table and column names than
                   de-duplicate:
                   extract-upto-depth:                
                ```
+
+## Delta snapshot mode
+
+Blitzz supports a third mode of replication called delta-snapshot. Delta-snapshot is required when the source database does not provide access to CDC log but the customer is interested in real-time replication (for example Teradata). The delta snapshot is a recurring snapshot which replicates the *delta* of the records which have been inserted/updated since the previous delta snapshot iteration. The following describes parameters of the `delta-snapshot` section of the Extractor configuration file.
+
+**delta-snapshot**
+  1. **threads**: Maximum number of threads replicant should use for data extraction from source.
+
+  2. **fetch-size-rows**: Maximum number of records/documents Replicant fetches at once from the source system.
+
+  3. **lock**: Option to do object locking on source. No locking is done on MongoDB. Below are the parameters and example values:
+
+      i. **enable**: false
+
+      ii. **scope**: table
+
+      iii. **force**: false
+
+      iv. **timeout-sec**: 5
+
+  4. **min-job-size-rows**: Replicant chunks Tables/collections into multiple jobs for replication. This configuration specifies a minimum size for each such job. This has a positive correlation with the memory footprint of replicant.
+
+  5. **max-jobs-per-chunk**: Determines the maximum number of jobs Replicant should create for each source table/collection.
+
+  6. **split-key**: Replciant uses this configuration to split a table into multiple jobs in order to do parallel extraction. It lets you specify a global `split-key`. Replicant will use this column to perform parallel data extraction from each table that has this column (unless this configuration is overridden in `per-table-config` for this table).
+  
+  7. **split-method**[20.05.12.3] : Replicant supports two split methods:
+
+      i. **RANGE** : Performs a range based splitting of work by uniformly distributing the split-key value ranges between the MIN and MAX values.
+
+      ii. **MODULO** : Split key must be only of numeric type for this split-method. Each extraction job is assigned a `JobID` of `0` to `JOB-CNT -1`. Each job then pulls data from the source where `MOD(split-key, JOB-CNT) =  JobID`.
+  
+  8. **extraction-method**[20.07.02.1]: Replicant supports following extraction methods (default set to QUERY):
+      * QUERY
+
+      * TPT (Teradata Parallel Transporter utility; currently supported only for Teradata as source)
+
+      * CSVLOAD (Supported only for Cassandra as source)
+
+      * DSBULK (Supported only for Cassandra as source)
+
+      * COPY (Supported only for Greenplum as source)
+
+9. **tpt-num-files-per-job**[20.07.02.1]: Relevant when extraction-method is TPT. This config indicates how many CSV files each TPT job should export (default value set to 16).    
+
+10. **delta-snapshot-key**: Tables requiring incremental replication must have a NON-NULL numeric/timestamp column which is updated on each insert/update on each row of that table. The value of this column must be monotonically increasing and non-repeatable. We call such a column a `delta-snapshot-key`. This configuration lets you specify that key. Replicant uses this column to perform its incremental replication for each table being replicated that has this column (unless this configuration is overridden in `per-table-config` for this table). 
+
+  {{< hint "warning" >}}
+  `delta-snapshot-key` is deprecated. Please use `delta-snapshot-keys` instead.
+  {{< /hint >}}
+
+11. **delta-snapshot-keys**[21.12.02.1]: This config lets you specify one or more `delta-snapshot-keys`. Tables requiring incremental replication must have a NON-NULL numeric/timestamp column which is updated on each insert/update on each row of that table. The value of this column must be monotonically increasing and non-repeatable. We call such a column a `delta-snapshot-key`. This configuration lets you specify multiple `delta-snapshot-key`s. Replicant uses this column to perform its incremental replication for each table being replicated that has this column (unless this configuration is overridden in per-table-config for this table).
+
+    Each column in this list  acts as an individual `delta-snapshot-key` and updating on any of the columns in this list will trigger replication. For example:
+
+    ```YAML
+    delta-snapshot-keys: [col1, col2, col3]`  # A list of monotonic increasing numeric/timestamp columns which gets new value on each INSERT/UPDATE
+    ```
+
+12. **row-identifier-key**: If a table does not have a PK/UK defined on it, then we strongly recommend that you specify a `row-identifier-key`: a single column or a group of columns that are ensured to be unique in the table by your applications. Blitzz leverages this `row-identifier-key` to achieve a much better overall performance for incremental replication (in the absence of PK/UK). This configuration lets you specify a global `row-identifier-key`. Blitzz Replicant makes use of this key to perform certain replication (unless this configuration is overridden in per-table-config for this table).
+
+13. **update-key**: This lets users specify a key that Replicant should use to perform DELETES/UPDATES on the target system under the following scenarios: 
+    * PK/UK does not exist.
+    * There's no unique `row-identifier-key` present in the table.
+
+    This specifies a single column or a group of columns to be used by replicant.  We strongly recommended that you create an index on `update-key` on the target table explicitly to get better replication performance.
+
+14. **delta-snapshot-interval**: The interval (in seconds) between two incremental replication cycles. This configuration allows you to specify how frequently Blitzz replicant should query the source database and pull incremental changes.
+
+15. **replicate-deletes**: This configuration allows you to disable delete replication. 
+
+16. **delta-snapshot-delete-interval**: This configuration allows you to specify a different interval for delete replication that the one specified for insert/update incremental replication.
+
+17. **native-extract-options**:
+
+    i. **charset**: This configuration allows users to specify the charset to be used with native extraction method. Supported values are ASCII and UTF8.
+
+    ii. **compression-type**: This configuration allows users to specify the compression type to be used with native extraction method. Supported value is GZIP.
+  
+18. **per-table-config**: Use this section if you want to override certain configuration on a per table (/view/query) basis.
+
+    i. **catalog**: <catalog_name>
+
+    ii. **schema**: <shema_name>
+
+    iii. **tables**:
+      1. **<table_name>**:
+
+          a. **split-key**: This configuration allows you to specify table specific `split-key`. If specified, it overrides the global `split-key` configuration.
+
+          b. **split-method**[20.05.12.3]: You can override `split-method` on a per-table basis using this config.
+          
+          c. **extraction-method**[20.07.02.1]: You can override `extraction-method` on a per-table basis using this config.
+
+          d. **num-jobs**: Number of parallel jobs Replicant will use to extract the rows from a table. This value will override the number of jobs Replicant internally calculates.
+          
+          e. **num-delete-jobs**[21.02.01.8]: Number of parallel delete jobs that Replicant will use to replicate deletes for a table. This value will override the number of jobs Replicant internally calculates. If you don't specify any value, then Replicant will use the value of `num-jobs` that you specified.
+
+          f. **tpt-num-files-per-job**[20.07.02.1]: Num files per TPT job can be overridden on a per-table basis using this config. 
+          
+          g. **delta-snapshot-key**: This configuration allows you to specify table specific delta-snapshot-key. If specified, it overrides the global delta-snapshot-key.
+
+           {{< hint "warning" >}} `delta-snapshot-key` is deprecated. Please use `delta-snapshot-keys` instead.{{< /hint >}}
+
+          h. **delta-snapshot-key**s: This configuration allows you to specify table specific delta-snapshot-keys. If specified, it overrides the global delta-snapshot-keys
+          
+          i. **row-identifier-key**: This configuration allows you to specify table specific `row-identifier-key`. If specified, it overrides the global `row-identifier-key`.
+          
+          j. **update-key**: This configuration allows you to specify a table specific `update-ke`y. If specified, it overrides the global `update-key`.
+
+          k. **replicate-deletes**: This configuration allows you to enable/disable delete replication individually for a table.
+
+          l. **native-extract-options**:
+            1. **charset**: This configuration allows users to specify the charset to be used with native extraction method. Supported values are ASCII and UTF8.
+
+            2. **compression-type**: This configuration allows users to specify the compression type to be used with native extraction method. Supported value is GZIP.
+
+            3. **column-size-map**[20.08.13.9]: This lets users specify column size/length to use while extracting data.
