@@ -14,39 +14,60 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     vi conf/conn/databricks.yaml
     ```
 
-2. Make the necessary changes as follows:
+2. The configuration file has two parts:
 
+    - Parameters related to target Databricks server connection.
+    - Parameters related to stage configuration.
+
+    ### Parameters related to Source Db2 server connection
+    For connecting to your target Databricks server, you can configure the following parameters:
+
+      ```YAML
+      type: DATABRICKS_DELTALAKE
+      host: localhost #Replace localhost with your Databricks host
+      port: 43213  #Replace 43213 with the port of your Databricks cluster
+
+      url: "jdbc:spark://<host>:<port>/<database-name>;transportMode=http;ssl=1;httpPath=<http-path>;AuthMech=3" #You can copy this URL from Databricks cluster info page
+
+      username: "replicant"  #Replace replicant with the user that connects to your Databricks server                            
+      password: "Replicant#123"  #Replace Replicant#123 with your user's password                                 
+      max-connections: 30 #Maximum number of connections Replicant can open in Databricks
+      max-retries: 100 #Number of times any operation on the source system will be re-attempted on failures.
+      retry-wait-duration-ms: 1000 #Duration in milliseconds replicant should wait before performing then next retry of a failed operation
+      ```
+    ### Parameters related to stage configuration
+    It is mandatory to use `DATABRICKS_DBFS` or an external stage like S3 to hold the data files and load them on the target database from there. This section allows specifying details required for Replicant to connect and use a given stage.
+
+      - `type`*[v21.06.14.1]*: The stage type. Allowed stages are `S3`, `AZURE`, and `DATABRICKS_DBFS`.
+      - `root-dir`: specify a directory on stage which can be used to stage bulk-load files.
+      - `conn-url`*[v21.06.14.1]*: Specify the connection URL for stage. For example, for S3 as stage, specify bucket-name; for AZURE as stage, specify the container name.
+      - `use-credentials`: Indicates whether to use the provided connection credentials. When `true`, you must set  `host`, `port`, `username`, and `password` as described in the section [Parameters Related to Source Db2 server connection](#parameters-related-to-source-db2-server-connection).
+
+        *Default: By default, this parameter is set to `false`.*
+      - `key-id`: This config is valid for S3 type only. Represents Access Key ID for AWS account hosting S3.
+      - `account-name`*[v21.06.14.1]*: This config is valid for AZURE type only. Represents name of the ADLS storage account.
+      - `secret-key`*[v21.06.14.1]*: This config is valid for S3 and AZURE type only. For example, Secret Access Key for AWS account hosting S3 or ADLS account.
+
+    #### For Databricks DBFS stage
+    Below is a sample for using Databricks DBFS as stage:
+    
     ```YAML
-    type: DATABRICKS_DELTALAKE
-    host: localhost #Replace localhost with your Databricks host
-    port: 43213  #Replace 43213 with the port of your Databricks cluster
-
-    url: "jdbc:spark://<host>:<port>/<database-name>;transportMode=http;ssl=1;httpPath=<http-path>;AuthMech=3" #This url can be copied from databricks cluster info page
-
-    username: "replicant"  #Replace replicant with the user that connects to your Databricks server                            
-    password: "Replicant#123"  #Replace Replicant#123 with your user's password                                 
-    max-connections: 30 #Maximum number of connections Replicant can open in Databricks
-
-    #lob-store-path: "/LOB_STORAGE"
-
-    #For Databricks DBFS Stage:
     stage:
-      type: DATABRICKS_DBFS #Specify your stage type
-      root-dir: "replicate-stage/databricks-stage" #Specify the path to DBFS stage
-      use-credentials: true|false #Default is false; When true, you must set  host, port, username, and password in the connection configuration section
+      type: DATABRICKS_DBFS
+      root-dir: "replicate-stage/databricks-stage"
+      use-credentials: false
+    ```
 
-    #OR
-
-    #For S3 Stage:
+    #### For S3 stage
+    Below is a sample for using S3 as stage:
+    
+    ```YAML
     stage:
       type: S3
-      root-dir: "replicate-stage/s3-stage" #Specify the path to S3 stage
-      key-id: "<S3 access key>"  #Replace <S3 access key> with your S3 access key
-      conn-url: "replicate-stage" #Replace replicate-stage with your bucket name
-      secret-key: "<S3 secret key>" #Replace <S3 secret key> with your S3 secret key
-
-    max-retries: 100 #Enter the maximum number of times Replicant can re-attempt a failed operation
-    retry-wait-duration-ms: 1000 #Enter the time Replicant should wait between each re-try of a failed operation
+      root-dir: "replicate-stage/s3-stage"
+      key-id: "<S3 access key>"
+      conn-url: "replicate-stage"
+      secret-key: "<S3 secret key>"
     ```
 
 ## II. Setup Applier Configuration
@@ -55,18 +76,77 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     ```BASH
     vi conf/dst/databricks.yaml
     ```
-2. Make the necessary changes as follows:
+2. The configuration file has two parts:
+
+    - Parameters related to snapshot mode.
+    - Parameters related to realtime mode.
+
+    ### Parameters related to snapshot mode
+    For snapshot mode, make the necessary changes as follows:
+
+      ```YAML
+      snapshot:
+        threads: 16 #Maximum number of threads Replicant should use for writing to the target
+
+        #If bulk-load is used, Replicant will use the native bulk-loading capabilities of the target database
+        bulk-load:
+          enable: true
+          type: FILE
+          serialize: true|false #Set to true if you want the generated files to be applied in serial/parallel fashion
+      ```
+    There are some additional parameters available that you can use in snapshot mode:
+
     ```YAML
     snapshot:
-      threads: 16 #Maximum number of threads Replicant should use for writing to the target
+      enable-optimize-write: true
+      enable-auto-compact:  true
+      enable-unmanaged-delta-table: false
+      unmanaged-delta-table-location:
+      init-sk: false
+      per-table-config:
+        init-sk: false
+        shard-key:
+        enable-optimize-write: true
+        enable-auto-compact: true
+        enable-unmanaged-delta-table: false
+        unmanaged-delta-table-location:
+    ```
+    These parameters are specific to Databricks as destination. More details about these parameters are as follows:
+    - `enable-optimize-write`: Databricks dynamically optimizes Apache Spark partition sizes based on the actual data, and attempts to write out 128 MB files for each table partition. This is an approximate size and can vary depending on dataset characteristics. 
 
-      #If bulk-load is used, Replicant will use the native bulk-loading capabilities of the target database
-      bulk-load:
-        enable: true
-        type: FILE
-        serialize: true|false #Set to true if you want the generated files to be applied in serial/parallel fashion
+      *Default: By default, this parameter is set to `true`*.
+    - `enable-auto-compact`: After an individual write, Databricks checks if files can be compacted further. If so, it runs an `OPTIMIZE` job to further compact files for partitions that have the most number of small files. The job is run with 128 MB file sizes instead of the 1 GB file size used in the standard `OPTIMIZE`.
 
+      *Default: By default, this parameter is set to `true`*.
+    - `enable-unmanaged-delta-table`: An unmanaged table is a Spark SQL table for which Spark manages only the metadata. The data is stored in the path provided by the user. So when you perform `DROP TABLE <example-table>`, Spark removes only the metadata and not the data itself. The data is still present in the path you provided.
+
+      *Default: By default, this parameter is set to `false`*.
+    - `unmanaged-delta-table-location`: The path where data for the unmanaged table is to be stored. It can be a Databricks DBFS path (for example `FileStore/tables`), or an S3 path (for example, `s3://replicate-stage/unmanaged-table-data`) where the S3 bucket is accessible to Databricks.
+    - `init-sk`: Partition-key on the source table is represented as a shard-key by replicant. By default the target table does not include this sharding information. If `init-sk` is true we add the shard-key/partition key to target table create SQL. Shard-key replication is disabled by default because DML replication with partitioned tables in Databricks is very slow if the partition key has a high distinct count.
+
+      *Default: By default, this parameter is set to `false`*.
+    - `per-table-config`: This configuration allows you to specify various properties for target tables on a per table basis.
+      - `init-sk`: Partition-key on the source table is represented as a shard-key by replicant. By default, the target table does not include this sharding information. If `init-sk` is true we add the shard-key/partition key to target table create SQL. Shard-key replication is disabled by default because DML replication with partitioned tables in\ databricks is very slow if the partition key has a high distinct count.
+
+        *Default: By default, this parameter is set to `false`*.
+      - `shard-key`: Shard key to be used for partitioning the target table.
+      - `enable-optimize-write`: Databricks dynamically optimizes Apache Spark partition sizes based on the actual data, and attempts to write out 128 MB files for each table partition. This is an approximate size and can vary depending on dataset characteristics.
+
+        *Default: By default, this parameter is set to `true`*.
+      - `enable-auto-compact`: After an individual write, Databricks checks if files can be compacted further. If so, it runs an `OPTIMIZE` job to further compact files for partitions that have the most number of small files. The job is run with 128 MB file sizes instead of the 1 GB file size used in the standard `OPTIMIZE`.
+
+        *Default: By default, this parameter is set to `true`*.
+      - `enable-unmanaged-delta-table`: An unmanaged table is a Spark SQL table for which Spark manages only the metadata. The data is stored in the path provided by the user. So when you perform `DROP TABLE <example-table>`, Spark removes only the metadata and not the data itself. The data is still present in the path you provided.
+
+        *Default: By default, this parameter is set to `false`*.
+
+      - `unmanaged-delta-table-location`: The path where data for the unmanaged table is to be stored. It can be a Databricks DBFS path (for example `FileStore/tables`), or an S3 path (for example, `s3://replicate-stage/unmanaged-table-data`) where the S3 bucket is accessible to Databricks.
+
+    ### Parameters related to realtime mode
+    If you want to operate in realtime mode, you can use the `realtime` section to specify your configuration. For example:
+
+    ```YAML
     realtime:
       threads: 4 #Maximum number of threads Replicant should use for writing to the target
     ```
-For a detailed explanation of configuration parameters in the applier file, read: [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference")
+For a detailed explanation of configuration parameters in the applier file, read [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference").
