@@ -10,7 +10,11 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
 ## I. Set up CDC Replication
 
-For enabling CDC-based replication from the source Informix server, please follow the steps below
+For enabling CDC-based replication from the source Informix server, please follow the instructions in [Enabling CDC Replication for Informix](/docs/references/source-prerequisites/informix/#enabling-cdc-replication).
+
+## II. Set up Logical Log Configuration
+
+For setting up logical log configuration, follow the instructions in [Logical Log Configuration Guidelines](/docs/references/source-prerequisites/informix/#logical-log-configuration-guidelines).
 
 ## II. Create the Heartbeat Table
 

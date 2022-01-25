@@ -8,11 +8,14 @@ bookHidden: false
 
 The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
 
-## I. Set up CDC Replication
+## I. Check Permissions
+You need to verify that the necessary permissions are in place on source Db2 in order to perform replication. To know about the permissions, see [IBM Db2 Permissions](/docs/references/source-prerequisites/db2/#permissions).
 
-For enabling CDC-based replication from the source Db2 server, please follow the steps below
+## II. Set up CDC Replication
 
-## II. Create the Heartbeat Table
+For enabling CDC-based replication from the source Db2 server, please follow the instructions in [Enabling CDC Replication for Db2](/docs/references/source-prerequisites/db2/#enabling-cdc-replication).
+
+## III. Create the Heartbeat Table
 
 For CDC replication, you must create the heartbeat table on the source database with the following DDL:
 
@@ -21,7 +24,7 @@ CREATE TABLE "tpch"."blitzz_io_cdc_heartbeat"("timestamp" BIGINT NOT NULL,
 CONSTRAINT "cdc_heartbeat_id_default_default" PRIMARY KEY("timestamp"))
 ```
 
-## III. Set up Connection Configuration
+## IV. Set up Connection Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the sample connection configuration file:
 
@@ -191,7 +194,7 @@ In this case `cdc-log-topic-prefix` should be set to the following:
 {{< /hint >}}
 
 
-## IV. Set up Extractor Configuration
+## V. Set up Extractor Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the Applier configuration file:
    ```BASH
