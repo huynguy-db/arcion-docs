@@ -7,9 +7,9 @@ bookHidden: false
 
 The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
 
-## I. Setup Connection Configuration
+## I. Set up Connection Configuration
 
-1. From `$REPLICANT_HOME`, navigate to the sample YugabyteSQL connection configuration file:
+1. From `$REPLICANT_HOME`, navigate to the sample Cockroach connection configuration file:
     ```BASH
     vi conf/conn/cockroach.yaml
     ```
@@ -68,9 +68,9 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
    {{< /hint >}}
    {{< hint "warning" >}} The target CockroachDB version must support the `cockroach nodelocal upload` command for this stage type to work. {{< /hint >}}
 
-## II. Setup Applier Configuration
+## II. Set up Applier Configuration
 
-1. From `$REPLICANT_HOME`, naviagte to the sample YugabyteSQL applier configuration file:
+1. From `$REPLICANT_HOME`, naviagte to the sample Cockroach applier configuration file:
     ```BASH
     vi conf/dst/cockroach.yaml
     ```

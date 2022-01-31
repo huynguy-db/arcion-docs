@@ -7,9 +7,9 @@ bookHidden: false
 
 The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
 
-## I. Setup Connection Configuration
+## I. Set up Connection Configuration
 
-1. From `$REPLICANT_HOME`, navigate to the sample YugabyteSQL connection configuration file:
+1. From `$REPLICANT_HOME`, navigate to the sample MySQL connection configuration file:
     ```BASH
     vi conf/conn/mysql_dst.yaml
     ```
@@ -31,9 +31,9 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
       - If you want Replicant to create catalogs/schemas for you on the target MySQL system, then you also need to grant `CREATE DATABASE`/`CREATE SCHEMA` privileges to the user.
       - If this user does not have `CREATE DATABASE` privilege, then create a database manually with name `io_blitzz` and grant all privileges for it to the user specified here. Replicant uses this database for internal checkpointing and metadata management.  
 
-## II. Setup Applier Configuration
+## II. Set up Applier Configuration
 
-1. Navigate to the mySQL sample applier configuration file
+1. From `$REPLICANT_HOME`, naviagte to the sample MySQL applier configuration file:
     ```BASH
     vi conf/dst/mysql.yaml
     ```
