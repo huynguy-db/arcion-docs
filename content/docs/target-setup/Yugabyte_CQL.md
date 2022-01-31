@@ -1,13 +1,13 @@
 ---
 title: YugabyteCQL
 weight: 8
-bookHidden: true
+bookHidden: false
 ---
 # Destination YugabyteCQL
 
-## I. Setup Connection Configuration
+## I. Set up Connection Configuration
 
-1. From Replicant's ```Home``` directory, navigate to the sample YugabyteCQL connection configuration file
+1. From `$REPLICANT_HOME`, navigate to the sample YugabyteSQL connection configuration file:
     ```BASH
     vi conf/conn/memsql.yaml
     ```
@@ -23,23 +23,31 @@ bookHidden: true
       node2: #Replace node2 with your node name
         host: 172.17.0.3 #Replace 172.17.0.3 with your node's host
         port: 9043 #Replace 9042 with your node's port    
-      .
-      .
-      .
-      .
 
     username: 'replicant' #Replace replicant with your username that connects to your Cassandra server
     password: 'Replicant#123' #Replace Replicant123#  with your user's password
 
-    #read-consistency-level: LOCAL_QUORUM  #Allowed values: ANY, ONE, TWO, THREE, QUORUM, ALL, LOCAL_QUORUM, EACH_QUORUM, SERIAL, LOCAL_SERIAL, LOCAL_ONE
-    #write-consistency-level: LOCAL_QUORUM #Allowed values: ANY, ONE, TWO, THREE, QUORUM, ALL, LOCAL_QUORUM, EACH_QUORUM, SERIAL, LOCAL_SERIAL, LOCAL_ONE
+    #read-consistency-level: LOCAL_QUORUM  
+    #write-consistency-level: LOCAL_QUORUM
 
     max-connections: 30 #Specify the maximum number of connections replicant can open in YugabyteCQL
     ```
+      - Allowed values for `read-consistency-level` and `write-consistency-level` are: 
+        - `ANY`
+        - `ONE`
+        - `TWO`
+        - `THREE`
+        - `QUORUM`
+        - `ALL`
+        - `LOCAL_QUORUM `(default value)
+        - `EACH_QUORUM`
+        - `SERIAL`
+        - `LOCAL_SERIAL`
+        - `LOCAL_ONE`
 
-## II. Setup Applier Configuration
+## II. Set up Applier Configuration
 
-1. Navigate to the sample YugabyteCQL applier configuration file
+1. From `$REPLICANT_HOME`, naviagte to the sample YugabyteSQL applier configuration file:
     ```BASH
     vi conf/dst/yugabytecql.yaml
     ```
