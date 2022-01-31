@@ -29,7 +29,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     retry-wait-duration-ms: 1000 #Duration in milliseconds replicant should wait before performing then next retry of a failed operation
     ```
     - Make sure the specified user has `CREATE TABLE` on the catalogs/schemas into which replicated tables should be created.
-    - If you want Replicant to create catalogs/schemas for you on the target MariaDB system, then you also need to grant `CREATE DATABASE`/`CREATE SCHEMA` privileges to the user.
+    - If you want Replicant to create catalogs/schemas for you on the target YugabyteSQL system, then you also need to grant `CREATE DATABASE`/`CREATE SCHEMA` privileges to the user.
     - If this user does not have `CREATE DATABASE` privilege, then create a database manually with name `io` and grant all privileges for it to the user specified here. Replicant uses this database for internal checkpointing and metadata management.  
 
         {{< hint "info" >}} The database/schema of your choice on a different instance of your choice name can be configured using the metadata config feature. For more information, see [Metadata Configuration](/docs/references/metadata-reference).{{< /hint >}}

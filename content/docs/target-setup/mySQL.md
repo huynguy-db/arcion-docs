@@ -5,9 +5,11 @@ bookHidden: false
 ---
 # Destination mySQL
 
+The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
+
 ## I. Setup Connection Configuration
 
-1. From Replicant's ```Home``` directory, navigate to the sample mySQL connection configuration file
+1. From `$REPLICANT_HOME`, navigate to the sample YugabyteSQL connection configuration file:
     ```BASH
     vi conf/conn/mysql_dst.yaml
     ```
@@ -26,7 +28,7 @@ bookHidden: false
     retry-wait-duration-ms: 1000 #Duration in milliseconds replicant should wait before performing then next retry of a failed operation
     ```
       - Make sure the specified user has `CREATE TABLE` and `CREATE TEMPORARY TABLE` privileges on the catalogs/schemas into which replicated tables should be created.
-      - If you want Replicant to create catalogs/schemas for you on the target MariaDB system, then you also need to grant `CREATE DATABASE`/`CREATE SCHEMA` privileges to the user.
+      - If you want Replicant to create catalogs/schemas for you on the target MySQL system, then you also need to grant `CREATE DATABASE`/`CREATE SCHEMA` privileges to the user.
       - If this user does not have `CREATE DATABASE` privilege, then create a database manually with name `io_blitzz` and grant all privileges for it to the user specified here. Replicant uses this database for internal checkpointing and metadata management.  
 
 ## II. Setup Applier Configuration

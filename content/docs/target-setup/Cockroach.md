@@ -1,17 +1,26 @@
 ---
 title: Cockroach
 weight: 4
-bookHidden: true
+bookHidden: false
 ---
 # Destination Cockroach
 
+The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
+
 ## I. Setup Connection Configuration
 
-1. From Replicant's ```Home``` directory, navigate to the sample memSQL connection configuration file
+1. From `$REPLICANT_HOME`, navigate to the sample YugabyteSQL connection configuration file:
     ```BASH
     vi conf/conn/cockroach.yaml
     ```
-2. Make the necessary changes as follows:
+2. The configuration file has two parts:
+
+    - Parameters related to target Cockroach server connection.
+    - Parameters related to stage configuration.
+
+    ### Parameters related to Target Cockroach server connection
+    For connecting to your target Cockroach server, you can configure the following parameters:
+
     ```YAML
     type: COCKROACH
 
@@ -22,35 +31,46 @@ bookHidden: true
     password: 'Replicant#123' #Replace Replicant#123 with your user's password
 
     max-connections: 30 #Specify the maximum number of connections Replicant can open in Cockroach
-
-    #It is possible to load data from a local stage, native stage, or external stage like s3 into Cockroach. To do so, specify the details Replicant needs to connect to the stage as follows:
-
-    stage:
-      type: NATIVE|LOCAL_FS|S3
-      conn-url: postgresql://root@localhost:57595 #Replace postgresql://root@localhost:57595 with your stage URL
-      root-dir: /replicate #Replace replicate with your stage directory's path
-      user: root #Replace root with your stage user
-    certificate-directory: /home/cockroach/certs #Enter your certificate directory path
+    max-retries: #Number of times any operation on the system will be re-attempted on failures.
+    retry-wait-duration-ms : #Duration in milliseconds replicant should wait before performing then next retry of a failed operation
     ```
-    * **Note**: For a native stage, you must install cockroach on the host running Replicant with the following four steps:
+    - Make sure the specified user has `CREATE TABLE` privilege on the catalogs/schemas into which replicated tables should be created.
+    - If you want Replicant to create catalogs/schemas for you on the target CockroachDB system, then you also need to grant `CREATE DATABASE`/`CREATE SCHEMA` privileges to the user.
+    - If this user does not have `CREATE DATABASE` privilege, then create a database manually with name `io` and grant all privileges for it to the user specified here. Replicant uses this database for internal checkpointing and metadata management.  
 
-    1. wget -qO- https://binaries.cockroachdb.com/cockroach-v20.1.0-beta.1.linux-amd64.tgz | tar xvz
+        {{< hint "info" >}} The database/schema of your choice on a different instance of your choice name can be configured using the metadata config feature. For more information, see [Metadata Configuration](/docs/references/metadata-reference).{{< /hint >}}
 
-    2. Copy the binary into your PATH so it's easy to execute cockroach commands from any shell:
-        ```BASH
-        cp -i cockroach-v20.1.0-beta.1.linux-amd64/cockroach /usr/local/bin/
-        ```
-    3. If you get a permissions error, prefix the command with sudo.
+    ### Parameters related to stage configuration
+    It is possible to use a local, native, or an external stage like S3 to hold the data files and then load them on the target Cockroach database from there. This section allows you to specify the details Replicant needs to connect to and use a specific stage.
 
-    4. Verify that cockroach nodelocal upload is a valid command.
+    - `type`: The stage type. Allowed stages are `LOCAL_FS`, `NATIVE`, and `S3`.
+      - `LOCAL_FS`: Stage type where users can specify the `external-io-dir` of the Cockroach system.
+      - `NATIVE`: stage type where replicant uses `cockroach nodelocal upload` utility to upload the data files for `IMPORT` to load into Cockroach. Users need to specify other details:
+        - `conn-url`: URL of the CockroachDB server as required for the [`cockroach nodelocal upload`](https://www.cockroachlabs.com/docs/stable/cockroach-nodelocal-upload.html) command.
+        - `user`: User with appropriate privilege to be able to run this command.
+      - `S3` : Stage type where Replicant uses the specified S3 account to hold the data files for `IMPORT` to load into Cockroach.
 
-    * **NOTE** : The target CockroachDB version must support cockroach nodelocal upload command for this stage type to work
+   {{< hint "info" >}}
+   For a `NATIVE` stage, you must install Cockroach on the host running Replicant with the following four steps:
+   
+   1. Get the latest binary: 
+       ```shell
+       wget -qO- https://binaries.cockroachdb.com/cockroach-v20.1.0-beta.1.linux-amd64.tgz | tar xvz
+       ```
 
+   2. Copy the binary into your PATH so it's easy to execute cockroach commands from any shell:
+       ```shell
+       cp -i cockroach-v20.1.0-beta.1.linux-amd64/cockroach /usr/local/bin/
+       ```
+   3. If you get a permissions error, prefix the command with `sudo`.
 
+   4. Verify that `cockroach nodelocal upload` is a valid command.
+   {{< /hint >}}
+   {{< hint "warning" >}} The target CockroachDB version must support the `cockroach nodelocal upload` command for this stage type to work. {{< /hint >}}
 
 ## II. Setup Applier Configuration
 
-1. Navigate to the applier configuration file
+1. From `$REPLICANT_HOME`, naviagte to the sample YugabyteSQL applier configuration file:
     ```BASH
     vi conf/dst/cockroach.yaml
     ```
@@ -75,6 +95,5 @@ bookHidden: true
     #   method: COPY # COPY, IMPORT
     #   max-files-per-bulk-load: 1
     #   serialize: false
-
-
     ```
+For a detailed explanation of configuration parameters in the applier file, read [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference").

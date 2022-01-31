@@ -5,6 +5,8 @@ bookHidden: false
 ---
 # Destination YugabyteCQL
 
+The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
+
 ## I. Set up Connection Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the sample YugabyteSQL connection configuration file:
