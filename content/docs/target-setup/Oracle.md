@@ -73,7 +73,7 @@ The following step must be executed in an Oracle client.
     ### Additional parameters
     * `max-metadata-connections`*[v21.05.04.6]*: When `--metadata` switch is not provided, the target is used as a metadata store. This config will determine the connection pool size for metadata storage.
 
-## IV. Setup Applier Configuration
+## IV. Set up Applier Configuration
 
 Replicant supports creating/loading tables at the partition and subpartition levels. Follow the instructions below if you want to change the behavior.
 
