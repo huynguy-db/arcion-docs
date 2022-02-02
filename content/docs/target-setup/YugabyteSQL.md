@@ -24,7 +24,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     username: 'replicant' #Replace replicant with the username of your user that connects to your YugabyteSQL server
     password: 'Replicant#123' #Replace Replicant#123 with your user's password
 
-    max-connections: 30 #Specify the maximum number of connections replicant can open in PostgreSQL
+    max-connections: 30 #Specify the maximum number of connections replicant can open in YugabyteSQL
     max-retries: 10 #Number of times any operation on the system will be re-attempted on failures.
     retry-wait-duration-ms: 1000 #Duration in milliseconds replicant should wait before performing then next retry of a failed operation
     ```

@@ -57,8 +57,8 @@ The following step must be executed in an Oracle client.
         root-dir: /data/shared_fs  #Enter the path of the shared directory
 
       max-connections: 30 #Maximum number of connections replicant can open in Oracle
-      max-retries: 10
-      retry-wait-duration-ms: 1000
+      max-retries: 10 #Number of times any operation on the system will be re-attempted on failures.
+      retry-wait-duration-ms: 1000 #Duration in milliseconds replicant should wait before performing then next retry of a failed operation
 
       #charset: AL32UTF8 #Character set to use when transferring data. This option must match the charset value in the source connection configuration.
 
