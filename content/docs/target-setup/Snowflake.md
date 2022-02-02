@@ -7,7 +7,7 @@ bookHidden: false
 
 The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
 
-## I. Setup Connection Configuration
+## I. Set up Connection Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the sample Snowflake connection configuration file:
     ```BASH
@@ -58,7 +58,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     -`secret-key`*[v21.06.14.1]*: This config is valid for both `S3` and `AZURE` types. For example, Secret Access Key for AWS account hosting s3 or ADLS account.
     - `token`*[v21.06.14.1]*:  This config is valid for `AZURE` type only. Indicates the SAS token for Azure storage.
 
-## II. Setup Applier Configuration
+## II. Set up Applier Configuration
 
 1. From `$REPLICANT_HOME`, naviagte to the sample Snowflake applier configuration file:
     ```BASH

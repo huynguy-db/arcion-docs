@@ -7,7 +7,7 @@ bookHidden: false
 
 The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
 
-## I. Setup Connection Configuration
+## I. Set up Connection Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the sample PostgreSQL connection configuration file:
     ```BASH
@@ -34,7 +34,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
         {{< hint "info" >}} The database/schema of your choice on a different instance of your choice name can be configured using the metadata config feature. For more information, see [Metadata Configuration](/docs/references/metadata-reference).{{< /hint >}}
 
-## II. Setup Applier Configuration
+## II. Set up Applier Configuration
 
 1. From `$REPLICANT_HOME`, naviagte to the sample PostgreSQL applier configuration file:
     ```BASH

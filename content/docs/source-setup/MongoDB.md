@@ -1,14 +1,14 @@
 ---
-title: Mongo Database
+title: MongoDB
 weight: 3
-bookHidden: true
+bookHidden: false
 ---
 
-# Source Mongo Database
+# Source MongoDB
 
 The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory.
 
-## I. Setup Connection Configuration
+## I. Set up Connection Configuration
 
 1.From `$REPLICANT_HOME`, navigate to the connection configuration file:
     ```BASH
@@ -19,7 +19,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     ```YAML
     type: MONGODB
 
-    url: "mongodb://localhost:27019/?w=majority" #enter mongo's connection URL
+    url: "mongodb://localhost:27019/?w=majority" #enter Mongo's connection URL
 
     max-connections: 30 #Specify the maximum number of connections replicant can open in MongoDB
 
@@ -31,8 +31,10 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
       #If you have multiple replica-sets for replication, specify all of them here using the format explained above. A sample second replica-set is also shown below:
     ```
+    - You can specify additional connection configurations like number of connections, read/write concern etc. can be included in the `url` string in accordance with the [MongoDB syntax](https://docs.mongodb.com/manual/reference/connection-string/).
+    - The `replica-sets` are monitored for oplog entries for carrying out real-time replication. Each `url` of a MongoDB replica set should represent the `host:port` belonging to the replica set. `url` should contain the option `replicaSet=<replicaSet_name>` to denote it as a [replica set](https://docs.mongodb.com/manual/reference/glossary/#std-term-replica-set). Additional connection configurations like number of connections, read/write concern, etc. can be included in the URL string in accordance with the [MongoDB syntax](https://docs.mongodb.com/manual/reference/connection-string/).
 
-## II. Setup Filter Configuration
+## II. Set up Filter Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the filter configuration file:
     ```BASH
@@ -83,11 +85,11 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
       ```
 For a detailed explanation of configuration parameters in the filter file, read: [Filter Reference]({{< ref "/docs/references/filter-reference" >}} "Filter Reference")
 
-3. Using the format shown in the step above (step 2) specify the database, collections, or documents  which will be part of real-time replication under the ```global-filter``` section
+3. Using the format shown in the step above (step 2) specify the database, collections, or documents  which will be part of real-time replication under the `global-filter` section
 
-## III. Setup Extractor Configuration
+## III. Set up Extractor Configuration
 
-For real-time replication, you must create a heartbeat table in the source Mongo
+For real-time replication, you must create a heartbeat table in the source MongoDB.
 
 1. Create a heartbeat table in the schema you are going to replicate with the following DDL:
    ```SQL
@@ -96,7 +98,7 @@ For real-time replication, you must create a heartbeat table in the source Mongo
      PRIMARY KEY("timestamp"));
    ```
 
-2. Grant ```INSERT```, ```UPDATE```, and ```DELETE``` privileges to the user configured for replication
+2. Grant `INSERT`, `UPDATE`, and `DELETE` privileges to the user configured for replication
 
 3. From `$REPLICANT_HOME`, navigate to the extractor configuration file:
    ```BASH
@@ -112,3 +114,4 @@ For real-time replication, you must create a heartbeat table in the source Mongo
         table-name [20.09.14.3]: replicate_io_cdc_heartbeat #Replace replicate_io_cdc_heartbeat with your heartbeat table's name if applicable
         column-name [20.10.07.9]: timestamp #Replace timestamp with your heartbeat table's column name if applicable
     ```
+ For a detailed explanation of configuration parameters in the extractor file, read [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference").
