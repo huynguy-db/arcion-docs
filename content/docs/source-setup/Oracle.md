@@ -179,7 +179,7 @@ bookHidden: false
 The proceeding steps are to set up Replicant. The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
 
 
-## V. Setup Connection Configuration
+## V. Set up Connection Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the connection configuration file:
     ```BASH
@@ -251,7 +251,7 @@ The proceeding steps are to set up Replicant. The extracted `replicant-cli` will
       ```
 For a detailed explanation of configuration parameters in the filter file, read: [Filter Reference]({{< ref "/docs/references/filter-reference" >}} "Filter Reference")
 
-## VII. Setup Extractor Configuration
+## VII. Set up Extractor Configuration
 
 For real-time replication, you must create a heartbeat table in the source Oracle.
 

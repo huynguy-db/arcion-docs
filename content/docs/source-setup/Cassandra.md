@@ -45,7 +45,7 @@ Blitzz Replicant supports two mechanisms for accessing the Cassandra CDC log fil
    /etc/init.d/ssh start
    ```
 
-## I. Setup Connection Configuration
+## I. Set up Connection Configuration
 
 1. From `$REPLICANT_HOME` navigate to the connection configuration file:
     ```BASH
@@ -142,7 +142,7 @@ Blitzz Replicant supports two mechanisms for accessing the Cassandra CDC log fil
       ```
 For a detailed explanation of configuration parameters in the filter file, read: [Filter Reference]({{< ref "/docs/references/filter-reference" >}} "Filter Reference")
 
-## III. Setup Extractor Configuration
+## III. Set up Extractor Configuration
 
 For real-time replication, you must create a heartbeat table in the source Casandra.
 

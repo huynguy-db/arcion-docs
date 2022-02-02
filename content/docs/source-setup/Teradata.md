@@ -8,7 +8,7 @@ bookHidden: false
 
 The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
 
-## I. Setup Connection Configuration
+## I. Set up Connection Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the sample connection configuration file:
 
@@ -71,7 +71,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
    - For TPT connection, the default password will be used.
    {{< /hint >}}
 
-## II. Setup Extractor Configuration
+## II. Set up Extractor Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the applier configuration file:
    ```BASH

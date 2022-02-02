@@ -36,7 +36,7 @@ Before you can use Replicant with Salesforce, you have to add it to Salesforce a
 
     b. In the new window, you'll find your **Consumer Key** and **Consumer Secret** values. These values correspond to the the values of the `client-id` and `client-secret` parameters of the Salesforce connection configuration respectively. To know more about the Salesforce connection configuration, go to the next section [Setting up Connection Configuration](#ii-setup-connection-configuration).
 
-## II. Setup Connection Configuration
+## II. Set up Connection Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the sample connection configuration file:
     ```BASH
@@ -65,7 +65,7 @@ Before you can use Replicant with Salesforce, you have to add it to Salesforce a
     #conn-retry-wait-duration-ms: 10_000
     ```
 
-## III. Setup Extractor Configuration
+## III. Set up Extractor Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the applier configuration file:
     ```BASH

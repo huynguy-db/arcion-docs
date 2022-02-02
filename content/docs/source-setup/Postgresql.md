@@ -83,7 +83,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 <br></br>
 
 **For the proceeding steps 3-5, position yourself in ```$REPLICANT_HOME``` directory**
-## III. Setup Connection Configuration
+## III. Set up Connection Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the connection configuration file:
     ```BASH
@@ -190,7 +190,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
         ```
 For a detailed explanation of configuration parameters in the filter file, read: [Filter Reference]({{< ref "/docs/references/filter-reference" >}} "Filter Reference")
 
-## V. Setup Extractor Configuration
+## V. Set up Extractor Configuration
 
 For real-time replication, you must create a heartbeat table in the source PostgreSQL
 

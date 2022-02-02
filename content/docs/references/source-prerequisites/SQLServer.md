@@ -33,7 +33,8 @@ The agent has the following security requirements:
    1. If not using the socket file server to publish the files, this directory must be a shared mount point with full access available from the system running the database being replicated as well the system running the replicate process(es). Note, it is possible to simply share the default location as long as there’s enough space.
    2. The user assigned to run the service must have full access to the staging directory. The installer assigns those privileges automatically, but if the staging directory is later moved, but sure to give that user full access to that directory.
 5. To enable the socket-based file server, simply edit the `sqlserver.yaml` file located in `<install dir>\conf\conn` and change the file-server section to enable the server, set the desired port and specify the thumbprint of the certificate to be used for the secured connection. This configuration will be applied when enabling replication as described below. To enable this feature with a self signed certificate, perform the following:
-   a. From a Windows command prompt, run the command:
+
+   a. From a Windows command prompt, run the following command:
    
    ```bat
    powershell New-ItemProperty -Path HKLM:\Software\SingleStore\Replicate -Name TlsCertificateHash -Value (New-SelfSignedCertificate -DnsName SingleStore -CertStoreLocation "cert:\CurrentUser\My"  -NotAfter (Get-Date).AddYears(20)).Thumbprint -PropertyType STRING -Force

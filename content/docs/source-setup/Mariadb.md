@@ -86,7 +86,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
 
 
-## IV. Setup Connection Configuration
+## IV. Set up Connection Configuration
 
 1. From ```$REPLICANT_HOME```, navigate to the connection configuration file:
     ```BASH
@@ -158,7 +158,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
       ```
 For a detailed explanation of configuration parameters in the filter file, read: [Filter Reference]({{< ref "/docs/references/filter-reference" >}} "Filter Reference")
 
-## VI. Setup Extractor Configuration
+## VI. Set up Extractor Configuration
 
 In real-time replication, for accurate computation of latency, you must create a heartbeat table in the source MariaDB.
 
