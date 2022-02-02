@@ -8,7 +8,15 @@ bookHidden: false
 
 The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
 
-## I. Setup Connection Configuration
+## I. Set up Replicant Windows Agent
+
+To intsall and set up Replicant Windows Agent, please follow the instructions in [Windows Agent Installation](/docs/references/source-prerequisites/sqlserver/#windows-agent-installation).
+
+## II. Check Permissions
+
+You need to verify that the necessary permissions are in place on source SQL Server in order to perform replication. To know about the permissions, see [SQL Server User Permissions # ](/docs/references/source-prerequisites/sqlserver/#sql-server-user-permissions).
+
+## III. Set up Connection Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the sample connection configuration file:
 
@@ -55,7 +63,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
      - The keystore `password` field is optional. If you don't want to specify the keystore password here, then you must use the UUID from your license file as the keystore password. Remember to keep your license file somewhere safe in order to keep this password secure.
 
-## II. Setup Extractor Configuration
+## IV. Set up Extractor Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the applier configuration file:
    ```BASH
