@@ -9,7 +9,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
 ## CDC Prerequisites
 
-Blitzz Replicant supports two mechanisms for accessing the Cassandra CDC log files. The working method depends on whether the CDC log files are accessible locally to the Replicant.
+Arcion Replicant supports two mechanisms for accessing the Cassandra CDC log files. The working method depends on whether the CDC log files are accessible locally to the Replicant.
 
 1. If Replicant is running on the same node as the source Cassandra server or the Cassandra CDC log files are accessible to Replicant using NFS mount, then you must configure the access-method as LOCAL and provide the locations of cdc-log-dir and cdc-raw-dir in the connection configuration file (explained in step I).
    ```yaml

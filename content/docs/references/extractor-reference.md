@@ -180,7 +180,7 @@ Unless you have given your heartbeat table different table and column names than
 
 ## Delta snapshot mode
 
-Blitzz supports a third mode of replication called delta-snapshot. Delta-snapshot is required when the source database does not provide access to CDC log but the customer is interested in real-time replication (for example Teradata). The delta snapshot is a recurring snapshot which replicates the *delta* of the records which have been inserted/updated since the previous delta snapshot iteration. The following describes parameters of the `delta-snapshot` section of the Extractor configuration file.
+Arcion supports a third mode of replication called delta-snapshot. Delta-snapshot is required when the source database does not provide access to CDC log but the customer is interested in real-time replication (for example Teradata). The delta snapshot is a recurring snapshot which replicates the *delta* of the records which have been inserted/updated since the previous delta snapshot iteration. The following describes parameters of the `delta-snapshot` section of the Extractor configuration file.
 
 **delta-snapshot**
   1. **threads**: Maximum number of threads replicant should use for data extraction from source.
@@ -236,7 +236,7 @@ Blitzz supports a third mode of replication called delta-snapshot. Delta-snapsho
     delta-snapshot-keys: [col1, col2, col3]`  # A list of monotonic increasing numeric/timestamp columns which gets new value on each INSERT/UPDATE
     ```
 
-12. **row-identifier-key**: If a table does not have a PK/UK defined on it, then we strongly recommend that you specify a `row-identifier-key`: a single column or a group of columns that are ensured to be unique in the table by your applications. Blitzz leverages this `row-identifier-key` to achieve a much better overall performance for incremental replication (in the absence of PK/UK). This configuration lets you specify a global `row-identifier-key`. Blitzz Replicant makes use of this key to perform certain replication (unless this configuration is overridden in per-table-config for this table).
+12. **row-identifier-key**: If a table does not have a PK/UK defined on it, then we strongly recommend that you specify a `row-identifier-key`: a single column or a group of columns that are ensured to be unique in the table by your applications. Arcion leverages this `row-identifier-key` to achieve a much better overall performance for incremental replication (in the absence of PK/UK). This configuration lets you specify a global `row-identifier-key`. Arcion Replicant makes use of this key to perform certain replication (unless this configuration is overridden in per-table-config for this table).
 
 13. **update-key**: This lets users specify a key that Replicant should use to perform DELETES/UPDATES on the target system under the following scenarios: 
     * PK/UK does not exist.
@@ -244,7 +244,7 @@ Blitzz supports a third mode of replication called delta-snapshot. Delta-snapsho
 
     This specifies a single column or a group of columns to be used by replicant.  We strongly recommended that you create an index on `update-key` on the target table explicitly to get better replication performance.
 
-14. **delta-snapshot-interval**: The interval (in seconds) between two incremental replication cycles. This configuration allows you to specify how frequently Blitzz replicant should query the source database and pull incremental changes.
+14. **delta-snapshot-interval**: The interval (in seconds) between two incremental replication cycles. This configuration allows you to specify how frequently Arcion replicant should query the source database and pull incremental changes.
 
 15. **replicate-deletes**: This configuration allows you to disable delete replication. 
 

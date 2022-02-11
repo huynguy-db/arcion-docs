@@ -91,7 +91,7 @@ Replicant supports creating/loading tables at the partition and subpartition lev
     *Default: By default, this parameter is set to `false`.*
 
   - `init-views-post-snapshot`*[v21.04.06.8]*: If init-views-as-views is true, this option will create views after snapshot is complete. If disabled, views are created prior to snapshot. (by default this is true).
-  - `bulk-load`: Blitzz can leverage underlying support of `FILE` based bulk loading into the target system.
+  - `bulk-load`: Arcion can leverage underlying support of `FILE` based bulk loading into the target system.
     - `enable`: To enable/disable bulk loading.
     - `type`: `FILE`
     - `serialize`: Specifies whether the files generated should be applied in serial/parallel fashion. Values are either `true` or `false`. 
@@ -121,7 +121,7 @@ Replicant supports creating/loading tables at the partition and subpartition lev
      enable-partition-load: true
      disable-partition-wise-load-on-failure: false
 
-     bulk-load : Blitzz can leverage underlying support of FILEbased bulk loading into the target system.
+     bulk-load : Arcion can leverage underlying support of FILEbased bulk loading into the target system.
        enable: true
        type: FILE
        serialize: true/false.

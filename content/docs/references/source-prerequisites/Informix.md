@@ -25,9 +25,9 @@ This page describes the requirements for using IBM Informix as source.
 
 ## Logical Log Configuration Guidelines
 
-You must perform Logical log configuration in such manner that Informix logical logs do not get overwritten fast enough before Blitzz Replicant has finished consuming them. To know about the general Informix guidelines for managing logical logs, see [Managing logical-log files](https://www.ibm.com/support/knowledgecenter/SSGU8G_14.1.0/com.ibm.admin.doc/ids_admin_0713.htm#ids_admin_0713) on IBM Informix Documentation.
+You must perform Logical log configuration in such manner that Informix logical logs do not get overwritten fast enough before Arcion Replicant has finished consuming them. To know about the general Informix guidelines for managing logical logs, see [Managing logical-log files](https://www.ibm.com/support/knowledgecenter/SSGU8G_14.1.0/com.ibm.admin.doc/ids_admin_0713.htm#ids_admin_0713) on IBM Informix Documentation.
 
-Blitzz replicant recommends the following:
+Arcion replicant recommends the following:
 
 - It is important to have a sufficiently large `DBSPACE`(s) configured to hold logical logs corresponding to the transaction activity that is done for a few days to a week duration. The higher the logical log space configured, the more is the resiliency of CDC based replication for the failures with the error code CDC_E_LSN ( Data at the requested log sequence number is unavailable for capture). E.g. A DBSPACE can be added with following using `DBACCESS`:
   ```
@@ -44,12 +44,12 @@ in this dbspace. For example:
 - The more the threads specified in the realtime section of the extractor configuration file (refer `conf/src/informix.yaml` in the release) the more is the number of CDC sessions replicant creates to pull logs from the source Informix database. For example, if there are 128
 tables to be replicated and if number of realtime extractor threads is specified as 16 then replicant will divide 128 tables amongst these 16 extractor slots ( cdc sessions) each pulling CDC logs for 8 tables). This will help replicant to consume the logs aggressively by maximizing the available bandwidth of log consumption.
 
-- Once Blitzz replicant has been started and it finishes snapshot and enters realtime mode, it is possible to monitor the consumption rate in different ways as described below 
+- Once Arcion replicant has been started and it finishes snapshot and enters realtime mode, it is possible to monitor the consumption rate in different ways as described below 
 
-  - Replicant has an in-built heartbeat mechanism by which replicant can precisely figure out how much is the replication lag at any point. For example, if an `INSERT`/`UPDATE`/`DELETE` operation was executed on the source Informix server at time X and it was applied to the target database by Blitzz replicant at time X + 25 then replicant computes this replication lag as 25 seconds and shows it up on the dashboard.
+  - Replicant has an in-built heartbeat mechanism by which replicant can precisely figure out how much is the replication lag at any point. For example, if an `INSERT`/`UPDATE`/`DELETE` operation was executed on the source Informix server at time X and it was applied to the target database by Arcion replicant at time X + 25 then replicant computes this replication lag as 25 seconds and shows it up on the dashboard.
 
     Replicant continuously computes and updates the replication lag value in real time and displays it on the Replicant dashboard. It is a true reliable metric to understand how much Replicant is lagging behind from the source system in terms of elapsed time.
-  - On Informix server, it is possible to continuously monitor how fast Blitzz Replicant is consuming the CDC logs buffers. To do so, use the following command:
+  - On Informix server, it is possible to continuously monitor how fast Arcion Replicant is consuming the CDC logs buffers. To do so, use the following command:
 
     ```shell
     [informix@62881888bf5b informix]$ onstat -g cdc bufm
@@ -91,15 +91,15 @@ tables to be replicated and if number of realtime extractor threads is specified
             Number of currently allocated bufers: 14
             Minimum prepend for alloced bufers: 17
     ```
-    In this output, the more the number of currently allocated buffers for each CDC session, the more is the amount of unconsumed log by Blitzz Replicant.
+    In this output, the more the number of currently allocated buffers for each CDC session, the more is the amount of unconsumed log by Arcion Replicant.
 
-    The value of this allocated buffers < 20 as above indicates all the logs have been consumed by Blitzz repicant. When the value is much higher, it is an indication of Blitzz replicant not being able to catch up with the high throughput of log generation. It is not possible to have record level granularity of records not yet fetched by Replicant. But once logs are fetched and are waiting to be applied we show "Buffered Oper" count on the replicant dashboard.
+    The value of this allocated buffers < 20 as above indicates all the logs have been consumed by Arcion repicant. When the value is much higher, it is an indication of Arcion replicant not being able to catch up with the high throughput of log generation. It is not possible to have record level granularity of records not yet fetched by Replicant. But once logs are fetched and are waiting to be applied we show "Buffered Oper" count on the replicant dashboard.
 
-  - Informix does not offer any direct way for CDC consumers (like Blitzz Replicant) to correlate the CDC record sequence number with the LSN in actual logical log files. (To know more, see the section **CDC Record Sequence Number** in [IBM Informix Change Data Capture API Programmer's Guide](http://www.oninit.com/manual/informix/117/documentation/ids_cdc_bookmap.pdf)). Meaning, there is no direct way/API to know which logical log file Blitzz Replicant is currently consuming.
+  - Informix does not offer any direct way for CDC consumers (like Arcion Replicant) to correlate the CDC record sequence number with the LSN in actual logical log files. (To know more, see the section **CDC Record Sequence Number** in [IBM Informix Change Data Capture API Programmer's Guide](http://www.oninit.com/manual/informix/117/documentation/ids_cdc_bookmap.pdf)). Meaning, there is no direct way/API to know which logical log file Arcion Replicant is currently consuming.
 
-    However, Blitzz replicant still offers one way to do this as below :
+    However, Arcion replicant still offers one way to do this as below :
 
-    - One of the metadata tables (in the metadata database) created by Blitzz Replicant is `blitzz_io_cdc_extractor_metadata_<id>_<id>`. The column `committed_cursor` in this table gives the exact CDC cursor information for each CDC session that Blitzz Replicant checkpoints and updates continuously. For example, notice the following SQL:
+    - One of the metadata tables (in the metadata database) created by Arcion Replicant is `blitzz_io_cdc_extractor_metadata_<id>_<id>`. The column `committed_cursor` in this table gives the exact CDC cursor information for each CDC session that Arcion Replicant checkpoints and updates continuously. For example, notice the following SQL:
 
       ```SQL
       select committed_cursor from blitzz.blitzz_io_cdc_extractor_metadata_repl1_repl1;
@@ -141,7 +141,7 @@ tables to be replicated and if number of realtime extractor threads is specified
       }
       (4 rows)
       ```
-      Each value is a JSON string is with a timestamp field in it. This timestamp is the start time of the Informix transaction that Blitzz Replicant has successfully replicated.
+      Each value is a JSON string is with a timestamp field in it. This timestamp is the start time of the Informix transaction that Arcion Replicant has successfully replicated.
 
       The minimum of all these values will give the oldest transaction’s start timestamp (say it is X ) which has been replayed by Replicant.This timestamp is in milliseconds (time since epoch) and it can be easily converted to a UTC timestamp.
 
@@ -189,7 +189,7 @@ tables to be replicated and if number of realtime extractor threads is specified
 
       It is possible to write an external monitoring script which can continuously query the following:
 
-      - The Blitzz replicant metadata table `blitzz_io_cdc_extractor_metadata_repl1_repl1` to get the start time of the oldest transaction which has been successfully replicated by replicant (calling it `X`).\
+      - The Arcion replicant metadata table `blitzz_io_cdc_extractor_metadata_repl1_repl1` to get the start time of the oldest transaction which has been successfully replicated by replicant (calling it `X`).\
       - The `ph_alerts` table to get the most recent logical log full time and logical log file number (calling it `Y`).
       - By comparing `X` with `Y` of each logical log file which becomes full, you can deduce which exact logical logs Replicant didn't consume at any point. Based on that observation, you can take appropriate action. For example:
         - If X is TS 120

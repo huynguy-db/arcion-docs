@@ -44,7 +44,7 @@ The agent has the following security requirements:
    
    c. Restart the `replicatesvc` service using the **services.msc** tool.
    
-   d. The certificate named Blitzz will need to be exported from the Personal\My folder in the **certmgr.msc** tool and added to the keystore of the JRE that runs the replicate tool on Linux. Export only the certificate and not the key.
+   d. The certificate named Arcion will need to be exported from the Personal\My folder in the **certmgr.msc** tool and added to the keystore of the JRE that runs the replicate tool on Linux. Export only the certificate and not the key.
 6. To change the staging directory location after installation, run the command `ReplicateDB -t <staging directory>`.
 7. The installation includes the tool **ReplicateDB.exe**, that sets up a local publication and subscription for the specified database. 
    1. To run the ReplicateDB tool, launch a command prompt as administrator.

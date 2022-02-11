@@ -13,11 +13,11 @@ Replicant can run on the default applier configurations for the data snapshot. T
 **snapshot**:
   1. **threads**: Maximum number of threads replicant should use for writing to target
 
-  2. **batch-size-rows**: This configuration determines the size of a batch. We recommend that you both refer to the value provided in the sample extractor configuration file of the Blitzz Replicant release folder and also experiment a bit on your deployment to find the appropriate value here (e.g. Typical size of 10000 offers good performance for MongoDB, but it should be tuned for the use case and target system).
+  2. **batch-size-rows**: This configuration determines the size of a batch. We recommend that you both refer to the value provided in the sample extractor configuration file of the Arcion Replicant release folder and also experiment a bit on your deployment to find the appropriate value here (e.g. Typical size of 10000 offers good performance for MongoDB, but it should be tuned for the use case and target system).
 
   3. **txn-size-rows**: This determines the unit of the applier side job size. A transaction consists of multiple batches.
 
-  4. **bulk-load**: Blitzz can leverage the underlying support of a FILE/PIPE based bulk loading into the target system.
+  4. **bulk-load**: Arcion can leverage the underlying support of a FILE/PIPE based bulk loading into the target system.
       * **enable**: To enable/disable bulk loading.
       * **type**: Type of bulk loading. Either FILE or PIPE based.
       * **serialize**: true/false. Enabling this will result in the files generated to be applied in a serial/parallel fashion

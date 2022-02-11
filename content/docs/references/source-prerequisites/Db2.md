@@ -138,7 +138,7 @@ For enabling CDC-based replication from the source Db2 server, please follow the
 
   {{< hint "info" >}}
   - You must create publications for each and every DB2 table to be replicated .
-  - Blitzz replicant supports both XML and DELIMITED formats of publication map. The example above uses XML format.
+  - Arcion replicant supports both XML and DELIMITED formats of publication map. The example above uses XML format.
   {{< /hint >}}
 
 ### Start Q Capture program 
@@ -163,7 +163,7 @@ For enabling CDC-based replication from the source Db2 server, please follow the
   ```
   asnqcap capture_server=sourcedb capture_schema="ASN" logstdout=y
   ```
-  {{< hint "warning" >}}You must make sure that the `asnqcap` program is running all the time while Blitzz Replicant is replicating. {{< /hint >}}
+  {{< hint "warning" >}}You must make sure that the `asnqcap` program is running all the time while Arcion Replicant is replicating. {{< /hint >}}
 
   c. It is important to set certain key MQ parameters to very high or maximum values for supporting large scale replication with high activity.
 

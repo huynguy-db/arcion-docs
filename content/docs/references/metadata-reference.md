@@ -3,7 +3,7 @@ title: Metadata Configuration
 weight: 11
 ---
 
-In order to carry out a fault-tolerant distributed replication, Blitzz Replicant needs to maintain a number of metadata tables of its own. It is possible to provision a separate metadata database using this configuration to make Replicant store all metadata tables in that database. If you don't specify this configuration, then Replicant will use the destination database itself to store metadata tables.
+In order to carry out a fault-tolerant distributed replication, Arcion Replicant needs to maintain a number of metadata tables of its own. It is possible to provision a separate metadata database using this configuration to make Replicant store all metadata tables in that database. If you don't specify this configuration, then Replicant will use the destination database itself to store metadata tables.
    
 1. `type`: The type of the metadata database.
 2. `connection`: The connection config of the metadata database.
