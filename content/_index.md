@@ -1,5 +1,5 @@
 ---
-title: Blitzz Documentation
+title: Arcion Documentation
 ---
 These pages are currently being populated, so please regularly check for new additions.
 
