@@ -21,7 +21,7 @@ theme = "book"
       xhtml = false
 [params]
   BookTheme = 'light'
-  BookLogo = '/blitzz-gradient.png'
+  BookLogo = '/arcion-horizontal.png'
 
 [deployment]
   [[deployment.targets]]
