@@ -27,7 +27,7 @@ conf/conn/target_database_name.yaml \
 --extractor conf/src/source_database_name.yaml \
 --applier conf/dst/target_database_name.yaml \
 --notify conf/notification/notification.yaml \
-–statistics conf/statistics/statistics.yaml \
+--statistics conf/statistics/statistics.yaml \
 --metadata conf/metadata/database_name.yaml \
 --filter filter/source_database_name_filter.yaml \
 --id repl1 --replace --overwrite
