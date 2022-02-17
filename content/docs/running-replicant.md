@@ -4,7 +4,7 @@ weight: 4
 ---
 # Running Replicant
 
-Replicant must be run in one of three replication modes: full, snapshot, realtime, and delta-snapshot. When starting Replicant, you must specify your desired mode of replication using a command line argument. In addition to the multiple different modes, Replicant can also be run with additional settings/options. All of the modes, options, and commands to run Replicant are explained below.
+Replicant must be run in one of three replication modes: full, snapshot, realtime, and delta-snapshot. When starting Replicant, you must specify your desired mode of replication using a command line argument (`full`, `realtime`, or `delta-snapshot`). In addition to the multiple different modes, Replicant can also be run with additional settings/options. All of the modes, options, and commands to run Replicant are explained below.
 
 
 ## Replicant Full Mode
