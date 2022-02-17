@@ -1,6 +1,6 @@
 ---
 title: Databricks Delta Lake
-weight: 13
+weight: 1
 bookHidden: false
 ---
 # Destination Databricks Delta Lake

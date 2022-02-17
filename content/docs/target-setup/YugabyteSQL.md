@@ -1,6 +1,6 @@
 ---
 title: YugabyteSQL
-weight: 7
+weight: 2
 bookHidden: false
 ---
 # Destination YugabyteSQL
