@@ -26,4 +26,4 @@ theme = "book"
 [deployment]
   [[deployment.targets]]
     name="replicant-docs"
-    URL="gs://docs.blitzz.io"
+    URL="gs://docs.arcion.io"
