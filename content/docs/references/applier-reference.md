@@ -29,7 +29,7 @@ Replicant can run on the default applier configurations for the data snapshot. T
 
   7. **skip-tables-on-failures**: true/false. Enabling this configuration forces replicant to skip a table/collection that Replicant is unable to load on to the target even after multiple attempts and continue replicating other tables.
 
-  8. **deferred-delete**: true/false. This configuration is relevant only for incremental replication (and not to snapshot or cdc based full replication). When enabled, Replicant will create an additional column on each target target table to mark the deletes instead of actually deleting records from the tables.
+  8. **deferred-delete**: true/false. This configuration is relevant only for incremental replication (and not to snapshot or cdc based full replication). When enabled, Replicant will create an additional column on each target table to mark the deletes instead of actually deleting records from the tables.
 
   9. **Schema-dictionary**: Allowed values: POJO | SCHEMA-DUMP | NONE (default is NONE)
     **NONE**: This option allows dumping the schema into a dedicated schema dictionary table on the target: blitzz_io_replication_schema.
@@ -88,7 +88,7 @@ While not required, changing certain parameters may improve real time replicatio
 
   10. **replay-consistency[20.09.14.1]**: GLOBAL/EVENTUAL (default is EVENTUAL:). If set to GLOBAL, realtime replication is performed with global transactional consistency. If set to EVENTUAL, realtime replication is performed with eventual consistency.
 
-  11. **skip-upto-cursors[20.09.14.1]**: This configuration is only applicable is replay-consitency is set to GLOBAL. Here, you can specify a list of cursor positions up to which replication must be skipped. If the operations of a failed transaction cannot be persisted in the failed_txn table in metadata storage (Refer SkipFailedTransaction for more details), the operations are logged in a text file <replicant_home>/data/<replicant ID>/bad_rows blitzz_io_failed_txn_log_<tableID/extractorID>. The location of the file is notified to the user through notification mails and trace logs. The file contains the failed operations as well as the skip-upto-cursor(s) configuration. After resolving the failure you can use this configuration to skip over the failed transactions.
+  11. **skip-upto-cursors[20.09.14.1]**: This configuration is only applicable if replay-consitency is set to GLOBAL. Here, you can specify a list of cursor positions up to which replication must be skipped. If the operations of a failed transaction cannot be persisted in the failed_txn table in metadata storage (Refer SkipFailedTransaction for more details), the operations are logged in a text file <replicant_home>/data/<replicant ID>/bad_rows blitzz_io_failed_txn_log_<tableID/extractorID>. The location of the file is notified to the user through notification mails and trace logs. The file contains the failed operations as well as the skip-upto-cursor(s) configuration. After resolving the failure you can use this configuration to skip over the failed transactions.
 
   12. **replay-shard-key-update-as-delete-insert[20.12.04.7]**: ON/OFF. This configuration allows replay of update operation that changes values of shard key columns as delete + inserts. This feature is ON by default for MEMSQL as a target
 

@@ -80,7 +80,7 @@ Replicant can run on the default extractor configurations for the data snapshot.
              split-key:
              split-method:  
              extraction-method:
-             pt-num-files-per-job:
+             tpt-num-files-per-job:
              row-identifier-key:
              extraction-priority:
              normalize: #Only for Mongo Database as source
@@ -92,7 +92,7 @@ Replicant can run on the default extractor configurations for the data snapshot.
             split-key:
             split-method:
             extraction-method:
-            pt-num-files-per-job:
+            tpt-num-files-per-job:
             row-identifier-key:
             extraction-priority:
             normalize: #Only for Mongo Database as source   
@@ -201,7 +201,7 @@ Arcion supports a third mode of replication called delta-snapshot. Delta-snapsho
 
   5. **max-jobs-per-chunk**: Determines the maximum number of jobs Replicant should create for each source table/collection.
 
-  6. **split-key**: Replciant uses this configuration to split a table into multiple jobs in order to do parallel extraction. It lets you specify a global `split-key`. Replicant will use this column to perform parallel data extraction from each table that has this column (unless this configuration is overridden in `per-table-config` for this table).
+  6. **split-key**: Replicant uses this configuration to split a table into multiple jobs in order to do parallel extraction. It lets you specify a global `split-key`. Replicant will use this column to perform parallel data extraction from each table that has this column (unless this configuration is overridden in `per-table-config` for this table).
   
   7. **split-method**[20.05.12.3] : Replicant supports two split methods:
 
@@ -281,7 +281,7 @@ Arcion supports a third mode of replication called delta-snapshot. Delta-snapsho
 
            {{< hint "warning" >}} `delta-snapshot-key` is deprecated. Please use `delta-snapshot-keys` instead.{{< /hint >}}
 
-          h. **delta-snapshot-key**s: This configuration allows you to specify table specific delta-snapshot-keys. If specified, it overrides the global delta-snapshot-keys
+          h. **delta-snapshot-keys**: This configuration allows you to specify table specific delta-snapshot-keys. If specified, it overrides the global delta-snapshot-keys
           
           i. **row-identifier-key**: This configuration allows you to specify table specific `row-identifier-key`. If specified, it overrides the global `row-identifier-key`.
           

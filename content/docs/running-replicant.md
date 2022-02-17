@@ -4,7 +4,7 @@ weight: 4
 ---
 # Running Replicant
 
-Replicant must be run in one of three replication modes: full, snapshot, and realtime. When starting Replicant, you must specify your desired mode of replication using the COMMAND argument. In addition to the multiple different modes, Replicant can also be run with additional settings/options. All of the modes, options, and commands to run Replicant are explained below.
+Replicant must be run in one of three replication modes: full, snapshot, realtime, and delta-snapshot. When starting Replicant, you must specify your desired mode of replication using a command line argument. In addition to the multiple different modes, Replicant can also be run with additional settings/options. All of the modes, options, and commands to run Replicant are explained below.
 
 
 ## Replicant Full Mode
@@ -68,7 +68,7 @@ Use the following command to run Replicant in realtime mode:
 conf/conn/target_database_name_dst.yaml \
 --extractor conf/src/source_database_name.yaml \
 --applier conf/dst/target_database_name.yaml  \
---filter filter/  source_database_name_filter.yaml \
+--filter filter/source_database_name_filter.yaml \
 --id repl2 --replace –overwrite
 ```
 

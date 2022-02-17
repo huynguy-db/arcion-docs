@@ -20,7 +20,7 @@ This page describes the requirements for using IBM Informix as source.
 
     You can check the current log mode using SQL:
     ```SQL
-    SELECT * FROM sysmaster:sysdatabases WHERE name = '<dbname>
+    SELECT * FROM sysmaster:sysdatabases WHERE name = '<dbname>'
     ```
 
 ## Logical Log Configuration Guidelines
@@ -31,7 +31,7 @@ Arcion replicant recommends the following:
 
 - It is important to have a sufficiently large `DBSPACE`(s) configured to hold logical logs corresponding to the transaction activity that is done for a few days to a week duration. The higher the logical log space configured, the more is the resiliency of CDC based replication for the failures with the error code CDC_E_LSN ( Data at the requested log sequence number is unavailable for capture). E.g. A DBSPACE can be added with following using `DBACCESS`:
   ```
-  EXECUTE FUNCTION task( "create dbspace", "logical_log_space",$INFORMIXDIR/tmp/dbspace3", "100000 M",0 );
+  EXECUTE FUNCTION task("create dbspace", "logical_log_space", $INFORMIXDIR/tmp/dbspace3", "100000 M", 0);
   ```
 - A sufficiently large number of initial logical log files of appropriate size should be added
 in this dbspace. For example:

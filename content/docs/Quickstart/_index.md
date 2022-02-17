@@ -107,7 +107,7 @@ This will create a directory named ```replicant-cli``` that will serve as ```REP
     retry-wait-duration-ms: 1000
     ```
 
-    For database specific examples, please refer to Source Database Setup.
+    For database specific examples, please refer to Target Database Setup.
 
 
 ## VI. Run Replicant Snapshot

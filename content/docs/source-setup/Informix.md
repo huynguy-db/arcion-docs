@@ -48,7 +48,7 @@ LOCK MODE ROW
 
     username: 'informix' #Replace informix with the user that connects to your Informix server
     password: 'in4mix' #Replace in4mix with your user's password 
-    informix-user-password: 'in4mix' # Password for user "informix"
+    informix-user-password: 'in4mix' #Password for the "informix" user, required for performing CDC. Not required in snapshot replication.
 
     max-connections: 15
     max-retries: #Number of times any operation on the source system will be re-attempted on failures.
