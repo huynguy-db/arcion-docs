@@ -16,9 +16,7 @@ Enter the following command to run Replicant in full mode with only minimal conf
 ./bin/replicant full conf/conn/source_database_name_src.yaml \
 conf/conn/target_database_name.yaml \
 --extractor conf/src/source_database_name.yaml \
---applier conf/dst/target_database_name.yaml  \
---filter filter/source_database_name_filter.yaml \
---id repl1 --replace --overwrite
+--filter filter/source_database_name_filter.yaml
 ```
 **With Advanced Configurations**
 
