@@ -325,6 +325,11 @@ For real-time replication, you must create a heartbeat table in the source Oracl
     #          row-count: 2000
       ```
     
+    {{< hint "info" >}}
+  - Supplying `split-key` in the `per-table-config `section is not required (and not supported) for Oracle source.
+  - We strongly recommend that you specify `row-identifier-key` in `per-table-config` section for tables not having PK/UK constraints defined on the source Oracle system.
+    {{< /hint >}}  
+
     ### Parameters related to realtime mode
     If you want to operate in realtime mode, you can use the `realtime` section to specify your configuration. The following Oracle specific parameters are available:
 
