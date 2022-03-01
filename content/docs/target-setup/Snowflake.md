@@ -19,7 +19,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     - Parameters related to stage configuration.
 
     ### Parameters related to target Snowflake server connection
-    For connecting to your target Cockroach server, you can configure the following parameters:
+    For connecting to your target Snowflake server, you can configure the following parameters:
 
     ```YAML
     type: SNOWFLAKE
