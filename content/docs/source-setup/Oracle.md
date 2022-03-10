@@ -5,9 +5,9 @@ bookHidden: false
 ---
 
 # Source Oracle
-**The first four steps (I-IV) are to prepare the Oracle Database for replication and must be executed in an Oracle client. The remaining steps (V-VII) are to configure Replicant.**
+**The first five steps (I-V) are to prepare the Oracle Database for replication and must be executed in an Oracle client. The remaining steps (VI-VIII) are to configure Replicant.**
 
-## I. Setup Oracle Driver
+## I. Set up Oracle Driver
 
 1. Install the appropriate JDBC Driver (Recommended: JDBC Driver 18c and Java 8 compatible ojdbc8 version)
 2. Download ojdbc8.jar from the following link: [Oracle JDBC Driver Download](https://www.oracle.com/database/technologies/jdbc-ucp-122-downloads.html#license-lightbox)
@@ -39,14 +39,14 @@ bookHidden: false
     GRANT SELECT ANY TABLE TO <USERNAME>;
     ```
 
-## III. Setup Change Data Capture (CDC)
+## III. Set up Change Data Capture (CDC)
 
 1. Set the destination for the log archive:
     ```BASH
     ALTER SYSTEM SET log_archive_dest = '$PATH_TO_REDO_LOG_FILES' scope=spfile  
     ```
-
-   Note: To use log-based CDC, the Oracle database must be in ARCHIVELOG mode.
+   {{< hint "info" >}}
+   To use log-based CDC, the Oracle database must be in ARCHIVELOG mode.
    To check what mode the database is in, use the ```ARCHIVE LOG LIST``` command.
    To set the database in ARCHIVELOG mode, use the following commands:
    ```SQL
@@ -55,6 +55,7 @@ bookHidden: false
    ALTER DATABASE ARCHIVELOG
    ALTER DATABASE OPEN
    ```
+   {{< /hint >}}
 2. Once the database is in ARCHIVELOG mode, grant the EXECUTE_CATALOG_ROLE role to use the DBMS_LOGMNR package:
     ```SQL
     GRANT EXECUTE_CATALOG_ROLE TO <USERNAME>
@@ -72,52 +73,62 @@ bookHidden: false
 4. Provide the following permission to allow Replicant to access v_$logmnr_contents:
     ```SQL
     GRANT SELECT ON v_$logmnr_contents TO <USERNAME>;
+    GRANT SELECT ON gv$archived_log to $USERNAME;
     ```
     For Oracle 19C and beyond, Replicant requires additional access to v_$logfile:
     ```SQL
     GRANT SELECT ON v_$logfile TO <USERNAME>;
     ```
-5. Enable either primary key or all column logging at either the database level or the table level:
-  * Note: If you use table level logging, you must enable it for the CDC heartbeat table as well
+### Enabling logs
+You have to enable either primary key or all column logging at either the database level or the table level.
+  
+{{< hint "info" >}}If you use table level logging, you must enable it for the CDC heartbeat table as well.{{< /hint >}}
 
-  **Database level Supplemental logging**
+  #### Database level Supplemental logging
   * Enable Force Logging:  
     ```SQL
     ALTER DATABASE FORCE LOGGING
     ```
 
 
-  * Enable PRIMARY KEY logging:
+  * Enable `PRIMARY KEY` logging:
     ```SQL
     ALTER DATABASE ADD SUPPLEMENTAL LOG DATA (PRIMARY KEY) COLUMNS
     ```
 
     OR
 
-  * Enable ALL Column logging:
+  * Enable `ALL` Column logging:
     ```SQL
     ALTER DATABASE ADD SUPPLEMENTAL LOG DATA (ALL) COLUMNS
     ```
-    **Note**: Only enable either PRIMARY KEY logging or ALL Column logging, not both.
 
-
-  **Table level supplemental logging**
-  * PRIMARY KEY logging
+  #### Table level supplemental logging
+  * `PRIMARY KEY` logging
     ```SQL
     ALTER <TABLE_NAME> ADD SUPPLEMENTAL LOG DATA (PRIMARY KEY) COLUMNS
     ```
 
     OR
 
-  * ALL Column logging
+  * `ALL` Column logging
     ```SQL
     ALTER <TABLE_NAME> ADD SUPPLEMENTAL LOG DATA (ALL) COLUMNS
     ```
-6. Execute the following command:
-    ```SQL
-    ALTER SYSTEM SWITCH LOGFILE
-    ```      
+  * If table level logging is enabled, then force logging should not be enabled. We need force logging for database level logging:
 
+    ```SQL
+    ALTER DATABASE FORCE LOGGING
+    ALTER SYSTEM SWITCH LOGFILE
+    ```
+  * The following additional permissions are required:
+    ```SQL
+    GRANT SELECT ON gv_$instance TO $USERNAME;
+    GRANT SELECT ON gv_$PDBS TO $USERNAME;
+    GRANT SELECT ON gv_$log TO $USERNAME;
+    GRANT SELECT ON gv_$database_incarnation to $USERNAME;
+    ```
+{{< hint "info" >}}Only enable either `PRIMARY KEY` logging or `ALL` column logging, not both.{{< /hint >}}
 
 
 ## IV. Setup Global Permissions
@@ -130,7 +141,7 @@ bookHidden: false
     ```SQL
     GRANT SELECT ON DBA_SEGMENTS TO <USERNAME>;
     ```
-2. Provide the following continuous access permissions:
+2. Provide the following continuous access permissions; these are necessary during snapshot as well as continious real-time replication:
     ```SQL
     GRANT SELECT ON gv_$database TO <USERNAME>;
     GRANT SELECT ON gv_$transaction TO <USERNAME>;
@@ -162,7 +173,7 @@ bookHidden: false
     GRANT SELECT ON SYS.ALL_IND_EXPRESSIONS TO <USERNAME>;
     ```
 
-## IV. Grant Pluggable Database (PDB) Permissions
+## V. Grant Pluggable Database (PDB) Permissions
 
 1. Ensure that you are connected as a common user with privileges granted on both CDB$ROOT and PDB
 
@@ -179,7 +190,7 @@ bookHidden: false
 The proceeding steps are to set up Replicant. The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
 
 
-## V. Set up Connection Configuration
+## VI. Set up Connection Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the connection configuration file:
     ```BASH
@@ -200,7 +211,7 @@ The proceeding steps are to set up Replicant. The extracted `replicant-cli` will
     max-connections: 30 #Maximum number of connections replicant can open in Oracle
     ```
 
-## VI. Setup Filter Configuration
+## VII. Setup Filter Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the filter configuration file:
     ```BASH
@@ -251,7 +262,7 @@ The proceeding steps are to set up Replicant. The extracted `replicant-cli` will
       ```
 For a detailed explanation of configuration parameters in the filter file, read: [Filter Reference]({{< ref "/docs/references/filter-reference" >}} "Filter Reference")
 
-## VII. Set up Extractor Configuration
+## VIII. Set up Extractor Configuration
 
 For real-time replication, you must create a heartbeat table in the source Oracle.
 
