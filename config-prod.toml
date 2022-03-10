@@ -1,4 +1,5 @@
-baseURL = "https://docs.blitzz.io/"
+baseURL = "https://docs.arcion.io/"
+canonifyURLs = "true"
 languageCode = "en-us"
 theme = "book"
 [markup]
