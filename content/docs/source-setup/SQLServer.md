@@ -1,6 +1,6 @@
 ---
 title: Microsoft SQL Server
-weight: 7
+weight: 11
 bookHidden: false
 ---
 
