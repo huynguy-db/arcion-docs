@@ -279,21 +279,40 @@ For real-time replication, you must create a heartbeat table in the source Oracl
    ```BASH
    vi conf/src/oracle.yaml
    ```
-4. Under the Realtime Section, make the necessary changes as follows:
-     ```YAML
-     realtime:
-       heartbeat:
-         enable: true
-         schema: "REPLICANT" #Replace REPLCIANT with your schema name
-         table-name [20.09.14.3]: replicate_io_cdc_heartbeat #Replace replicate_io_cdc_heartbeat with your heartbeat table's name if applicable
-         column-name [20.10.07.9]: timestamp #Replace timestamp with your heartbeat table's column name if applicable
-     ```
-5. Below is a sample extractor file with commonly used configuration parameters:
+4. The configuration file has two parts:
+
+    - Parameters related to snapshot mode.
+    - Parameters related to realtime mode.
+
+    ### Parameters related to snapshot mode
+    The following parameters are specific to Oracle as source:
+
+    - `fetch-create-sql`: This option can be used to apply exact create SQL on source to target.
+
+      *This parameter is available only for Oracle->Oracle pipeline.*
+
+    - `fetch-create-sql-no-constraints`: This option is used to split create table SQL and Primary/Unique/Foreign Key constraints as different SQLs. So as part of schema migration we create tables without constraints and after the snapshot is complete the constraints are applied. Application of constraints post snapshot is configured by applier config init-constraint-post-snapshot.
+    
+      *This parameter is available only for Oracle->Oracle pipeline.*
+
+    - `serialize-fetch-createSql`: This option is used to fetch create SQL in serialized manner after fetching table schema.
+    - `serialize-fetch-create-sql-no-constraints`: This option is used to fetch SQL of Primary/Unique/Foreign Key constraints in serialized manner.
+
+      *This parameter is available only for Oracle->Oracle pipeline.*
+
+    The following is a sample configuration for snapshot mode:
+
     ```YAML
     snapshot:
-       threads: 16
-
-       fetch-size-rows: 10_000
+      threads: 16
+      fetch-size-rows: 10_000
+      verify-row-count: false
+      _fetch-exact-row-count: true
+      _traceDBTasks: true
+    #  inf-number-behavior: EXCEPTION   # EXCEPTION, ROUND, CONVERT_TO_NULL
+    #  flashback-query: true
+    #  parallel-query: true
+    #  fetch-user-roles: true
 
     #   per-table-config:
     #   - schema: tpch
@@ -301,20 +320,58 @@ For real-time replication, you must create a heartbeat table in the source Oracl
     #       lineitem1:
     #         row-identifier-key: [ORDERKEY, LINENUMBER]
     #         extraction-priority: 1 #Higher value is higher priority. Both positive and negative values are allowed. Default priority is 0 if unspecified.
+    #       lineitem1:
+    #         row-identifier-key: [ORDERKEY, LINENUMBER]
+    #        products:
+    #          per-partition-config:
+    #          - partition-name: SYS_P461
+    #            row-count: 0
+    #          - partition-name: SYS_P462
+    #            row-count: 0
+    #          - partition-name: SYS_P463
+    #            row-count: 1
+    #          - partition-name: SYS_P464
+    #            row-count: 3
+    #        part:
+    #          row-count: 2000
+      ```
+    
+    {{< hint "info" >}}
+  - Supplying `split-key` in the `per-table-config `section is not required (and not supported) for Oracle source.
+  - We strongly recommend that you specify `row-identifier-key` in `per-table-config` section for tables not having PK/UK constraints defined on the source Oracle system.
+    {{< /hint >}}  
 
+    ### Parameters related to realtime mode
+    If you want to operate in realtime mode, you can use the `realtime` section to specify your configuration. The following Oracle specific parameters are available:
+
+    - `block-ddl-transaction`*[v20.09.14.3]*: This option blocks fetching logs for DDL operation from Oracle.
+    - `use-current-scn`*[v20.09.14.8]*: In `start-postion` section, this option allows using current `scn` value for to start reading realtime operations.
+    - `start-scn`[v20.09.14.3]: In `start-postion` section this option allows using user specified `scn` value for to start reading realtime operations.
+    - `inter-source-latency-s`*[v20.10.07.16]:* In the `start-position` section this config option in seconds represents the lag between primary and standby Oracle in case the source-failover feature is enabled.
+    - `stop-inactive-lm-session-after-s`*[v20.12.04.14]*: Check if inactive logminer session after specified seconds and cancel the statement.
+    - `adjust-lm-fetch-size`*[v21.02.01.2]*: Allow adjusting the logimer fetch size if there is a lot of log activity.
+    - `auto-adjust-lm-timeout`*[v21.04.06.6]*: This is a tuning config which will adjust the logminer query timeout based on workload for continuous mine mode.
+
+      *Default: By default, this parameter is set to `false`*.
+
+    - `log-miner-dict-file`*[v21.09.17.6]*: If specified, this file will be used as the dictionary for log mining instead of using the online dictionary. The file must be accessible by Oracle.
+
+    The following is a sample configuration for realtime mode:
+
+    ```YAML
     realtime:
       threads: 4
-      #idempotent-replay: NONE #[ALWAYS, NEVER, NONE]
+      _traceDBTasks: true
       #fetch-size-rows: 0
-      #auto-adjust-lm-timeout: false
-
+      #stop-inactive-lm-session-after-s: 2
       heartbeat:
         enable: true
-        schema: "REPLCIANT"
-        table-name [20.09.14.3]: replicate_io_cdc_heartbeat
+        schema: "tpch"
         interval-ms: 10000
+        table-name: replicate_io_cdc_heartbeat
 
       #start-position:
         #start-scn: 2362927
     ```
+   
 For a detailed explanation of configuration parameters in the extractor file, read: [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference")

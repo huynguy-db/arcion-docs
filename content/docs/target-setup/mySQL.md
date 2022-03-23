@@ -1,6 +1,6 @@
 ---
 title: MySQL
-weight: 3
+weight: 9
 bookHidden: false   
 ---
 # Destination mySQL

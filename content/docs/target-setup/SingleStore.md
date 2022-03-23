@@ -1,44 +1,46 @@
 ---
-title: MemSQL
-weight: 2
+title: SingleStore
+weight: 8
 bookHidden: false
 ---
-# Destination memSQL
+# Destination SingleStore
 
 The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
 
 ## Prerequisites
-You must have a user configured in memSQL for replication with `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `CREATE`, `DROP` permissions on application databases.
+You must have a user configured in SingleStore for replication with `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `CREATE`, `DROP` permissions on application databases.
 
-If memsql user does not have create database permission then you must create a database named `io_replicate` and provide `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `CREATE`, `DROP` privileges to memsql user.
+If SingleStore user does not have create database permission then you must create a database named `io_replicate` and provide `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `CREATE`, `DROP` privileges to SingleStore user.
 
 ## I. Setup Connection Configuration
 
-1. From `$REPLICANT_HOME`, navigate to the sample memSQL connection configuration file
+1. From `$REPLICANT_HOME`, navigate to the sample SingleStore connection configuration file:
     ```BASH
-    vi conf/conn/memsql.yaml
+    vi conf/conn/singlestore.yaml
     ```
 
 2. Make the necessary changes as follows:
     ```YAML
-    type: MEMSQL
+    type: SINGLESTORE
 
-    host: localhost #Replace localhost with address to your memSQL host
+    host: localhost #Replace localhost with address to your SingleStore host
     port: 3306 #Replace default port 3306 if needed
 
-    username: 'replicant' #Replace replicant with your memSQL user
+    username: 'replicant' #Replace replicant with your SingleStore user
     password: 'Replicant#123' #Replace Replicant#123 with your user's password
 
-    max-connections: 30 #Maximum number of connections replicant can open in memSQL
+    max-connections: 30 #Maximum number of connections replicant can open in SingleStore 
+    max-retries: 10
+    retry-wait-duration-ms: 1000
     ```
 
 ## II. Setup Applier Configuration
 
 Edit the applier configurations if required.  
 
-1. From `$REPLICANT_HOME`, navigate to the Applier Configuration File:
+1. From `$REPLICANT_HOME`, navigate to the sample Applier Configuration File:
    ```BASH
-   vi conf/dst/memsql.yaml
+   vi conf/dst/singlestore.yaml
    ```
 
 2. Make the necessary changes as follows:
@@ -48,9 +50,9 @@ Edit the applier configurations if required.
       per-table-config:
         catalog: tpch
           tables:
-            MemSQL_orders: #Replace MemSQL_orders with the name of the specific table you are configuring for in memSQL
+            singlestore_orders: #Replace this with the name of the specific table you are configuring for in SingleStore
             table-store: COLUMN #Enter the table's store (ROW/COLUMN etc.)
-            sort-key: [MemSQL_orderkey] #If applicable, replace MemSQL_orderkey with a list of columns to be created as the sort key
+            sort-key: [singlestore_orderkey] #If applicable, replace singlestore_orderkey with a list of columns to be created as the sort key
             shard-key: [c2] #If applicable, replace c2 with a list of columns to be created as the shared key
 
     realtime:
@@ -68,7 +70,7 @@ Edit the applier configurations if required.
       bulk-load:
         enable: true
         type: FILE
-        #native-load-configs: "ERRORS HANDLE 'memsql_load_error'" #User provided MemSQL LOAD configs. These will be appended to the generated LOAD SQL command.
+        #native-load-configs: "ERRORS HANDLE 'singlestore_load_error'" #User provided SingleStore LOAD configs. These will be appended to the generated LOAD SQL command.
 
       #table-store: ROW
       #init-constraint-post-snapshot: false
@@ -76,9 +78,9 @@ Edit the applier configurations if required.
       per-table-config:
       - catalog: tpch
         tables:
-          MemSQL_orders:
+          singlestore_orders:
             table-store: COLUMN
-            sort-key: [MemSQL_orderkey]
+            sort-key: [singlestore_orderkey]
             #shard-key: [c2]
           partsupp:
             #table-type: REGULAR | REFERENCE

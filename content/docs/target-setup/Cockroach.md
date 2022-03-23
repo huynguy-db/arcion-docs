@@ -1,6 +1,6 @@
 ---
 title: Cockroach
-weight: 4
+weight: 7
 bookHidden: false
 ---
 # Destination Cockroach
