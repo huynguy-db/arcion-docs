@@ -2,6 +2,7 @@
 weight: 6
 Title: Cluster Manager Setup
 bookHidden: true
+bookSearchExclude: true
 ---
 
 # Cluster Manager Setup

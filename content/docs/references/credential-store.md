@@ -7,7 +7,7 @@ bookHidden: false
 # Setting up Credential Store
 Replicant is capable of consuming credential information from a credential store. This page describes the necessary steps for creating a credential store.
 
-Let's take an example of **Teradata->MemSQL** pipeline. Let's assume that you need to specify a URL to connect to Teradata and specify username/password to connect to MemSQL. For these requirements, you can create the keystore and encrypted keys by executing the following commands:
+Let's take an example of **Teradata->SingleStore** pipeline. Let's assume that you need to specify a URL to connect to Teradata and specify username/password to connect to SingleStore. For these requirements, you can create the keystore and encrypted keys by executing the following commands:
 
 ```shell
 echo "<TD_URL>" | keytool -importpass -keystore <keystore_file_name>.jks
@@ -16,13 +16,13 @@ echo "<TD_URL>" | keytool -importpass -keystore <keystore_file_name>.jks
 ```
 
 ```shell
-echo "<MemSQL_Username>" | keytool -importpass -keystore
+echo "<SingleStore_Username>" | keytool -importpass -keystore
 <keystore_file_name>.jks -storetype pkcs12 -storepass <License_UUID> -alias
 <key-prefix>username -keypass <License_UUID> -noprompt
 ```
 
 ```shell
-echo "<MemSQL_Password>" | keytool -importpass -keystore
+echo "<SingleStore_Password>" | keytool -importpass -keystore
 <keystore_file_name>.jks -storetype pkcs12 -storepass <License_UUID> -alias
 <key-prefix>password -keypass <License_UUID> -noprompt
 ```

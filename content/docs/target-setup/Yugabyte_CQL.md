@@ -11,7 +11,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
 1. From `$REPLICANT_HOME`, navigate to the sample YugabyteSQL connection configuration file:
     ```BASH
-    vi conf/conn/memsql.yaml
+    vi conf/conn/singlestore.yaml
     ```
 2. Make the necessary changes as follows:
     ```YAML

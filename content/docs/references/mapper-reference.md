@@ -10,7 +10,7 @@ While replicating data between storages of different type, Replicant by default 
 By using the mapping file, you can precisely define how the data retrieved from the source is applied to the destination. The mapping file can be provided as follows:
 
 `./bin/replicant snapshot conf/conn/oracle.yaml `
-`conf/conn/memsql.yaml --map oracle_to_memsql_map.yaml`
+`conf/conn/singlestore.yaml --map oracle_to_singlestore_map.yaml`
 
 ## Database
 The mapper file contains a map of rules where each rule applies to a single destination catalog or schema (namespace). For databases that support both catalog and schema, each rule applies to a single schema and the schema must be prefixed with the catalog (fully qualified). For each destination namespace, it's possible to define a list of source namespaces, the contents of which will then be mapped into the destination namespace.

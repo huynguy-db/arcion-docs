@@ -39,7 +39,7 @@ Replicant can run on the default applier configurations for the data snapshot. T
    **Note**: This is not supported for selective targets only.
 
   10. **Per-table-config**: This configuration allows you to specify various properties for specific tables on the target database.
-      **table-type**: Type of table (e.g. REFERENCE in case of MemSQL)
+      **table-type**: Type of table (e.g. REFERENCE in case of )
       **table-store**: Table store to use: ROW/COLUMN etc.
       **sort-key**: Sort key to be created for a table (if applicable for target)
       **Shard-key**: Shard key to be created for a target table
@@ -90,7 +90,7 @@ While not required, changing certain parameters may improve real time replicatio
 
   11. **skip-upto-cursors[20.09.14.1]**: This configuration is only applicable if replay-consitency is set to GLOBAL. Here, you can specify a list of cursor positions up to which replication must be skipped. If the operations of a failed transaction cannot be persisted in the failed_txn table in metadata storage (Refer SkipFailedTransaction for more details), the operations are logged in a text file <replicant_home>/data/<replicant ID>/bad_rows blitzz_io_failed_txn_log_<tableID/extractorID>. The location of the file is notified to the user through notification mails and trace logs. The file contains the failed operations as well as the skip-upto-cursor(s) configuration. After resolving the failure you can use this configuration to skip over the failed transactions.
 
-  12. **replay-shard-key-update-as-delete-insert[20.12.04.7]**: ON/OFF. This configuration allows replay of update operation that changes values of shard key columns as delete + inserts. This feature is ON by default for MEMSQL as a target
+  12. **replay-shard-key-update-as-delete-insert[20.12.04.7]**: ON/OFF. This configuration allows replay of update operation that changes values of shard key columns as delete + inserts. This feature is ON by default for SingleStore as a target
 
   13. **per-table-config**: This configuration allows you to specify various properties for specific target tables
     * **skip-upto-cursor[20.09.14.1]**: Similar to skip-upto-cursors, use this to specify a cursor upto which replication must be skipped for a given table.
