@@ -2,6 +2,7 @@
 title: Cluster Manager
 weight: 9
 bookHidden: true
+bookSearchExclude: true
 ---
 # Cluster Manager Explanations
 

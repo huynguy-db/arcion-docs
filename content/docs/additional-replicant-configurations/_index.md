@@ -2,6 +2,7 @@
 weight: 5
 Title: "Additional Replicant Configurations"
 bookHidden: true
+bookSearchExclude: true
 ---
 
 # Additional Replicant Configurations
