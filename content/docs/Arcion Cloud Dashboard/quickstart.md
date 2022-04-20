@@ -92,6 +92,9 @@ After completing the previous steps, you should now be in the **Destination** wi
 - After filling in the details, save the connector by clicking on **Save**.
 
 - Just like source, sync your connector by going to the **Sync Connector** tab and clicking on **Sync Connector**.
+  {{< hint "warning" >}}
+  You must sync every destination connector at least once, as a mandatory step in setting up a destination.
+  {{< /hint >}}
 
 - Click **Continue to Filter**
 
