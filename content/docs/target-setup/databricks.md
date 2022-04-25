@@ -19,7 +19,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     - Parameters related to target Databricks server connection.
     - Parameters related to stage configuration.
 
-    ### Parameters related to Source Db2 server connection
+    ### Parameters related to target Databricks server connection
     For connecting to your target Databricks server, you can configure the following parameters:
 
       ```YAML
