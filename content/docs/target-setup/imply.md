@@ -1,0 +1,66 @@
+---
+title: Imply
+weight: 18
+bookHidden: false
+
+---
+
+# Destination Imply
+
+The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
+
+## I. Set up Connection Configuration
+
+1. From `$REPLICANT_HOME`, navigate to the sample connection configuration file:
+
+   ```sh
+   vi conf/conn/imply.yaml
+   ```
+
+2. You can modify the following sample configurations to your case for connecting to the target Imply server:
+
+   ```yaml
+   type: IMPLY
+   
+   accountName: <YOUR_ACCOUNT_NAME>
+   url: <IMPLY_BASE_URL>
+   clientId: <YOUR_CLIENT_ID>
+   clientSecret: <YOUR_CLIENT_SECRET>
+   file-format: JSON
+   wait-poll-duration: <YOUR_PREFERRED_VALUE> #this will number of seconds used when polling on imnply async http calls"
+   ```
+
+## II. Set up Applier Configuration
+
+1. From `$REPLICANT_HOME`, navigate to the sample Applier configuration file:
+
+   ```BASH
+   vi conf/dst/imply.yaml
+   ```
+
+2.  The configuration file has two parts:
+
+    - Parameters related to snapshot mode.
+    - Parameters related to realtime mode.
+
+    ### Parameters related to snapshot mode
+    For snapshot mode, you can use the following sample configuration:
+
+     ```yaml
+     snapshot:
+       threads: 4
+       txn-size-rows: 1000000
+       _traceDBTasks: true
+       _optimizedSnapshot: true
+     ```
+    
+    ### Parameters related to realtime mode
+    For operating in realtime mode, you can use the following sample configuration:
+    ```yaml
+    realtime:
+      threads: 4
+      txn-size-rows: 1000000
+      _traceDBTasks: true
+    ```
+
+   For a detailed explanation of configuration parameters in the applier file, read [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference").

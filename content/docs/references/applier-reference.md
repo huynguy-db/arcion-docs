@@ -62,7 +62,7 @@ Replicant can run on the default applier configurations for the data snapshot. T
 
 
 
-## Realtime Mode:
+## Realtime Mode
 
 While not required, changing certain parameters may improve real time replication performance depending on the use case. Each configuration that can be altered is explained below:
 
@@ -93,4 +93,5 @@ While not required, changing certain parameters may improve real time replicatio
   12. **replay-shard-key-update-as-delete-insert[20.12.04.7]**: ON/OFF. This configuration allows replay of update operation that changes values of shard key columns as delete + inserts. This feature is ON by default for SingleStore as a target
 
   13. **per-table-config**: This configuration allows you to specify various properties for specific target tables
-    * **skip-upto-cursor[20.09.14.1]**: Similar to skip-upto-cursors, use this to specify a cursor upto which replication must be skipped for a given table.
+    
+  14. **skip-upto-cursor[20.09.14.1]**: Similar to skip-upto-cursors, use this to specify a cursor upto which replication must be skipped for a given table.
