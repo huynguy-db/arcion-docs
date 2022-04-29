@@ -2,12 +2,17 @@
 title: Imply
 weight: 18
 bookHidden: false
-
 ---
 
 # Destination Imply
 
 The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
+
+{{< hint "info" >}}
+When using Imply as target, Arcion adds two new columns to table from its side:
+- `OP_TYPE`: Means operation type. For snapshot, it will always will be `I`. For delete and update, it's `D` and `U`. This is necessary to carry out CDC. 
+- `VER_COL`: This column contains a monotonically increasing value for each row. Since every table doesn't have a primary key, these values help distinguishing different rows.
+{{< /hint >}}
 
 ## I. Set up Connection Configuration
 
