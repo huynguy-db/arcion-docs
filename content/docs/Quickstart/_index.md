@@ -15,7 +15,7 @@ Please ensure your host machine that will run Replicant meets the following mini
 
 **Minimum System Requirements**
 * Linux (CentOS/Ubuntu/Redhat)
-* Java 8 or above either from a JRE or JDK installation
+* JDK 8 either from a JRE or JDK installation
 
 ## II. Download Replicant and Create a Home Repository
 
