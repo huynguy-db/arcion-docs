@@ -13,7 +13,8 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     ```BASH
     vi conf/conn/postgresql_dst.yaml
     ```
-2. Make the necessary changes as follows:  
+2. Make the necessary changes as follows:
+
     ```YAML
       type: POSTGRESQL
 
@@ -25,15 +26,18 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
       password: 'Replicant#123' #Replace Replicant#123 with your user's password
 
       max-connections: 30 #Specify the maximum number of connections Replicant can open in PostgreSQL
+      socket-timeout-s: 60 #The timeout value for socket read operations. The timeout is in seconds and a value of zero means that it is disabled.
       max-retries: 10 #Number of times any operation on the system will be re-attempted on failures.
       retry-wait-duration-ms: 1000 #Duration in milliseconds replicant should wait before performing then next retry of a 
     ```
+
     - Make sure the specified user has `CREATE TABLE` privilege on the catalogs/schemas into which replicated tables should be created.
     - If you want Replicant to create catalogs/schemas for you on the target PostgresSQL system, then you also need to grant `CREATE DATABASE`/`CREATE SCHEMA` privileges to the user.
     - If this user does not have `CREATE DATABASE` privilege, then create a database manually with name `io` and grant all privileges for it to the user specified here. Replicant uses this database for internal checkpointing and metadata management.  
 
         {{< hint "info" >}} The database/schema of your choice on a different instance of your choice name can be configured using the metadata config feature. For more information, see [Metadata Configuration](/docs/references/metadata-reference).{{< /hint >}}
 
+        {{< hint "info" >}} The `socket-timeout-s` parameter has been introduced in *v22.02.12.16* and isn't available in previous versions.{{< /hint >}}
 ## II. Set up Applier Configuration
 
 1. From `$REPLICANT_HOME`, naviagte to the sample PostgreSQL applier configuration file:

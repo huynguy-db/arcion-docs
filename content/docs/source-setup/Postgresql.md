@@ -102,8 +102,11 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     password: "Replicant#123" #Replace Replicant#123 with your user's password
 
     max-connections: 30 #Maximum number of connections replicant can open in postgresql
+    socket-timeout-s: 60 #The timeout value for socket read operations. The timeout is in seconds and a value of zero means that it is disabled.
+    max-retries: 10 #Number of times any operation on the source system will be re-attempted on failures.
+    retry-wait-duration-ms: 1000 #Duration in milliseconds Replicant should wait before performing then next retry of a failed operation.
 
-   #List your replication slots (slots which hold the real-time changes of the source database) as follows
+    #List your replication slots (slots which hold the real-time changes of the source database) as follows
       replication-slots:
         io_replicate: #Replace "io-replicate" with your replication slot name
           - wal2json #plugin used to create replication slot (wal2json | test_decoding)
@@ -112,10 +115,24 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
     log-reader-type: SQL [SQL|STREAM]
     ```
+    - Default `log-reader-type` is `SQL`. If `SQL` is chosen, PostgreSQL server will periodically receive SQL statements for CDC data extraction. If `STREAM` is chosen, CDC data will be captured through `PgReplicationStream`.
 
+3. You can also enable SSL for your connection by including the `ssl` field and specifying the necessary parameters as below:
+    ```YAML
+    ssl:
+      ssl-cert: <full_path_to_SSL_certificate_file>
+      root-cert: <full_path_to_SSL_root_certificate_file>
+      ssl-key: <full_path_to_SSL_key_file>
+    ```
+    The key file must be in PKCS-12 or in PKCS-8 DER format. A PEM key can be converted to DER format using the following openssl command:
 
+    ```BASH
+    openssl pkcs8 -topk8 -inform PEM -in postgresql.key -outform DER -out postgresql.pk8 -v1 PBE-MD5-DES
+    ```
 
-**Note**: If the log-reader-type is set to `STREAM`, the replication connection must be allowed as the <username> that will be used to perform the replication. To enable replication connection, the pg_hba.conf file needs to be modified with some of the following entries depending on the use-case:
+{{< hint "info" >}} The `socket-timeout-s` parameter has been introduced in *v22.02.12.16* and isn't available in previous versions.{{< /hint >}}
+
+{{< hint "info" >}} If the `log-reader-type` is set to `STREAM`, the replication connection must be allowed as the <username> that will be used to perform the replication. To enable replication connection, the `pg_hba.conf` file needs to be modified with some of the following entries depending on the usecase:
 
 1. From `$REPLICANT_HOME`, navigate to the pg_hba file:
    ```BASH
@@ -134,6 +151,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
    host     replication          <username>    0.0.0.0/0                        <auth-method>
    host     replication          <username>    ::0/0                            <auth-method>
    ```
+   {{< /hint >}}
 
 ## IV. Setup Filter Configuration
 
