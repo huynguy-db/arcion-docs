@@ -72,6 +72,24 @@ conf/conn/target_database_name_dst.yaml \
 
 In real-time mode, replicant first creates the destination schemas if they are not already present. If the destination schemas are present, Replicant  appends to the existing tables. In real-time mode Replicant starts replicating real-time operations obtained from log-based CDC. By default, real-time mode starts replicating from latest log position, but a custom start position can be specified by the user in real-time section of extractor configuration file.
 
+## Replicant Delta Snapshot Mode
+
+Use the following command to run Replicant in delta snapshot mode:
+
+```BASH
+/bin/replicant delta-snapshot \
+conf/conn/source_database_name_src.yaml \
+conf/conn/target_database_name_dst.yaml \
+--extractor conf/src/source_database_name.yaml \
+--applier conf/dst/target_database_name.yaml  \
+--filter filter/source_database_name_filter.yaml \
+--id repl2 --replace –overwrite
+```
+
+The delta snapshot is a recurring snapshot which replicates the *delta* of the records which have been inserted/updated since the previous delta snapshot iteration. In this mode, Replicant uses the delta-snapshot key column and the recovery table to identify the set of delta records which have been inserted/updated/deleted since the previous delta snapshot iteration. 
+
+To know how you can specify delta snapshot parameters in Extractor configuration file, see [Delta Snapshot Mode in Extractor Configuration](http://localhost:1313/docs/references/extractor-reference/#delta-snapshot-mode).
+
 ## Replicant Init Mode
 
 Use the following command to run Replicant in init mode:
