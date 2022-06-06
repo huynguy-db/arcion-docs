@@ -14,7 +14,7 @@ To intsall and set up Replicant Windows Agent, please follow the instructions in
 
 ## II. Check Permissions
 
-You need to verify that the necessary permissions are in place on source SQL Server in order to perform replication. To know about the permissions, see [SQL Server User Permissions # ](/docs/references/source-prerequisites/sqlserver/#sql-server-user-permissions).
+You need to verify that the necessary permissions are in place on source SQL Server in order to perform replication. To know about the permissions, see [SQL Server User Permissions](/docs/references/source-prerequisites/sqlserver/#sql-server-user-permissions).
 
 ## III. Set up Connection Configuration
 
