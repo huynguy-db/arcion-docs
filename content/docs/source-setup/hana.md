@@ -93,6 +93,6 @@ Please download the SAP HANA JDBC Client from [SAP Development Tools](https://to
             row-identifier-key: [$rowid$]
     ```
   
-    {{< hint "info" >}} `delta-snapshot-key` is only needed for Hana Row store tables; Column store tables are handled automatically. {{< /hint >}}
+    {{< hint "info" >}} `delta-snapshot-key` is only needed for Hana Row store tables. Column store tables are handled automatically, even if `delta-snaphot-key` is not specified. If specified, it will get preference over system-generated key. {{< /hint >}}
 
  For a detailed explanation of configuration parameters in the extractor file, read [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference").
