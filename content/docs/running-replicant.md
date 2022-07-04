@@ -156,14 +156,44 @@ Replicant has another write mode, `--synchronize-deletes`,  which is relevant on
 
 ## Various Replication Options Explanation
 
-Replicant has four replication options: overwrite, resume, terminate-post-snapshot, and continue-inconsistent-post-failure.
-  * **overwrite**: When --overwrite is specified in the command to run Replicant, the existing replication with the specified --id is overwritten completely. The option makes replicant:
-    -	Override the existing replicated tables on target (if any) honoring the specified WriteMode (REPLACE/TRUNCATE/APPEND)
-    -	Overwrite the directory with name %id% created under data directory
-    -	Overwrites all internal metadata tables created by replicant on the metadata storage  
-  * **resume**: When --resume is specified in the command to run Replicant, the existing replication with the specified --id is resumed. Note that you can either specify the overwrite option or the resume option, not both.
-  * **terminate-post-snapshot**: When --terminate-post-snapshot is specified for a replicant job in full mode, Replicant will start in full mode (existing + realtime data replication) and once the snapshot (transfer of existing data) is complete, Replicant will terminate the job. You can resume the replication later on with the --resume option. Upon resumption of the job, Replicant will immediately start realtime replication as previously existing data in the source database will have already been replicated in the data snapshot.
-  * **continue-inconsistent-post-failure**: When this option is specified, replicant logs a failed transaction in a failed_txn table and continues replication without stopping. Note that using this option may introduce inconsistencies in the destination database.
+Replicant has the following four replication options:
+
+  * `overwrite`: This option enables completely overwriting the existing replication with the specified -`-id`. The option makes replicant:
+    -	Override the existing replicated tables on target (if any) honoring the specified WriteMode (REPLACE/TRUNCATE/APPEND).
+    -	Overwrite the directory with name %id% created under data directory.
+    -	Overwrites all internal metadata tables created by replicant on the metadata storage.
+  * `resume`: This option enables resuming the existing replication with the specified `--id`. Note that you can either specify the `overwrite` option or the `resume` option, but not both.
+  * `terminate-post-snapshot`: With this option, Replicant will start in full mode (existing + realtime data replication) and once the snapshot (transfer of existing data) is complete, Replicant will terminate the job. You can resume the replication later on with the `--resume` option. Upon resumption of the job, Replicant will immediately start realtime replication as previously existing data in the source database will have already been replicated in the data snapshot.
+  * `--skip-failed-txn`: Replicant provides an option to skip over failed transactions. This allows you to resolve replication blockage caused by the failing transactions. During realtime replication in full/real-time mode, if a transaction could not be successfully applied to the destination database even after configured number of retries, Replicant dumps the transaction statements into a table in the destination storage. This table is labelled `blitzz_io_failed_txn_<group_id>_<replicant_id>`. The table contains the following details about the failed transaction: 
+    - Catalog name
+    - Schema name
+    - Table name 
+    - Operation statements (SQLs)
+    - Cursors(for internal use)
+
+    As user you can intervene and resolve the failed transaction (manually or using other means) using the details logged in the aforementioned table. After successfully resolving the failed transaction, you need to run the original Replicant command with the extra option `--skip-failed-txn` so that Replicant skips over the failed transaction.
+
+    For example,
+
+    ```sh
+    ./bin/replicant full conf/conn/oracle.yaml conf/conn/singlestore.yaml \
+    --extractor conf/src/oracle.yaml \
+    --applier conf/dst/singlestore.yaml \
+    --filter filter/oracle_filter.yaml \
+    --map mapper/oracle_to_singlestore.yaml \
+    --replace-existing --skip-failed-txn
+    ```
+    After running the aforementioned command, you can resume Replicant with the `--resume` option:
+
+    ```sh
+    ./bin/replicant full conf/conn/oracle.yaml conf/conn/singlestore.yaml \
+    --extractor conf/src/oracle.yaml \
+    --applier conf/dst/singlestore.yaml \
+    --filter filter/oracle_filter.yaml \
+    --map mapper/oracle_to_singlestore.yaml \
+    --replace-existing --resume
+    ```
+<!--   * **continue-inconsistent-post-failure**: When this option is specified, replicant logs a failed transaction in a failed_txn table and continues replication without stopping. Note that using this option may introduce inconsistencies in the destination database. -->
 
 ## Encrypting Replicant
 
