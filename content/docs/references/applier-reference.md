@@ -40,7 +40,7 @@ The following configuration parameters are available for snapshot mode:
 
   9. `schema-dictionary`: This parameter controls dumping of schemas. The following values are allowed:
 
-      - `NONE`: Default value. This option allows dumping the schema into a dedicated schema dictionary table on the target like  `blitzz_io_replication_schema`.
+      - `NONE`: Default value. This option allows dumping the schema into a dedicated schema dictionary table on the target like  `replicate_io_replication_schema`.
       - `SCHEMA-DUMP`: With this, Replicant dumps the exact schema as fetched from the source database and mapped to the target for each table being replicated, in a yaml format.
       - `POJO`: With this, Replicant dumps the exact Java class definition per topic that should be used to deserialize all the topic messages into POJOs.
 
@@ -115,7 +115,7 @@ While not required, changing certain parameters may improve real time replicatio
   11. `skip-upto-cursors` *[v20.09.14.1]*: This parameter is only applicable if `replay-consitency` is set to `GLOBAL`. Here, you can specify a list of cursor positions up to which replication must be skipped. If the operations of a failed transaction cannot be persisted in the `failed_txn` table in metadata storage (see [`--skip-failed-txn` in Various Replication Options Explanation](/docs/running-replicant/#various-replication-options-explanation) for more details), the operations are logged in a text file. The text file is located in the following path:
 
       ```sh
-      <Replicant_home>/data/<Replicant ID>/bad_rows blitzz_io_failed_txn_log_<tableID/extractorID>. 
+      <Replicant_home>/data/<Replicant ID>/bad_rows replicate_io_failed_txn_log_<tableID/extractorID>. 
       ```
     
       The user gets notified of this file location through notification mails and trace logs. The file contains the failed operations as well as the `skip-upto-cursor`(s) configuration. After resolving the failure, you can use this parameter to skip over the failed transactions.

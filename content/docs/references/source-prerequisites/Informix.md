@@ -99,10 +99,10 @@ tables to be replicated and if number of realtime extractor threads is specified
 
     However, Arcion replicant still offers one way to do this as below :
 
-    - One of the metadata tables (in the metadata database) created by Arcion Replicant is `blitzz_io_cdc_extractor_metadata_<id>_<id>`. The column `committed_cursor` in this table gives the exact CDC cursor information for each CDC session that Arcion Replicant checkpoints and updates continuously. For example, notice the following SQL:
+    - One of the metadata tables (in the metadata database) created by Arcion Replicant is `replicate_io_cdc_extractor_metadata_<id>_<id>`. The column `committed_cursor` in this table gives the exact CDC cursor information for each CDC session that Arcion Replicant checkpoints and updates continuously. For example, notice the following SQL:
 
       ```SQL
-      select committed_cursor from blitzz.blitzz_io_cdc_extractor_metadata_repl1_repl1;
+      select committed_cursor from blitzz.replicate_io_cdc_extractor_metadata_repl1_repl1;
       ```
       An example output looks ike below:
 
@@ -189,7 +189,7 @@ tables to be replicated and if number of realtime extractor threads is specified
 
       It is possible to write an external monitoring script which can continuously query the following:
 
-      - The Arcion replicant metadata table `blitzz_io_cdc_extractor_metadata_repl1_repl1` to get the start time of the oldest transaction which has been successfully replicated by replicant (calling it `X`).\
+      - The Arcion replicant metadata table `replicate_io_cdc_extractor_metadata_repl1_repl1` to get the start time of the oldest transaction which has been successfully replicated by replicant (calling it `X`).\
       - The `ph_alerts` table to get the most recent logical log full time and logical log file number (calling it `Y`).
       - By comparing `X` with `Y` of each logical log file which becomes full, you can deduce which exact logical logs Replicant didn't consume at any point. Based on that observation, you can take appropriate action. For example:
         - If X is TS 120

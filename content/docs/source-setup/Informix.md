@@ -23,7 +23,7 @@ For CDC replication, you must create the heartbeat table on the source database 
 Remember to grant `INSERT`, `UPDATE`, and `DELETE` privileges for this table to the user that you provided to Replicant.
 
 ```SQL
-CREATE TABLE tpch:tpch.blitzz_io_cdc_heartbeat(timestamp INT8 NOT NULL, PRIMARY KEY(timestamp) CONSTRAINT cdc_heartbeat_id_repl1_repl1) 
+CREATE TABLE tpch:tpch.replicate_io_cdc_heartbeat(timestamp INT8 NOT NULL, PRIMARY KEY(timestamp) CONSTRAINT cdc_heartbeat_id_repl1_repl1) 
 LOCK MODE ROW
 ```
 

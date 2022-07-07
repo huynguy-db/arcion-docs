@@ -20,7 +20,7 @@ For enabling CDC-based replication from the source Db2 server, please follow the
 For CDC replication, you must create the heartbeat table on the source database with the following DDL:
 
 ```SQL
-CREATE TABLE "tpch"."blitzz_io_cdc_heartbeat"("timestamp" BIGINT NOT NULL, 
+CREATE TABLE "tpch"."replicate_io_cdc_heartbeat"("timestamp" BIGINT NOT NULL, 
 CONSTRAINT "cdc_heartbeat_id_default_default" PRIMARY KEY("timestamp"))
 ```
 

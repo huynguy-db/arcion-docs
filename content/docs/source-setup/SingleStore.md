@@ -74,10 +74,10 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     b. For delta snapshot mode, you can add `delta-snapshot-key` column to SingleStore tables if not present already with the following `ALTER` (and `UPDATE`) statement per table.
 
     ```SQL
-    ALTER TABLE tpch.LINEITEM_CS ADD COLUMN blitzz_io_delta_snapshot_key TIMESTAMP NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp;
+    ALTER TABLE tpch.LINEITEM_CS ADD COLUMN replicate_io_delta_snapshot_key TIMESTAMP NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp;
     ```
     ```SQL
-    UPDATE tpch.LINEITEM_CS set blitzz_io_delta_snapshot_key = current_timestamp;
+    UPDATE tpch.LINEITEM_CS set replicate_io_delta_snapshot_key = current_timestamp;
     ```
     Then make the necessary changes as follows in the `delta-snapshot` section of the configuration file:
 
