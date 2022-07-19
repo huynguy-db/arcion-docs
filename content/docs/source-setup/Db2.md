@@ -60,11 +60,14 @@ CONSTRAINT "cdc_heartbeat_id_default_default" PRIMARY KEY("timestamp"))
   - If you set `proxy-source` to `true`, Replicant will not attempt to connect to the source database. You can enable it for real-time mode if the log is in a separate storage space than the source database.
 
 ### Parameters Related to CDC Logs and Monitoring
-- If you enable CDC-based replication from your source Db2 server, the following parameters will enable you to configure CDC logs and monitoring process:
+{{< hint "info" >}}If you want to use db2ReadLog API as log reader, please see [Using db2ReadLog API](/docs/references/db2readlogapi/) for instructions.{{< /hint >}}
+
+For CDC-based replication from source Db2 server, the following parameters are available to configure CDC logs and monitoring process:
+
 
   ```YAML
   cdc-log-config:
-    #cdc-log-store: MQ
+    #cdc-log-storage: MQ
     mqueue-connections:
       queue-conn1:
         host: localhost
@@ -113,7 +116,7 @@ CONSTRAINT "cdc_heartbeat_id_default_default" PRIMARY KEY("timestamp"))
    ```
    Below are more details on `cdc-log-config` parameters:
 
-   i. `cdc-log-store`: Storage where Db2 logs reside. Allowed values are:
+   i. `cdc-log-storage`: Storage where Db2 logs reside. Allowed values are:
      - `MQ`
      - `KAFKA_TRANSACTION`
      - `KAFKA_EVENTUAL`
@@ -177,10 +180,10 @@ CONSTRAINT "cdc_heartbeat_id_default_default" PRIMARY KEY("timestamp"))
 {{< hint "info" >}}
 ## Note
 1) You can configure the `message-type` of queues to `ROW` or `TRANSACTION` depending on the value of the `MESSAGE CONTENT TYPE` that you set using `PubQMap`. If it's set to `R`, then `message-type` can be `ROW`. If it's set to `T`, then `message-type` can be `TRANSACTION`.
-2) For  `KAFKA_TRANSACTIONAL` as `cdc-log-store`, based on the value of `message-format`, the following assumptions will take place:
+2) For  `KAFKA_TRANSACTIONAL` as `cdc-log-storage`, based on the value of `message-format`, the following assumptions will take place:
    - If the `message-format` is `XML`/`DELIMITED`, then the assumption is that the key of record is the MQ `MessageId` and value is the `MQMessage` in `XML`/`DELIMITED` format.
    - If the `message-format` is `KCOP_MULTIROW_AUDIT`, then the assumption is that the `cdc-log-topic` is the topic name of the `COMMIT-STREAM` topic associated with the subscription that will be replicated in a transactionally consistent manner.
-3) For `KAFKA_EVENTUAL`/`KAFKA_AVRO` as `cdc-log-store`, the assumption is that the topic name is in format `cdc-log-topic-prefix.<table_name>`. Assumption is based on the naming scheme IBM IIDR follows for Kafka topics.
+3) For `KAFKA_EVENTUAL`/`KAFKA_AVRO` as `cdc-log-storage`, the assumption is that the topic name is in format `cdc-log-topic-prefix.<table_name>`. Assumption is based on the naming scheme IBM IIDR follows for Kafka topics.
 
 By default, IIDR creates a Kafka topic using the following naming convention:
 
