@@ -48,9 +48,9 @@ Edit the applier configurations if required.
     snapshot:
       table-store: COLUMN #Applied to all tables; can be overridden for certain tables if needed in the per-table-config section below
       per-table-config:
-        catalog: tpch
-          tables:
-            singlestore_orders: #Replace this with the name of the specific table you are configuring for in SingleStore
+      - catalog: tpch
+        tables:
+          singlestore_orders: #Replace this with the name of the specific table you are configuring for in SingleStore
             table-store: COLUMN #Enter the table's store (ROW/COLUMN etc.)
             sort-key: [singlestore_orderkey] #If applicable, replace singlestore_orderkey with a list of columns to be created as the sort key
             shard-key: [c2] #If applicable, replace c2 with a list of columns to be created as the shared key
