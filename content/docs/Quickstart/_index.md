@@ -9,18 +9,20 @@ weight: 1
 
 Please ensure your host machine that will run Replicant meets the following minimum hardware and software prerequisites.
 
-**Minimum Hardware Requirements**
+### Minimum Hardware Requirements
 * 32 CPU and 64GB Memory
-* 1 TB SSD (/NVMe) space
+* 1 TB SSD/NVMe space
 
-**Minimum System Requirements**
+### Minimum System Requirements
 * Linux (CentOS/Ubuntu/Redhat)
 * JDK 8 either from a JRE or JDK installation
 
 ## II. Download Replicant and Create a Home Repository
 
-1. Click the following to download the latest version of Replicant: [Replicant Download](https://blitzz-releases.s3-us-west-1.amazonaws.com/general/replicant/replicant-cli-21.02.01.7.zip)
-2. Unzip the downloaded Replicant archive
+1. Download the latest version of Replicant from [Arcion Self-hosted](https://www.arcion.io/self-hosted).
+
+2. Unzip the downloaded archive:
+
    ```BASH
    unzip replicant-cli-<version>.zip
    ```
@@ -28,15 +30,16 @@ This will create a directory named ```replicant-cli``` that will serve as ```REP
 
 
 ## III. Licensing
-1. Download the license file for Replicant and rename it to replicant.lic
-  * Note: The license file must be named replicant.lic
-2. Copy replicant.lic into ```REPLICANT_HOME```
-  * Note: You must copy the replicant.lic file into Replicant's home directory and not in the licenses folder of Replicant
+1. Download the license file for Replicant and rename it to `replicant.lic`
+  {{<hint "warning" >}} The license file must be named replicant.lic{{< /hint >}}
+2. Copy r`eplicant.lic` into ```REPLICANT_HOME```
+  {{<hint "warning" >}}You must copy the `replicant.lic` file into Replicant's home directory, not in the `licenses` folder of Replicant.{{< /hint >}}
 
 
 ## IV. Setup Source Database Configuration
 
-1. From ```REPLICANT_HOME``` navigate to the sample connection configuration file of the source database
+1. From ```REPLICANT_HOME``` navigate to the sample connection configuration file of the source database:
+
     ```BASH
     vi conf/conn/<database-name>.yaml
     ```
@@ -59,11 +62,12 @@ This will create a directory named ```replicant-cli``` that will serve as ```REP
     retry-wait-duration-ms: 1000
     ```
 
-    Please note that certain databases might have additional configuration parameters. For example, Oracle has the additional parameter ```service-name```
+    Please note that certain databases might have additional configuration parameters. For example, [Oracle has the additional parameter ```service-name```](/docs/source-setup/oracle/#vi-set-up-connection-configuration).
 
-    For further database specific examples, please refer to Source Database Setup.
+    For further database specific examples, please refer to one of our Source database setup pages.
 
-2. From ```REPLICANT_HOME``` navigate to the sample filter file of the source database
+2. From ```REPLICANT_HOME```, navigate to the sample filter file of the source database:
+
    ```BASH
    vi filter/<source-database-name>_filter.yaml
    ```
@@ -83,7 +87,7 @@ This will create a directory named ```replicant-cli``` that will serve as ```REP
 
 ## V. Target Database Setup
 
-1. From ```REPLICANT_HOME``` navigate to the sample connection configuration file of the target database
+1. From ```REPLICANT_HOME``` navigate to the sample connection configuration file of the target database:
 
     ```BASH
     vi conf/conn/<database-name>.yaml
@@ -107,14 +111,14 @@ This will create a directory named ```replicant-cli``` that will serve as ```REP
     retry-wait-duration-ms: 1000
     ```
 
-    For database specific examples, please refer to Target Database Setup.
+    For database specific examples, please refer to one of our Target database setup pages.
 
 
 ## VI. Run Replicant Snapshot
 
-Replicant is now ready to run in snapshot mode. The snapshot will only transfer existing data from the source database to the target database. If you would like to transfer real-time changes in addition to the snapshot, skip step 6 and proceed to steps 7 and 8 to run Replicant in full mode.
+Replicant is now ready to run in snapshot mode. The snapshot will only transfer existing data from the source database to the target database. If you would like to transfer real-time changes in addition to the snapshot, skip step VI and proceed to steps VII and VIII to run Replicant in full mode.
 
-1. Execute the following command from ```REPLICANT_HOME``` to run Replicant in snapshot mode
+1. Execute the following command from ```REPLICANT_HOME``` to run Replicant in snapshot mode:
 
    ``` BASH
    ./bin/replicant snapshot conf/conn/<source-database-name>.yaml \
@@ -128,15 +132,16 @@ The proceeding steps are only required if you intend to run Replicant in real-ti
 
 ## VII. Heartbeat table setup
 
-1. Create a heartbeat table in the catalog/schema you are going to replicate with the following DDL
-   ``` BASH
+1. Create a heartbeat table in the catalog/schema you are going to replicate with the following DDL:
+
+   ```SQL
    CREATE TABLE <catalog>.<schema>.replicate_io_cdc_heartbeat( \
    timestamp <data_type_equivalent_to_long>)
    ```
 
-2. Grant ```INSERT```, ```UPDATE```, and ```DELETE``` privileges to the user configured for Replicant
+2. Grant ```INSERT```, ```UPDATE```, and ```DELETE``` privileges to the user configured for Replicant.
 
-3. From ```REPLICANT_HOME``` navigate to the heartbeat table's configuration
+3. From ```REPLICANT_HOME```, navigate to the heartbeat table's configuration.
    ```BASH
    vi conf/src/<source-database-name>.yaml
    ```
@@ -152,7 +157,8 @@ The proceeding steps are only required if you intend to run Replicant in real-ti
 
 ## VIII. Run Replicant in full mode
 
-1. From ```REPLICANT_HOME``` enter the following to run Replicant in full mode
+1. From ```REPLICANT_HOME```, enter the following to run Replicant in full mode:
+
    ```BASH
    ./bin/replicant full conf/conn/<source-database-name>.yaml \
    conf/conn/<destination-database-name>.yaml \
@@ -163,7 +169,7 @@ The proceeding steps are only required if you intend to run Replicant in real-ti
 
 ## Database Specific Setup Overview
 
-Different source and target databases may have slightly more specific and different setup instructions than the general guidelines provided in the Quickstart Guide above. Follow the six steps below for a pipeline specific setup for Replicant.
+Different source and target databases may have slightly more specific and different setup instructions than the general guidelines provided in this Quickstart Guide. Follow the six steps below for a pipeline specific setup for Replicant:
 
 1. Source Database Setup
 2. Target Database Setup  
