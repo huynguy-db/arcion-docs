@@ -196,6 +196,23 @@ In this case `cdc-log-topic-prefix` should be set to the following:
 ```
 {{< /hint >}}
 
+### Support For Db2 AS400
+
+Arcion supports realtime replication on Db2 AS400 platform as source. To be able to do so, you need to add the following additional parameters to the connection configuration file:
+
+```YAML
+platform: AS400
+
+cdc-log-config:
+  cdc-log-storage: READ_LOG
+    journals:
+    - journal-library: JournalLib
+      journal-name: JournalName
+```
+
+- `journals`: Represents the list of Db2 journals that Replicant will read CDC logs from.
+- `journal-library`: The library (schema) that the journal is in.
+
 
 ## V. Set up Extractor Configuration
 
