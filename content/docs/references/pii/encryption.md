@@ -1,8 +1,7 @@
 ---
 title: "Encryption"
 weight: 1
-bookHidden: true
-bookSearchExclude: true
+bookHidden: false
 ---
 
 # Encryption
