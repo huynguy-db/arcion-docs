@@ -1,12 +1,11 @@
 ---
 title: Source Column Transformation
-weight: 4 
-bookHidden: true
-bookSearchExclude: true
+weight: 8
+bookHidden: false
 ---
 
 # Source Column Transformation
-Replicant allows you to transform the data of source tables before it reaches the desired target. This is achieved via a configuration file where you can specify the transformation logic for each individual table. As Replicant processes data from source tables, it applies the transformation rules to the data, and then loads the transformed data into the destination tables. The column on the destination could either be a new column, or a source column with transformed values.
+From version 22.07.19.3 onwards, Replicant allows you to transform the data of source tables before it reaches the desired target. This is achieved via a configuration file where you can specify the transformation logic for each individual table. As Replicant processes data from source tables, it applies the transformation rules to the data, and then loads the transformed data into the destination tables. The column on the destination could either be a new column, or a source column with transformed values.
 
 Source Column Transformation solves several business cases for data migration, while making it possible to build new features like data encryption and obfuscation.
 

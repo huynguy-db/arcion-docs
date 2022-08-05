@@ -207,4 +207,7 @@ For real-time replication, you must create a heartbeat table in the source MySQL
         catalog: tpch
         interval-ms: 10000
     ```
+  {{< hint "info" >}}
+  If you want to use the Source Column Transformation feature of Replicant for a **MySQL->Databricks** pipeline, please see [Source Column Transformation](/docs/references/source-column-transformation).
+  {{< /hint >}}
 For a detailed explanation of configuration parameters in the extractor file, read: [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference")
