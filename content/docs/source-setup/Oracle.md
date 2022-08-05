@@ -355,6 +355,9 @@ For real-time replication, you must create a heartbeat table in the source Oracl
       *Default: By default, this parameter is set to `false`*.
 
     - `log-miner-dict-file`*[v21.09.17.6]*: If specified, this file will be used as the dictionary for log mining instead of using the online dictionary. The file must be accessible by Oracle.
+    - `oldest-active-txn-window-hr`*[v22.07.19.3]*: Specifies the time period in hours up to which Replicant should fetch the oldest transaction SCN.
+
+      *Default: By default, this parameter is set to `24`*.
 
     The following is a sample configuration for realtime mode:
 
@@ -374,4 +377,4 @@ For real-time replication, you must create a heartbeat table in the source Oracl
         #start-scn: 2362927
     ```
    
-For a detailed explanation of configuration parameters in the extractor file, read: [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference")
+For a detailed explanation of configuration parameters in the extractor file, see [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference").
