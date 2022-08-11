@@ -210,6 +210,51 @@ The proceeding steps are to set up Replicant. The extracted `replicant-cli` will
 
     max-connections: 30 #Maximum number of connections replicant can open in Oracle
     ```
+### Using Native Oracle Log Reader
+
+It's possible to configure Replicant so that it can read and make use of Oracle redo log files. 
+
+To do so, you need to add the following two parameters in the Oracle connection configuration file:
+
+```YAML
+log-reader: REDOLOG
+transaction-store-location: <path_to_transaction_storage>
+```
+
+ Replicant also supports using Oracle Automatic Storage Management (ASM) for logs. To use ASM, follow the steps below:
+
+  1. In your Oracle connection configuration file, create a new section `asm-connection`.  This section will have the necessary ASM connection configuration. Below is a sample connection configuration file with ASM connection details specified as well:
+
+      ```YAML
+      type: ORACLE
+      host: localhost
+      port: 53545
+      service-name: IO
+      username: 'replicant'
+      password: 'Replicant#123'
+
+      asm-connection:
+        host: oracle-asm
+        port: 1521
+        service-name: +ASM
+        username: 'replicant-user'
+        password: 'myAsmPassword'
+        max-connections: 10
+      ```
+
+  2. To use the file system directly, Replicant must have access to the redo log files for reading. If Replicant's path(s) to redo log files is different from the database's path, you must include the path to the redo log files explicitly in the Source connection configuration file. For example:
+
+      ```YAML
+      log-path: /home/replicant-user/shared/redo/online
+      archive-log-path: /home/replicant-user/shared/redo/archive
+      ```
+  In order to use Oracle redo log files, Replicant requires at least minimal supplemental logging. Currently, the following table logging levels are supported:
+
+  - All column logging
+  - Primary Key logging
+  - Unique column logging
+  - Foreign key logging
+  - User log group logging
 
 ## VII. Setup Filter Configuration
 
