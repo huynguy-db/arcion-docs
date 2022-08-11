@@ -1,4 +1,5 @@
-baseURL = "http://34.117.23.138/"
+baseURL = "/"
+canonifyURLs = "true"
 languageCode = "en-us"
 theme = "book"
 [markup]
@@ -20,10 +21,5 @@ theme = "book"
       unsafe = true
       xhtml = false
 [params]
-  BookTheme = 'Light'
-  BookLogo = '/blitzz-gradient.png'
-
-[deployment]
-  [[deployment.targets]]
-    name="blitzz-docs"
-    URL="gs://blitzz-docs"
+  BookTheme = 'light'
+  BookLogo = '/arcion-horizontal.png'
