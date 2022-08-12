@@ -4,79 +4,129 @@ weight: 3
 bookHidden: false 
 ---
 
-This page describes the requirements for using Microsoft SQL Server as source.
+This page describes the requirements for using Microsoft SQL Server as the Source.
 
-## Windows Agent Installation
+# Replicant SQL Server Agent Installation
 
-The agent has the following security requirements:
+The Windows Agent works by setting up push transactional replication on the source database to the local SQL Server Express instance. The local Express instance works as a "ghost target". All replicated data is intercepted before hitting the SQL Server subscriber and handed to the Replicant process which then prepares the data for the target and applies it.
 
-1. The agent has the following security requirements:
+## Prerequisites
 
-   a. The installation must be done by a Windows user that is an *administrator* for the local system.
+- Windows 10 or later or Windows Server 2016 or later
+- 16GB RAM
+- 100GB of free disk space
+- SQL Server 2016 Express Edition or later
 
-   b. The service must be installed under a Windows user that can log into SQL Server and has the following access:
-      - Must have the [**Log on as a service**](https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/log-on-as-a-service) on the local system. The installer automatically adds this privilege.
-      - The Windows user must be a `db_owner` of both the replicated database and the scratch database. 
-      - The Windows user must be a `db_owner` of the system databases `msdb` and `replicantdistribution`.
-      - In addition to the replicated tables, the service must have select access to the following SQL Server objects in the replicated database:
-         - `syscolumns`
-         - `sys.indexes`
-         - `sys.index_columns`
-      - Also, the Windows user must be enabled for user mapping for the scratch database and added as an owner. No data is inserted into the database and only the following objects are accessed:
-         - `msreplication_objects`
-         - `sysusers`
-         - `sysobjects`
-      - To start and stop the distribution agent, the Windows user must be a member of the  **sysadmin** role. This role is optional, it just means that the service won’t be able to automatically start and stop the distribution agent.
+**Optional requirement**: Windows Subsystem for Linux (WSL) if using Replicant in Linux.
 
-2. Run the MSI package **ReplicantForMSS.msi**. This installer will create the files required for the local Windows agent at the default location of `%HOMEDRIVE%\Program Files\Blitzz.io\Replicant for Microsoft SQL Server`.
+## Installation
 
-   a. The installer prompts for the service user and password. This Windows user must have system and database privileges as described in 1b. This user will automatically receive the *Log on as a service* privilege.
+Before proceeding with the installation, please make sure that the following conditions are met:
 
-   b. The installer prompts for a staging directory that is used to transfer transactions to the system where the replicate process is running. 
-      - If not using the socket file server to publish the files, this directory must be a shared mount point with full access available from the system running the database being replicated as well the system running the replicate process(es). 
-         {{< hint "info" >}}It is possible to simply share the default location as long as there’s enough space.{{< /hint >}}
-      - The Windows user assigned to run the service must have full access to the staging directory. The installer assigns those privileges automatically, but if the staging directory is later moved, but sure to give that user full access to that directory.
+  - Ensure that TCP ports 1433 and 6061 are open for Inbound traffic.
+  - The SQL Express instance is configured to allow the TCP protocol forces encryption.
+  - By default, SQL Server Express installs to a named instance. To connect to the instance, the SQL Server Browser service must be enabled so that it starts automatically and continues to run.
+  - Identify a Windows login with the **sysadmin** role for the local SQL Express instance.
+  - The installation will elevate to the Administrator level, so either an Administrator must run it or the Administrator login must be available.
+  - If you're installing into a Virtual Machine, make sure that nested VMs are supported to co-install Replicant. Otherwise, use a separate system for Replicant.
 
-3. To change the staging directory location after installation, run the command `ReplicantDB -t <staging_directory>`.
+To install the Replicant SQL Server Agent, run the installer called `remote-replicant-mssql-cdc-agent-<version>.msi`. This will start the installation wizard. Follow the steps below to complete the installation:
 
-4. To enable the socket-based file server, simply edit the `sqlserver.yaml` file located in `<install_dir>\conf\conn` and change the file-server section to enable the server, set the desired port and specify the thumbprint of the certificate to be used for the secured connection. This configuration will be applied when enabling replication as described below. 
+1. After the first screen of the installation wizard appears, click **Next**.
 
-   To enable this feature with a self signed certificate, perform the following:
+2. In the next **Select Installation Folder** screen, you need to choose the installation location. After making your choice, click **Next**.
 
-   a. From a Windows Command Prompt, run the following command:
-   
-   ```bat
-   powershell New-ItemProperty -Path HKLM:\Software\Blitzz.io\Replicant -Name TlsCertificateHash -Value (New-SelfSignedCertificate -DnsName Blitzz -CertStoreLocation "cert:\CurrentUser\My"  -NotAfter (Get-Date).AddYears(20)).Thumbprint -PropertyType STRING -Force
-   ```
-   
-   b. Using the **regedit** tool, navigate to `HKEY_LOCAL_MACHINE\SOFTWARE\Blitzz\Replicant` and set the value `FileServerEnabled` to `1`.
-   
-   c. Restart the `replicantsvc` service using the **services.msc** tool.
-   
-   d. The certificate named Blitzz will need to be exported from the `Personal\My folder` in the **certmgr.msc** tool and added to the keystore of the JRE that runs the Replicant tool on Linux. Export only the certificate and not the key.
+3. The **Specify Replicant Service User** screen will appear. This is where you specify the Windows login that will run the Replicant SQL Server Agent service. This login must have the **sysadmin** role to access the local SQL Server Express instance. 
 
-5. The installation includes the tool **ReplicantDB.exe**, that sets up a local publication and subscription for the specified database.
+    After filling out the **Service User** and **Password** fields, click **Next**.
 
-   a. To run the **ReplicantDB** tool, launch a command prompt as administrator.
-   
-   b. The simplest form of the command to specify a database for replication is: 
-      ```shell
-      ReplicantDb conf/conn/sqlserver.yaml -au <agent_user>
-      ```
-    - The `sqlserver.yaml` file contains the configuration for the connection to the database to replicate.
-    - The argument `-au` specifies the Windows user under which the snapshot and log reader agents will run. 
-   There is a sample connection configuration file in the `conf/conn` directory that you can modify for your own connection. Running **ReplicantDB.exe** without parameters provides full usage.
+4. The next screen is for specifying the staging directory. A staging directory is where the Agent temporarily writes the replicated data. For a production system, it is recommended that there is at least 100GB of free disk space for this temporary storage.
 
-   c. Note that you can specify the scope of the tables to replicate in a filter file in the same format as the filter file used with Replicant. Simply specify the file to use when launching **ReplicantDB** with the `--filter <filter_file>` option. There is a sample provided in the install directory in the `filter` folder or if already created, copy the filter from the Linux Replicant installation. Any time this file is changed, simply run `ReplicantDB` with the `--filter` option and the tables being replicated will be updated.
+    After filling out the **Staging Directory** field, click on **Next**.
 
-6. If LOB data is being replicated, the specified agent user (specified with `-au`)  must have write permissions on the directory `C:\Program Files\Microsoft SQL Server\XX\COMfolder`, where `XX` represents the `instanceID`.
-7. The **ReplicantDB** tool will automatically start the SQL Agent and initialize the subscription.
-8. Once the snapshot job completes, the Replicant process can be started on the Linux system.
+5. The next screen is **Confirm Installation**. If you're satisfied with the settings you chose in the previous steps, click **Next** to start the installation.
 
-## SQL Server User Permissions
+## Configuration
 
-1. The user should have read access on all the databases, schemas and tables to be replicated.
-2. The user should have read access to following system tables/views
+If Replicant will be running on the same system as the SQL Server Agent, make sure that the Windows Subsystem for Linux (WSL) is installed.
+
+{{< hint "info" >}}
+If WSL is installed in a Virtual Machine, Intel VT-x/EPT or AMD-V/RVI must be enabled for the guest and Hyper-V must be disabled on the host system.
+{{< /hint >}}
+
+{{< hint "info" >}}
+If you need to install Replicant, follow the instructions in [Arcion Replicant Quickstart](/docs/quickstart/).
+{{< /hint >}}
+
+### Setting up TLS/SSL
+Before Replicant can connect to the Agent, the TLS certificate used for communication must be imported into the JRE TrustStore. Below is a sample command if Replicant is running from WSL on the agent system:
+
+```sh
+sudo keytool -import -alias arcion -keystore $JAVA_HOME/jre/lib/security/cacerts -file /mnt/c/Program\ Files/Arcion/Replicant\ for\ Microsoft\ SQL\ Server/certs/replicant.cert
+```
+
+You will be prompted for a KeyStore password. If the password has never been previously set, the default is `changeit`.
+
+The installer generates a certificate for TLS/SSL communication. The certificate lives in `<installation_path>\Arcion\Replicant for Microsoft SQL Server\certs\replicant.cert`, where `installation_path` is the directory/folder where you installed the Agent. Note that a new certificate is generated for each Agent installation, requiring a certificate import for each Agent Replicant will be connecting to.
+
+### Connecting Replicant and SQL Server Agent
+There's a sample SQL Server connection configuration file `sqlserver.yaml` in the `conf\conn` directory inside the Replicant installation location. 
+
+To configure Replicant to connect to the Agent, set the following parameters in that configuration file:
+
+```YAML
+sql-jobs-username: '<your_windows_login_username>'
+sql-jobs-password: '<your_windows_login_password'
+log-path: /mnt/c/arcion/data/replicate/ # used to cache DML received from the Agent
+sql-proxy-connection:
+  host: mwrightwin10\SQLEXPRESS
+  port: 1433
+  username: '<username>'
+  password: '<password>'
+  auth-type: NTLM
+
+# Required for Azure Managed SQL
+azure-file-storage-path: \\arcionsqldev.file.core.windows.net\replication # be sure to use backslashes in the path
+azure-file-storage-key: DefaultEndpointsProtocol=https;AccountName=arcionsqldev;AccountKey=1GJlZ6fdfB/YT5SnPkLyKFo/5DhaqgRhiW7QVleE38FypEyIEohO9PCRbCbUA17Peavt0mqnnK12+AStjexQ4g==;EndpointSuffix=core.windows.net
+sql-snapshot-folder: c:\transactions
+
+# Details for connecting to Agent
+agent-connection:
+  host: mwrightwin10.local
+  username: 'mwrightwin10\administrator'
+  password: '<password>'
+  port: 6061
+  mode: CONFIG
+```
+
+- `sql-jobs-username`, `sql-jobs-password`: These parameters specify the Windows login used on the Target system to run the replication jobs.
+
+- `log-path`: Specifies where Replicant will store the data it received from the Agent. If Replicant is running on the same system as the Agent, this path can point to the staging directory you specified during the Agent installation. In the sample config above, we've shown a path from within WSL using the default staging location.
+
+- `sql-proxy-connection`: Specifies the login used to connect to the SQL Server Express instance that works as the "ghost" target for the actual SQL Server replication. No data is inserted into this database.
+  - `host`: The hostname in the format `<host>\<instance>`. For Azure Managed SQL, this must be an IP address or DNS name that is accessible from Azure. By default, SQL Server Express installs a named instance called `SQLEXPRESS`. However, if a default instance is used, do not specify an instance.
+  - `port`: The port number.
+  - `username`: The username credential to log into the SQL Server Express instance.
+  - `password`: The password associated with the `username` to log into the SQL Server Express instance.
+  - `auth-type`: The authentication protocol used.
+
+  {{< hint "info" >}} If the source database is an Azure Managed SQL instance, the host specified for the proxy must be accessible from the Azure Managed instance. {{< /hint >}}
+
+- `azure-file-storage-path`, `azure-file-storage-key`: If the source database is an Azure Managed SQL instance, a storage account must be specified with these two parameters. This storage account is an intermediate storage area for the replicated data. 
+
+- `sql-snapshot-folder`: Specifies where on the Source SQL Server to store the initial schema information. Do not specify this option for an SQL Azure managed instance. The data stored at this location is insignificant and temporary when the replication is first started. This folder can be either a physical or UNC path accessible from the Source SQL Server instance.
+
+- `agent-connection`: Specifies the connection details for the SQL Agent. 
+  - `host`: The hostname of the machine where the Agent is installed. If Replicant is running in WSL, specify `<hostname>.local` for this parameter.
+  - `username`: Windows login for the Replicant Agent. This login must have access to the staging directory.
+  - `password`: The associated password with the `username`.
+  - `port`: The port number.
+  - `mode`: The connection mode. If Replicant is running on a separate system, the agent-connection mode must be `FILES`.
+
+# SQL Server User Permissions
+
+1. The user should have read access to all the databases, schemas and tables to be replicated.
+2. The user should have read access to the following system tables/views:
     - `sys.databases`
     - `sys.schemas`
     - `sys.tables`
@@ -85,7 +135,7 @@ The agent has the following security requirements:
     - `sys.foreign_keys`
     - `sys.check_constraints`
     - `sys.default_constraints`
-3. The user should have execute permissions on following system procs
+3. The user should have execute permissions on the following system procs:
     - `sp_tables`
     - `sp_columns`
     - `sp_pkeys`
