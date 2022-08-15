@@ -8,7 +8,11 @@ This page describes the requirements for using Microsoft SQL Server as the Sourc
 
 # Replicant SQL Server Agent Installation
 
-The Windows Agent works by setting up push transactional replication on the source database to the local SQL Server Express instance. The local Express instance works as a "ghost target". All replicated data is intercepted before hitting the SQL Server subscriber and handed to the Replicant process which then prepares the data for the target and applies it.
+In the diagram below, the Source SQL Server instance represents the location of the database or databases that would undergo replication. The Target database can be any destination that Replicant supports.
+
+![Diagram showing how Arcion Replicant SQL Server Agent works](/images/arcion_replicant_SQL_server_agent_architecture.png)
+
+The Windows Agent works by setting up push transactional replication on the source database to the local SQL Server Express instance. The local Express instance works as a "ghost target". All replicated data gets intercepted before hitting the SQL Server subscriber and handed to the Replicant process; Replicant then prepares the data for the target and applies it.
 
 ## Prerequisites
 
