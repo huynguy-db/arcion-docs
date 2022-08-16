@@ -157,7 +157,11 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     - An UPDATE in the Source is an INSERT in the Target with additional metadata like Operation Performed, Time of Operation, etc.
     - A DELETE in the Source is an INSERT in the Target: INSERT with OPER_TYPE as DELETE.
 
-    It's possible to extend the metadata to include source-specific fields, apart from the operation performed and timestamp of query fired.
+    Currently, Arcion supports the following metadata related to source-specific fields:
+
+    - `query_timestamp`: Time at which the user on Source fired a query.
+    - `extraction_timestamp`: Time at which Replicant detected the DML from logs.
+    - `OPER_TYPE`: Type of the operation (INSERT/UPDATE/DELETE).
 
     The primary requirement for Type-2 CDC is to *enable full row logging* in the Source.
 
