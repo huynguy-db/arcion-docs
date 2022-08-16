@@ -149,4 +149,38 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     realtime:
       threads: 4 #Maximum number of threads Replicant should use for writing to the target
     ```
-For a detailed explanation of configuration parameters in the applier file, read [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference").
+
+    ### Enabling Type-2 CDC
+    From version 22.07.19.3 onwards, Arcion supports Type-2 CDC for Databricks as the Target. Type-2 CDC enables a Target to have a history of all transactions performed in the Source. For example:
+
+    - An INSERT in the Source is an INSERT in the Target.
+    - An UPDATE in the Source is an INSERT in the Target with additional metadata like Operation Performed, Time of Operation, etc.
+    - A DELETE in the Source is an INSERT in the Target: INSERT with OPER_TYPE as DELETE.
+
+    It's possible to extend the metadata to include source-specific fields, apart from the operation performed and timestamp of query fired.
+
+    The primary requirement for Type-2 CDC is to *enable full row logging* in the Source.
+
+   {{< hint "info" >}}
+  Currently, support for Type-2 CDC is limited to the following cases: 
+  - Sources that support CDC.
+  - `realtime` and `full` modes.
+   {{< /hint >}}
+
+    To enable Type-2 CDC for your Databricks target, follow the steps below:
+    
+    1. Add the following two parameters under the `realtime` section of the Databricks Applier configuration file:
+
+    ```YAML
+    realtime:
+      enable-type2-cdc: true
+      replay-strategy: NONE
+    ```
+
+    2. In the Extractor configuration file of Source, add the following parameter under the `snapshot` section:
+
+    ```YAML
+    snapshot:
+      csv-publish-method: READ
+    ```
+  For a detailed explanation of configuration parameters in the Applier file, read [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference").
