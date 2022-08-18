@@ -212,6 +212,8 @@ The proceeding steps are to set up Replicant. The extracted `replicant-cli` will
     ```
 ### Using Native Oracle Log Reader
 
+{{< hint "info" >}}**Note:** This feature is currently in Beta. {{< /hint >}}
+
 It's possible to configure Replicant so that it can read and make use of Oracle redo log files. 
 
 To do so, you need to add the following two parameters in the Oracle connection configuration file:
