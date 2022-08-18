@@ -210,7 +210,7 @@ The proceeding steps are to set up Replicant. The extracted `replicant-cli` will
 
     max-connections: 30 #Maximum number of connections replicant can open in Oracle
     ```
-### Using Native Oracle Log Reader
+### Using Native Oracle Log Reader (Beta)
 
 {{< hint "info" >}}**Note:** This feature is currently in Beta. {{< /hint >}}
 
