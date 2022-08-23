@@ -62,18 +62,26 @@ If WSL is installed in a Virtual Machine, Intel VT-x/EPT or AMD-V/RVI must be en
 If you need to install Replicant, follow the instructions in [Arcion Replicant Quickstart](/docs/quickstart/).
 {{< /hint >}}
 
-### Setting up TLS/SSL
-Before Replicant can connect to the Agent, the TLS certificate used for communication must be imported into the JRE TrustStore. Below is a sample command if Replicant is running from WSL on the agent system:
+### Set up TLS/SSL
+The installer generates a certificate for TLS/SSL communication. Before Replicant can connect to the Agent, you must import the TLS certificate for communication into the JRE TrustStore. The TrustStore is located on the Replicant server. 
+
+Below is a sample command for importing the certificate. This command is applicable when Replicant is running from WSL on the same system the Agent is installed:
 
 ```sh
 sudo keytool -import -alias arcion -keystore $JAVA_HOME/jre/lib/security/cacerts -file /mnt/c/Program\ Files/Arcion/Replicant\ for\ Microsoft\ SQL\ Server/certs/replicant.cert
 ```
-
 You will be prompted for a KeyStore password. If the password has never been previously set, the default is `changeit`.
 
-The installer generates a certificate for TLS/SSL communication. The certificate lives in `<installation_path>\Arcion\Replicant for Microsoft SQL Server\certs\replicant.cert`, where `installation_path` is the directory/folder where you installed the Agent. Note that a new certificate is generated for each Agent installation, requiring a certificate import for each Agent Replicant will be connecting to.
+{{< hint "info" >}} The location of the `replicant.cert` file is `INSTALLATION_PATH\Arcion\Replicant for Microsoft SQL Server\certs\replicant.cert`, where `INSTALLATION_PATH` is where you installed the Agent. If you installed Agent in the default location, the certificate will be in `c:\Program Files\Arcion\Replicant for Microsoft SQL Server\certs\replicant.cert`.
+{{< /hint >}}
 
-### Connecting Replicant and SQL Server Agent
+{{< hint "info" >}}
+If the Replicant process is located on a different server than the Agent, then you need to copy the `replicant.cert` file to the Replicant server.
+{{< /hint >}}
+
+{{< hint "info" >}}A new certificate is generated for each Agent installation. So you need to import the certificate for each Agent Replicant will be connecting to.{{< /hint >}}
+
+### Connect Replicant and SQL Server Agent
 There's a sample SQL Server connection configuration file `sqlserver.yaml` in the `conf\conn` directory inside the Replicant installation location. 
 
 To configure Replicant to connect to the Agent, set the following parameters in that configuration file:
