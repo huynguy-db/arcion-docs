@@ -136,7 +136,7 @@ For example, here we've updated 127 rows on `orders2` table. After some time, Ar
 
 You can verify this by clicking **View Details** and going to the per-table metrics page.
 
-![View Details page showing that the orders2 table update was picked up by Arcion and applied to the target](per_table_metrics_after_cdc.png)
+![View Details page showing that the orders2 table update was picked up by Arcion and applied to the target](/images/per_table_metrics_after_cdc.png)
 
 ## Actions
 
