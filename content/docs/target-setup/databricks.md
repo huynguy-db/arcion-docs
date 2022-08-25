@@ -7,7 +7,15 @@ bookHidden: false
 
 The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
 
-## I. Setup Connection Configuration
+## I. Obtain the JDBC Driver for Databricks
+
+Replicant requires the Databricks JDBC Driver as a dependency. To obtain the appropriate driver, follow the steps below: 
+
+- Download the [JDBC 4.2-compatible Databricks JDBC Driver ZIP](https://databricks-bi-artifacts.s3.us-east-2.amazonaws.com/simbaspark-drivers/jdbc/2.6.22/SimbaSparkJDBC42-2.6.22.1040.zip).
+- From the downloaded ZIP, locate and extract the `SparkJDBC42.jar` file.
+- Put the `SparkJDBC42.jar` file inside `$REPLICANT_HOME/lib` directory.
+
+## II. Setup Connection Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the sample connection configuration file:
     ```BASH
@@ -70,7 +78,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
       secret-key: "<S3 secret key>"
     ```
 
-## II. Setup Applier Configuration
+## III. Setup Applier Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the applier configuration file:
     ```BASH

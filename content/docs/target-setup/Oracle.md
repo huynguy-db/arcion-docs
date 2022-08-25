@@ -2,20 +2,29 @@
 title: Oracle
 bookHidden: false
 ---
-# Destination: Oracle
+# Destination Oracle
 
 The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
 
-## I. Set up Shared Directory
+## I. Obtain the JDBC Driver for Oracle
 
-Replicant uses the [external directory feature in Oracle](https://docs.oracle.com/cd/B19306_01/server.102/b14215/et_concepts.htm) for efficient loading of data into target Oracle. You must specify the shared directory [in the `stage` section of the connection configuration file](#iii-setup-connection-configuration).
+Replicant requires Oracle JDBC Driver as a dependency. To obtain the appropriate driver, follow the steps below: 
 
-1. Create a directory shared between Replicant host and Oracle host with `READ` and `WRITE` access
+- Go to the [Oracle Database JDBC driver Downloads page](https://www.oracle.com/database/technologies/appdev/jdbc-downloads.html).
+- We recommend JDBC Driver 18c and Java 8 compatible driver. So navigate to the **Oracle Database 18c Downloads** section. 
+- From there, download the [Oracle JDBC Driver `ojdbc8.jar`](https://download.oracle.com/otn-pub/otn_software/jdbc/1815/ojdbc8.jar).
+- Put the `ojdbc8.jar` file inside `$REPLICANT_HOME/lib` directory.
+
+## II. Set up Shared Directory
+
+Replicant uses the [external directory feature in Oracle](https://docs.oracle.com/cd/B19306_01/server.102/b14215/et_concepts.htm) for efficient loading of data into target Oracle. You must specify the shared directory [in the `stage` section of the connection configuration file](#iv-set-up-connection-configuration).
+
+1. Create a directory shared between Replicant host and Oracle host with `READ` and `WRITE` access.
 2. One way to create the shared directory is using NFS. You can follow NFS recommendation:
 
 From here onwards, we'll consider the directory created in this step to have the following path: `/data/shared_fs`.
 
-## II. Set up Oracle User Permissions
+## III. Set up Oracle User Permissions
 The following step must be executed in an Oracle client.
 
 1. Grant the following privileges to the host replicant user
@@ -34,7 +43,7 @@ The following step must be executed in an Oracle client.
     ```
 2. Manually create user schema and a schema named io_replicate. Grant both of them permission to access a tablespace
 
-## III. Set up Connection Configuration
+## IV. Set up Connection Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the sample connection configuration file:
     ```BASH
@@ -73,7 +82,7 @@ The following step must be executed in an Oracle client.
     ### Additional parameters
     * `max-metadata-connections`*[v21.05.04.6]*: When `--metadata` switch is not provided, the target is used as a metadata store. This config will determine the connection pool size for metadata storage.
 
-## IV. Set up Applier Configuration
+## V. Set up Applier Configuration
 
 Replicant supports creating/loading tables at the partition and subpartition levels. Follow the instructions below if you want to change the behavior.
 

@@ -7,13 +7,16 @@ bookHidden: false
 # Source Oracle
 **The first five steps (I-V) are to prepare the Oracle Database for replication and must be executed in an Oracle client. The remaining steps (VI-VIII) are to configure Replicant.**
 
-## I. Set up Oracle Driver
+## I. Obtain the JDBC Driver for Oracle
 
-1. Install the appropriate JDBC Driver (Recommended: JDBC Driver 18c and Java 8 compatible ojdbc8 version)
-2. Download ojdbc8.jar from the following link: [Oracle JDBC Driver Download](https://www.oracle.com/database/technologies/jdbc-ucp-122-downloads.html#license-lightbox)
-3. Place the downloaded ojdbc8 jar file into the replicant-cli/lib directory after installing Replicant
+Replicant requires the JDBC driver for Oracle as a dependency. To obtain the appropriate driver, follow the steps below: 
 
-## II. Setup Oracle User
+- Go to the [Oracle Database JDBC driver Downloads page](https://www.oracle.com/database/technologies/appdev/jdbc-downloads.html).
+- We recommend JDBC Driver 18c and Java 8-compatible driver. So navigate to the **Oracle Database 18c Downloads** section. 
+- From there, download the [Oracle JDBC Driver `ojdbc8.jar`](https://download.oracle.com/otn-pub/otn_software/jdbc/1815/ojdbc8.jar).
+- Put the `ojdbc8.jar` file inside `$REPLICANT_HOME/lib` directory.
+
+## II. Set up Oracle User
 
 1. Create a new user for Replicant with the following command:
     ```SQL
@@ -131,7 +134,7 @@ You have to enable either primary key or all column logging at either the databa
 {{< hint "info" >}}Only enable either `PRIMARY KEY` logging or `ALL` column logging, not both.{{< /hint >}}
 
 
-## IV. Setup Global Permissions
+## IV. Set up Global Permissions
 
 **Quick Definitions**
   * One Time Access: The granted permission is only required for the initial data load (snapshot) and for reinit operations (snapshots of newly added tables). The permission can be revoked after the necessary operation is complete.
@@ -212,7 +215,7 @@ The proceeding steps are to set up Replicant. The extracted `replicant-cli` will
     ```
 
 
-## VII. Setup Filter Configuration
+## VII. Set up Filter Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the filter configuration file:
     ```BASH

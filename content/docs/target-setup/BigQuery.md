@@ -7,7 +7,16 @@ bookHidden: false
 
 The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
 
-## I. Setup Connection Configuration
+## I. Obtain the JDBC Driver for Google BigQuery
+
+Replicant requires the JDBC driver for Google BigQuery as a dependency. To obtain the appropriate driver, follow the steps below: 
+
+- Go to the [JDBC drivers for BigQuery page](https://cloud.google.com/bigquery/docs/reference/odbc-jdbc-drivers#current_jdbc_driver).
+- From there, download the [latest JDBC 4.2-compatible JDBC driver ZIP](https://storage.googleapis.com/simba-bq-release/jdbc/SimbaJDBCDriverforGoogleBigQuery42_1.2.25.1029.zip).
+- From the downloaded ZIP, locate and extract the `GoogleBigQueryJDBC42.jar` file.
+- Put the `GoogleBigQueryJDBC42.jar` file inside `$REPLICANT_HOME/lib` directory.
+
+## II. Set up Connection Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the sample connection configuration file:
     ```BASH
@@ -38,7 +47,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     retry-wait-duration-ms: 1000
     ```
 
-## II. Setup Applier Configuration
+## III. Set up Applier Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the applier configuration file:
     ```BASH
