@@ -132,13 +132,6 @@ For real-time replication, you must create a heartbeat table. Replicant periodic
     * The user configured for Replicant must be granted INSERT, DELETE, and UPDATE privileges to the heartbeat table.
     * For simplicity, it is recommended to use the exact DDL provided in the extractor configuration set up under your source database's instructional documentation to create the heartbeat table
 
-## Heartbeat table
-
-For real-time replication, you must create a heartbeat table. Replicant periodically updates this table at a configurable frequency. This table helps forcefully flush the cdc log for all committed transactions so that Replicant can Replicate them. A few things to note:
-    * The table must be created in the catalog/schema which is to be replicated by replicant.
-    * The user configured for Replicant must be granted INSERT, DELETE, and UPDATE privileges to the heartbeat table.
-    * For simplicity, it is recommended to use the exact DDL provided in the extractor configuration set up under your source database's instructional documentation to create the heartbeat table
-
 The configurations for the heartbeat table must be specified under the ```realtime``` section of the Extractor Configuration as explained in the proceeding section.
 
 ## Realtime mode
