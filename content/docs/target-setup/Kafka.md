@@ -1,9 +1,9 @@
 ---
-title: Kafka
+title: Apache Kafka
 weight: 11
 bookHidden: false
 ---
-# Destination Kafka
+# Destination Apache Kafka
 
 The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
 
@@ -64,7 +64,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
       *Default: By default, this parameter is set to `lz4`.*
 
-    -` kafka-batch-size-in-bytes`*[v20.05.12.3]*: batch size for Kafka producer.
+    - `kafka-batch-size-in-bytes`*[v20.05.12.3]*: batch size for Kafka producer.
     
       *Default: By default, this parameter is set to `100000`.*
 
@@ -76,7 +76,15 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
       *Default: By default, this parameter is set to `10`.*
 
-    - `kafka-interceptor-classes`*[v21.09.17.2]*: Config used to specify list of interceptor classes. This config corresponds to Kafka’s P`roducerConfig.INTERCEPTOR_CLASSES_CONFIG.`
+    - `kafka-interceptor-classes`*[v21.09.17.2]*: Config used to specify list of interceptor classes. It corresponds to Kafka’s `ProducerConfig.INTERCEPTOR_CLASSES_CONFIG.`
+    - `producer-max-block-ms`*[v22.07.19.7]*: Corresponds to the [`max.block.ms` parameter of Kafka Producer](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#producerconfigs_max.block.ms).
+
+        *Default: Default value is `60_000`.*
+
+    - `create-topic-timeout-ms`*[v22.07.19.7]*: Specifies the timeout for topic creation.
+
+        *Default: Default value is `60_000`.*
+
     - `per-table-config`*[v20.12.04.6]*: This configuration allows you to specify various properties for target tables on a per table basis.
       - `replication-factor`*[v21.12.02.6]*: Replication factor for data topics. For Kafka cluster setup, this defines the factor in which Kafka topic partitions are replicated on different brokers. We pass this config value to Kafka and Kafka drives the partition level replication.
       - `num-shards`*[v21.12.02.6]*: Number of partitions per data topic. By default this is set to a number of applier threads for getting the best possible scaling by allowing each individual applier thread to write to an independent partition of a Kafka topic.
@@ -89,14 +97,18 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
     ```YAML
     snapshot:
-     threads: 16 #Specify the maximum number of threads Replicant should use for writing to the target
-
-     replication-factor: 1
-     schema-dictionary: SCHEMA_DUMP  # Allowed values: POJO | SCHEMA_DUMP| NONE
-     kafka-compression-type: lz4
-     kafka-batch-size-in-bytes: 100000
-     kafka-buffer-memory-size-in-bytes: 67108864
-     kafka-linger-ms: 10
+      threads: 16
+      txn-size-rows: 10000
+      replication-factor: 1
+      schema-dictionary: SCHEMA_DUMP  # Allowed values: POJO | SCHEMA_DUMP| NONE
+      kafka-compression-type: lz4
+      kafka-batch-size-in-bytes: 100000
+      kafka-buffer-memory-size-in-bytes: 67108864
+      kafka-linger-ms: 10
+      skip-tables-on-failures : false
+      kafka-interceptor-classes: ["KafkaInterceptors.SampleInterceptor"]
+      producer-max-block-ms: 60_000
+      create-topic-timeout-ms: 100_000
     ```
     ### Parameters related to realtime mode
     If you want to operate in realtime mode, you can use a `realtime` section to specify your configuration. The following Kafka-specific parameters are available:
@@ -124,7 +136,14 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
       *Default: By default, this parameter is set to `10`.*
 
-    - `kafka-interceptor-classes`*[v21.09.17.2]*: Config used to specify list of interceptor classes. This config corresponds to Kafka’s P`roducerConfig.INTERCEPTOR_CLASSES_CONFIG.`
+    - `kafka-interceptor-classes`*[v21.09.17.2]*: Config used to specify list of interceptor classes. It corresponds to Kafka’s `ProducerConfig.INTERCEPTOR_CLASSES_CONFIG.`
+    - `producer-max-block-ms`*[v22.07.19.7]*: Corresponds to the [`max.block.ms` parameter of Kafka Producer](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#producerconfigs_max.block.ms).
+
+        *Default: Default value is `60_000`.*
+
+    - `create-topic-timeout-ms`*[v22.07.19.7]*: Specifies the timeout for topic creation.
+
+        *Default: Default value is `60_000`.*
 
     - `per-table-config`*[v20.12.04.6]*: This configuration allows you to specify various properties for target tables on a per table basis.
       - `replication-factor`*[v21.12.02.6]*: Replication factor for CDC topics. For Kafka cluster setup this defines the factor in which Kafka topic partitions are replicated on different brokers. We pass this config value to Kafka and Kafka drives the partition level replication.
@@ -142,15 +161,19 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
       txn-size-rows: 1000
       before-image-format: ALL  # Allowed values : KEY, ALL
       after-image-format: ALL   # Allowed values : UPDATED, ALL
+      # kafka-compression-type: lz4
       # shard-key: id
       # num-shards: 1
-      # shard-function: MOD
+      # shard-function: MOD # Allowed values: MOD, NONE. NONE means storage will use its default sharding
+      # skip-tables-on-failures : false
+      # producer-max-block-ms: 60_000
+      # create-topic-timeout-ms: 100_000
 
       # per-table-config:
       # - tables:
       #     io_blitzz_nation:
       #       shard-key: id
-      #       num-shards: 16
+      #       num-shards: 16 #default: 1
       #       shard-function: NONE
       #     io_blitzz_region:
       #       shard-key: id
