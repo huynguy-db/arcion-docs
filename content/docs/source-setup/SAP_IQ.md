@@ -25,14 +25,19 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     port: 2638
 
     database: 'tpch'
-    username: '<your_username>'
-    password: '<your_password>'
+    username: 'USERNAME'
+    password: 'PASSWORD'
 
     max-connections: 30
     max-retries: 10
     retry-wait-duration-ms: 1000
     ```
-   
+
+    Replace the following:
+
+    - *`USERNAME`*: The username to connect to the SAP IQ instance.
+    - *`PASSWORD`*: The password associated with *`USERNAME`*.
+
 ## II. Set up Extractor Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the Extractor configuration file:
