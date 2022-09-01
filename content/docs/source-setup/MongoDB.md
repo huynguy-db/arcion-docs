@@ -10,7 +10,8 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
 ## I. Set up Connection Configuration
 
-1.From `$REPLICANT_HOME`, navigate to the connection configuration file:
+1. From `$REPLICANT_HOME`, navigate to the connection configuration file:
+
     ```BASH
     vi conf/conn/mongodb.yaml
     ```
@@ -31,28 +32,43 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
       #If you have multiple replica-sets for replication, specify all of them here using the format explained above. A sample second replica-set is also shown below:
     ```
-    - You can specify additional connection configurations like number of connections, read/write concern etc. can be included in the `url` string in accordance with the [MongoDB syntax](https://docs.mongodb.com/manual/reference/connection-string/).
+    - You can specify additional connection configurations in the `url` string in accordance with the [MongoDB syntax](https://docs.mongodb.com/manual/reference/connection-string/). For example, you can specify number of connections, [Read Concern Options](https://www.mongodb.com/docs/manual/reference/connection-string/#readconcern-options), [Write Concern Options](https://www.mongodb.com/docs/manual/reference/connection-string/#write-concern-options), etc. For more information, see [Connection String Options](https://www.mongodb.com/docs/manual/reference/connection-string/#connection-string-options). 
     - The `replica-sets` are monitored for oplog entries for carrying out real-time replication. Each `url` of a MongoDB replica set should represent the `host:port` belonging to the replica set. `url` should contain the option `replicaSet=<replicaSet_name>` to denote it as a [replica set](https://docs.mongodb.com/manual/reference/glossary/#std-term-replica-set). Additional connection configurations like number of connections, read/write concern, etc. can be included in the URL string in accordance with the [MongoDB syntax](https://docs.mongodb.com/manual/reference/connection-string/).
+    - If you want to connect to MongoDB using SSL, you can specify the SSL connection parameters in the `ssl` section of the connection configuration file:
+
+      ```YAML
+      ssl:
+        key-store:
+          path: 'PATH_TO_KEYSTORE'
+          password: 'KEYSTORE_PASSWORD'
+        trust-store:
+          path: 'PATH_TO_TRUST_STORE'
+          password: 'TRUSTSTORE_PASSWORD'
+      ```
+
+      Replcate the following:
+
+      - *`PATH_TO_KEYSTORE`*: Path to your KeyStore file.
+      - *`KEYSTORE_PASSWORD`*: Your KeyStore password.
+      - *`PATH_TO_TRUST_STORE`*: Path to your TrustStore file.
+      - *`TRUSTSTORE_PASSWORD`*: Your TrustStore password.
 
 ## II. Set up Filter Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the filter configuration file:
+
     ```BASH
     vi filter/mongodb_filter.yaml
     ```
-2. In accordance to you replication needs, specify the data which is to be replicated. Use the format of the example explained below:  
+2. According to your replication needs, specify the data to be replicated. Use the format of the following example:  
 
     ```yaml
     allow:
-      #In this example, data of object type Table in the schema tpch will be replicated
-      schema: "tpch"
+    - schema: "tpch"
       types: [TABLE]
 
-      #From schema tpch, only the lineitem, ng_test, and usertable tables will be replicated.
-      #Note: Unless specified, all tables in the catalog will be replicated
       allow:
         lineitem:
-        #Within lineitem, only the item_one and item_two columns will be replicated
         allow: ["item_one, item_two"]
 
         ng_test:  
@@ -62,56 +78,133 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
         usertable: #All columns in the table usertable will be replicated without any predicates
       ```
-      The following is a template of the format you must follow:
+
+      The preceding sample consists of the following elements:
+
+      - Data of object type `Table` in the schema `tpch` will be replicated.
+      - From schema `tpch`, only the `lineitem`, `ng_test`, and `usertable` tables will be replicated.
+        {{< hint "info" >}}**Note:** Unless specified, all tables in the catalog will be replicated.{{< /hint >}}
+      - Within `lineitem`, only the `item_one` and `item_two` columns will be replicated.
+      - From the `ng_test` table, only the `test_one` and `test_two` columns will be replicated as long as they meet the condition specified in `conditions`.
+
+      The preceeding sample follows the followig format. You must adhere to this format for specifying your filters.
 
       ```YAML
       allow:
-        schema: <your_schema_name>
-        types: <your_object_type>
-
+      - schema: SCHEMA_NAME
+        types: OBJECT_TYPE
 
         allow:
           <your_table_name>:
-             allow: ["your_column_name"]
-             conditions: "your_condition"
+             allow: ["COLUMN_NAME"]
+             conditions: "CONDITION"
 
           <your_table_name>:  
-             allow: ["your_column_name"]
-             conditions: "your_condition"
+             allow: ["COLUMN_NAME"]
+             conditions: "CONDITION"
 
           <your_table_name>:
-            allow: "your_column_name"]
-            conditions: "your_condition"         
+            allow: "COLUMN_NAME"]
+            conditions: "CONDITION"         
       ```
-For a detailed explanation of configuration parameters in the filter file, read: [Filter Reference]({{< ref "/docs/references/filter-reference" >}} "Filter Reference")
 
-3. Using the format shown in the step above (step 2) specify the database, collections, or documents  which will be part of real-time replication under the `global-filter` section
+      Replace the following:
+
+      - *`SCHEMA_NAME`*: Name of your MongoDB schema.
+      - *`OBJECT_TYPE`*: Object type of data.
+      - *`COLUMN_NAME`*: Column name.
+      - *`CONDITION`*: The condition that must be satisfied in order for the specified columns to undergo replication.
+
+3. Using the same format, specify the database, collections, or documents that will be part of real-time replication under the `global-filter` section. For example:
+
+    ```YAML
+    global-filter:
+      allow:
+      - schema: "tpch"
+        types: [TABLE]
+        allow:
+          nation :
+          region :
+          part :
+          supplier :
+          partsupp :
+          orders :
+          customer:
+          lineitem:
+          ng_test:
+            conditions: "{$and: [{c1: {$gt : 1}}, {c1: {$lt : 9}}]}"
+          usertable:
+    ```
+
+For a detailed explanation of configuration parameters in the Filter file, see [Filter Reference]({{< ref "/docs/references/filter-reference" >}} "Filter Reference")
 
 ## III. Set up Extractor Configuration
 
-For real-time replication, you must create a heartbeat table in the source MongoDB.
-
-1. Create a heartbeat table in the schema you are going to replicate with the following DDL:
-   ```SQL
-   CREATE TABLE "<user_database>"."<schema>"."replicate_io_cdc_heartbeat"(
-     "timestamp" BIGINT NOT NULL,
-     PRIMARY KEY("timestamp"));
-   ```
-
-2. Grant `INSERT`, `UPDATE`, and `DELETE` privileges to the user configured for replication
-
-3. From `$REPLICANT_HOME`, navigate to the extractor configuration file:
+1. From `$REPLICANT_HOME`, navigate to the Extractor configuration file:
    ```BASH
    vi conf/src/mongodb.yaml
    ```
 
-4. Under the Realtime Section, make the necessary changes as follows:
+2. The configuration file has two parts:
+
+    - Parameters related to snapshot mode.
+    - Parameters related to realtime mode.
+
+    ### Parameters related to snapshot mode
+    For snapshot mode, make the necessary changes as follows in the `snapshot` section of the configuration file:
+
+    ```YAML
+    snapshot:
+      threads: 16
+      fetch-size-rows: 5000
+
+      min-job-size-rows: 1_000
+      max-jobs-per-chunk: 32
+
+      split-key: _id
+      _traceDBTasks: true
+    #  fetch-user-roles: true
+    #  fetch-system-tables: true
+      normalize:
+        enable: true
+        de-duplicate: false
+    #     extract-upto-depth: 2
+      per-table-config:
+      - schema: tpch
+        tables:
+          t1:
+            num-jobs: 1
+          usertable1:
+            split-key: field1
+          lineitem:
+            normalize:
+              de-duplicate: false
+              extract-upto-depth: 3
+    #       extraction-priority: 2  #Higher value is higher priority. Both positive and negative values are allowed. Default priority is 0 if unspecified.
+    ```
+    
+    ### Parameters related to realtime mode
+    If you want to operate in realtime mode, you can use the `realtime` section to specify your configuration. For example:
+
     ```YAML
     realtime:
-      heartbeat:
+      threads: 4
+      fetch-size-rows: 10000
+      fetch-duration-per-extractor-slot-s: 3
+      _traceDBTasks: true
+    #   heartbeat:
+    #     enable: false
+    #     schema: io_replicate
+    #     interval-ms: 10_000
+
+      replicate-ddl: true      #use for replicaSet only, not for sharded cluster
+
+    #   start-position:
+    #     increment: 1
+    #     timestamp-ms: 1598619575000
+
+      normalize:
         enable: true
-        schema-name: "Replicant" #Replace Replicant with the name of the schema your heartbeat table is in
-        table-name [20.09.14.3]: replicate_io_cdc_heartbeat #Replace replicate_io_cdc_heartbeat with your heartbeat table's name if applicable
-        column-name [20.10.07.9]: timestamp #Replace timestamp with your heartbeat table's column name if applicable
+    #     extract-upto-depth: 2
     ```
- For a detailed explanation of configuration parameters in the extractor file, read [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference").
+ For a detailed explanation of configuration parameters in the Extractor file, see [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference").
