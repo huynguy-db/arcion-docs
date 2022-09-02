@@ -35,8 +35,8 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
     Replace the following:
 
-    - *`USERNAME`*: The username to connect to the SAP IQ instance.
-    - *`PASSWORD`*: The password associated with *`USERNAME`*.
+    - *`USERNAME`*: the username to connect to the SAP IQ instance.
+    - *`PASSWORD`*: the password associated with *`USERNAME`*.
 
 ## II. Set up Extractor Configuration
 

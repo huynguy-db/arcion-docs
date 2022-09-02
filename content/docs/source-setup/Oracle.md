@@ -444,10 +444,10 @@ Replicant also supports using Oracle Automatic Storage Management (ASM) for logs
 
     Replace the following:
 
-    - *`REPLICANT_USERNAME`*: Your Replicant username.
-    - *`REPLICANT_PASSWORD`*: The password associated with your Replicant username.
-    - *`ASM_USERNAME`*: The username to connect to the ASM instance.
-    - *`ASM_PASSWORD`*: The password associated with *`ASM_USERNAME`*.
+    - *`REPLICANT_USERNAME`*: your Replicant username.
+    - *`REPLICANT_PASSWORD`*: the password associated with your Replicant username.
+    - *`ASM_USERNAME`*: the username to connect to the ASM instance.
+    - *`ASM_PASSWORD`*: the password associated with *`ASM_USERNAME`*.
 
 3. To use the file system directly, Replicant must have access to the redo log files for reading. If Replicant's path(s) to redo log files is different from the database's path, you must include the path to the redo log files explicitly in the Source connection configuration file. For example:
 

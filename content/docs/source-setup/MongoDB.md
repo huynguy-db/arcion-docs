@@ -112,10 +112,10 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
       Replace the following:
 
-      - *`SCHEMA_NAME`*: Name of your MongoDB schema.
-      - *`OBJECT_TYPE`*: Object type of data.
-      - *`COLUMN_NAME`*: Column name.
-      - *`CONDITION`*: The condition that must be satisfied in order for the specified columns to undergo replication.
+      - *`SCHEMA_NAME`*: name of your MongoDB schema.
+      - *`OBJECT_TYPE`*: object type of data.
+      - *`COLUMN_NAME`*: column name.
+      - *`CONDITION`*: the condition that must be satisfied in order for the specified columns to undergo replication.
 
 3. Using the same format, specify the database, collections, or documents that will be part of real-time replication under the `global-filter` section. For example:
 
