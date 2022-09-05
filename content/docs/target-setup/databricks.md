@@ -196,3 +196,30 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
       csv-publish-method: READ
     ```
   For a detailed explanation of configuration parameters in the Applier file, read [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference").
+
+## Databricks Unity Catalog Support
+
+{{< hint "info" >}}**Note:** This feature is currently in Beta. {{< /hint >}}
+
+From version 22.08.31.x onwards, Arcion has added support for [Databricks Unity Catalog](https://www.databricks.com/product/unity-catalog). The support is still in beta phase, with complete support to land gradually in future releases.
+
+As of now, note the following about the state of Arcion's Unity Catalog support:
+
+- Legacy Databricks Catalog only supports two-level namespace:
+
+    - Schemas
+    - Tables
+
+  With introduction of Unity Catalog, Databricks now exposes a [three-level namespace](https://docs.databricks.com/data-governance/unity-catalog/queries.html#three-level-namespace-notation) that organizes data. 
+    - Catalogs 
+    - Schemas 
+    - Tables
+
+  Arcion adds support for Unity Catalog by introducing a new child storage type (`DATABRICKS_LAKEHOUSE` child of `DATABRICKS_DELTALAKE`).
+- To avoid manual steps to configure staging, Databricks has introduced personal staging. To read the staging URL, we've added a new configuration parameter `UNITY_CATALOG_PERSONAL_STAGE`.
+- We'll be using `SparkJDBC42` driver for Legacy Databricks (`DATABRICKS_DELTALAKE`) and `DatabricksJDBC42` for Unity catalog (`DATABRICKS_LAKEHOUSE`). Once Databricks is completely migrated to only Databricks protocol we will use `DatabricksDriver` for both types.
+- In current changes, we've hardcoded the `readOnly` catalogs to block it. In a next release, we'll query Databricks to fetch `readOnly` catalog and a flag (`Boolean::isReadOnly`) in `schemas.yaml`.
+- We've tested the current changes with AWS and AZURE.
+
+
+
