@@ -87,14 +87,14 @@ There's a sample SQL Server connection configuration file `sqlserver.yaml` in th
 To configure Replicant to connect to the Agent, set the following parameters in that configuration file:
 
 ```YAML
-sql-jobs-username: '<your_windows_login_username>'
-sql-jobs-password: '<your_windows_login_password'
+sql-jobs-username: 'WINDOWS_LOGIN_USERNAME'
+sql-jobs-password: 'WINDOWS_LOGIN_PASSWORD'
 log-path: /mnt/c/arcion/data/replicate/ # used to cache DML received from the Agent
 sql-proxy-connection:
-  host: mwrightwin10\SQLEXPRESS
-  port: 1433
-  username: '<username>'
-  password: '<password>'
+  host: HOSTNAME
+  port: PORT_NUMBER
+  username: 'USERNAME'
+  password: 'PASSWORD'
   auth-type: NTLM
 
 # Required for Azure Managed SQL
@@ -104,11 +104,11 @@ sql-snapshot-folder: c:\transactions
 
 # Details for connecting to Agent
 agent-connection:
-  host: mwrightwin10.local
-  username: 'mwrightwin10\administrator'
-  password: '<password>'
-  port: 6061
-  mode: CONFIG
+  host: HOSTNAME
+  username: 'USERNAME'
+  password: 'PASSWORD'
+  port: PORT_NUMBER
+  mode: {CONFIG|FILES}
 ```
 
 - `sql-jobs-username`, `sql-jobs-password`: These parameters specify the Windows login used on the Target system to run the replication jobs.
@@ -116,7 +116,7 @@ agent-connection:
 - `log-path`: Specifies where Replicant will store the data it received from the Agent. If Replicant is running on the same system as the Agent, this path can point to the staging directory you specified during the Agent installation. In the sample config above, we've shown a path from within WSL using the default staging location.
 
 - `sql-proxy-connection`: Specifies the login used to connect to the SQL Server Express instance that works as the "ghost" target for the actual SQL Server replication. No data is inserted into this database.
-  - `host`: The hostname in the format `<host>\<instance>`. For Azure Managed SQL, this must be an IP address or DNS name that is accessible from Azure. By default, SQL Server Express installs a named instance called `SQLEXPRESS`. However, if a default instance is used, do not specify an instance.
+  - `host`: The hostname in the format *`HOST\INSTANCE`*—for example, `mwrightwin10\SQLEXPRESS`. For Azure Managed SQL, this must be an IP address or DNS name that is accessible from Azure. By default, SQL Server Express installs a named instance called `SQLEXPRESS`. However, if a default instance is used, do not specify an instance.
   - `port`: The port number.
   - `username`: The username credential to log into the SQL Server Express instance.
   - `password`: The password associated with the `username` to log into the SQL Server Express instance.
@@ -129,11 +129,13 @@ agent-connection:
 - `sql-snapshot-folder`: Specifies where on the Source SQL Server to store the initial schema information. Do not specify this option for an SQL Azure managed instance. The data stored at this location is insignificant and temporary when the replication is first started. This folder can be either a physical or UNC path accessible from the Source SQL Server instance.
 
 - `agent-connection`: Specifies the connection details for the SQL Agent. 
-  - `host`: The hostname of the machine where the Agent is installed. If Replicant is running in WSL, specify `<hostname>.local` for this parameter.
-  - `username`: Windows login for the Replicant Agent. This login must have access to the staging directory.
+  - `host`: The hostname of the machine where the Agent is installed. If Replicant is running in WSL, specify `host` in the format `HOSTNAME.local`—for example, `mwrightwin10.local`.
+  - `username`: Windows login for the Replicant Agent. This login must have access to the staging directory. Replace *`USERNAME`* with the appropriate username—for example, `mwrightwin10\administrator`.
   - `password`: The associated password with the `username`.
   - `port`: The port number.
-  - `mode`: The connection mode. If Replicant is running on a separate system, the agent-connection mode must be `FILES`.
+  - `mode`: The connection mode. There are two connection modes available. Set this parameter to only one of the two following modes: 
+    - **`CONFIG`**: Use this mode if Replicant is running on the same system.
+    - **`FILES`**: Use this mode if Replicant is running on a separate system.
 
 # SQL Server User Permissions
 
