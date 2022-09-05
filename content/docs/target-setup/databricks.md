@@ -216,9 +216,19 @@ As of now, note the following about the state of Arcion's Unity Catalog support:
     - Tables
 
   Arcion adds support for Unity Catalog by introducing a new child storage type (`DATABRICKS_LAKEHOUSE` child of `DATABRICKS_DELTALAKE`).
-- To avoid manual steps to configure staging, Databricks has introduced personal staging. To read the staging URL, we've added a new configuration parameter `UNITY_CATALOG_PERSONAL_STAGE`.
+- To avoid manual steps to configure staging, Databricks has introduced personal staging. To read the staging URL, we've added a new configuration parameter `UNITY_CATALOG_PERSONAL_STAGE`. The complete `stage` configuration is as follows:
+  ```YAML
+  stage:
+    type: UNITY_CATALOG_PERSONAL_STAGE
+    staging-url: STAGING_URL
+    file-format: DATA_FILE_FORMAT
+  ```
+  Replace the following:
+    - *`STAGING_URL`*: the temporary staging URL—for example, `stage://tmp/userName/rootDir`.
+    - *`DATA_FILE_FORMAT`*: the type of data file format. Supported formats are `PARQUET` and `CSV`. 
+      
+      *Default: `PARQUET`*.
 - We'll be using `SparkJDBC42` driver for Legacy Databricks (`DATABRICKS_DELTALAKE`) and `DatabricksJDBC42` for Unity catalog (`DATABRICKS_LAKEHOUSE`). Once Databricks is completely migrated to only Databricks protocol we will use `DatabricksDriver` for both types.
-- In current changes, we've hardcoded the `readOnly` catalogs to block it. In a next release, we'll query Databricks to fetch `readOnly` catalog and a flag (`Boolean::isReadOnly`) in `schemas.yaml`.
 - We've tested the current changes with AWS and AZURE.
 
 
