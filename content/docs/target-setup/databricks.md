@@ -197,9 +197,9 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
     ```
   For a detailed explanation of configuration parameters in the Applier file, read [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference").
 
-## Databricks Unity Catalog Support
+## Databricks Unity Catalog Support (Beta)
 
-{{< hint "info" >}}**Note:** This feature is currently in Beta. {{< /hint >}}
+{{< hint "info" >}}**Note:** This feature is currently in beta. {{< /hint >}}
 
 From version 22.08.31.x onwards, Arcion has added support for [Databricks Unity Catalog](https://www.databricks.com/product/unity-catalog). The support is still in beta phase, with complete support to land gradually in future releases.
 

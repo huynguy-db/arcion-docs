@@ -383,7 +383,7 @@ For real-time replication, you must create a heartbeat table in the source Oracl
 
 ## IX. Using Native Oracle Log Reader (Beta)
 
-{{< hint "info" >}}**Note:** This feature is currently in Beta. {{< /hint >}}
+{{< hint "info" >}}**Note:** This feature is currently in beta. {{< /hint >}}
 
 It's possible to configure Replicant so that it can read and make use of Oracle redo log files.
 
