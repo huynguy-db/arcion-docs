@@ -4,7 +4,7 @@ weight: 3
 ---
 # Applier Configuration
 
-The Applier configuration file contains all the parameters that Replicant uses while loading data on to the target database. While it is not necessary to modify most of the  parameters, they can be adjusted to optimize the Applier job as necessary. The sample Applier configuration file is located in the Replicant release download folder. The path to the sample Applier configuration file in the release folder is: `conf/dst/source_database_name.yaml` The sample file is broken up into two sections- snapshot and realtime. The Applier configurations for the initial data capture must be specified under `snapshot` and the configurations for realtime replication must be specified under `realtime`
+The Applier configuration file contains all the parameters that Replicant uses while loading data on to the target database. While it is not necessary to modify most of the  parameters, they can be adjusted to optimize the Applier job as necessary. The sample Applier configuration file is located in the Replicant release download folder. The path to the sample Applier configuration file in the release folder is: `conf/dst/target_database_name.yaml` The sample file is broken up into two sections- snapshot and realtime. The Applier configurations for the initial data capture must be specified under `snapshot` and the configurations for realtime replication must be specified under `realtime`
 
 ## Snapshot Mode
 
