@@ -41,7 +41,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     ```
       - The `username` and `password` correspond to plain SASL mechanism for authentication. For more information, see [Authentication with SASL using JAAS](https://docs.confluent.io/platform/current/kafka/authentication_sasl/index.html).
       - For help with creating SSL keys and certificates to connect to Kafka over SSL, see [Creating SSL Keys and Certificates](https://docs.confluent.io/platform/current/security/security_tutorial.html#generating-keys-certs).
-      - The `_timeout-sec` parameter sets the following Kafka AdminClient timeout parameters:
+      - The `_timeout-sec` configuration sets the following Kafka AdminClient timeout parameters:
         - [`request.timeout.ms`](https://docs.confluent.io/platform/current/installation/configuration/admin-configs.html#adminclientconfigs_request.timeout.ms)
         - [`default.api.timeout.ms`](https://docs.confluent.io/platform/current/installation/configuration/admin-configs.html#adminclientconfigs_default.api.timeout.ms)
 
