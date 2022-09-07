@@ -32,17 +32,27 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
 
       ```YAML
       type: DATABRICKS_DELTALAKE
-      host: localhost #Replace localhost with your Databricks host
-      port: 43213  #Replace 43213 with the port of your Databricks cluster
+
+      host: HOSTNAME
+      port: PORT_NUMBER
 
       url: "jdbc:spark://<host>:<port>/<database-name>;transportMode=http;ssl=1;httpPath=<http-path>;AuthMech=3" #You can copy this URL from Databricks cluster info page
 
-      username: "replicant"  #Replace replicant with the user that connects to your Databricks server                            
-      password: "Replicant#123"  #Replace Replicant#123 with your user's password                                 
+      username: "USERNAME"                         
+      password: "PASSWORD"                            
       max-connections: 30 #Maximum number of connections Replicant can open in Databricks
       max-retries: 100 #Number of times any operation on the source system will be re-attempted on failures.
       retry-wait-duration-ms: 1000 #Duration in milliseconds replicant should wait before performing then next retry of a failed operation
       ```
+
+      Replace the following:
+      - *`HOSTNAME`*: the hostname of your Databricks host
+      - *`PORT_NUMBER`*: the port number of the Databricks cluster
+      - *`USERNAME`*: the username that connects to your Databricks server
+      - *`PASSWORD`*: the password associated with *`USERNAME`*
+    
+      {{< hint "info" >}}For [Databricks Unity Catalog](https://www.databricks.com/product/unity-catalog), set the connection `type` to `DATABRICKS_LAKEHOUSE`. To know more, see [Databricks Unity Catalog Support](#databricks-unity-catalog-support-beta).{{< /hint >}}
+
     ### Parameters related to stage configuration
     It is mandatory to use `DATABRICKS_DBFS` or an external stage like S3 to hold the data files and load them on the target database from there. This section allows specifying details required for Replicant to connect and use a given stage.
 
