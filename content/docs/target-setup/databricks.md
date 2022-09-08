@@ -56,17 +56,18 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
     ### Parameters related to stage configuration
     It is mandatory to use `DATABRICKS_DBFS` or an external stage like S3 to hold the data files and load them on the target database from there. This section allows specifying details required for Replicant to connect and use a given stage.
 
-      - `type`*[v21.06.14.1]*: The stage type. Allowed stages are `S3`, `AZURE`, and `DATABRICKS_DBFS`.
-      - `root-dir`: specify a directory on stage which can be used to stage bulk-load files.
+      - `type`*[v21.06.14.1]*: The stage type. Allowed stages are `S3`, `AZURE`, `GCP`, and `DATABRICKS_DBFS`.
+      - `root-dir`: Specify a directory on stage which can be used to stage bulk-load files.
       - `conn-url`*[v21.06.14.1]*: Specify the connection URL for stage. For example, for S3 as stage, specify bucket-name; for AZURE as stage, specify the container name.
       - `use-credentials`: Indicates whether to use the provided connection credentials. When `true`, you must set  `host`, `port`, `username`, and `password` as described in the section [Parameters Related to Source Db2 server connection](#parameters-related-to-source-db2-server-connection).
 
         *Default: By default, this parameter is set to `false`.*
-      - `key-id`: This config is valid for S3 type only. Represents Access Key ID for AWS account hosting S3.
+      - `key-id`: This config is valid for `S3` as stage `type` only. Represents Access Key ID for AWS account hosting S3.
       - `account-name`*[v21.06.14.1]*: This config is valid for AZURE type only. Represents name of the ADLS storage account.
       - `secret-key`*[v21.06.14.1]*: This config is valid for S3 and AZURE type only. For example, Secret Access Key for AWS account hosting S3 or ADLS account.
+      - `credential-file-path`: For `GCP` as stage `type` only. Represents the absolute path to the service account key file. For more information, see [GCP as stage](#gcp-as-stage).
 
-    #### For Databricks DBFS stage
+    #### Databricks DBFS as stage
     Below is a sample for using Databricks DBFS as stage:
     
     ```YAML
@@ -76,7 +77,7 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
       use-credentials: false
     ```
 
-    #### For S3 stage
+    #### S3 as stage
     Below is a sample for using S3 as stage:
     
     ```YAML
@@ -87,6 +88,28 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
       conn-url: "replicate-stage"
       secret-key: "<S3 secret key>"
     ```
+
+    #### GCP as stage
+    When hosting Target Databricks on Google Cloud Platform (GCP), it's possible to use GCP Storage as the staging area. To use GCP Storage as the staging area, follow the steps below:
+
+    - [Create a service account from the Google Cloud console](https://cloud.google.com/iam/docs/creating-managing-service-accounts?hl=en#creating).
+    - Grant your service account the following roles to GCP Storage:
+      - **Storage Object Admin** 
+      - **Storage Object Creator**
+      - **Storage Object Viewer**
+    - [Create a key for your service account](https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating). Creating a key successfully downloads a service account key file in JSON format. You'll need to provide the absolute path to the key file in the [`stage` section of your Target Databricks connection configuration](#parameters-related-to-stage-configuration). So make sure to store the key file securely. See the sample `stage` configuration below for better understanding how to provide path to the key file.
+    - As a last step, you need to provide your Google service account email address to Databricks. For instructions to do so, see [Configure Databricks SQL to use Google service account for data access](https://docs.gcp.databricks.com/sql/user/security/cloud-storage-access.html#step-3-configure-databricks-sql-to-use-the-service-account-for-data-access).
+
+    Below is sample for using GCP as stage:
+
+    ```YAML
+    stage:
+      type: GCP
+      root-dir: '<stage_directory>'
+      conn-url: '<gcp_bucket_name>'
+      credential-file-path: '<absolute_file_path_to_service_account_key_file>'
+    ```
+
 
 ## III. Setup Applier Configuration
 
