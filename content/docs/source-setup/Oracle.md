@@ -303,6 +303,14 @@ For real-time replication, you must create a heartbeat table in the source Oracl
     - `serialize-fetch-create-sql-no-constraints`: This option is used to fetch SQL of Primary/Unique/Foreign Key constraints in serialized manner.
 
       *This parameter is available only for Oracle->Oracle pipeline.*
+    
+    - `native-load`: With this parameter set, Replicant uses the Oracle Data Pump Export (`expdp`) utility to load table data instead of JDBC. This enables Replicant to efficiently handle large-scale data. For more information, see [Oracle Native Export](#oracle-native-export). 
+    
+    The following configuration parameters are available under `native-load`:
+      - `enable`: `true` or `false`. Whether to enable `native-load`.
+      - `stage-type`: The type of staging area. Allowed values are `SHARED_FS` and `ASM`. The staging area can either be a shared directory or Oracle ASM.
+      - `directory`: The Oracle directory object corresponding to the `stage-type`. For more information, see [Create directory object in Source and Target Oracle](#create-directory-object-in-source-and-target-oracle).
+      - `path`: Full path to the NFS (Network File System) representing the directory shared between Replicant and Oracle.
 
     The following is a sample configuration for snapshot mode:
 
@@ -317,6 +325,13 @@ For real-time replication, you must create a heartbeat table in the source Oracl
     #  flashback-query: true
     #  parallel-query: true
     #  fetch-user-roles: true
+
+    #   native-load:
+    #     enable: false
+    #     stage-type: SHARED_FS
+    #     directory: SHARED_STAGE
+    #     shared-path: FULL_PATH_TO_NFS #full path to the NFS shared directory 
+
 
     #   per-table-config:
     #   - schema: tpch
@@ -339,7 +354,6 @@ For real-time replication, you must create a heartbeat table in the source Oracl
     #        part:
     #          row-count: 2000
       ```
-    
     {{< hint "info" >}}
   - Supplying `split-key` in the `per-table-config `section is not required (and not supported) for Oracle source.
   - We strongly recommend that you specify `row-identifier-key` in `per-table-config` section for tables not having PK/UK constraints defined on the source Oracle system.
@@ -380,6 +394,8 @@ For real-time replication, you must create a heartbeat table in the source Oracl
       #start-position:
         #start-scn: 2362927
     ```
+    
+For a detailed explanation of configuration parameters in the Extractor file, see [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference").
 
 ## IX. Using Native Oracle Log Reader (Beta)
 
@@ -455,5 +471,32 @@ Replicant also supports using Oracle Automatic Storage Management (ASM) for logs
     log-path: /home/replicant-user/shared/redo/online
     archive-log-path: /home/replicant-user/shared/redo/archive
     ```
-   
-For a detailed explanation of configuration parameters in the Extractor file, see [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference").
+
+## Oracle Native Export
+
+For Oracle as both Source and Target systems, Replicant uses Oracle's native Data Pump Export (`expdp`) utility to export table data. To set up Replicant and Source Oracle to use this feature, follow the instructions below:
+
+### Set up `expdp` in Replicant host machine
+- Download the [Oracle Instant Client Tools Package ZIP](https://download.oracle.com/otn_software/linux/instantclient/216000/instantclient-tools-linux.x64-21.6.0.0.0dbru.zip) and extract the files.
+- Copy the `expdp` file to the `/usr/bin` directory.
+- Download the [Oracle Instant Client Basic Package ZIP](https://download.oracle.com/otn_software/linux/instantclient/216000/instantclient-basic-linux.x64-21.6.0.0.0dbru.zip) and extract the files in a directory.
+- Copy the path to the directory where you extracted the ZIP archive.
+- Set the `ORACLE_HOME` and `LD_LIBRARY_PATH` environment variables in your `~/.bashrc` file:
+  ```BASH
+  export ORACLE_HOME=instantClientBasicPath
+  export LD_LIBRARY_PATH="$ORACLE_HOME":$LD_LIBRARY_PATH
+  export PATH="$ORACLE_HOME:$PATH"
+  ```
+### Create directory object in Source and Target Oracle
+Replicant uses the [external directory feature of Oracle](https://docs.oracle.com/cd/B19306_01/server.102/b14215/et_concepts.htm) for efficient loading of data into Target Oracle. So you need to create a directory shared between Replicant host and Oracle host (both Source and Target) with `READ` and `WRITE` access. To do so, follow the steps below:
+
+- Launch Oracle SQL Plus from the terminal.
+- From the SQL Plus prompt, execute the following SQL commands:
+  ```SQL
+  create directory SHARED_STAGE as '/shared-volume';
+  grant read,write on directory SHARED_STAGE to SYSTEM;
+  ```
+
+### Modify the Replicant Extractor configuration file
+In Replicant's Extractor configuration file of Source Oracle, add a new `native-load` section under `snapshot`. This section holds the necessary parameters for Replicant to start using Oracle's native Export utility. For more information, see [Parameters related to snapshot mode](#parameters-related-to-snapshot-mode).
+

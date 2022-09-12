@@ -122,6 +122,13 @@ Replicant supports creating/loading tables at the partition and subpartition lev
   ```
         {{< /hint >}}
 
+    - `native-load`: With this parameter set, Replicant uses the Oracle Data Pump Import (`impdp`) utility to load table data instead of JDBC. This enables Replicant to efficiently handle large-scale data. For more information, see [Oracle Native Import](#oracle-native-import). 
+    
+      The following configuration parameters are available under `native-load`:
+        - `enable`: `true` or `false`. Whether to enable `native-load`.
+        - `stage-type`: The type of staging area. Allowed values are `SHARED_FS` and `ASM`. The staging area can either be a shared directory or Oracle ASM.
+        - `directory`: The Oracle directory object corresponding to the `stage-type`. For more information, see [Create directory object in Source and Target Oracle](#create-directory-object-in-source-and-target-oracle).
+        - `path`: Full path to the NFS (Network File System) representing the directory shared between Replicant and Oracle.
 
   Below is a sample config:
 
@@ -135,6 +142,42 @@ Replicant supports creating/loading tables at the partition and subpartition lev
        type: FILE
        serialize: true/false.
        method: SQL_LOADER.
+    
+    # native-load config is only available for Oracle -> Oracle replication
+    #  native-load:
+    #    enable: false
+    #    stage-type: SHARED_FS
+    #    directory: SHARED_STAGE
+    #    shared-path: path-to-nfs
+
 
    ```
    For a detailed explanation of configuration parameters in the applier file, read [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference").
+
+## Oracle Native Import
+
+For Oracle as both Source and Target systems, Replicant uses Oracle's native Data Pump Import (`impdp`) utility to load data into the Target. To set up Replicant and Target Oracle to use this feature, follow the instructions below:
+
+### Set up `impdp` in Replicant host machine
+- Download the [Oracle Instant Client Tools Package ZIP](https://download.oracle.com/otn_software/linux/instantclient/216000/instantclient-tools-linux.x64-21.6.0.0.0dbru.zip) and extract the files.
+- Copy the `impdp` file to the `/usr/bin` directory.
+- Download the [Oracle Instant Client Basic Package ZIP](https://download.oracle.com/otn_software/linux/instantclient/216000/instantclient-basic-linux.x64-21.6.0.0.0dbru.zip) and extract the files in a directory.
+- Copy the path to the directory where you extracted the ZIP archive.
+- Set the `ORACLE_HOME` and `LD_LIBRARY_PATH` environment variables in your `~/.bashrc` file:
+  ```BASH
+  export ORACLE_HOME=instantClientBasicPath
+  export LD_LIBRARY_PATH="$ORACLE_HOME":$LD_LIBRARY_PATH
+  export PATH="$ORACLE_HOME:$PATH"
+  ```
+### Create directory object in Source and Target Oracle
+Replicant uses the [external directory feature of Oracle](https://docs.oracle.com/cd/B19306_01/server.102/b14215/et_concepts.htm) for efficient loading of data into Target Oracle. So you need to create a directory shared between Replicant host and Oracle host (both Source and Target) with `READ` and `WRITE` access. To do so, follow the steps below:
+
+- Launch Oracle SQL Plus from the terminal.
+- From the SQL Plus prompt, execute the following SQL commands:
+  ```SQL
+  create directory SHARED_STAGE as '/shared-volume';
+  grant read,write on directory SHARED_STAGE to SYSTEM;
+  ```
+
+### Modify the Replicant Extractor configuration file
+In Replicant's Extractor configuration file of Source Oracle, add a new `native-load` section under `snapshot`. This section holds the necessary parameters for Replicant to start using Oracle's native Export utility. For more information, see [Parameters related to snapshot mode](#parameters-related-to-snapshot-mode).
