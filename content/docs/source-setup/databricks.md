@@ -27,7 +27,7 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
     ```YAML
     type: DATABRICKS_DELTALAKE
 
-    host: "HOSTNAME
+    host: "HOSTNAME"
     port: "PORT_NUMBER"
 
     url: "jdbc:databricks://HOST:PORT/DATABASE_NAME;transportMode=http;ssl=1;httpPath=<http-path>;AuthMech=3" # This URL can be copied from databricks cluster info page"
@@ -51,50 +51,46 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
     {{< hint "warning" >}} **Important:** For [Databricks Unity Catalog](https://www.databricks.com/product/unity-catalog), set the connection `type` to `DATABRICKS_LAKEHOUSE`. To know more, see [Databricks Unity Catalog Support](#databricks-unity-catalog-support-beta).{{< /hint >}}
 
 ## III. Set up Extractor Configuration
+    
+The Extractor configuration file has two parts:
 
-1. From `$REPLICANT_HOME`, navigate to the Extractor configuration file:
-    ```BASH
-    vi conf/dst/databricks.yaml
-    ```
-2. The configuration file has two parts:
+  - Parameters related to snapshot mode.
+  - Parameters related to realtime mode.
 
-    - Parameters related to snapshot mode.
-    - Parameters related to realtime mode.
+  ### Parameters related to snapshot mode
+  For snapshot mode, make the necessary changes as follows:
 
-    ### Parameters related to snapshot mode
-    For snapshot mode, make the necessary changes as follows:
+  ```YAML
+  snapshot:
+    threads: 16
+    fetch-size-rows: 5_000 #Maximum number of records/documents fetched by replicant at once from the source system
+    min-job-size-rows: 1_000_000 #tables/collections are chunked into multiple jobs for replication. This configuration specifies a minimum size for each such job. This has a positive correlation with the memory footprint of replicant
+    max-jobs-per-chunk: 32 #Determines the maximum number of jobs created per source table/collection
+    _traceDBTasks: true
 
-      ```YAML
-      snapshot:
-        threads: 16
-        fetch-size-rows: 5_000 #Maximum number of records/documents fetched by replicant at once from the source system
-        min-job-size-rows: 1_000_000 #tables/collections are chunked into multiple jobs for replication. This configuration specifies a minimum size for each such job. This has a positive correlation with the memory footprint of replicant
-        max-jobs-per-chunk: 32 #Determines the maximum number of jobs created per source table/collection
-        _traceDBTasks: true
+    per-table-config:
+    - catalog: io_blitzz
+      tables:
+        orders:
+          num-jobs: 10 #Number of parallel jobs that will be used to extract the rows from a table. This value will override the number of jobs internally calculated by Replicant
+          split-key: ORDERKEY #This configuration is used by replicant to split a table into multiple jobs in order to do parallel extraction. This column will be used to perform parallel data extraction from table being replicated that has this column
+        lineitem:
+          split-key: orderkey
+  ```
 
-        per-table-config:
-        - catalog: io_blitzz
-          tables:
-            orders:
-              num-jobs: 10 #Number of parallel jobs that will be used to extract the rows from a table. This value will override the number of jobs internally calculated by Replicant
-              split-key: ORDERKEY #This configuration is used by replicant to split a table into multiple jobs in order to do parallel extraction. This column will be used to perform parallel data extraction from table being replicated that has this column
-            lineitem:
-              split-key: orderkey
-      ```
+  {{< hint "warning" >}} **Important:** For Unity Catalog, specify both both `catalog` and `schema` in `per-table-config`.{{< /hint >}}
 
-      {{< hint "warning" >}} **Important:** For Unity Catalog, specify both both `catalog` and `schema` in `per-table-config`.{{< /hint >}}
+  ### Parameters related to realtime mode
+  If you want to operate in realtime mode, you can use the `realtime` section to specify your configuration. For example:
 
-    ### Parameters related to realtime mode
-    If you want to operate in realtime mode, you can use the `realtime` section to specify your configuration. For example:
+  ```YAML
+  realtime:
+    threads: 16
+    fetch-size-rows: 5_000
+    _traceDBTasks: true
+  ```
 
-    ```YAML
-    realtime:
-      threads: 16
-      fetch-size-rows: 5_000
-      _traceDBTasks: true
-    ```
-
-  For a detailed explanation of configuration parameters in the Extractor file, see [Extractor Reference]({{< ref "/docs/references/Extractor-reference" >}} "Extractor Reference").
+For a detailed explanation of configuration parameters in the Extractor file, see [Extractor Reference]({{< ref "/docs/references/Extractor-reference" >}} "Extractor Reference").
 
 ## IV. Set up Filter configuration (Optional)
 
