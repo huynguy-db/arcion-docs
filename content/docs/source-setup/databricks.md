@@ -11,9 +11,19 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
 Replicant requires the Databricks JDBC Driver as a dependency. To obtain the appropriate driver, follow the steps below: 
 
+{{< tabs "databricks-jdbc-driver-download" >}}
+{{< tab "For Legacy Databricks" >}}
 - Download the [JDBC 4.2-compatible Databricks JDBC Driver ZIP](https://databricks-bi-artifacts.s3.us-east-2.amazonaws.com/simbaspark-drivers/jdbc/2.6.22/SimbaSparkJDBC42-2.6.22.1040.zip).
 - From the downloaded ZIP, locate and extract the `SparkJDBC42.jar` file.
 - Put the `SparkJDBC42.jar` file inside `$REPLICANT_HOME/lib` directory.
+{{< /tab >}}
+{{< tab "For Databricks Unity Catalog" >}}
+- Go to the [Databricks JDBC Driver download page](https://www.databricks.com/spark/jdbc-drivers-download) and download the driver.
+- From the downloaded ZIP, locate and extract the `DatabricksJDBC42.jar` file.
+- Put the `DatabricksJDBC42.jar` file inside `$REPLICANT_HOME/lib` directory.
+{{< /tab >}}
+
+{{< /tabs >}}
 
 ## II. Set up Connection Configuration
 
@@ -120,11 +130,11 @@ For a detailed explanation of configuration parameters in the Filter file, see [
 
 {{< hint "info" >}}**Note:** This feature is currently in beta. {{< /hint >}}
 
-From version 22.08.31.x onwards, Arcion has added support for [Databricks Unity Catalog](https://www.databricks.com/product/unity-catalog). The support is still in beta phase, with complete support to land gradually in future releases.
+From version 22.08.31.3 onwards, Arcion has added support for [Databricks Unity Catalog](https://www.databricks.com/product/unity-catalog). The support is still in beta phase, with complete support to land gradually in future releases.
 
 As of now, note the following about the state of Arcion's Unity Catalog support:
 
-- Legacy Databricks Catalog only supports two-level namespace:
+- Legacy Databricks only supports two-level namespace:
 
     - Schemas
     - Tables
@@ -137,10 +147,9 @@ As of now, note the following about the state of Arcion's Unity Catalog support:
   Arcion adds support for Unity Catalog by introducing a new child storage type (`DATABRICKS_LAKEHOUSE` child of `DATABRICKS_DELTALAKE`).
 - If you're using Unity Catalog, notice the following when configuring your Source Databricks with Arcion:
   - Set the connection `type` to `DATABRICKS_LAKEHOUSE` in the [connection configuration file](#ii-set-up-connection-configuration).
-  - Specify both both `catalog` and `schema` as part of `per-table-config` [in the Extractor configuration file](#iii-set-up-Extractor-configuration).
+  - Specify both both `catalog` and `schema` as part of `per-table-config` [in the Extractor configuration file](#iii-set-up-extractor-configuration).
   - If you want to configure [Filter](/docs/references/filter-reference) on your Source Databricks, specify both both `catalog` and `schema` under the list `allow` in the [Filter configuration file](#iv-set-up-filter-configuration-optional).
-- We'll be using `SparkJDBC42` driver for Legacy Databricks (`DATABRICKS_DELTALAKE`) and `DatabricksJDBC42` for Unity catalog (`DATABRICKS_LAKEHOUSE`). Once Databricks is completely migrated to only Databricks protocol we will use `DatabricksDriver` for both types.
-- We've tested the current changes with AWS and AZURE.
-
+- We'll be using `SparkJDBC42` driver for Legacy Databricks (`DATABRICKS_DELTALAKE`) and `DatabricksJDBC42` for Unity catalog (`DATABRICKS_LAKEHOUSE`). For instructions on how to obtain these drivers, see [Obtain the JDBC Driver for Databricks](#i-obtain-the-jdbc-driver-for-databricks).
+- Replicant currently supports Unity Catalog on AWS and AZURE.
 
 

@@ -11,11 +11,22 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
 Replicant requires the Databricks JDBC Driver as a dependency. To obtain the appropriate driver, follow the steps below: 
 
+{{< tabs "databricks-jdbc-driver-download" >}}
+{{< tab "For Legacy Databricks" >}}
 - Download the [JDBC 4.2-compatible Databricks JDBC Driver ZIP](https://databricks-bi-artifacts.s3.us-east-2.amazonaws.com/simbaspark-drivers/jdbc/2.6.22/SimbaSparkJDBC42-2.6.22.1040.zip).
 - From the downloaded ZIP, locate and extract the `SparkJDBC42.jar` file.
 - Put the `SparkJDBC42.jar` file inside `$REPLICANT_HOME/lib` directory.
+{{< /tab >}}
+{{< tab "For Databricks Unity Catalog" >}}
+- Go to the [Databricks JDBC Driver download page](https://www.databricks.com/spark/jdbc-drivers-download) and download the driver.
+- From the downloaded ZIP, locate and extract the `DatabricksJDBC42.jar` file.
+- Put the `DatabricksJDBC42.jar` file inside `$REPLICANT_HOME/lib` directory.
+{{< /tab >}}
 
-## II. Setup Connection Configuration
+{{< /tabs >}}
+
+
+## II. Set up Connection Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the sample connection configuration file:
     ```BASH
@@ -27,7 +38,7 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
     - Parameters related to target Databricks server connection.
     - Parameters related to stage configuration.
 
-    ### Parameters related to target Databricks server connection
+    ### Parameters related to Target Databricks server connection
     For connecting to your target Databricks server, you can configure the following parameters:
 
       ```YAML
@@ -51,17 +62,19 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
       - *`USERNAME`*: the username that connects to your Databricks server
       - *`PASSWORD`*: the password associated with *`USERNAME`*
     
-      {{< hint "info" >}}For [Databricks Unity Catalog](https://www.databricks.com/product/unity-catalog), set the connection `type` to `DATABRICKS_LAKEHOUSE`. To know more, see [Databricks Unity Catalog Support](#databricks-unity-catalog-support-beta).{{< /hint >}}
+      {{< hint "info" >}}For [Databricks Unity Catalog](https://www.databricks.com/product/unity-catalog), set the connection `type` to `DATABRICKS_LAKEHOUSE`. For more information, see [Databricks Unity Catalog Support](#databricks-unity-catalog-support-beta).{{< /hint >}}
 
     ### Parameters related to stage configuration
     It is mandatory to use `DATABRICKS_DBFS` or an external stage like S3 to hold the data files and load them on the target database from there. This section allows specifying details required for Replicant to connect and use a given stage.
 
       - `type`*[v21.06.14.1]*: The stage type. Allowed stages are `S3`, `AZURE`, `GCP`, and `DATABRICKS_DBFS`.
+      {{< hint "info" >}}For [Databricks Unity Catalog](https://www.databricks.com/product/unity-catalog), set `type` to `DATABRICKS_LAKEHOUSE`. For more information, see [Databricks Unity Catalog Support](#databricks-unity-catalog-support-beta).{{< /hint >}}
       - `root-dir`: Specify a directory on stage which can be used to stage bulk-load files.
       - `conn-url`*[v21.06.14.1]*: Specify the connection URL for stage. For example, for S3 as stage, specify bucket-name; for AZURE as stage, specify the container name.
-      - `use-credentials`: Indicates whether to use the provided connection credentials. When `true`, you must set  `host`, `port`, `username`, and `password` as described in the section [Parameters Related to Source Db2 server connection](#parameters-related-to-source-db2-server-connection).
+      - `use-credentials`: Applicable only for `DATABRICKS_DBFS` as type. Indicates whether to use the provided connection credentials. When `true`, you must set  `host`, `port`, `username`, and `password` as described in the section [Parameters Related to Target Databricks server connection](#parameters-related-to-target-databricks-server-connection).
 
         *Default: By default, this parameter is set to `false`.*
+        
       - `key-id`: This config is valid for `S3` as stage `type` only. Represents Access Key ID for AWS account hosting S3.
       - `account-name`*[v21.06.14.1]*: This config is valid for AZURE type only. Represents name of the ADLS storage account.
       - `secret-key`*[v21.06.14.1]*: This config is valid for S3 and AZURE type only. For example, Secret Access Key for AWS account hosting S3 or ADLS account.
@@ -111,7 +124,7 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
     ```
 
 
-## III. Setup Applier Configuration
+## III. Set up Applier Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the applier configuration file:
     ```BASH
@@ -234,11 +247,11 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
 
 {{< hint "info" >}}**Note:** This feature is currently in beta. {{< /hint >}}
 
-From version 22.08.31.x onwards, Arcion has added support for [Databricks Unity Catalog](https://www.databricks.com/product/unity-catalog). The support is still in beta phase, with complete support to land gradually in future releases.
+From version 22.08.31.3 onwards, Arcion has added support for [Databricks Unity Catalog](https://www.databricks.com/product/unity-catalog). The support is still in beta phase, with complete support to land gradually in future releases.
 
 As of now, note the following about the state of Arcion's Unity Catalog support:
 
-- Legacy Databricks Catalog only supports two-level namespace:
+- Legacy Databricks only supports two-level namespace:
 
     - Schemas
     - Tables
@@ -249,20 +262,19 @@ As of now, note the following about the state of Arcion's Unity Catalog support:
     - Tables
 
   Arcion adds support for Unity Catalog by introducing a new child storage type (`DATABRICKS_LAKEHOUSE` child of `DATABRICKS_DELTALAKE`).
-- To avoid manual steps to configure staging, Databricks has introduced personal staging. To read the staging URL, we've added a new configuration parameter `UNITY_CATALOG_PERSONAL_STAGE`. The complete `stage` configuration is as follows:
-  ```YAML
-  stage:
-    type: UNITY_CATALOG_PERSONAL_STAGE
-    staging-url: STAGING_URL
-    file-format: DATA_FILE_FORMAT
-  ```
-  Replace the following:
-    - *`STAGING_URL`*: the temporary staging URL—for example, `stage://tmp/userName/rootDir`.
-    - *`DATA_FILE_FORMAT`*: the type of data file format. Supported formats are `PARQUET` and `CSV`. 
-      
-      *Default: `PARQUET`*.
-- We'll be using `SparkJDBC42` driver for Legacy Databricks (`DATABRICKS_DELTALAKE`) and `DatabricksJDBC42` for Unity catalog (`DATABRICKS_LAKEHOUSE`). Once Databricks is completely migrated to only Databricks protocol we will use `DatabricksDriver` for both types.
-- We've tested the current changes with AWS and AZURE.
-
-
-
+- If you're using Unity Catalog, notice the following when configuring your Target Databricks with Arcion:
+  - Set the connection `type` to `DATABRICKS_LAKEHOUSE` in the [connection configuration file](#ii-set-up-connection-configuration).
+  - To avoid manual steps to configure staging, Databricks has introduced personal staging. To read the staging URL, we've added a new configuration parameter `UNITY_CATALOG_PERSONAL_STAGE`. The complete `stage` configuration is as follows:
+    ```YAML
+    stage:
+      type: UNITY_CATALOG_PERSONAL_STAGE
+      staging-url: STAGING_URL
+      file-format: DATA_FILE_FORMAT
+    ```
+    Replace the following:
+      - *`STAGING_URL`*: the temporary staging URL—for example, `stage://tmp/userName/rootDir`.
+      - *`DATA_FILE_FORMAT`*: the type of data file format. Supported formats are `PARQUET` and `CSV`.
+        
+        *Default: `PARQUET`*.
+- We'll be using `SparkJDBC42` driver for Legacy Databricks (`DATABRICKS_DELTALAKE`) and `DatabricksJDBC42` for Unity catalog (`DATABRICKS_LAKEHOUSE`). For instructions on how to obtain these drivers, see [Obtain the JDBC Driver for Databricks](#i-obtain-the-jdbc-driver-for-databricks).
+- Replicant currently supports Unity Catalog on AWS and AZURE.
