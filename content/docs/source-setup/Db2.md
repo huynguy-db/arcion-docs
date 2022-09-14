@@ -117,10 +117,10 @@ For CDC-based replication from source Db2 server, the following parameters are a
    Below are more details on `cdc-log-config` parameters:
 
    i. `cdc-log-storage`: Storage where Db2 logs reside. Allowed values are:
-     - `MQ`
-     - `KAFKA_TRANSACTION`
-     - `KAFKA_EVENTUAL`
-     - `KAFKA_AVRO`
+   - `MQ`
+   - `KAFKA_TRANSACTION`
+   - `KAFKA_EVENTUAL`
+   - `KAFKA_AVRO`
    
    The sample configuration file above shows samples for `MQ`, `KAFKA_STRING`, and `KAFKA_AVRO`.
 
@@ -166,16 +166,16 @@ For CDC-based replication from source Db2 server, the following parameters are a
          - `password`: Password for the truststore.
        - `ssl-cipher-suite`: Encryption algorithm configured on MQ
        
-   iii. `kafka-connection`[20.10.07.15]: If you enable realtime replication and use Kafka for CDC logs, then you need to specify Kafka connection information in this field. It contains the following parameters: 
-     - `cdc-log-topic`: The Kafka topic that contains Db2 CDC log. To be
-     used when cdc-log-config is `KAFKA_TRANSACTIONAL`.
-     - `cdc-log-topic-prefix`[20.12.04.7]: The common prefix for all Kafka topics that will be replicated. To be used when `cdc-log-config` is `KAFKA_EVENTUAL` or `KAFKA_AVRO`.
-     - `cdc-log-topic-prefix-list`[21.02.01.19]:
-       - `cdc-log-topic-prefix`: The common prefix for Kafka topics wit.
-       - `tables`:
-     - `message-format`: Format of message that will be received from Kafka. Allowed values are `XML`, `DELIMITED`, and `KCOP_MULTIROW_AUDIT`.
-     - `lob-send-option`: If LOB columns are inlined or will be received in separate messages from Kafka. Allowed values are `INLINE` and `SEPARATE`.
-     - `connection`: Connection config for connecting to Kafka. Please refer to this document for details.
+   iii. `kafka-connection`[20.10.07.15]: If you enable realtime replication and use Kafka for CDC logs, then you need to specify Kafka connection information in this field. It contains the following parameters:
+    
+  - `cdc-log-topic`: The Kafka topic that contains Db2 CDC log. To be used when cdc-log-config is `KAFKA_TRANSACTIONAL`.
+  - `cdc-log-topic-prefix`[20.12.04.7]: The common prefix for all Kafka topics that will be replicated. To be used when `cdc-log-config` is `KAFKA_EVENTUAL` or `KAFKA_AVRO`.
+  - `cdc-log-topic-prefix-list`[21.02.01.19]:
+    - `cdc-log-topic-prefix`: The common prefix for Kafka topics wit.
+    - `tables`:
+  - `message-format`: Format of message that will be received from Kafka. Allowed values are `XML`, `DELIMITED`, and `KCOP_MULTIROW_AUDIT`.
+  - `lob-send-option`: If LOB columns are inlined or will be received in separate messages from Kafka. Allowed values are `INLINE` and `SEPARATE`.
+  - `connection`: Connection config for connecting to Kafka. Please refer to this document for details.
 
 {{< hint "info" >}}
 ## Note
