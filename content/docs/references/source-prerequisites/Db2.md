@@ -1,10 +1,10 @@
 ---
-title: IBM Db2
+title: IBM Db2 MQ
 weight: 1
 bookHidden: false 
 ---
 
-This page describes the requirements for using IBM Db2 as source.
+This page describes the requirements for using IBM Db2 MQ as source.
 
 ## Permissions
 1. The user should have read access on all the databases, schemas and tables to be replicated.
