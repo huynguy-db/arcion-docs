@@ -66,16 +66,6 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
         lock:
           enable: false
 
-      #  lock:
-      #    enable: true
-      #    scope: TABLE   # DATABASE, TABLE
-      #    force: false
-      #    timeout-sec: 5
-
-      #  extraction-method: QUERY # Allowed values are QUERY, COPY
-      #  native-extract-options:
-      #    compression-type: "NONE" #Allowed values are GZIP and NONE. GZIP generates extracted files in compressed .gz format. Use GZIP only when extraction-method is set to COPY
-
         per-table-config:
           - catalog: tpch
             schema: public
@@ -83,20 +73,55 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
               lineitem:
                 row-identifier-key: [l_orderkey, l_linenumber]
                 split-key: l_orderkey
-      #          extraction-method: QUERY # Allowed values are QUERY, COPY
-      #          native-extract-options:
-      #           compression-type: "NONE" #Allowed values are GZIP and NONE. GZIP generates extracted files in compressed .gz format. Use GZIP only when extraction-method is set to COPY
-      #        split-hints:
-      #          row-count-estimate: 15000
-      #          split-key-min-value: 1
-      #          split-key-max-value: 60_000
+              split-hints:
+                row-count-estimate: 15000
+                split-key-min-value: 1
+                split-key-max-value: 60_000
       ```
-
-    {{< hint "warning" >}}
+      {{< hint "warning" >}}
   - In the absence of a `split-key`, we use a generated key `gp_segment_id` for tables. This allows Replicant to split a table into multiple jobs, increasing parallelism.
   - In case of views or any other non-table object type, we don't support extraction using generated key. Replicant honors `split-key` only if the user explicitly provides it in the Extractor configuration file.
     {{< /hint >}}
 
+      - If you want to enable objecting locking, you can do so by setting the `enable` field of `lock` to `true` and providing the locking details in the following way:
+
+        ```YAML
+        lock:
+          enable: {true|false}
+          scope: {TABLE|DATABASE} 
+          force: {true|false}
+          timeout-sec: TIMEOUT_IN_SECONDS
+        ```
+
+        Replace *`TIMEOUT_IN_SECONDS`* with the number of seconds you want the locking timeout to be—for example, `5`.
+
+      - To specify extraction method for Source Greenplum, set the parameter `extraction-method` to any of the following two extraction methods:
+        - `QUERY`
+        - `COPY`.
+
+      - You can also specify details for native extraction method—for example the type of compression to use. For Source Greenplum, Arcion currently supports only the `GZIP` compression type, which generates extracted files in compressed `.gz` format. Notice the following sample:
+
+        ```YAML
+        extraction-method: COPY
+        native-extract-options:
+          compression-type: "GZIP"
+        ```
+
+        {{< hint "warning" >}} **Important:** Use `GZIP` as the `compression-type` only when you've set the `extraction-method` to `COPY`. Otherwise, set `compression-type` to `NONE`. {{< /hint >}}
+      
+      - You can also choose to specify the `extraction-method` and `native-extract-options` parameters in the `per-table-config` section to more finely tune your table-specific requirements. For example:
+
+        ```YAML
+          per-table-config:
+          - catalog: tpch
+            schema: public
+            tables:
+              lineitem:
+                extraction-method: QUERY 
+                native-extract-options:
+                  compression-type: "NONE"
+          ```
+ 
     ### Parameters related to delta snapshot mode
     If you want to operate in delta snapshot mode, you can use the `delta-snapshot` section to specify your configuration. For example:
 
@@ -113,28 +138,12 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
       delta-snapshot-interval: 10
       delta-snapshot-delete-interval: 10
       _traceDBTasks: true
-      #ddl-replication:
-      #  enable: true # This config enables detection of DDLs fire on source.
-                      # If this config is set to true then please enable and set appropriate value of delta-snapshot-detect-DDL-interval config.
-      #  delta-snapshot-detect-ddl-interval: 5 # This config sets the value of DDL detection interval E.g if set to 5 then DDLs will be detected after every 5 delta-snapshot intervals
-                                            # If DDLs are rare it is recommended to set large value.
       #replicate-deletes: false
-    #  extraction-method: QUERY # Allowed values are QUERY, COPY
-    #  native-extract-options:
-    #    compression-type: "NONE" #Allowed values are GZIP and NONE. GZIP generates extracted files in compressed .gz format. Use GZIP only when extraction-method is set to COPY
-
 
       per-table-config:
       - catalog: tpch
         schema: public
         tables:
-    #     testTable
-    #       split-key: split-key-column
-    #       delta-snapshot-key: delta-snapshot-key-column
-    #       delta-snapshot-key-offset: '2019-10-05 13:23:45.890000'  ( delta snapshot key to start replication from)
-    #       extraction-method: QUERY # Allowed values are QUERY, COPY
-    #       native-extract-options:
-    #         compression-type: "NONE" #Allowed values are GZIP and NONE. GZIP generates extracted files in compressed .gz format. Use GZIP only when extraction-method is set to COPY
           part:
             delta-snapshot-key: last_update_time
           partsupp:
@@ -145,7 +154,39 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
             delta-snapshot-key: last_update_time
           lineitem:
             delta-snapshot-key: last_update_time
-            #row-identifier-key: [l_orderkey, l_linenumber]
+            row-identifier-key: [l_orderkey, l_linenumber]
     ```
+
+    - To specify extraction method, set the parameter `extraction-method` to any of the following two extraction methods:
+        - `QUERY`
+        - `COPY`.
+
+    - You can also specify details for native extraction method—for example the type of compression to use. For Source Greenplum, Arcion currently supports only the `GZIP` compression type, which generates extracted files in compressed `.gz` format. Notice the following sample:
+
+      ```YAML
+      extraction-method: COPY
+      native-extract-options:
+        compression-type: "GZIP"
+      ```
+
+      {{< hint "warning" >}} **Important:** Use `GZIP` as the `compression-type` only when you've set the `extraction-method` to `COPY`. Otherwise, set `compression-type` to `NONE`. {{< /hint >}}
+    
+    - You can also choose to specify the `extraction-method` and `native-extract-options` parameters in the `per-table-config` section to more finely tune your table-specific requirements. For example:
+
+      ```YAML
+      per-table-config:
+        - catalog: tpch
+          schema: public
+          tables:
+           testTable:
+             split-key: split-key-column
+             delta-snapshot-key: delta-snapshot-key-column
+             delta-snapshot-key-offset: '2019-10-05 13:23:45.890000'
+             extraction-method: QUERY
+             native-extract-options:
+               compression-type: "NONE"
+      ```
+
+      In the sample above, the `delta-snapshot-key-offset` parameter indicates the delta snapshot key to start replication from.
 
 For a detailed explanation of configuration parameters in the Extractor file, see [Extractor Reference]({{< ref "/docs/references/Extractor-reference" >}} "Extractor Reference").
