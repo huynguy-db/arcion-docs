@@ -8,7 +8,40 @@ bookHidden: false
 
 This page describes how to set up CDC-based replication from Source Db2 server on the IBM i AS/400 platform.
 
-## I. Create the Heartbeat Table
+
+## I. Check Permissions
+
+1. The user should have read access on all the databases, schemas, and tables to be replicated.
+
+2. The user should have read access to following system tables and views:
+  
+    a. `QSYS2.SYSTABLES`
+
+    b. `SYSIBM.SQLTABLETYPES`
+
+    c. `QSYS2.SYSCOLUMNS`
+
+    d. `QSYS2.SYSCSTCO`
+
+    e. `SYSIBM.SQLCOLUMNS`
+
+    f. `SYSIBM.COLUMNS` (required for for [`fetch-schemas`](/docs/running-replicant/#fetch-schemas) mode mode)
+
+3. The user should have execute permissions on following system procedures:
+
+    a. `SYSIBM.SQLTABLES`
+
+    b. `SYSIBM.SQLCOLUMNS`
+
+    c. `SYSIBM.SQLPRIMARYKEYS`
+
+    d. `SYSIBM.SQLSTATISTICS`
+
+{{< hint "info" >}}
+Users need these permissions only once at the start of a fresh replication.
+{{< /hint >}}
+
+## II. Create the Heartbeat Table
 
 For CDC replication, you must create the heartbeat table on the Source database with the following DDL:
 
@@ -17,7 +50,7 @@ CREATE TABLE "tpch"."replicate_io_cdc_heartbeat"("timestamp" BIGINT NOT NULL,
 CONSTRAINT "cdc_heartbeat_id_default_default" PRIMARY KEY("timestamp"))
 ```
 
-## II. Enable CDC Replication
+## III. Enable CDC Replication
 
 For enabling CDC-based replication, follow the steps described below.
 
@@ -73,7 +106,7 @@ cdc-log-config:
 - `journals`: Represents the list of Db2 journals that Replicant will read CDC logs from.
 - `journal-library`: The library (schema) that the journal is in.
 
-## III. Set up Extractor Configuration
+## IV. Set up Extractor Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the Extractor configuration file:
    ```BASH

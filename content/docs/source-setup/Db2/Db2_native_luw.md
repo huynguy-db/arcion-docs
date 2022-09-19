@@ -10,9 +10,9 @@ You may want to use [db2ReadLog API](https://www.ibm.com/docs/en/db2/11.1?topic=
 
 ## I. Check Permissions
 
-1. The user should have read access on all the databases, schemas and tables to be replicated.
+1. The user should have read access on all the databases, schemas, and tables to be replicated.
 
-2. The user should have read access to following system tables/views:
+2. The user should have read access to following system tables and views:
 
     a. `SYSIBM.SYSTABLES`
 
@@ -24,9 +24,9 @@ You may want to use [db2ReadLog API](https://www.ibm.com/docs/en/db2/11.1?topic=
 
     e. `SYSIBM.SQLCOLUMNS`
     
-    f. `SYSCAT.COLUMNS` (needed for [`fetch-schemas`](/docs/running-replicant/#fetch-schemas) mode).
+    f. `SYSCAT.COLUMNS` (required for [`fetch-schemas`](/docs/running-replicant/#fetch-schemas) mode).
 
-3. The user should have execute permissions on the following system procs:
+3. The user should have execute permissions on the following system procedures:
 
     a. `SYSIBM.SQLTABLES`
 
