@@ -146,12 +146,6 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
         tables:
           part:
             delta-snapshot-key: last_update_time
-          partsupp:
-            delta-snapshot-key: last_update_time
-          supplier:
-            delta-snapshot-key: last_update_time
-          orders:
-            delta-snapshot-key: last_update_time
           lineitem:
             delta-snapshot-key: last_update_time
             row-identifier-key: [l_orderkey, l_linenumber]
