@@ -263,7 +263,7 @@ The following configuration parameters are available for delta snapshot mode:
       - `TPT`: Stands for Teradata Parallel Transporter Utility (TPT). Currently only supported for Teradata as a source.
       - `CSVLOAD`: Extraction from the CSV files containing the data already exported from tables. Currently only supported for Cassandra as source,
       - `DSBULK`: Extraction using the DataStax Bulk Loader (DSBulk) tool. Currently supported only for Cassandra.
-      - `COPY`: Supported only for Greenplum as source.
+      - `COPY`: Supports bulk mode extraction for CockroachDB and Greenplum.
 
 9. `tpt-num-files-per-job` *[v20.07.02.1]*: Relevant when `extraction-method` is TPT. This config indicates how many CSV files each TPT job should export (default value set to 16).    
 
