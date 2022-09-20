@@ -366,12 +366,6 @@ For real-time replication, you must create a heartbeat table in the source Oracl
     - `use-current-scn`*[v20.09.14.8]*: In `start-postion` section, this option allows using current `scn` value for to start reading realtime operations.
     - `start-scn`[v20.09.14.3]: In `start-postion` section this option allows using user specified `scn` value for to start reading realtime operations.
     - `inter-source-latency-s`*[v20.10.07.16]:* In the `start-position` section this config option in seconds represents the lag between primary and standby Oracle in case the source-failover feature is enabled.
-    - `stop-inactive-lm-session-after-s`*[v20.12.04.14]*: Check if inactive logminer session after specified seconds and cancel the statement.
-    - `adjust-lm-fetch-size`*[v21.02.01.2]*: Allow adjusting the logimer fetch size if there is a lot of log activity.
-    - `auto-adjust-lm-timeout`*[v21.04.06.6]*: This is a tuning config which will adjust the logminer query timeout based on workload for continuous mine mode.
-
-      *Default: By default, this parameter is set to `false`*.
-
     - `log-miner-dict-file`*[v21.09.17.6]*: If specified, this file will be used as the dictionary for log mining instead of using the online dictionary. The file must be accessible by Oracle.
     - `oldest-active-txn-window-hr`*[v22.07.19.3]*: Specifies the time period in hours up to which Replicant should fetch the oldest transaction SCN.
 
@@ -384,7 +378,6 @@ For real-time replication, you must create a heartbeat table in the source Oracl
       threads: 4
       _traceDBTasks: true
       #fetch-size-rows: 0
-      #stop-inactive-lm-session-after-s: 2
       heartbeat:
         enable: true
         schema: "tpch"
