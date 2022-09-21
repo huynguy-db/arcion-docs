@@ -125,7 +125,7 @@ If you're performing CDC-based replication from the source Db2 server, please fo
     db2 connect to <DATABASE> user <USER>
     ```
 
-## III. Configure Replicant
+## IV. Configure Replicant
 
 You also need to configure Replicant's Db2 connection configuration file:
 
@@ -157,7 +157,7 @@ You also need to configure Replicant's Db2 connection configuration file:
     ```
 
 
-## IV. Set up Extractor Configuration
+## V. Set up Extractor Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the Extractor configuration file:
    ```BASH
