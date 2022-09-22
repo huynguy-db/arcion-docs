@@ -65,7 +65,7 @@ You need to verify that the necessary permissions are in place on source SQL Ser
 
   ```YAML
   credentials-store:
-    type: PKCS12 | JKS | JCEKS
+    type: {PKCS12|JKS|JCEKS}
       path: PATH_TO_KEYSTORE_FILE
       key-prefix: PREFIX_OF_THE_KEYSTORE_ENTRY
       password: KEYSTORE_PASSWORD
