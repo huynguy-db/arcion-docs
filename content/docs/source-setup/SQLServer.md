@@ -10,7 +10,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
 ## I. Set up Replicant Windows Agent
 
-To intsall and set up [Replicant Windows Agent to use as CDC Extractor](#specify-cdc-extractor), please follow the instructions in [Windows Agent Installation](/docs/references/source-prerequisites/sqlserver/#windows-agent-installation).
+To intsall and set up [SQL Server Agent to use as CDC Extractor](#specify-cdc-extractor), please follow the instructions in [Replicant SQL Server Agent Installation](/docs/references/source-prerequisites/sqlserver/#windows-agent-installation).
 
 ## II. Check Permissions
 
@@ -54,7 +54,7 @@ You need to verify that the necessary permissions are in place on source SQL Ser
     ### Specify CDC Extractor
     For your Source SQL Server, you can choose from two CDC Extractors. You can specify the Extractor to use by setting the `extractor` parameter in the connection configuration file to any of the following values:  
     
-      - `CHANGE`: The default value. With this value set, SQL Server Change Tracking is used for real-time replication. In this case, you don't need to follow the documentation for the SQL CDC Agent.
+      - `CHANGE`: The default value. With this value set, SQL Server Change Tracking is used for real-time replication. In this case, you don't need to follow [the documentation for Replicant SQL Server Agent](#i-set-up-replicant-windows-agent).
 
         {{< details title="Enable Change Tracking" open=false >}}
   To use SQL Server Change Tracking for realtime, all databases and tables must have change tracking enabled:
