@@ -56,7 +56,7 @@ You need to verify that the necessary permissions are in place on source SQL Ser
     
       - `CHANGE`: The default value. With this value set, SQL Server Change Tracking is used for real-time replication. In this case, you don't need to follow the documentation for the SQL CDC Agent.
 
-        {{< details title="Enable Change Tracking" open="false" >}}
+        {{< details title="Enable Change Tracking" open=false >}}
   To use SQL Server Change Tracking for realtime, all databases and tables must have change tracking enabled:
   - To enable Change Tracking on a database, execute the following SQL command:
     ```SQL
