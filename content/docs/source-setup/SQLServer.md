@@ -32,36 +32,52 @@ You need to verify that the necessary permissions are in place on source SQL Ser
    host: localhost
    port: 1433
 
-   username: 'replicant' # username to connect to the server
-   #username: 'domain\replicant' # use this format for NTLM authentication
-   password: 'Replicant#123'
+   username: 'USERNAME'
+   password: 'PASSWORD'
    database: 'tpcc'
-   #auth-type: [NATIVE, NTLM]
 
-   max-connections: 30 #maximum number of connections Replicant would use to fetch data from source.
-
-   #log-path: /home/shared/transactions/
+   max-connections: MAX_NUMBER_OF_CONNECTIONS
 
    #ssl:
    #  enable: true
    #  hostname-verification: false
    ```
 
-   - **auth-type**: Authentication protocol will default to `NATIVE` if you don't specify the `auth-type` parameter. In case of `NLTM` as the `auth-type`, you'll have to provide the `username` in `<domain>\<user>` format.
+   Replace the following:
 
-   - Replicant supports consuming `username` and `password` configurations from a _credentials store_ rather than having users specify them in plain text config file. Instead of specifying username and password as above, you can keep them in a keystore and provide its details in the config file like below:
+   - *`USERNAME`*: the username to connect to the SQL Server
+   - *`PASSWORD`*: the password associated with *`USERNAME`*
+   - *`MAX_NUMBER_OF_CONNECTIONS`*: the maximum number of connections Replicant would use to fetch data from source—for example, `30`
 
-     ```YAML
-     credentials-store:
-       type: PKCS12 | JKS | JCEKS
-         path: # path to your keystore file
-         key-prefix: # prefix of the keystore entry
-         password: # optional, keystore password
-     ```
+   You can also explicitly specify the authentication protocol used for the connection, and use a KeyStore to securely hold your login credentials:
+   
+    {{< details title="Specify the connection authentication protocol" open=false >}}
+  - To specify an authentication protocol for the connection, set the `auth-type` parameter in the connection cofiguration file to any of the following two values:
+    - `NATIVE` 
+    - `NLTM`
+    
+    Default protocol will always be `NATIVE` if you don't explicitly set the `auth-type` parameter.
+  - In case of `NLTM` as `auth-type`, provide the `username` in `DOMAIN\USER` format—for example, `domain\replicant`.
+    {{< /details >}}
 
-     - You should create entries in the credential store for `username` and `password` configs using a prefix and specify the prefix here. For example, you can create keystore entries with aliases `sqlserver_username` and `sqlserver_password`. You can then specify the prefix here as `sqlserver_`.
+    {{< details title="Use a KeyStore to hold login credentials" open=false >}}
+  Replicant supports consuming `username` and `password` configurations from a _credentials store_ rather than having users specify them in plain text config file. Instead of specifying username and password as above, you can keep them in a KeyStore and provide its details in the connection configuration file like below:
 
-     - The keystore `password` field is optional. If you don't want to specify the keystore password here, then you must use the UUID from your license file as the keystore password. Remember to keep your license file somewhere safe in order to keep this password secure.
+  ```YAML
+  credentials-store:
+    type: PKCS12 | JKS | JCEKS
+      path: PATH_TO_KEYSTORE_FILE
+      key-prefix: PREFIX_OF_THE_KEYSTORE_ENTRY
+      password: KEYSTORE_PASSWORD
+  ```
+
+  Replace the following:
+
+  - *`PATH_TO_KEYSTORE_FILE`*: the path to your KeyStore file.
+  - *`PREFIX_OF_THE_KEYSTORE_ENTRY`*: you should create entries in the credential store for `username` and `password` configs using a prefix and specify the prefix here. For example, you can create keystore entries with aliases `sqlserver_username` and `sqlserver_password`. You can then specify the prefix here as `sqlserver_`.
+  - *`KEYSTORE_PASSWORD`*: the KeyStore password. This is optional. If you don’t want to specify the KeyStore password here, then you must use the UUID from your license file as the KeyStore password. Remember to keep your license file somewhere safe in order to keep this password secure.
+
+    {{< /details >}}
 
 ## IV. Set up Extractor Configuration
 
