@@ -10,7 +10,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
 ## I. Set up Replicant Windows Agent
 
-To intsall and set up Replicant Windows Agent, please follow the instructions in [Windows Agent Installation](/docs/references/source-prerequisites/sqlserver/#windows-agent-installation).
+To intsall and set up [Replicant Windows Agent to use as CDC Extractor](#specify-cdc-extractor), please follow the instructions in [Windows Agent Installation](/docs/references/source-prerequisites/sqlserver/#windows-agent-installation).
 
 ## II. Check Permissions
 
@@ -28,6 +28,8 @@ You need to verify that the necessary permissions are in place on source SQL Ser
 
    ```YAML
    type: SQLSERVER
+
+   extractor: {CHANGE|LOG}
 
    host: localhost
    port: 1433
@@ -49,35 +51,54 @@ You need to verify that the necessary permissions are in place on source SQL Ser
    - *`PASSWORD`*: the password associated with *`USERNAME`*
    - *`MAX_NUMBER_OF_CONNECTIONS`*: the maximum number of connections Replicant would use to fetch data from source—for example, `30`
 
-   You can also explicitly specify the authentication protocol used for the connection, and use a KeyStore to securely hold your login credentials:
-   
-    {{< details title="Specify the connection authentication protocol" open=false >}}
-  - To specify an authentication protocol for the connection, set the `auth-type` parameter in the connection cofiguration file to any of the following two values:
-    - `NATIVE` 
-    - `NLTM`
+    ### Specify CDC Extractor
+    For your Source SQL Server, you can choose from two CDC Extractors. You can specify the Extractor to use by setting the `extractor` parameter in the connection configuration file to any of the following values:  
     
-    Default protocol will always be `NATIVE` if you don't explicitly set the `auth-type` parameter.
-  - In case of `NLTM` as `auth-type`, provide the `username` in `DOMAIN\USER` format—for example, `domain\replicant`.
-    {{< /details >}}
+      - `CHANGE`: The default value. With this value set, SQL Server Change Tracking is used for real-time replication. In this case, you don't need to follow the documentation for the SQL CDC Agent.
 
-    {{< details title="Use a KeyStore to hold login credentials" open=false >}}
-  Replicant supports consuming `username` and `password` configurations from a _credentials store_ rather than having users specify them in plain text config file. Instead of specifying username and password as above, you can keep them in a KeyStore and provide its details in the connection configuration file like below:
+        {{< details title="Enable Change Tracking" open="false" >}}
+  To use SQL Server Change Tracking for realtime, all databases and tables must have change tracking enabled:
+  - To enable Change Tracking on a database, execute the following SQL command:
+    ```SQL
+    ALTER DATABASE database_name SET CHANGE_TRACKING = ON  
+    (CHANGE_RETENTION = 2 DAYS, AUTO_CLEANUP = ON)
+    ```
+      Replace *`database_name`* with the name of the database you want Change Tracking enabled on.
 
-  ```YAML
-  credentials-store:
-    type: {PKCS12|JKS|JCEKS}
-      path: PATH_TO_KEYSTORE_FILE
-      key-prefix: PREFIX_OF_THE_KEYSTORE_ENTRY
-      password: KEYSTORE_PASSWORD
-  ```
+  - To enable Change Tracking on table, execute the following SQL command for each table being replicated:
+    ```SQL
+    ALTER TABLE table_name ENABLE CHANGE_TRACKING
+    ```
+      Replace *`table_name`* with the name of the table you want Change Tracking enabled on.
+        {{< /details >}}
+      
+      - `LOG`: Uses the Replicant SQL Server Agent as CDC Extractor. In this case, please follow the [Replicant SQL Server Agent docs](/docs/references/source-prerequisites/sqlserver/#windows-agent-installation).
 
-  Replace the following:
+    ### Specify authentication protocol for connection
+   
+    - To specify an authentication protocol for the connection, set the `auth-type` parameter in the connection cofiguration file to any of the following values:
+      - `NATIVE` 
+      - `NLTM`
+    
+      Default authentication protocol will always be `NATIVE` if you don't explicitly set the `auth-type` parameter.
+    - In case of `NLTM` as `auth-type`, provide the `username` in `DOMAIN\USER` format—for example, `domain\replicant`.
 
-  - *`PATH_TO_KEYSTORE_FILE`*: the path to your KeyStore file.
-  - *`PREFIX_OF_THE_KEYSTORE_ENTRY`*: you should create entries in the credential store for `username` and `password` configs using a prefix and specify the prefix here. For example, you can create keystore entries with aliases `sqlserver_username` and `sqlserver_password`. You can then specify the prefix here as `sqlserver_`.
-  - *`KEYSTORE_PASSWORD`*: the KeyStore password. This is optional. If you don’t want to specify the KeyStore password here, then you must use the UUID from your license file as the KeyStore password. Remember to keep your license file somewhere safe in order to keep this password secure.
+    ### Use KeyStore for credentials
+    Replicant supports consuming login credentials from a _credentials store_ rather than having users specify them in plain text configuration file. Instead of specifying username and password as above, you can keep them in a KeyStore and provide its details in the connection configuration file like below:
 
-    {{< /details >}}
+    ```YAML
+    credentials-store:
+      type: {PKCS12|JKS|JCEKS}
+        path: PATH_TO_KEYSTORE_FILE
+        key-prefix: PREFIX_OF_THE_KEYSTORE_ENTRY
+        password: KEYSTORE_PASSWORD
+    ```
+
+    Replace the following:
+
+    - *`PATH_TO_KEYSTORE_FILE`*: the path to your KeyStore file.
+    - *`PREFIX_OF_THE_KEYSTORE_ENTRY`*: you should create entries in the credential store for `username` and `password` configs using a prefix and specify the prefix here. For example, you can create keystore entries with aliases `sqlserver_username` and `sqlserver_password`. You can then specify the prefix here as `sqlserver_`.
+    - *`KEYSTORE_PASSWORD`*: the KeyStore password. This is optional. If you don’t want to specify the KeyStore password here, then you must use the UUID from your license file as the KeyStore password. Remember to keep your license file somewhere safe in order to keep this password secure.
 
 ## IV. Set up Extractor Configuration
 
