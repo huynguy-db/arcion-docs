@@ -29,7 +29,10 @@ The following configuration parameters are available for snapshot mode:
 
   5. `max-jobs-per-chunk`: The maximum number of jobs in a chunk. 
 
-  6. `split-key`: Replicant uses this configuration to split the table/collection into multiple jobs in order to perform parallel extraction. The specified split key  column must be of numeric or timestamp type. Splitting the work for source data extraction using the key provided here can significantly optimize Replicant if the following coniditions are met:
+  6. `split-key`: Replicant uses this configuration to split the table/collection into multiple jobs in order to perform parallel extraction. The specified split key  column must be of numeric or timestamp type. 
+    {{< hint "info" >}} **Note:** We don't support `split-key`s over macro/procedure queries. Curerntly, we only support splitting jobs over `split-key`s for **tables** and **views**.
+    {{< /hint >}}
+    Splitting the work for source data extraction using the key provided here can significantly optimize Replicant if the following coniditions are met:
 
       * The `split-key` has uniform data distribution in the table (and there is minimal data skew in the values of `split-key`)  .
       * An index is present on `split-key` on the source system.
