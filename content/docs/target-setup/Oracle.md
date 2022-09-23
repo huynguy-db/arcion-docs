@@ -179,5 +179,5 @@ Replicant uses the [external directory feature of Oracle](https://docs.oracle.co
   grant read,write on directory SHARED_STAGE to SYSTEM;
   ```
 
-### Modify the Replicant Extractor configuration file
-In Replicant's Extractor configuration file of Source Oracle, add a new `native-load` section under `snapshot`. This section holds the necessary parameters for Replicant to start using Oracle's native Export utility. For more information, see [Parameters related to snapshot mode](#parameters-related-to-snapshot-mode).
+### Modify the Replicant Applier configuration file
+In Replicant's Applier configuration file of Target Oracle, add a new `native-load` section under `snapshot`. This section holds the necessary parameters for Replicant to start using Oracle's native Import utility. For more information, see [Set up Applier Configuration](#v-set-up-applier-configuration).
