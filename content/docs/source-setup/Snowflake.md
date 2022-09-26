@@ -35,11 +35,11 @@ To create stage table as an intermediate buffer of the CDC process, follow the i
     ```YAML
     type: SNOWFLAKE
 
-    host: replicate_partner.snowflakecomputing.com #Enter your Snowflake host
-    port: 3306  #Replace the 3306 with the port of your host
-    warehouse: "demo_wh" #Snowflake warehouse
+    host: SNOWFLAKE_HOSTNAME
+    port: PORT_NUMBER 
+    warehouse: "WAREHOUSE_NAME" #Snowflake warehouse
 
-    username: "USERNAME" #Username to connect to Snowflake server
+    username: "USERNAME"
     password: "PASSWORD"
 
     max-connections: 20 #Specify the maximum number of connections replicant can open in Snowflake
@@ -48,7 +48,10 @@ To create stage table as an intermediate buffer of the CDC process, follow the i
     ```
 
     Replace the following:
-
+    
+    - *`SNOWFLAKE_HOSTNAME`*: the Snowflake hostname. The hostname is in the format `ACCOUNT_NAME.REGION_ID.snowflakecomputing.com` or `ACCOUNT_NAME.snowflakecomputing.com`—for example, `replicate_partner.snowflakecomputing.com`.
+    - *`PORT_NUMBER`*: the port number of Snowflake host
+    - *`WAREHOUSE_NAME`*: the name of the [Snowflake warehouse](https://docs.snowflake.com/en/sql-reference/ddl-virtual-warehouse.html#warehouse-resource-monitor-ddl)
     - *`USERNAME`*: the username to connect to the Snowflake server
     - *`PASSWORD`*: the password associated with *`USERNAME`*
       
