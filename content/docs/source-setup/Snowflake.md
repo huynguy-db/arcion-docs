@@ -55,7 +55,7 @@ To create stage table as an intermediate buffer of the CDC process, follow the i
     - *`USERNAME`*: the username to connect to the Snowflake server
     - *`PASSWORD`*: the password associated with *`USERNAME`*
       
-    {{< hint "warning" >}} **Important:** Make sure the specified user has `CREATE TABLE` and `CREATE STREAM` privileges on the catalogs/schemas from which tables need to be replicated. {{< /hint >}}
+    {{< hint "warning" >}} **Note:** Make sure the specified user has `CREATE TABLE` and `CREATE STREAM` privileges on the catalogs/schemas from which tables need to be replicated. {{< /hint >}}
 
     ### Additional parameters
     - `credential-store`: Replicant supports consuming `username` and `password` configurations from a _credentials store_ rather than having users specify them in plain text config file. You can use keystores to store your credentials related to your Snowflake server connections.The following parameters are available:
