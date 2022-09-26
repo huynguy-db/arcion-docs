@@ -39,14 +39,20 @@ To create stage table as an intermediate buffer of the CDC process, follow the i
     port: 3306  #Replace the 3306 with the port of your host
     warehouse: "demo_wh" #Snowflake warehouse
 
-    username: "xxx" #Username to connect to Snowflake server
-    password: "xxxx"
+    username: "USERNAME" #Username to connect to Snowflake server
+    password: "PASSWORD"
 
     max-connections: 20 #Specify the maximum number of connections replicant can open in Snowflake
     max-retries: 10
     retry-wait-duration-ms: 1000
     ```
-    - Make sure the specified user has `CREATE TABLE` and `CREATE STREAM` privileges on the catalogs/schemas from which tables need to be replicated.
+
+    Replace the following:
+
+    - *`USERNAME`*: the username to connect to the Snowflake server
+    - *`PASSWORD`*: the password associated with *`USERNAME`*
+      
+    {{< hint "warning" >}} **Important:** Make sure the specified user has `CREATE TABLE` and `CREATE STREAM` privileges on the catalogs/schemas from which tables need to be replicated. {{< /hint >}}
 
     ### Additional parameters
     - `credential-store`: Replicant supports consuming `username` and `password` configurations from a _credentials store_ rather than having users specify them in plain text config file. You can use keystores to store your credentials related to your Snowflake server connections.The following parameters are available:
@@ -67,6 +73,94 @@ To create stage table as an intermediate buffer of the CDC process, follow the i
     -`secret-key`*[v21.06.14.1]*: This config is valid for both `S3` and `AZURE` types. For example, Secret Access Key for AWS account hosting s3 or ADLS account.
     - `token`*[v21.06.14.1]*:  This config is valid for `AZURE` type only. Indicates the SAS token for Azure storage.
 
+    ### Use RSA key pair for authentication
+    You can also choose to use [Snowflake's key pair authentication support](https://docs.snowflake.com/en/user-guide/key-pair-auth.html) for enhanced authentication security instead of using basic authentication via username and password. In that case, you just need to provide username and RSA private key along with a passphrase to connect to Snowflake server. 
+    
+    To set up key pair authentication using RSA keys, follow the steps below:
+
+    #### Generate the private key
+    From your command line, execute the following command to generate an encrypted private key:
+
+    ```sh
+    openssl genrsa 2048 | openssl pkcs8 -topk8 -inform PEM -v1 PBE-SHA1-RC4-128 -out rsa_key.p8
+    ```
+    The command generates a private key in PEM format:
+
+    ```
+    -----BEGIN ENCRYPTED PRIVATE KEY-----
+    MIIFHDBOBgkqhkiG9w0BBQ0wQTApBgkqhkiG9w0BBQwwHAQIK0h8dqI1n5sCAggA
+    MAwGCCqGSIb3DQIJBQAwFAYIKoZIhvcNAwcECNDwqMf6Xx1pBIIEyNmf044S+pEQ
+    ...
+    -----END ENCRYPTED PRIVATE KEY-----
+    ```
+    {{< hint "info" >}}
+  **Important:** The command above to generate an encrypted key prompts for a passphrase to grant access to the key. We recommend using a passphrase that complies with PCI DSS standards to protect the generated private key. Additionally, we recommend storing the passphrase in a secure location. When using an encrypted key to connect to Snowflake, you will need to input the passphrase during the initial connection. The use of the passphrase is only for protecting the private key; it's never to sent to Snowflake servers.
+
+  To generate a long and complex passphrase based on PCI DSS standards, follow the steps below:
+
+  - Go to the [PCI Security Standards Document Library](https://www.pcisecuritystandards.org/document_library).
+  - For **PCI DSS**, select the most recent version and your desired language.
+  - Complete the form to access the document.
+  - Search for `Passwords/passphrases must meet the following:` and follow the recommendations for password/passphrase requirements, testing, and guidance.
+    {{< /hint >}}
+
+    #### Generate a public key
+    From the command line, generate the public key by referencing the private key. The following command references the private key contained in a file named `rsa_key.p8` created in the [previous step](#generate-the-private-key):
+
+    ```sh
+    openssl rsa -in rsa_key.p8 -pubout -out rsa_key.pub
+    ```
+    The command generates a public key in PEM format:
+
+    ```
+    -----BEGIN PUBLIC KEY-----
+    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAslwTa+Lj5SMI58GiDzWq
+    0rwj4FBymfKzHT16RXecnMcx7uI6KsVpqfh9HH0FMb/3C6YEMeGPkaRmKvXYjM5s
+    ...
+    -----END PUBLIC KEY-----
+    ```
+
+    #### Store the Private and Public Keys Securely
+
+    After following the above steps, you should find the private and public key files saved in a local directory of your system. Note down the path to those files. The private key is stored using the PKCS#8 (Public Key Cryptography Standards) format and is encrypted using the passphrase you specified in the [first step](#generate-the-private-key).
+
+    However, maintain caution in protecting the file from unauthorized access using the file permission mechanism provided by your operating system. It's your responsibility to secure the file when it's not being used.
+
+    #### Assign the public key to a Snowflake user
+    Execute the following command to assign the public key to a Snowflake user.
+
+    ```sql
+    alter user jsmith set rsa_public_key='MIIBIjANBgkqh...';
+    ```
+
+    {{< hint "info" >}}
+  - Only security administrators (i.e. users with the SECURITYADMIN role) or higher can alter a user.
+  - Exclude the public key delimiters in the SQL statement.
+    {{< /hint >}}
+
+
+    #### Verify the user's public key fingerprint
+    Execute the following command to verify the user’s public key:
+
+    ```sql
+    DESC USER jsmith;
+    ```
+    The command output is similar to the following:
+
+    ```
+    +---------------------+-----------------------------------------------------+---------+----------------------------------------------+
+    | property            | value                                               | default | description                                  |
+    +---------------------+-----------------------------------------------------+---------+----------------------------------------------+
+    | NAME                | JSMITH                                              | null    | Name                                         |
+    ...
+    ...
+    | RSA_PUBLIC_KEY      | MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAslwT... | null    | RSA public key of the user                   |
+    | RSA_PUBLIC_KEY_FP   | SHA256:nvnONUsfiuycCLMXIEWG4eTp4FjhVUZQUQbNpbSHXiA= | null    | Fingerprint of user's RSA public key.        |
+    | RSA_PUBLIC_KEY_2    | null                                                | null    | Second RSA public key of the user            |
+    | RSA_PUBLIC_KEY_2_FP | null                                                | null    | Fingerprint of user's second RSA public key. |
+    ...
+    +---------------------+-----------------------------------------------------+---------+----------------------------------------------+
+    ```
 
 ## IV. Set up Extractor Configuration
 
