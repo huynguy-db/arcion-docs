@@ -30,14 +30,20 @@ To create stage table as an intermediate buffer of the CDC process, follow the i
     - Parameters related to stage configuration.
 
     ### Parameters related to target Snowflake server connection
-    For connecting to your source Snowflake server, you can configure the following parameters:
+    For connecting to target Snowflake server, you can choose between two methods for an authenticated connection: 
+    - RSA key pair authentication
+    - Basic username and password authentication
+
+    For connecting to Snowflake via RSA key pair authentication, see [Use RSA key pair for authentication](#use-rsa-key-pair-for-authentication).
+
+    For connecting to Snowflake via basic username and password authentication, see the sample below:
 
     ```YAML
     type: SNOWFLAKE
 
     host: SNOWFLAKE_HOSTNAME
     port: PORT_NUMBER 
-    warehouse: "WAREHOUSE_NAME" #Snowflake warehouse
+    warehouse: "WAREHOUSE_NAME"
 
     username: "USERNAME"
     password: "PASSWORD"
@@ -164,6 +170,21 @@ To create stage table as an intermediate buffer of the CDC process, follow the i
     ...
     +---------------------+-----------------------------------------------------+---------+----------------------------------------------+
     ```
+
+    #### Edit the connection configuration file
+    You need to modify [Replicant's connection configuration file for Snowflake](#parameters-related-to-target-snowflake-server-connection) and include RSA key information there. Specifically, add the following parameters to the connection configuration file:
+
+    ```YAML
+    private-key-path: "/PATH_TO_GENERATED_KEY/rsa_key.p8"
+    private-key-passphrase: "PRIVATE_KEY_PASSPHRASE"
+    ```
+
+    Replace the following:
+
+    - *`PATH_TO_GENERATED_KEY`*: the local directory path to the `rsa_key.p8` keyfile
+    - *`PRIVATE_KEY_PASSPHRASE`*: the private key passphrase you specified in the [first step](#generate-the-private-key)
+
+    {{< hint "info" >}} If you specify the `private-key-path` and `private-key-passphrase` parameters, you don't need to specify the `password` parameter in the connection configuration file.
 
 ## IV. Set up Extractor Configuration
 

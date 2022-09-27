@@ -19,14 +19,18 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     - Parameters related to stage configuration.
 
     ### Parameters related to target Snowflake server connection
-    For connecting to your target Snowflake server, you can configure the following parameters:
+    For connecting to target Snowflake server, you can choose between two methods for an authenticated connection: 
+    - [RSA key pair authentication](#use-rsa-key-pair-for-authentication)
+    - Basic username and password authentication
+
+    For connecting to Snowflake via basic username and password authentication, see the sample below:
 
     ```YAML
     type: SNOWFLAKE
 
     host: SNOWFLAKE_HOSTNAME
     port: PORT_NUMBER 
-    warehouse: "WAREHOUSE_NAME" #Snowflake warehouse
+    warehouse: "WAREHOUSE_NAME"
 
     username: "USERNAME"
     password: "PASSWORD"
@@ -158,6 +162,21 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     +---------------------+-----------------------------------------------------+---------+----------------------------------------------+
     ```
 
+    #### Edit the connection configuration file
+    You need to modify [Replicant's connection configuration file for Snowflake](#parameters-related-to-target-snowflake-server-connection) and include RSA key information there. Specifically, add the following parameters to the connection configuration file:
+
+    ```YAML
+    private-key-path: "/PATH_TO_GENERATED_KEY/rsa_key.p8"
+    private-key-passphrase: "PRIVATE_KEY_PASSPHRASE"
+    ```
+
+    Replace the following:
+
+    - *`PATH_TO_GENERATED_KEY`*: the local directory path to the `rsa_key.p8` keyfile
+    - *`PRIVATE_KEY_PASSPHRASE`*: the private key passphrase you specified in the [first step](#generate-the-private-key)
+
+    {{< hint "info" >}}**Note**: If you specify the `private-key-path` and `private-key-passphrase` parameters, you don't need to specify the `password` parameter in the connection configuration file. {{< /hint >}}
+
 ## II. Set up Applier Configuration
 
 1. From `$REPLICANT_HOME`, naviagte to the sample Snowflake applier configuration file:
@@ -197,7 +216,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
       retry-wait-duration-ms: 5000 #Specify the time in milliseconds Replicant should wait before re-trying a failed operation
       cdc-stage-type: FILE #Enter your cdc-stage-type
     ```
-    ### Enabling Type-2 CDC
+    ### Use Type-2 CDC
     From version 22.07.19.3 onwards, Arcion supports Type-2 CDC for Snowflake as the Target. Type-2 CDC enables a Target to have a history of all transactions performed in the Source. For example:
 
     - An INSERT in the Source is an INSERT in the Target.
