@@ -74,7 +74,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     - `token`*[v21.06.14.1]*:  This config is valid for `AZURE` type only. Indicates the SAS token for Azure storage.
 
     ### Use RSA key pair for authentication
-    You can also choose to use [Snowflake's key pair authentication support](https://docs.snowflake.com/en/user-guide/key-pair-auth.html) for enhanced authentication security instead of using basic authentication via username and password. In that case, you just need to provide username and RSA private key along with a passphrase to connect to Snowflake server. 
+    You can also choose to use [Snowflake's key pair authentication support](https://docs.snowflake.com/en/user-guide/key-pair-auth.html) for enhanced authentication security instead of using basic authentication via username and password. 
     
     To set up key pair authentication using RSA keys, follow the steps below:
 
