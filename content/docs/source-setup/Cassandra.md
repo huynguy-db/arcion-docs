@@ -148,9 +148,7 @@ For real-time replication, you must create a heartbeat table in the source Casan
 
 1. Create a heartbeat table in the catalog you are going to replicate with the following DDL:
    ```SQL
-   CREATE TABLE "<user_keyspace>"."replicate_io_cdc_heartbeat"(
-     "timestamp" BIGINT NOT NULL,
-     PRIMARY KEY("timestamp"));
+   CREATE TABLE "<user_keyspace>"."replicate_io_cdc_heartbeat"("timestamp" BIGINT, PRIMARY KEY("timestamp"));
    ```
 
 2. Grant ```INSERT```, ```UPDATE```, and ```DELETE``` privileges to the user configured for replication.
