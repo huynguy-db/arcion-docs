@@ -4,7 +4,7 @@ weight: 15
 bookHidden: false
 ---
 
-# Source SAP ASE
+# Source SAP ASE (Sybase ASE)
 
 {{< hint "info" >}} **Note:** Currently, Arcion Replicant supports SAP ASE for snapshot mode only.{{< /hint >}}
 
@@ -37,11 +37,13 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
     Replace the following:
 
-    - *`HOSTNAME`*: hostname of the SAP ASE server.
-    - *`PORT_NUMBER`*: port number of the SAP ASE server.
-    - *`DATABASE`*: the name of the SAP ASE database to connect to.
-    - *`USERNAME`*: the username of the *`DATABASE`* user.
-    - *`PASSWORD`*: the password associated with *`USERNAME`*.
+    - *`HOSTNAME`*: hostname of the SAP ASE server
+    - *`PORT_NUMBER`*: port number of the SAP ASE server
+    - *`DATABASE`*: the name of the SAP ASE database to connect to
+    - *`USERNAME`*: the username of the *`DATABASE`* user
+    - *`PASSWORD`*: the password associated with *`USERNAME`*
+
+    {{< hint "info" >}} If you want to use [the `bcp` utility](https://help.sap.com/docs/SAP_ASE/da6c1d172bef4597a78dc5e81a9bb947/a80af36ebc2b1014adabde105795cc5b.html?version=16.0.3.8) for extracting data from your Source ASE, you'll need specify some additional parameters in the connection configuration file. For more information, see [Use `bcp` Utility for Extraction](#use-bcp-utility-for-extraction). {{< /hint >}}
 
 ## II. Set up Extractor Configuration
 
@@ -51,7 +53,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     vi conf/src/sybasease.yaml
     ```
 
-2. Currently, Arcion only supports snapshot mode for SAP ASE as Source. So make the necessary changes as follows in the `snapshot` section of the configuration file:
+2. Currently, Arcion only supports snapshot mode for SAP ASE as Source. Below is a sample configuration:
 
     ```YAML
     snapshot:
@@ -60,6 +62,8 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
       min-job-size-rows: 1_000_000
       max-jobs-per-chunk: 32
+
+      extraction-method: {BCP|QUERY}
 
       per-table-config:
         - schema: tpch
@@ -70,8 +74,49 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
               split-key: s_suppkey
             orders:
               split-key: o_orderkey
-            nation:
+              nation:
               split-key: n_regionkey
     ```
 
+    The `extraction-method` parameter specifies what extraction method to use to extract data from Source ASE. You can set it to any of the following two values:
+    
+    - `BCP`: With this Replicant will use [ASE's `bcp` utility](https://help.sap.com/docs/SAP_ASE/da6c1d172bef4597a78dc5e81a9bb947/a80af36ebc2b1014adabde105795cc5b.html?version=16.0.3.8) to extract data. For more information, see [Use `bcp` Utility for Extraction](#use-bcp-utility-for-extraction).
+    - `QUERY`: Replicant will use JDBC connection to extract the data.
+
+    *Default: By default, Replicant will use the `QUERY` method for extraction.*
+
+    {{< hint "warning" >}} **Important:** When using `BCP` as the extraction method with filters, or `split-key` in Extractor configuration, make sure that the Replicant user has access privilege to create views in data schema. {{< /hint >}}
+
 For a detailed explanation of configuration parameters in the Extractor file, read [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference").
+
+## Use `bcp` Utility for Extraction
+
+You can configure Replicant to use the `bcp` (bulk copy program) utility for extracting data from your Source ASE. To do so, follow the steps below:
+
+### Specify connection details
+In your [SAP ASE connection configuration file](#i-set-up-connection-configuration), specify the `bcp` connection details under a new field `bcp-connection`:
+
+```YAML
+bcp-connection:
+  host: HOSTNAME
+  port: PORT_NUMBER
+  username: 'USERNAME'
+  password: 'PASSWORD'
+  sybase-dir: 'SYBASE_SETUP_DIRECTORY'
+  ocs-dir-name: 'OCS_DIRECTORY_NAME'
+```
+
+Replace the following:
+
+- *`HOSTNAME`*: hostname of the SAP ASE server
+- *`PORT_NUMBER`*: port number of the SAP ASE server
+- *`USERNAME`*: the username of the ASE database user
+- *`PASSWORD`*: the password associated with *`USERNAME`*
+- *`SYBASE_SETUP_DIRECTORY`*: the absolute path for Sybase setup directory on Replicant machine
+- *`OCS_DIRECTORY_NAME`*: the OCS directory name that is inside your Sybase setup directory
+
+### Specify the extraction method in Extractor configuration file
+In your [SAP ASE Extractor configuration file](#ii-set-up-extractor-configuration), set the value of `extraction-method` to `BCP`. This tells Replicant to use [ASE's `bcp` utility](https://help.sap.com/docs/SAP_ASE/da6c1d172bef4597a78dc5e81a9bb947/a80af36ebc2b1014adabde105795cc5b.html?version=16.0.3.8) for extraction.
+
+{{< hint "warning" >}} **Important:** When using `BCP` as the extraction method with filters, or `split-key` in Extractor configuration, make sure that the Replicant user has access privilege to create views in data schema. {{< /hint >}}
+
