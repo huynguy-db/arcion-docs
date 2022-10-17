@@ -117,7 +117,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
       - *`COLUMN_NAME`*: column name.
       - *`CONDITION`*: the condition that must be satisfied in order for the specified columns to undergo replication.
 
-3. Using the same format, specify the database, collections, or documents that will be part of real-time replication under the `global-filter` section. For example:
+3. Using the same format, specify the database, collections, or documents under the `global-filter` section for carrying out distributed replication across multiple nodes. Global filter is the sum total of all tables, including the Local filters of `snapshot` . For example:
 
     ```YAML
     global-filter:
@@ -138,7 +138,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
           usertable:
     ```
 
-For a detailed explanation of configuration parameters in the Filter file, see [Filter Reference]({{< ref "/docs/references/filter-reference" >}} "Filter Reference")
+For a detailed explanation of configuration parameters in the Filter file, see [Filter Reference]({{< ref "/docs/references/filter-reference" >}} "Filter Reference").
 
 ## III. Set up Extractor Configuration
 
