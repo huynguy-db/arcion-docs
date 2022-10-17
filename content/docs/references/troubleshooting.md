@@ -112,11 +112,11 @@ In this section, you'll go through two examples of troubleshooting an issue wher
 
 - Look for the first `ERROR` and `Caused by` in the `trace.log` file.
 
-  ```
-  2022-09-15 06:13:46.940 DEBUG [main] t.r.ReplicationManager: Initializing...
+  
+  <pre tabindex="0"><code>2022-09-15 06:13:46.940 DEBUG [main] t.r.ReplicationManager: Initializing...
   2022-09-15 06:13:50.116 DEBUG [pool-5-thread-1] t.r.d.c.CassandraDatabase: SRC CASSANDRA: active  connections: 0
-  2022-09-15 06:13:51.059 ERROR [main] t.r.Main: Replication error
-  tech.replicant.ReplicationException: java.lang.NullPointerException
+  <mark  style="background-color: #f7d9db; display:">2022-09-15 06:13:51.059 ERROR [main] t.r.Main: Replication error
+  tech.replicant.ReplicationException: java.lang.NullPointerException</mark>
           at tech.replicant.db.DBReplicationManager.a(SourceFile:3228)
           at tech.replicant.Main.main(SourceFile:50550)
   Caused by: java.lang.NullPointerException: null
@@ -129,8 +129,7 @@ In this section, you'll go through two examples of troubleshooting an issue wher
           at tech.replicant.db.DBReplicationManager.a(SourceFile:1546)
           at tech.replicant.db.DBReplicationManager.a(SourceFile:2094)
           at tech.replicant.db.DBReplicationManager.a(SourceFile:3175)
-          ... 1 common frames omitted
-  ```
+          ... 1 common frames omitted</code></pre>
 
 - Decide whether the issue is easier to fix by yourself, or you need to contact the [Arcion Support Team](https://support.arcion.io). 
   - In this case, the first `ERROR` shows the following exception: 
@@ -163,10 +162,9 @@ In this section, you'll go through two examples of troubleshooting an issue wher
 - Since the command to run Replicant didn't include the `--id` argument, the `trace.log` file will be in the default location `$REPLICANT_HOME/data/default`. 
 
 - Look for the first `ERROR` and `Caused by` in the `trace.log` file.
-
-  ```
-  2022-09-17 01:28:53.827 DEBUG [main] t.r.ReplicationManager: Initializing...
-  2022-09-17 01:28:53.987 ERROR [main] t.r.Main: Replication error
+  
+  <pre tabindex="0"><code>2022-09-17 01:28:53.827 DEBUG [main] t.r.ReplicationManager: Initializing...
+  <mark  style="background-color: #f7d9db; display:">2022-09-17 01:28:53.987 ERROR [main] t.r.Main: Replication error</mark>
   tech.replicant.Main$NonResumableException: REPLICANT.replicate_io_cdc_heartbeat: Table does not exist on source. Please create table using command: CREATE TABLE "REPLICANT"."replicate_io_cdc_heartbeat"("timestamp" NUMBER NOT NULL, PRIMARY KEY("timestamp"))
           at tech.replicant.db.DBReplicationManager.a(SourceFile:1636)
           at tech.replicant.db.DBReplicationManager.a(SourceFile:1301)
@@ -174,8 +172,7 @@ In this section, you'll go through two examples of troubleshooting an issue wher
           at tech.replicant.db.DBReplicationManager.a(SourceFile:2054)
           at tech.replicant.db.DBReplicationManager.a(SourceFile:3114)
           at tech.replicant.Main.main(SourceFile:50550)
-  2022-09-17 01:28:53.988 DEBUG [Thread-3] t.r.n.NotificationManager: Shutting down Notification Manager.
-  ```
+  2022-09-17 01:28:53.988 DEBUG [Thread-3] t.r.n.NotificationManager: Shutting down Notification Manager.</code></pre>
 
 - Decide whether the issue is easier to fix by yourself, or you need to contact the [Arcion Support Team](support.arcion.io). 
   - In this case, it's apparent from the first `ERROR` messsage that the issue is related to the heartbeat table:
