@@ -16,7 +16,7 @@ For enabling CDC-based replication from the source Informix server, please follo
 
 For setting up logical log configuration, follow the instructions in [Logical Log Configuration Guidelines](/docs/references/source-prerequisites/informix/#logical-log-configuration-guidelines).
 
-## II. Create the Heartbeat Table
+## III. Create the Heartbeat Table
 
 For CDC replication, you must create the heartbeat table on the source database with the following DDL:
 
@@ -27,7 +27,7 @@ CREATE TABLE tpch:tpch.replicate_io_cdc_heartbeat(timestamp INT8 NOT NULL, PRIMA
 LOCK MODE ROW
 ```
 
-## III. Set up Connection Configuration
+## IV. Set up Connection Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the sample connection configuration file:
 
@@ -63,7 +63,7 @@ LOCK MODE ROW
 
     - You can use SSL to connect to the Informix server using the configuration parameters shown above. To konw about Informix server side SSL setup, see [Configuring Informix server instance for SSL connections](https://www.ibm.com/docs/en/informix-servers/14.10?topic=protocol-configuring-server-instance-secure-sockets-layer-connections) on IBM Informix Documentation.
 
-## IV. Set up Extractor Configuration
+## V. Set up Extractor Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the Extractor configuration file:
    ```BASH
@@ -143,6 +143,17 @@ LOCK MODE ROW
         schema: tpch
         interval-ms: 10000
     ```
+
+    {{< hint "info" >}}
+
+  With Informix as Source, you have the option to use the Source Column Transformation feature of Replicant for the following pipelines:
+  
+  - Informix to PostgreSQL
+  - Informix to Kafka
+  
+  For more information, see [Source Column Transformation](/docs/references/source-column-transformation).
+  
+    {{< /hint >}}
 
     #### Example of creating a checkpoint and resuming replication
     Let's assume you used the following command to start the replication, with your `realtime` configuration same as above:

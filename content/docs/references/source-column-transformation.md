@@ -9,7 +9,15 @@ From version 22.07.19.3 onwards, Replicant allows you to transform the data of s
 
 Source Column Transformation solves several business cases for data migration, while making it possible to build new features like data encryption and obfuscation.
 
-{{< hint "info" >}}Currently, Source Column Transformation is only supported for **MySQL->Databricks** pipeline.{{< /hint >}}
+{{< hint "info" >}}
+
+Currently, Source Column Transformation is only supported for the following pipelines:
+
+- MySQL to Databricks
+- Informix to PostgreSQL
+- Informix to Kafka
+  
+{{< /hint >}}
 
 ## Transformation Configuration File
 
