@@ -59,6 +59,8 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
       txn-size-rows: 1_000_000
       skip-tables-on-failures: false
 
+      map-bit-to-boolean: false
+
       bulk-load:
         enable: true
         type: FILE # FILE or PIPE
@@ -66,6 +68,13 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
       _traceDBTasks: true
       use-quoted-identifiers: true
     ```
+    
+      - `map-bit-to-boolean`: Tells Replicant whether to map `bit(1)` and `varbit(1)` data types from Source to `boolean` on Target:
+
+        - `true`: map `bit(1)`/`varbit(1)` data types from Source to `boolean` on Target Yugabyte
+        - `false`: map `bit(1)`/`varbit(1)` data types from Source to `bit(1)`/`varbit(1)` on Target Yugabyte
+
+        *Default: `false`.*
 
     ### Parameters related to realtime mode
     If you want to operate in realtime mode, you can use the `realtime` section to specify your configuration. For example:

@@ -49,23 +49,32 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
 ## II. Set up Applier Configuration
 
-1. From `$REPLICANT_HOME`, naviagte to the sample YugabyteSQL applier configuration file:
+1. From `$REPLICANT_HOME`, naviagte to the sample YugabyteSQL Applier configuration file:
     ```BASH
     vi conf/dst/yugabytecql.yaml
     ```
-2. Make the necessary changes as follows:
+2. The file contains the following sample snapshot configuration:
+
     ```YAML
     snapshot:
-      threads: 16 #Specify the maximum number of threads Replicant should use for writing to the target
+      threads: 16
 
-      #If bulk-load is used, Replicant will use the native bulk-loading capabilities of the target database
+      map-bit-to-boolean: true
+
       bulk-load:
-        enable: true|false #Set to true if you want to enable bulk loading
-        type: FILE|PIPE #Specify the type of bulk loading between FILE and PIPE
-        serialize: true|false #Set to true if you want the generated files to be applied in serial/parallel fashion
+        enable: true
+        type: FILE #FILE or PIPE
+        serialize: true
 
         #For versions 20.09.14.3 and beyond
         native-load-configs: #Specify the user-provided LOAD configuration string which will be appended to the s3 specific LOAD SQL command
     ```
 
-For a detailed explanation of configuration parameters in the applier file, read [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference").
+      - `map-bit-to-boolean`: Tells Replicant whether to map `bit(1)` and `varbit(1)` data types from Source to `boolean` on Target:
+
+        - `true`: map `bit(1)`/`varbit(1)` data types from Source to `boolean` on Target Yugabyte
+        - `false`: map `bit(1)`/`varbit(1)` data types from Source to `bit(1)`/`varbit(1)` on Target Yugabyte
+
+        *Default: `true`.*
+
+For a detailed explanation of configuration parameters in the Applier file, see [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference").
