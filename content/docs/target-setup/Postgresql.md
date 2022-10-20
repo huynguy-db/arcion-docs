@@ -71,8 +71,8 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     
       - `map-bit-to-boolean`: Tells Replicant whether to map `bit(1)` and `varbit(1)` data types from Source to `boolean` on Target:
 
-        - `true`: map `bit(1)`/`varbit(1)` data types from Source to `boolean` on Target Yugabyte
-        - `false`: map `bit(1)`/`varbit(1)` data types from Source to `bit(1)`/`varbit(1)` on Target Yugabyte
+        - `true`: map `bit(1)`/`varbit(1)` data types from Source to `boolean` on Target PostgreSQL
+        - `false`: map `bit(1)`/`varbit(1)` data types from Source to `bit(1)`/`varbit(1)` on Target PostgreSQL
 
         *Default: `false`.*
 
