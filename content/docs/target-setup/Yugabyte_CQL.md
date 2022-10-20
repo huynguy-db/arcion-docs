@@ -59,8 +59,6 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     snapshot:
       threads: 16
 
-      map-bit-to-boolean: true
-
       bulk-load:
         enable: true
         type: FILE #FILE or PIPE
@@ -69,12 +67,5 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
         #For versions 20.09.14.3 and beyond
         native-load-configs: #Specify the user-provided LOAD configuration string which will be appended to the s3 specific LOAD SQL command
     ```
-
-      - `map-bit-to-boolean`: Tells Replicant whether to map `bit(1)` and `varbit(1)` data types from Source to `boolean` on Target:
-
-        - `true`: map `bit(1)`/`varbit(1)` data types from Source to `boolean` on Target Yugabyte
-        - `false`: map `bit(1)`/`varbit(1)` data types from Source to `bit(1)`/`varbit(1)` on Target Yugabyte
-
-        *Default: `true`.*
 
 For a detailed explanation of configuration parameters in the Applier file, see [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference").
