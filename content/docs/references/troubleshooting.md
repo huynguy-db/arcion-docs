@@ -15,14 +15,12 @@ In the steps below, `$REPLICANT_HOME` represents the location of the `replicant-
 
 ## Locate the log files
 
-{{< hint "info" >}} 
-**Note:** There are two log files that can help you troubleshoot an issue:
+There are two log files that can help you troubleshoot an issue:
 
 - `trace.log`
 - `error-trace.log`
 
-The `error-trace.log` file only stores `ERROR` messages which may help you identify errors faster. But in most cases, the information in `error-trace.log` won't be enough to determine the root cause of your problem. So we recommend that you rely on the `trace.log` file instead for most of your troubleshooting. In our examples, we'll be using the `trace.log` file only to define and troubleshoot the issue in steps.
-{{< /hint >}}
+The `error-trace.log` file only stores `ERROR` messages which may help you identify errors faster. But in most cases, the information in `error-trace.log` won't be enough to determine the root cause of your problem. So we recommend that you rely on the `trace.log` file instead for most of your troubleshooting. In our examples, we'll only be using the `trace.log` file to define and troubleshoot the issue in steps.
 
 ### Location
 {{< tabs "trace-log-location" >}}
@@ -85,7 +83,7 @@ grep -iE 'error|caused by|failed|exception|warn' trace.log
 
 ### Examples
 
-In this section, you'll go through two examples of troubleshooting an issue where using the `trace.log` file, you'll define the issue and decide on a solution.
+In this section, you'll go through two examples of troubleshooting. You'll use the `trace.log` file to define the issue and then decide on a solution.
 
 ### First example
 
