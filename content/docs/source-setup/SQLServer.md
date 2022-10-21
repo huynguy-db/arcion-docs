@@ -51,6 +51,15 @@ You need to verify that the necessary permissions are in place on source SQL Ser
    - *`PASSWORD`*: the password associated with *`USERNAME`*
    - *`MAX_NUMBER_OF_CONNECTIONS`*: the maximum number of connections Replicant would use to fetch data from source—for example, `30`
 
+    {{< hint "warning" >}}
+  
+  If you're hosting SQL Server on Azure, you must set the following parameter to `true` in the connection configuration file:
+
+  ```YAML
+  is_azure: true
+  ```
+    {{< /hint >}}
+
     ### Specify CDC Extractor
     For your Source SQL Server, you can choose from two CDC Extractors. You can specify the Extractor to use by setting the `extractor` parameter in the connection configuration file to any of the following values:  
     
