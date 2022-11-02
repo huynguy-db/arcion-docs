@@ -1,5 +1,7 @@
 ---
+pageTitle: Using Mapper file to map Source data
 title: Mapper Configuration
+description: "You can control the structure of Source data as it gets replicated to Target. Learn to map Source data using Mapper file rules."
 weight: 4
 ---
 

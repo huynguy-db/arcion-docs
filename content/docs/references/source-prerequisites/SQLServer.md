@@ -1,10 +1,12 @@
 ---
+pageTitle: Using SQL Server as Source with SQL Server Agent
 title: Microsoft SQL Server
+description: "Learn how to set up Replicant SQL Server Agent for your Source SQL Server and enable CDC replication."
 weight: 3
 bookHidden: false 
 ---
 
-This page describes the requirements for using Microsoft SQL Server as the Source.
+If you set [the `extractor` parameter to `LOG` for your Source SQL Server](/docs/source-setup/sqlserver/#specify-cdc-extractor), Replicant uses the SQL Server Agent as CDC Extractor. This page describes how to install and configure Replicant SQL Server agent.
 
 # Replicant SQL Server Agent Installation
 

@@ -1,5 +1,7 @@
 ---
+pageTitle: PostgreSQL Source Connector Documentation
 title: PostgreSQL
+descriptoin: "Learn how to replicate data from Source PostgreSQL with Arcion PostgreSQL connector. Use Filters to have more control over your priorities."
 weight: 3
 bookHidden: false
 ---

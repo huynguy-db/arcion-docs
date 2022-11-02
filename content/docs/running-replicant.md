@@ -1,5 +1,7 @@
 ---
+pageTitle: Using the Arcion Replicant CLI 
 title: Running Replicant
+description: "Explore the Arcion Replicant CLI, its different modes, and replication options. Learn how to fetch or infer schemas, how to encrypt Replicant, and more."
 weight: 3
 ---
 # Running Replicant

@@ -1,5 +1,7 @@
 ---
+pageTitle: Documentation for Db2 Source on i Series AS/400
 title: Native i Series AS/400
+description: "Learn how Arcion offers realtime, distributed, CDC-based replication on Db2 i Series AS/400 platform."
 weight: 2
 bookHidden: false
 ---

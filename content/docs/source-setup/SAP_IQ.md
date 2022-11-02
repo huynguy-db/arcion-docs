@@ -1,5 +1,7 @@
 ---
+pageTitle: SAP IQ Source Connector Documentation
 title: SAP IQ
+descriptoin: "Get up to speed with SAP IQ's big data analytics on the Arcion platform."
 weight: 14
 bookHidden: false
 ---

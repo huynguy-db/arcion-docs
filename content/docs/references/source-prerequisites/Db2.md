@@ -1,10 +1,12 @@
 ---
+pageTitle: Requirements for using IBM Db2 as Source with MQ
 title: IBM Db2 MQ
+description: "Learn about the necessary permissions and how to enable CDC replication for Db2 Source by installing and configuring MQ."
 weight: 1
 bookHidden: false 
 ---
 
-This page describes the requirements for using IBM Db2 MQ as source.
+This page describes the requirements for using IBM Db2 MQ as Source and how to set up CDC-based replication.
 
 ## Permissions
 1. The user should have read access on all the databases, schemas and tables to be replicated.

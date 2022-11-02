@@ -1,5 +1,7 @@
 ---
+pageTitle: Snowflake Source connector
 title: Snowflake
+description: "Get more out of Snowflake Data Cloud with Arcion. Use RSA key pair authentication, configure stage and Extractor, and enjoy fast, real-time replication."
 weight: 10
 bookHidden: false
 ---

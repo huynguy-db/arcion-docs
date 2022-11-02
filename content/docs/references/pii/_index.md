@@ -1,6 +1,8 @@
 ---
 bookCollapseSection: true
+pageTitle: Protecting Personally Identifiable Information
 title: "Protecting Personally Identifiable Information (PII)"
+description: "Arcion hashes Personally Identifiable Information to prevent sensitive information leaks. Additionally, Arcion can encrypt columns with user-supplied keys."
 weight: 10
 bookHidden: false
 ---

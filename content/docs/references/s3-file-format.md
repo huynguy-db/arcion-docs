@@ -1,9 +1,11 @@
 ---
-title: S3 File Format
+pageTitle: File format for Amazon S3 as Target 
+title: Amazon S3 File Format
+description: "When loading data into Amazon S3, Replicant converts Source data into either CSV or JSON. Learn about the data formats of those files on this page."
 weight: 10
 ---
 
-# S3 File Format
+# Amazon S3 File Format
 
 When loading data into S3 Replicant first converts the data extracted from the source database into either a CSV or JSON file. Both types of files are structured in accordance to the data being replicated. Sample file formats for both CSV and JSON files are explained below.
 

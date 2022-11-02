@@ -1,5 +1,7 @@
 ---
+pageTitle: Google BigQuery Source Connector
 title: Google BigQuery
+description: "Mobilize data from your BigQuery warehouse to other platforms of your choice using Arcion BigQuery connector."
 weight: 13
 bookHidden: false
 ---
@@ -52,7 +54,7 @@ Replicant requires the JDBC driver for Google BigQuery as a dependency. To obtai
     ```BASH
     vi conf/src/bigquery.yaml
     ```
-2. Currently, Arcion only supports snapshot mode for BigQuery as source. So make the necessary changes as follows in the `snapshot` section of the configuration file:
+2. Currently, Arcion only supports snapshot mode for BigQuery as Source. So make the necessary changes as follows in the `snapshot` section of the configuration file:
 
     ```YAML
     snapshot:

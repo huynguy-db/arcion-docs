@@ -1,5 +1,7 @@
 ---
+pageTitle: MariaDB Source Connector Documentation
 title: MariaDB
+descriptoin: "Get detailed guide on how to set up MariaDB as data Source on Arcion platform for your data pipelines."
 weight: 5
 bookHidden: false
 ---

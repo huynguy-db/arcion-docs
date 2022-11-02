@@ -1,5 +1,7 @@
 ---
+pageTitle: Control notifications from Replicant
 title: Notification Configuration
+description: "Replicant can send important notifications to the user. Learn about different notification features, what notifications you want, and how."
 weight: 5
 ---
 

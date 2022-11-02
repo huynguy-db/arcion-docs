@@ -1,5 +1,7 @@
 ---
+pageTitle: Documentation for SingleStore Source connector
 title: SingleStore
+description: "Set up SingleStore as Source for zero-maintenance data pipelines using Arcion SingleStore connector."
 weight: 7
 bookHidden: false
 ---

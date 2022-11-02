@@ -1,5 +1,7 @@
 ---
+pageTitle: Configure replication statistics
 title: Statistics Configuration
+description: "Arcion Replicant provides full statistical history of an ongoing replication. Learn how you can configure them to suit your needs."
 weight: 6
 ---
 # Statistics Configuration

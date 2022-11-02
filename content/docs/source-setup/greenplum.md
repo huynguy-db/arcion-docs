@@ -1,5 +1,7 @@
 ---
+pageTitle: Greenplum Source Connector Documentation
 title: Greenplum
+description: "Read the setup instructions for streaming data from Greenplum Source, the analytics Postgres database."
 weight: 16
 bookHidden: false
 ---
@@ -163,7 +165,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
         compression-type: "GZIP"
       ```
 
-      {{< hint "warning" >}} **Important:** Use `GZIP` as the `compression-type` only when you've set the `extraction-method` to `COPY`. Otherwise, set `compression-type` to `NONE`. {{< /hint >}}
+      {{< hint "warning" >}} **Important:** Use `GZIP` as the `compression-type` only when you've set `extraction-method` to `COPY`. Otherwise, set `compression-type` to `NONE`. {{< /hint >}}
     
     - You can also choose to specify the `extraction-method` and `native-extract-options` parameters in the `per-table-config` section to more finely tune your table-specific requirements. For example:
 

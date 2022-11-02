@@ -1,5 +1,7 @@
 ---
+pageTitle: Documentation for Apache Kafka as Target
 title: Apache Kafka
+description: "Seamlessly integrate Kafka as data Target with other platforms using Arcion. Connect via SASL or SSL and configure Applier for real-time data loading."
 weight: 11
 bookHidden: false
 ---

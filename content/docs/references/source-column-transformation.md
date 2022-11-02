@@ -1,5 +1,7 @@
 ---
+pageTitle: Transforming Source data  
 title: Source Column Transformation
+description: "Know how to transform Source data using transformation rules in a configuration file."
 weight: 8
 bookHidden: false
 ---

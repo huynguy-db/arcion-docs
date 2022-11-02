@@ -1,5 +1,7 @@
 ---
+pageTitle: Documentation for SQL Server Source connector
 title: Microsoft SQL Server
+description: "Set SQL Server as data Source in data pipelines. Use our in-house CDC extractor, or Change Tracking for fast, real-time replication."
 weight: 11
 bookHidden: false
 ---

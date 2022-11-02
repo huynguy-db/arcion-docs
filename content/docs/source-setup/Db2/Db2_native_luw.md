@@ -1,5 +1,7 @@
 ---
+pageTitle: Documentation for Db2 LUW Source with db2ReadLog API
 title: Native LUW
+description: "Arcion supports IBM's Db2 for LUW as Source. Learn the setup fundamentals and how to use db2ReadLog API for log management."
 weight: 2
 bookHidden: false
 ---

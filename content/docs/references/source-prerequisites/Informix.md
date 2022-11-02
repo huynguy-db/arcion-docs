@@ -1,10 +1,12 @@
 ---
+pageTitle: Requirements for using Informix as Source
 title: IBM Informix
+description: "Step-by-step guide to enable CDC replication for Informix as Source in Arcion, including logical log configuration guidelines."
 weight: 2
 bookHidden: false 
 ---
 
-This page describes the requirements for using IBM Informix as source.
+This page describes the requirements for using IBM Informix as Source and how to achieve CDC replication.
 
 ## Enabling CDC Replication
 

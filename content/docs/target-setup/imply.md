@@ -1,5 +1,7 @@
 ---
+pageTitle: Set up Imply as data Target
 title: Imply
+description: "Get high-performance and high-volume data streaming into Imply and ensure faster feedback from the real-time analytics database."
 weight: 18
 bookHidden: false
 ---
@@ -11,7 +13,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 {{< hint "info" >}}
 When using Imply as target, Arcion adds two new columns to table from its side:
 - `OP_TYPE`: Means operation type. For snapshot, it will always will be `I`. For delete and update, it's `D` and `U`. This is necessary to carry out CDC. 
-- `VER_COL`: This column contains a monotonically increasing value for each row. Since every table doesn't have a primary key, these values help distinguishing different rows.
+- `VER_COL`: This column contains a monotonically increasing value for each row. Since every table doesn't have a primary key, these values help distinguish different rows.
 {{< /hint >}}
 
 ## I. Set up Connection Configuration

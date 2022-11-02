@@ -1,5 +1,7 @@
 ---
+pageTitle: Google BigQuery Target Connector Documentation
 title: Google BigQuery
+description: "Load terabyte-scale data into BigQuery. Build real-time data streams for real-time analytics and accelerate your business with Arcion BigQuery connector."
 weight: 16
 bookHidden: false
 ---

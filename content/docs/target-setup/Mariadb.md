@@ -1,5 +1,7 @@
 ---
+pageTitle: Use MariaDB as Target
 title: MariaDB
+description: "Learn how to securely connect to, ensure database privileges on, and load data into MariaDB using Arcion."
 weight: 9
 bookHidden: false
 ---

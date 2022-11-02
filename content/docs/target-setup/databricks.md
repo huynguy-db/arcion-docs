@@ -1,5 +1,7 @@
 ---
+pageTitle: Documentation for Databricks Target connector
 title: Databricks Delta Lake
+description: "Get fast, reliable, and real-time data ingestion into Databricks Lakehouse with Arcion, boasting features like Unity Catalog, Type-2 CDC, and more."
 weight: 1
 bookHidden: false
 ---

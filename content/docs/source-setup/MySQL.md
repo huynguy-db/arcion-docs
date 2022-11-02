@@ -1,5 +1,7 @@
 ---
+pageTitle: MySQL Source Connector Documentation
 title: MySQL
+descriptoin: "Follow the step-by-step guide to migrate data from MySQL. Use Source Column Transformation to tranform data as you need."
 weight: 4
 bookHidden: false
 ---

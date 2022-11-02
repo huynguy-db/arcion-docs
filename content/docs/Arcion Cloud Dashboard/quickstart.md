@@ -1,5 +1,7 @@
 ---
+pageTitle: Using your Arcion Cloud Dashboard
 title: Quickstart
+description: "In this page, we get you familiar with your Arcion Cloud dashboard by going through a sample replication process."
 bookCollapseSection: true
 weight: 1
 ---

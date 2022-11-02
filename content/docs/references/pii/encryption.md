@@ -1,5 +1,7 @@
 ---
+pageTitle: Encrypt data of JDBC-based Sources
 title: "Encryption"
+description: "Learn how to encrypt columns of JDBC-based data Sources using encryption keys, and run Replicant with encryption enabled."
 weight: 1
 bookHidden: false
 ---

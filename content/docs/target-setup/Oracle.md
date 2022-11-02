@@ -1,5 +1,7 @@
 ---
+pageTitle: Documentation for Oracle Target connector
 title: Oracle
+description: "Set up Oracle as Target for your data pipelines. Use Oracle's native Data Pump Import utility for homogenous pipelines."
 bookHidden: false
 ---
 # Destination Oracle

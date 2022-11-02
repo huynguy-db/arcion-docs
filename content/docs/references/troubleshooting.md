@@ -1,9 +1,11 @@
 ---
+pageTitle: How to troubleshoot a Replicant issue 
 title: Troubleshooting
+description: "Learn to troubleshoot Replicant issues by following a step-by-step process. Learn about Replicant log files and go through two practical examples."
 weight: 13
 ---
 
-# Troubleshooting
+# Troubleshoot Arcion Replicant
 
 This page describes a general guideline for troubleshooting Replicant when it fails with an error. These steps will help pinpoint the cause of failure and in turn ensure proper debugging and support from our team. 
 

@@ -1,5 +1,7 @@
 ---
+pageTitle: Distribute replication across multiple nodes
 title: Distribution Configuration
+description: "Learn how Arcion Replicant can carry out distributed replication across multiple nodes."
 weight: 7
 ---
 # Distribution Configuration

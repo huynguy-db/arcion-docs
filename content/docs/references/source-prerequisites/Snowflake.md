@@ -1,10 +1,12 @@
 ---
+pageTitle: Requirements for using Snowflake as Source
 title: Snowflake
+description: "Get in-depth instructions on how to achieve CDC replication for Source Snowflake with streams and stage tables."
 weight: 3
 bookHidden: false 
 ---
 
-This page describes the requirements for using Snowflake as source.
+This page describes the requirements for using Snowflake as Source and how to set up CDC replication.
 
 ## Streams
 A stream object records data manipulation language (DML) changes made to tables, including inserts, updates, and deletes, as well as metadata about each change. This makes it possible to take specific actions using the changed data. This process is referred to as **Change Data Capture** (CDC). 

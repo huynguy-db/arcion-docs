@@ -5,7 +5,8 @@
 
 {{- template "_internal/opengraph.html" . -}}
 
-<title>{{ .Params.pagetitle }} {{ .Site.Title -}} | Arcion</title>
+<!-- We don't want our brand name to appear more than once in title tag -->
+<title>{{ .Params.pagetitle }} {{ .Site.Title -}} {{ if in .Params.pagetitle "Arcion" }} {{ else }}| Arcion{{ end }}</title>
 
 {{- $manifest := resources.Get "manifest.json" | resources.ExecuteAsTemplate "manifest.json" . }}
 <link rel="manifest" href="{{ $manifest.RelPermalink }}">
@@ -37,7 +38,4 @@
   {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
 {{ end -}}
 
-{{ "<!--" | safeHTML }}
-Made with Book Theme
-https://github.com/alex-shpak/hugo-book
-{{ "-->" | safeHTML }}
+{{ "" | safeHTML }}

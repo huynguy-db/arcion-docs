@@ -1,9 +1,11 @@
 ---
-title: Quickstart
+pageTitle: Get started with Arcion Self-hosted 
+title: Arcion Self-hosted
+description: "Quickly get started with Arcion Self-hosted. Learn about hardware requirements, download Arcion Replicant, and set up Sources and Targets."
 weight: 1
 ---
 
-# Quickstart
+# Arcion Self-hosted Quickstart
 
 ## I. Host Machine Prerequisites
 

@@ -1,5 +1,7 @@
 ---
+pageTitle: Load data into IBM Informix
 title: IBM Informix
+description: "Get in-depth documentation on how to set up IBM Informix as data Target with Arcion, from setting up secure connection to enabling CDC-based replication."
 weight: 15
 bookHidden: false
 ---
@@ -7,7 +9,11 @@ bookHidden: false
 
 The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
 
-## I. Setup Connection Configuration
+## I. Set up CDC Replication
+To set up CDC-based replication into your Target Informix database, follow the instructions in [Source Prerequisites for IBM Informix](/docs/references/source-prerequisites/informix/).
+
+
+## II. Setup Connection Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the sample connection configuration file:
     ```BASH
@@ -39,7 +45,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     ```
     You have to connect to the **syscdcv1** catalogue on the server as the user `informix` to be able to use Change Data Capture. The `informix-user-password` parameter of the config file above should have the password of user `informix`. For more information, see [Preparing to use the Change Data Capture API](https://www.ibm.com/docs/en/informix-servers/14.10?topic=api-preparing-use-change-data-capture) on IBM Informix Documentation.
 
-## II. Setup Applier Configuration
+## III. Setup Applier Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the applier configuration file:
     ```BASH
