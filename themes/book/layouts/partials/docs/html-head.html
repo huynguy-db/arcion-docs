@@ -38,4 +38,8 @@
   {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
 {{ end -}}
 
+<!-- Minify our custom JS in the website bundle -->
+{{ $customjs := resources.Get "js/script.js" | minify }}
+<script defer language="javascript" type="text/javascript"  src="{{ $customjs.RelPermalink }}"></script>
+
 {{ "" | safeHTML }}
