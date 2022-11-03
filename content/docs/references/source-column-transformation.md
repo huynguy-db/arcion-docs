@@ -92,11 +92,11 @@ Below are more details about the parameters:
         - **`modulo`**: `computed-column` is modulo of `source-column` by either `mod-by-column` or `mod-by-value`.
           - **`enable`**: `true` or `false`. Enables/disables this modulo operation.
           - **`source-column`**: Source column which you want to Transform. You must specify numeric value column only.
-          - **`mod-by-column`**: The numeric value column used to calculate target column by modulo of source column: `F = A % D`. Don't specify `mod-by-column` if `mod-by-value` is used. Data type should be same as `source-column`.
-          - **`mod-by-value`**: The value to calculate target column by module of source column: `F = A % 5`. Don't specify `mod-by-value` if `mod-by-column` is used.
+          - **`mod-by-column`**: The numeric value column used to calculate the modulo of source column: `F = A % D`. Don't specify `mod-by-column` if `mod-by-value` is used. Data type should be same as `source-column`.
+          - **`mod-by-value`**: The numeric value to calculate modulo of source column: `F = A % 5`. Don't specify `mod-by-value` if `mod-by-column` is used.
           - **`computed-column`**: The column as result of the modulo operation. This can be the new column which will be created on Target, or same as the Source column, or any other column in same table.
-          - **`computed-column-datatype`**: Specifies datatype for Target column. If `null`, the datatype of `source-column` is used. If you specify `computed-column-datatype`, then Replicant will try to convert the operation result into that datatype. The conversion might fail due to compatibility issue.
-          - **`computed-column-key-type`**: Supported value is `SHARDKEY`. With this parameter specified, it uses the target column as specified key type on Applier. As in this example, the target column `F` will be used as the `SHARDKEY` column on destination database.
+          - **`computed-column-datatype`**: Specifies datatype for computed column. If `null`, the datatype of `source-column` is used. If you specify `computed-column-datatype`, then Replicant will try to convert the operation result into that datatype. The conversion might fail due to compatibility issue.
+          - **`computed-column-key-type`**: Supported value is `SHARDKEY`. With this parameter specified, it uses the `computed-column` as shard key for the Destination table. As in this example, the `computed-column` value `F` will be used as the `SHARDKEY` column on Destination database.
         - **`concat`**: The `computed-column` is a concatenation of `source-column` and `concat-by-columns`.
           - **`enable`**: `true` or `false`. Enables/disables this concat operation.
           - **`source-column`**: The source column name.
@@ -104,19 +104,19 @@ Below are more details about the parameters:
             - `"_"`: Concats this string value to source column. 
             - `"column: Q"`: Specifies concat value of column `Q` to Source column. 
             - `"column:"`: The column name identifier. 
-          - **`computed-column`**: Target column is the result of concatenation. For example, in the sample config above, it is: `S = P + "_" + Q`.
-          - **`computed-column-datatype`**: Specifies datatype for target column. If `null`, the datatype of `source-column` is used.
+          - **`computed-column`**: Computed column is the result of concatenation. For example, in the sample config above, it is: `S = P + "_" + Q`.
+          - **`computed-column-datatype`**: Specifies datatype for computed column. If `null`, the datatype of `source-column` is used.
         - **`trim`**: `computed-column` is trim of `source-column`. Removes space from front and back of string.
           - **`enable`**: `true` or `false`. Enables/disables this concat operation.
               - **`source-column`**: Please specify source column name.
-              - **`computed-column`**: Target column is result of trim. For example,  in the sample config above, if `P = "name    "`, then `S = "name"`.
-              - **`computed-column-datatype`**: Specifies datatype for target column. If `null`, the datatype of source-column is used.
+              - **`computed-column`**: Computed column is result of trim. For example,  in the sample config above, if `P = "name    "`, then `S = "name"`.
+              - **`computed-column-datatype`**: Specifies datatype for computed column. If `null`, the datatype of source-column is used.
 
 {{< hint "info" >}}
-- Target column can be the same as source column, new column, or any other column in same table.
-- If `computed-column-datatype` is not specified and target column does not exist in Source table, then Replicant will use the datatype of `source-column`.
+- Computed column can be the same as source column, new column, or any other column in same table.
+- If `computed-column-datatype` is not specified and `computed-column` does not exist in Source table, then Replicant will use the datatype of `source-column`.
 - If `computed-column-datatype` is specified, then Replicant will try its best to covert operation result into that datatype. The conversion might fail due to compatibility issue.
-- If `computed-column` exists in Source table, then Replicant will use the datatype of `computed-column`.
+- If `computed-column` exists in Source table, then Replicant will use the datatype of `source-column`.
 
 We recommend that you do not use `computed-column-datatype`. In that case Replicant can fall back to using the datatype of `source-column`.
 {{< /hint >}}
