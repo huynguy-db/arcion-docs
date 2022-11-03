@@ -1,7 +1,7 @@
 ---
 pageTitle: SAP ASE Source Connector Documentation
 title: SAP ASE
-descriptoin: "Learn how to extract data from Source SAP ASE database with Arcion, with support for ASE's bcp utility for faster, native data extraction."
+description: "Learn how to extract data from Source SAP ASE database with Arcion, with support for ASE's bcp utility for faster, native data extraction."
 weight: 15
 bookHidden: false
 ---
