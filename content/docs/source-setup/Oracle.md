@@ -111,14 +111,14 @@ You have to enable either primary key or all column logging at either the databa
   #### Table level supplemental logging
   * `PRIMARY KEY` logging
     ```SQL
-    ALTER <TABLE_NAME> ADD SUPPLEMENTAL LOG DATA (PRIMARY KEY) COLUMNS
+    ALTER TABLE <TABLE_NAME> ADD SUPPLEMENTAL LOG DATA (PRIMARY KEY) COLUMNS
     ```
 
     OR
 
   * `ALL` Column logging
     ```SQL
-    ALTER <TABLE_NAME> ADD SUPPLEMENTAL LOG DATA (ALL) COLUMNS
+    ALTER TABLE <TABLE_NAME> ADD SUPPLEMENTAL LOG DATA (ALL) COLUMNS
     ```
   * If table level logging is enabled, then force logging should not be enabled. We need force logging for database level logging:
 
