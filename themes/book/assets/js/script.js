@@ -1,13 +1,11 @@
 // Get header which contains the hamburger menus
 const header = document.querySelector("header");
 
-// Get the search bar
-const search = document.querySelector(".book-search");
-//Get the left TOC menu
-const left_toc = document.querySelector("#left-toc-menu");
+// Get the entire left menu
+const left_sidebar = document.querySelector(".book-menu");
 
 // Get the hamburger menu for mobile screens
-const menu = header.getElementsByTagName("label");
+const hamburger_menu = header.getElementsByTagName("label");
 
 // Grab the ZenID widget class from HubSpot
 
@@ -50,7 +48,6 @@ if (iframe_value) {
       hubspot_widget.remove();
     }
   );
-  menu[0].remove();
-  left_toc.remove();
-  search.remove();
+  left_sidebar.remove();
+  hamburger_menu[0].remove();
 }
