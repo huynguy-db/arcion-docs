@@ -25,7 +25,13 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     - [RSA key pair authentication](#use-rsa-key-pair-for-authentication)
     - Basic username and password authentication
 
-    For connecting to Snowflake via basic username and password authentication, see the sample below:
+    For connecting to Snowflake via basic username and password authentication, you have two options:
+
+    #### Fetch credentials from AWS Secrets Manager
+    You can choose to store your username and password in AWS Secrets Manager, and tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/references/secrets-manager).
+
+    #### Specify credentials in plain form
+    You can also specify your credentials in plain form in the connection configuration file like the sample below:
 
     ```YAML
     type: SNOWFLAKE

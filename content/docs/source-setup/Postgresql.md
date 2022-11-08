@@ -92,7 +92,9 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     vi conf/conn/postgresql.yaml
     ```
 
-2. Make the necessary changes as follows:
+2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/references/secrets-manager). 
+    
+    Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
     ```YAML
     type: POSTGRESQL
 

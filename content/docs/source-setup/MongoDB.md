@@ -57,6 +57,10 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
       - *`PATH_TO_TRUST_STORE`*: Path to your TrustStore file.
       - *`TRUSTSTORE_PASSWORD`*: Your TrustStore password.
 
+      {{< hint "info" >}} 
+  **Note:** If you store your credentials like KeyStore and TrustStore passwords in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/references/secrets-manager).
+      {{< /hint >}}
+    
 ## II. Set up Filter Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the filter configuration file:

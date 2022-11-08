@@ -9,13 +9,15 @@ weight: 5
 {{< hint "info" >}}
 This feature is available from version 22.10.28.2.
 {{< /hint >}}
-You may want to store credentials like usernames and associated passwords in AWS Secrets Manager. In that case, you can tell Replicant to retrieve credentials from Secrets Manager instead of reading them from plain YAML files like above. 
+You may want to store credentials like usernames and associated passwords in AWS Secrets Manager. In that case, you can tell Replicant to retrieve credentials from Secrets Manager instead of reading them from plain YAML files. 
 
 To fetch your credentials from AWS Secrets Manager, follow the steps below:
 
 1. Run Replicant with the argument `--use-sm-provider`. The argument can take the following two values: 
    - **`AWS`**: Replicant will try to read secrets from AWS Secrets Manager.
-   - **`NONE`**: Replicant will expect the secrets to be in plain YAML files instead of being managed by a Secrets Manager.
+   - **`NONE`**: Replicant will expect the values of the configuration parameters to be in plain text in the YAML file itself, and will not look in Secrets Manager. 
+   
+      *Default value is `NONE`.*
 
    Below is a sample Replicant command specifying AWS Secrets Manager:
 
@@ -32,10 +34,10 @@ To fetch your credentials from AWS Secrets Manager, follow the steps below:
       ```
 
       In the URL above, there are two parts:
-      - **`connectionConfig`** represents the secret name.
+      - **`connectionConfig`** represents the secret name where various secret keys are stored.
       - **`username`** is the secret key for which Replicant should retrieve the value from AWS Secrets Manager.
 
-Below is a sample connection configuration file for MySQL where the `host`, `port`, `username`, and `password` credentials are managed by the AWS Secrets Manager:
+Below is a sample connection configuration file for MySQL where the `host`, `port`, `username`, and `password` credentials are stored in the AWS Secrets Manager:
 
 ```YAML
 type: MYSQL

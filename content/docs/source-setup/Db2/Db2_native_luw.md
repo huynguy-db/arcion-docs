@@ -131,7 +131,9 @@ If you're performing CDC-based replication from the source Db2 server, please fo
 
 You also need to configure Replicant's Db2 connection configuration file:
 
-1. Add a new property called `node`, representing the name of the Db2 node you're connecting to. It can go anywhere in the root of the file. The default node name is the Db2 user’s name. For example, below is a part of the configuration file with Db2 server connection info where we've added the `node`:
+1. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/references/secrets-manager). 
+
+    Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below: 
 
     ```yaml
     type: DB2
@@ -151,7 +153,9 @@ You also need to configure Replicant's Db2 connection configuration file:
     retry-wait-duration-ms: 1000
     ```
 
-2. Set the value of `cdc-log-storage` to `READ_LOG`. This tells Replicant that you want to use the native db2ReadLog as the CDC log reader:
+    Notice the property called `node`. It represents the name of the Db2 node you're connecting to. It can go anywhere in the root of the file. The default node name is the Db2 user’s name.
+
+2. Set the value of `cdc-log-storage` to `READ_LOG` in the connection configuration file. This tells Replicant that you want to use the native db2ReadLog as the CDC log reader:
 
     ```yaml
     cdc-log-config:

@@ -31,12 +31,18 @@ To create stage table as an intermediate buffer of the CDC process, follow the i
     - Parameters related to source Snowflake server connection.
     - Parameters related to stage configuration.
 
-    ### Parameters related to target Snowflake server connection
-    For connecting to target Snowflake server, you can choose between two methods for an authenticated connection: 
+    ### Parameters related to Source Snowflake server connection
+    For connecting to Source Snowflake server, you can choose between two methods for an authenticated connection: 
     - [RSA key pair authentication](#use-rsa-key-pair-for-authentication)
     - Basic username and password authentication
 
-    For connecting to Snowflake via basic username and password authentication, see the sample below:
+    For connecting to Snowflake via basic username and password authentication, you have two options:
+
+    #### Fetch credentials from AWS Secrets Manager
+    You can choose to store your username and password in AWS Secrets Manager, and tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/references/secrets-manager).
+
+    #### Specify credentials in plain form
+    You can also specify your credentials in plain form in the connection configuration file like the sample below:
 
     ```YAML
     type: SNOWFLAKE

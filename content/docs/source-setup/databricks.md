@@ -35,7 +35,9 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
     vi conf/conn/databricks.yaml
     ```
 
-2. For connecting to your source Databricks server, you can configure the following parameters:
+2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/references/secrets-manager). 
+    
+    Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
 
     ```YAML
     type: DATABRICKS_DELTALAKE

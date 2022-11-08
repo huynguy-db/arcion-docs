@@ -24,7 +24,9 @@ When using Imply as target, Arcion adds two new columns to table from its side:
    vi conf/conn/imply.yaml
    ```
 
-2. You can modify the following sample configurations to your case for connecting to the target Imply server:
+2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/references/secrets-manager). 
+    
+    Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
 
    ```yaml
    type: IMPLY
