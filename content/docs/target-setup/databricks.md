@@ -84,7 +84,12 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
       - `account-name`*[v21.06.14.1]*: This config is valid for AZURE type only. Represents name of the ADLS storage account.
       - `secret-key`*[v21.06.14.1]*: This config is valid for S3 and AZURE type only. For example, Secret Access Key for AWS account hosting S3 or ADLS account.
       - `credential-file-path`: For `GCP` as stage `type` only. Represents the absolute path to the service account key file. For more information, see [GCP as stage](#gcp-as-stage).
+      - `assume-role`: For `S3` as stage `type` only. Use this parameter to configure ARNs (Amazon Resource Name) for roles. It has the following configurable fields:
+        - `enable`: `true` or `false`. Whether to enable this option.
+        - `role-arn`: The ARN specifying the role—for example `arn:aws:iam::123456789012:role/S3Access`.
+        - `session-duration-s`: The duration of AWS STS credentials in seconds.
 
+        For an example, see [S3 as stage](#s3-as-stage).
     #### Databricks DBFS as stage
     Below is a sample for using Databricks DBFS as stage:
     
@@ -102,9 +107,13 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
     stage:
       type: S3
       root-dir: "replicate-stage/s3-stage"
-      key-id: "<S3 access key>"
+      key-id: "<S3_access key>"
       conn-url: "replicate-stage"
       secret-key: "<S3 secret key>"
+      assume-role:
+        enable: true
+        role-arn: "<Role_ARN>"
+        session-duration-s: 900
     ```
 
     #### GCP as stage
