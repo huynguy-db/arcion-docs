@@ -11,6 +11,10 @@ This feature is available from version 22.10.28.2.
 {{< /hint >}}
 You may want to store credentials like usernames and associated passwords in AWS Secrets Manager. In that case, you can tell Replicant to retrieve credentials from Secrets Manager instead of reading them from plain YAML files. 
 
+{{< hint "warning" >}}
+**Important:** Make sure to set AWS credentials and the region either in the credentials file or as environment variables. For more information, see [Set up AWS Credentials and Region for Development](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html).
+{{< /hint >}}
+
 To fetch your credentials from AWS Secrets Manager, follow the steps below:
 
 1. Run Replicant with the argument `--use-sm-provider`. The argument can take the following two values: 
