@@ -135,6 +135,9 @@
     dt {
       font-weight: bolder;
       margin-top: $padding-16;
+      code {
+        font-size: .825rem;
+      }
     }
 
     dd {
