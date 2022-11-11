@@ -7,7 +7,7 @@ weight: 5
 
 # Send replication statistics and logs to New Relic
 
-Enterprises can gain valuable business metrics from a centralized, all-in-one log management platform such as [New Relic](https://newrelic.com/platform/log-management). With that in mind, Arcion has added support for New Relic from version 22.10.28.2. With 
+Enterprises can gain valuable business metrics from a centralized, all-in-one log management platform such as [New Relic](https://newrelic.com/platform/log-management). With that in mind, Arcion has added support for New Relic from version 22.10.28.2.
 
 To send your replication statistics and logs to New Relic, follow the steps below.
 
