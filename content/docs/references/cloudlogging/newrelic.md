@@ -44,12 +44,14 @@ Option to configure replication statistics that you want to send to New Relic. I
   <dd>The prefix to add to each metric. Default prefix is <code>arcion.core</code>.</dd>
 
   <dt><code>custom-attributes</code></dt>
-  <dd>To add user-defined attribute (<code>key</code>, <code>val</code>) in each metric for grouping. It has the following parameters:
-  <ul>
-  <li><code>host</code></li>
-  <li><code>pipeline</code></li>
+  <dd>To add user-defined attribute (<code>key</code>, <code>val</code>) in each metric for grouping. For example, you may add the pipeline information by adding Source and Target attributes like below:
+
+  ```YAML
+  custom-attributes:
+    source: Oracle
+    target: Databricks
+  ```
   </dd>
-  </dl>
   
 ### `trace-logging`
 Option to configure replication logs that you want to send to New Relic. It has the following parameters:
@@ -96,6 +98,10 @@ metrics-logging:
 trace-logging:
   enable: false
   interval-s: 5
+
+custom-attributes:
+  host: localhost
+  pipeline: Oracle->Databricks
 ```
 
 ## Run Replicant
