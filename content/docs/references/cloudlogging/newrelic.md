@@ -38,7 +38,7 @@ Option to configure replication statistics that you want to send to New Relic. I
   </dd>
 
   <dt><code>interval-s</code></dt>
-  <dd>The wait duration of metrics logger thread in seconds.</dd>
+  <dd>The interval between each successive transfer in seconds.</dd>
 
   <dt><code>prefix</code></dt>
   <dd>The prefix to add to each metric. Default prefix is <code>arcion.core</code>.</dd>
@@ -65,7 +65,7 @@ Option to configure replication logs that you want to send to New Relic. It has 
   </dd>
 
   <dt><code>interval-s</code></dt>
-  <dd>The wait duration of trace logger thread in seconds.</dd>
+  <dd>The interval between each successive transfer in seconds.</dd>
 
   </dl>
 
