@@ -224,6 +224,17 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
       retry-wait-duration-ms: 5000 #Specify the time in milliseconds Replicant should wait before re-trying a failed operation
       cdc-stage-type: FILE #Enter your cdc-stage-type
     ```
+
+    When operating in realtime mode, pay attention to the following details:
+
+    - Make sure that the number of `threads` is equal to the number of tables.
+    - Enable PK/UK logging if Source table has PK/UK. If table does not have any PK, then only enable full logging. For example, if you're loading data from Oracle, it has support for UK logging.
+    - You might want to select any table in your Snowflake dashboard while operating. Due to a Snowflake limitation, problems may arise if table name contains lower case. So you need to execute the following command first:
+      ```SQL
+      ALTER SESSION SET QUOTED_IDENTIFIERS_IGNORE_CASE = TRUE;
+      ```
+      
+
     ### Use Type-2 CDC
     From version 22.07.19.3 onwards, Arcion supports Type-2 CDC for Snowflake as the Target. Type-2 CDC enables a Target to have a history of all transactions performed in the Source. For example:
 
@@ -231,7 +242,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     - An UPDATE in the Source is an INSERT in the Target with additional metadata like Operation Performed, Time of Operation, etc.
     - A DELETE in the Source is an INSERT in the Target: INSERT with OPER_TYPE as DELETE.
 
-    Currently, Arcion supports the following metadata related to source-specific fields:
+    Arcion supports the following metadata related to source-specific fields:
 
     - `query_timestamp`: Time at which the user on Source fired a query.
     - `extraction_timestamp`: Time at which Replicant detected the DML from logs.
@@ -239,11 +250,11 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
     The primary requirement for Type-2 CDC is to *enable full row logging* in the Source.
 
-   {{< hint "info" >}}
-  Currently, support for Type-2 CDC is limited to the following cases: 
+    {{< hint "info" >}}
+  **Note:** Support for Type-2 CDC is limited to the following cases: 
   - Sources that support CDC.
   - `realtime` and `full` modes.
-   {{< /hint >}}
+    {{< /hint >}}
 
     To enable Type-2 CDC for your Snowflake target, follow the steps below:
     
@@ -261,4 +272,4 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     snapshot:
       csv-publish-method: READ
     ```
-  For a detailed explanation of configuration parameters in the Applier file, read [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference").
+  For a detailed explanation of configuration parameters in the Applier file, read [Applier Reference]({{< ref "/docs/references/applier-reference" >}}).
