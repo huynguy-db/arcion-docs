@@ -1,13 +1,17 @@
 ---
-pageTitle: Oracle Source connector
-title: Oracle
-description: "Set up Oracle as Source for your data pipelines using Arcion Oracle connector, supporting Oracle redo log, Data Pump Export utility, and more."
-weight: 2
-bookHidden: false
+weight: 1
+pageTitle: Oracle Source Setup Guide
+title: "Setup guide"
+description: "Set up Oracle as Source. We discuss Oracle User, CDC, necessary permissions, filters, connection and Extractor details for snapshot and realtime replication."
 ---
 
-# Source Oracle
-**The first five steps (I-V) are to prepare the Oracle Database for replication and must be executed in an Oracle client. The remaining steps (VI-VIII) are to configure Replicant.**
+# Oracle Source Setup Guide
+Follow the instructions below to set up a replication pipeline from your Oracle database to your destination using Arcion's Oracle connector.
+
+{{< hint "warning" >}}
+**Important:** The first five steps (I-V) describe how to prepare the Oracle Database for replication. You must execute these steps in an Oracle client. The remaining steps (VI-VIII) allow you to configure Replicant.
+{{< /hint >}}
+
 
 ## I. Obtain the JDBC Driver for Oracle
 
@@ -46,45 +50,71 @@ Replicant requires the JDBC driver for Oracle as a dependency. To obtain the app
 
 ## III. Set up Change Data Capture (CDC)
 
-1. Set the destination for the log archive:
-    ```BASH
-    ALTER SYSTEM SET log_archive_dest = '$PATH_TO_REDO_LOG_FILES' scope=spfile  
-    ```
-   {{< hint "info" >}}
-   To use log-based CDC, the Oracle database must be in ARCHIVELOG mode.
-   To check what mode the database is in, use the ```ARCHIVE LOG LIST``` command.
-   To set the database in ARCHIVELOG mode, use the following commands:
-   ```SQL
-   SHUTDOWN IMMEDIATE
-   STARTUP MOUNT
-   ALTER DATABASE ARCHIVELOG
-   ALTER DATABASE OPEN
-   ```
-   {{< /hint >}}
-2. Once the database is in ARCHIVELOG mode, grant the EXECUTE_CATALOG_ROLE role to use the DBMS_LOGMNR package:
+### Set archive log destination
+
+To use log-based CDC, the Oracle database must be in ARCHIVELOG mode. To check what mode the database is in, use the ```ARCHIVE LOG LIST``` command. To set the database in ARCHIVELOG mode, use the following commands:
+  
+  ```SQL
+  SHUTDOWN IMMEDIATE
+  STARTUP MOUNT
+  ALTER DATABASE ARCHIVELOG
+  ALTER DATABASE OPEN
+  ```
+
+After you've set the database to ARCHIVELOG mode, set the destination for the log archive:
+  ```BASH
+  ALTER SYSTEM SET log_archive_dest = '$PATH_TO_REDO_LOG_FILES' scope=spfile  
+  ```
+
+### Set permissions
+
+1. Once the database is in ARCHIVELOG mode, grant the EXECUTE_CATALOG_ROLE role to use the DBMS_LOGMNR package:
     ```SQL
     GRANT EXECUTE_CATALOG_ROLE TO <USERNAME>
     ```
-3. Provide the following permissions to allow Replicant to access the START_LOGMNR procedure
-    For Oracle 11g:
-    ```SQL
-    GRANT SELECT ANY TRANSACTION TO <USERNAME>;
-    ```
+2. Provide the following permissions to allow Replicant to access the START_LOGMNR procedure:
 
-    For Oracle 12C and beyond:
-    ```SQL
-    GRANT LOGMINING TO <USERNAME>;
-    ```
-4. Provide the following permission to allow Replicant to access v_$logmnr_contents:
-    ```SQL
-    GRANT SELECT ON v_$logmnr_contents TO <USERNAME>;
-    GRANT SELECT ON gv$archived_log to $USERNAME;
-    ```
-    For Oracle 19C and beyond, Replicant requires additional access to v_$logfile:
-    ```SQL
-    GRANT SELECT ON v_$logfile TO <USERNAME>;
-    ```
-### Enabling logs
+    {{< tabs "oracle-permissions-start-logmnr" >}}
+{{< tab "For Oracle 11g" >}}
+For Oracle version 11g, execute the following command: 
+
+  ```SQL
+  GRANT SELECT ANY TRANSACTION TO <USERNAME>;
+  ```
+{{< /tab >}}
+
+{{< tab "For Oracle 12c and above" >}}
+For Oracle versions 12C and above, execute the following command:
+
+  ```SQL
+  GRANT LOGMINING TO <USERNAME>;
+  ```
+{{< /tab >}}
+
+    {{< /tabs >}}
+    
+1. You also need to provide the following permission to allow Replicant to access `v_$logmnr_contents`:
+
+    {{< tabs "oracle-permissions-v-logmnr-contents" >}}
+{{< tab "For Oracle below 19c" >}}
+For Oracle versions below 19c, grant the following permissions:
+
+  ```SQL
+  GRANT SELECT ON v_$logmnr_contents TO <USERNAME>;
+  GRANT SELECT ON gv$archived_log to $USERNAME;
+  ```
+{{< /tab >}}
+{{< tab "For Oracle 19c and above" >}}
+For Oracle versions 19C and above, Replicant requires additional access to v_$logfile.:
+  ```SQL
+  GRANT SELECT ON v_$logmnr_contents TO <USERNAME>;
+  GRANT SELECT ON gv$archived_log to $USERNAME;
+  GRANT SELECT ON v_$logfile TO <USERNAME>;
+  ```
+{{< /tab >}}
+    {{< /tabs >}}
+
+### Enable logs
 You have to enable either primary key or all column logging at either the database level or the table level.
   
 {{< hint "info" >}}If you use table level logging, you must enable it for the CDC heartbeat table as well.{{< /hint >}}
@@ -308,12 +338,12 @@ For real-time replication, you must create a heartbeat table in the source Oracl
 
       *This parameter is available only for Oracle->Oracle pipeline.*
     
-    - `native-load`: With this parameter set, Replicant uses the Oracle Data Pump Export (`expdp`) utility to load table data instead of JDBC. This enables Replicant to efficiently handle large-scale data. For more information, see [Oracle Native Export](#oracle-native-export). 
+    - `native-load`: With this parameter set, Replicant uses the Oracle Data Pump Export (`expdp`) utility to load table data instead of JDBC. This enables Replicant to efficiently handle large-scale data. For more information, see [Oracle Native Export]({{< relref "native-export" >}}). 
     
     The following configuration parameters are available under `native-load`:
       - `enable`: `true` or `false`. Whether to enable `native-load`.
       - `stage-type`: The type of staging area. Allowed values are `SHARED_FS` and `ASM`. The staging area can either be a shared directory or Oracle ASM.
-      - `directory`: The Oracle directory object corresponding to the `stage-type`. For more information, see [Create directory object in Source and Target Oracle](#create-directory-object-in-source-and-target-oracle).
+      - `directory`: The Oracle directory object corresponding to the `stage-type`. For more information, see [Create directory object in Source and Target Oracle]({{< relref "native-export#create-directory-object-in-source-and-target-oracle" >}}).
       - `path`: Full path to the NFS (Network File System) representing the directory shared between Replicant and Oracle.
 
     The following is a sample configuration for snapshot mode:
@@ -393,107 +423,3 @@ For real-time replication, you must create a heartbeat table in the source Oracl
     ```
     
 For a detailed explanation of configuration parameters in the Extractor file, see [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference").
-
-## IX. Using Native Oracle Log Reader (Beta)
-
-{{< hint "info" >}}**Note:** This feature is currently in beta. {{< /hint >}}
-
-It's possible to configure Replicant so that it can read and make use of Oracle redo log files.
-
-### Modify Oracle Connection Configuration File
-
-Add the following two parameters in the Oracle connection configuration file:
-
-```YAML
-log-reader: REDOLOG
-transaction-store-location: PATH_TO_TRANSACTION_STORAGE
-```
-
-Replace *`PATH_TO_TRANSACTION_STORAGE`* with the location of Oracle transaction storage.
-
-### Grant Necessary Permissions
-
-Replicant user should have the following permissions granted for them in order to use the native Oracle log reader.
-
-  ```SQL
-  GRANT SELECT ON gv_$instance TO USERNAME;
-  GRANT SELECT ON v_$log TO USERNAME;
-  GRANT SELECT ON v_$logfile TO USERNAME;
-  GRANT SELECT ON v_$archived_log to USERNAME;
-  ```
-
-  Replace *`USERNAME`* with your Oracle username.
-
-### Oracle ASM for Logs
-
-Replicant also supports using Oracle Automatic Storage Management (ASM) for logs. To use ASM, follow the steps below:
-
-1. Make sure that the following permission is granted:
-
-    ```SQL
-    GRANT SELECT ON gv_$asm_client TO USERNAME
-    ```
-  
-    Replace *`USERNAME`* with your ASM username.
-
-2. In your Oracle connection configuration file, create a new section `asm-connection`.  This section will have the necessary ASM connection configuration. Below is a sample connection configuration file with ASM connection details specified as well:
-
-    ```YAML
-    type: ORACLE
-    host: localhost
-    port: 53545
-    service-name: IO
-    username: 'REPLICANT_USERNAME'
-    password: 'REPLICANT_PASSWORD'
-
-    asm-connection:
-      host: oracle-asm
-      port: 1521
-      service-name: +ASM
-      username: 'ASM_USERNAME'
-      password: 'ASM_PASSWORD'
-      max-connections: 10
-    ```
-
-    Replace the following:
-
-    - *`REPLICANT_USERNAME`*: your Replicant username.
-    - *`REPLICANT_PASSWORD`*: the password associated with your Replicant username.
-    - *`ASM_USERNAME`*: the username to connect to the ASM instance.
-    - *`ASM_PASSWORD`*: the password associated with *`ASM_USERNAME`*.
-
-3. To use the file system directly, Replicant must have access to the redo log files for reading. If Replicant's path(s) to redo log files is different from the database's path, you must include the path to the redo log files explicitly in the Source connection configuration file. For example:
-
-    ```YAML
-    log-path: /home/replicant-user/shared/redo/online
-    archive-log-path: /home/replicant-user/shared/redo/archive
-    ```
-
-## Oracle Native Export
-
-For Oracle as both Source and Target systems, Replicant uses Oracle's native Data Pump Export (`expdp`) utility to export table data. To set up Replicant and Source Oracle to use this feature, follow the instructions below:
-
-### Set up `expdp` in Replicant host machine
-- Download the [Oracle Instant Client Tools Package ZIP](https://download.oracle.com/otn_software/linux/instantclient/216000/instantclient-tools-linux.x64-21.6.0.0.0dbru.zip) and extract the files.
-- Copy the `expdp` file to the `/usr/bin` directory.
-- Download the [Oracle Instant Client Basic Package ZIP](https://download.oracle.com/otn_software/linux/instantclient/216000/instantclient-basic-linux.x64-21.6.0.0.0dbru.zip) and extract the files in a directory.
-- Copy the path to the directory where you extracted the ZIP archive.
-- Set the `ORACLE_HOME` and `LD_LIBRARY_PATH` environment variables in your `~/.bashrc` file:
-  ```BASH
-  export ORACLE_HOME=instantClientBasicPath
-  export LD_LIBRARY_PATH="$ORACLE_HOME":$LD_LIBRARY_PATH
-  export PATH="$ORACLE_HOME:$PATH"
-  ```
-### Create directory object in Source and Target Oracle
-Replicant uses the [external directory feature of Oracle](https://docs.oracle.com/cd/B19306_01/server.102/b14215/et_concepts.htm) for efficient loading of data into Target Oracle. So you need to create a directory shared between Replicant host and Oracle host (both Source and Target) with `READ` and `WRITE` access. To do so, follow the steps below:
-
-- Launch Oracle SQL Plus from the terminal.
-- From the SQL Plus prompt, execute the following SQL commands:
-  ```SQL
-  create directory SHARED_STAGE as '/shared-volume';
-  grant read,write on directory SHARED_STAGE to SYSTEM;
-  ```
-
-### Modify the Replicant Extractor configuration file
-In Replicant's Extractor configuration file of Source Oracle, add a new `native-load` section under `snapshot`. This section holds the necessary parameters for Replicant to start using Oracle's native Export utility. For more information, see [Parameters related to snapshot mode](#parameters-related-to-snapshot-mode).
-
