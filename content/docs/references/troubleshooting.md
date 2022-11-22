@@ -15,7 +15,7 @@ To submit a support request to the Arcion team, please visit the [Arcion Help Ce
 In the steps below, `$REPLICANT_HOME` represents the location of the `replicant-cli` folder after you've [downloaded and extracted Arcion Self-hosted](/docs/quickstart#ii-download-replicant-and-create-a-home-repository).
 {{< /hint >}}
 
-## Locate the log files
+## The log files
 
 There are two log files that can help you troubleshoot an issue:
 
@@ -67,8 +67,15 @@ The `trace.log` and `error-trace.log` files will be in the directories `$trace-d
 {{< /tab >}}
 {{< /tabs >}}
 
+### Verbose mode
+In some cases, we might run into a problem that's hard to reproduce. For cases like this, verbose logging can help diagnose the problem. However, running in this mode will eventually make the `trace.log` file larger.
+
+You can run Replicant in verbose mode with the `--verbose` argument. In this mode, Replicant will record every processing detail in the `trace.log` file.
+
+You can see the [first example below](#first-example) where we run Replicant in verbose mode.
+
 ## Define the issue
-After you've [located the `trace.log` file](#locate-the-log-files), search for the following keywords in the file:
+After you've [located the `trace.log` file](#the-log-files), search for the following keywords in the file:
 
 - `ERROR`
 - `Caused by`
@@ -131,7 +138,7 @@ In this section, you'll go through two examples of troubleshooting. You'll use t
           at tech.replicant.db.DBReplicationManager.a(SourceFile:3175)
           ... 1 common frames omitted</code></pre>
 
-- Decide whether the issue is easier to fix by yourself, or you need to contact the [Arcion Support Team](https://support.arcion.io). 
+- Decide whether you can fix the issue by yourself, or you need to contact the [Arcion Support Team](https://support.arcion.io). 
   - In this case, the first `ERROR` shows the following exception: 
   
     ```java
@@ -174,7 +181,7 @@ In this section, you'll go through two examples of troubleshooting. You'll use t
           at tech.replicant.Main.main(SourceFile:50550)
   2022-09-17 01:28:53.988 DEBUG [Thread-3] t.r.n.NotificationManager: Shutting down Notification Manager.</code></pre>
 
-- Decide whether the issue is easier to fix by yourself, or you need to contact the [Arcion Support Team](support.arcion.io). 
+- Decide whether you can fix the issue by yourself, or you need to contact the [Arcion Support Team](support.arcion.io). 
   - In this case, it's apparent from the first `ERROR` messsage that the issue is related to the heartbeat table:
 
     ```
