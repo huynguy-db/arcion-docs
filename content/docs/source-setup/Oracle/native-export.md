@@ -31,5 +31,5 @@ Replicant uses the [external directory feature of Oracle](https://docs.oracle.co
   ```
 
 ## Modify the Replicant Extractor configuration file
-In Replicant's Extractor configuration file of Source Oracle, add a new `native-load` section under `snapshot`. This section holds the necessary parameters for Replicant to start using Oracle's native Export utility. For more information, see [Parameters related to snapshot mode]({{< relref "setup-guide#parameters-related-to-snapshot-mode" >}}).
+I[n Replicant's Extractor configuration file of Source Oracle]({{< relref "setup-guide#vi-set-up-connection-configuration" >}}), add a new `native-load` section under `snapshot`. This section holds the necessary parameters for Replicant to start using Oracle's native Export utility. For more information, see [Parameters related to snapshot mode]({{< relref "setup-guide#parameters-related-to-snapshot-mode" >}}).
 

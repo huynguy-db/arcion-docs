@@ -12,7 +12,7 @@ It's possible to configure Replicant so that it can read and make use of Oracle 
 
 ## Modify Oracle Connection Configuration File
 
-Add the following two parameters in the Oracle connection configuration file:
+Add the following two parameters in [the Oracle connection configuration file]({{< relref "setup-guide#vi-set-up-connection-configuration" >}}):
 
 ```YAML
 log-reader: REDOLOG
@@ -46,7 +46,7 @@ Replicant also supports using Oracle Automatic Storage Management (ASM) for logs
   
     Replace *`USERNAME`* with your ASM username.
 
-2. In your Oracle connection configuration file, create a new section `asm-connection`.  This section will have the necessary ASM connection configuration. Below is a sample connection configuration file with ASM connection details specified as well:
+2. In [your Oracle connection configuration file]({{< relref "setup-guide#vi-set-up-connection-configuration" >}}), create a new section `asm-connection`.  This section will have the necessary ASM connection configuration. Below is a sample connection configuration file with ASM connection details specified as well:
 
     ```YAML
     type: ORACLE
@@ -72,7 +72,7 @@ Replicant also supports using Oracle Automatic Storage Management (ASM) for logs
     - *`ASM_USERNAME`*: the username to connect to the ASM instance.
     - *`ASM_PASSWORD`*: the password associated with *`ASM_USERNAME`*.
 
-3. To use the file system directly, Replicant must have access to the redo log files for reading. If Replicant's path(s) to redo log files is different from the database's path, you must include the path to the redo log files explicitly in the Source connection configuration file. For example:
+3. To use the file system directly, Replicant must have access to the redo log files for reading. If Replicant's path(s) to redo log files is different from the database's path, you must include the path to the redo log files explicitly [in the Source connection configuration file]({{< relref "setup-guide#vi-set-up-connection-configuration" >}}). For example:
 
     ```YAML
     log-path: /home/replicant-user/shared/redo/online
