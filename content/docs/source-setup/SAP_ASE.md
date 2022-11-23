@@ -131,6 +131,10 @@ For a detailed explanation of configuration parameters in the Extractor file, re
 
 ## Use `bcp` Utility for Extraction
 
+{{< hint "info" >}}
+**Note:** `bcp` is only supported for snapshot mode.
+{{< /hint >}}
+
 You can configure Replicant to use the `bcp` (bulk copy program) utility for extracting data from your Source ASE. To do so, follow the steps below:
 
 ### Specify connection details
