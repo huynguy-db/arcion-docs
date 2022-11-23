@@ -10,7 +10,7 @@ bookCollapseSection: true
 
 Arcion's Oracle connector can replicate data from your Oracle source database and load it into your destination. 
 
-Here you'll find [a comprehensive setup guide]({{< relref "setup-guide" >}}) that can quickly get you up and running. We also describe [how Arcion can make use of Oracle redo log files]({{< relref "native-oracle-log-reader" >}}), [support for Oracle ASM]({{< relref "native-oracle-log-reader#oracle-asm-for-logs" >}}), and [Oracle's native Data Pump Export (expdp) utility]({{< relref "native-export" >}}).
+Here you'll find [a comprehensive setup guide]({{< relref "setup-guide" >}}) that can quickly get you up and running. We also describe [how Arcion can make use of Oracle redo log files]({{< relref "native-oracle-log-reader" >}}), [support for Oracle ASM]({{< relref "native-oracle-log-reader#oracle-asm" >}}), and [Oracle's native Data Pump Export (expdp) utility]({{< relref "native-export" >}}).
 
 ## In this section
 

@@ -34,9 +34,13 @@ Replicant user should have the following permissions granted for them in order t
 
   Replace *`USERNAME`* with your Oracle username.
 
-## Oracle ASM for Logs
 
-Replicant also supports using Oracle Automatic Storage Management (ASM) for logs. To use ASM, follow the steps below:
+## Choose How to Access Logs
+You can either use Oracle ASM to access the logs, or use the file system directly.
+
+### Oracle ASM
+
+Replicant supports using Oracle Automatic Storage Management (ASM) for logs. To use ASM, follow the steps below:
 
 1. Make sure that the following permission is granted:
 
@@ -72,9 +76,12 @@ Replicant also supports using Oracle Automatic Storage Management (ASM) for logs
     - *`ASM_USERNAME`*: the username to connect to the ASM instance.
     - *`ASM_PASSWORD`*: the password associated with *`ASM_USERNAME`*.
 
-3. To use the file system directly, Replicant must have access to the redo log files for reading. If Replicant's path(s) to redo log files is different from the database's path, you must include the path to the redo log files explicitly [in the Source connection configuration file]({{< relref "setup-guide#vi-set-up-connection-configuration" >}}). For example:
+  
+### File system
 
-    ```YAML
-    log-path: /home/replicant-user/shared/redo/online
-    archive-log-path: /home/replicant-user/shared/redo/archive
-    ```
+To use the file system directly, Replicant must have access to the redo log files for reading. If Replicant's path(s) to redo log files is different from the database's path, you must include the path to the redo log files explicitly [in the Source connection configuration file]({{< relref "setup-guide#vi-set-up-connection-configuration" >}}). For example:
+
+  ```YAML
+  log-path: /home/replicant-user/shared/redo/online
+  archive-log-path: /home/replicant-user/shared/redo/archive
+  ```
