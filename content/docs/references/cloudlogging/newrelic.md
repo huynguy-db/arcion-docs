@@ -67,6 +67,16 @@ Option to configure replication logs that you want to send to New Relic. It has 
   <dt><code>interval-s</code></dt>
   <dd>The interval between each successive transfer in seconds.</dd>
 
+  <dt><code>custom-attributes</code></dt>
+  <dd>To add user-defined attribute (<code>key</code>, <code>val</code>) in each log for grouping. For example, you may add the pipeline information by adding Source and Target attributes like below:
+
+  ```YAML
+  custom-attributes:
+    source: Oracle
+    target: Databricks
+  ```
+  </dd>
+
   </dl>
 
 ### `monitor-activity`
@@ -89,20 +99,26 @@ Below is a sample configuration file:
 ```YAML
 type: NEW_RELIC
 
-license-key: "*******************"
+license-key: "LICENSE_KEY"
 
 metrics-logging:
   enable: true
   interval-s: 5
+  custom-attributes:
+    host: localhost
+    pipeline: Oracle->Databricks
 
 trace-logging:
   enable: false
   interval-s: 5
-
-custom-attributes:
-  host: localhost
-  pipeline: Oracle->Databricks
+  custom-attributes:
+    replicationMode: FULL
+    pipeline: Oracle->Databricks
+  
+monitor-activity: true
 ```
+
+Replace *`LICENSE_KEY`* [with your New Relic license key](#license-key).
 
 ## Run Replicant
 As the final step, run Replicant with the `--cloud-logger` argument, providing it the path to the configuration file. For example:
