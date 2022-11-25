@@ -221,8 +221,8 @@ You have to enable either primary key or all column logging at either the databa
     ```SQL
     ALTER PLUGGABLE DATABASE $PDB_NAME OPEN READ WRITE FORCE;
     ```
-<br> </br>
-The proceeding steps are to set up Replicant. The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
+
+The following steps describe how to set up Replicant. We'll refer [the extracted `replicant-cli`]({{< relref "../../quickstart#ii-download-replicant-and-create-a-home-repository" >}}) as the `$REPLICANT_HOME` directory in the following steps.
 
 
 ## VI. Set up Connection Configuration
@@ -246,7 +246,11 @@ The proceeding steps are to set up Replicant. The extracted `replicant-cli` will
     password: 'Replicant#123' #Replace Replicant#123 with the your user's password
 
     max-connections: 30 #Maximum number of connections replicant can open in Oracle
+    continuous-log-mining: true
     ```
+
+    {{< hint "danger" >}} If you're using Oracle 19c, please set `continuous-log-mining` to `false`. For more information, see [Desupport of the `CONTINUOUS_MINE` feature of LogMiner](https://docs.oracle.com/en/database/oracle/oracle-database/19/upgrd/behavior-changes-deprecated-desupport-oracle-database.html#GUID-85615CEF-600E-4E78-9480-14102C60DC98). 
+    {{< /hint >}}
 
 
 ## VII. Set up Filter Configuration
