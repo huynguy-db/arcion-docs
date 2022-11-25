@@ -8,8 +8,8 @@ description: "Set up Oracle as Source. We discuss Oracle User, CDC, necessary pe
 # Oracle Source Setup Guide
 Follow the instructions below to set up a replication pipeline from your Oracle database to your destination using Arcion's Oracle connector.
 
-{{< hint "warning" >}}
-**Important:** The first five steps (I-V) describe how to prepare the Oracle Database for replication. You must execute these steps in an Oracle client. The remaining steps (VI-VIII) allow you to configure Replicant.
+{{< hint "info" >}}
+**Note:** The first five steps (I-V) describe how to prepare the Oracle Database for replication. You must execute these steps in an Oracle client. The remaining steps (VI-VIII) allow you to configure Replicant.
 {{< /hint >}}
 
 
