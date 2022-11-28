@@ -5,10 +5,55 @@ description: "Arcion Replicant maintains its own metadata for distributed and fa
 weight: 11
 ---
 
-In order to carry out a fault-tolerant distributed replication, Arcion Replicant needs to maintain a number of metadata tables of its own. It is possible to provision a separate metadata database using this configuration to make Replicant store all metadata tables in that database. If you don't specify this configuration, then Replicant will use the destination database itself to store metadata tables.
+# Metadata configuration
+
+In order to carry out a fault-tolerant distributed replication, Arcion Replicant needs to maintain a number of metadata tables of its own. Replicant uses [the metadata configuration file](#the-metadata-configuration-file) to handle metadata-related operations.
+
+## Metadata location
+Usually, [the metadata configuration file](#the-metadata-configuration-file) specifies a separate database where Replicant will store all metadata tables. You can also choose not to specify a metadata configuration file. In that case, if the target database is a data warehouse, such as Databricks and Snowflake, then Replicant will use SQLite to store metadata tables. For more information on how to specify the metadata configuration file to Replicant, see [Run Replicant with metadata configuration](#run-replicant-with-metadata-configuration).
    
-1. `type`: The type of the metadata database.
-2. `connection`: The connection config of the metadata database.
-3. `ddl-connection`*[v21.05.04.4]*: This optional section can be used to specify the configurations parameters for the connections to be used specially for DDL operations. All the connection configuration parameters above can be configured for DDL connections.
-4. `catalog`: The catalog to be used for storing metadata.
-5. `schema`: The schema to be used for storing metadata.
+## The metadata configuration file
+
+### `type`
+The type of the metadata database. For example, `MYSQL`, `SQLITE`.
+
+### `connection`
+The connection configuration of the metadata database. Replicant uses these connection parameters to connect to the metadata database. For more information about the connection parameters, see [Sample metadata configuration](#sample-metadata-configuration).
+
+### `ddl-connection` *[v21.05.04.4]*
+Optional. 
+
+For specifying the configurations parameters for the connections to be used specially for DDL operations. You can configure all the connection configuration parameters above for DDL connections.
+
+### `catalog`
+The catalog Replicant would use for storing metadata.
+
+### `schema`
+The schema Replicant would use for storing metadata.
+
+## Sample metadata configuration
+You can find some sample metadata configuration files inside the `conf/metadata` directory of [your Arcion self-hosted download]({{< relref "../quickstart#ii-download-replicant-and-create-a-home-repository">}}). Below is a sample for MySQL as the metadata database:
+
+```YAML
+type: MYSQL
+
+connection:
+  host: localhost
+  port: 53585
+  username: 'replicant'
+  password: 'Replicant#123'
+  max-connections: 30
+
+catalog: io_replicate
+```
+
+## Run Replicant with metadata configuration
+To specify your metadata configuration file to Replicant, run Replicant with the  `--metadata` argument and give it the full path to your configuration file. For example:
+
+```shell
+./bin/replicant full conf/conn/source_database_name.yaml \
+conf/conn/target_database_name.yaml \
+--extractor conf/src/source_database_name.yaml \
+--applier conf/dst/target_database_name.yaml \
+--metadata conf/metadata/database_name.yaml \
+```
