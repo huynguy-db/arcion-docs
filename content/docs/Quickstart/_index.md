@@ -169,6 +169,18 @@ The proceeding steps are only required if you intend to run Replicant in real-ti
    --filter filter/<source-database-name>_filter.yaml \
    ```
 
+## Upgrade Arcion Replicant
+
+We recommend that you always use the latest version of Replicant. That way, you can enjoy the latest features and various quality improvmements. 
+
+You can grab the latest version of Replicant from our [Arcion Self-hosted page](https://www.arcion.io/self-hosted).
+
+To get the most out of your upgrades, follow the tips below:
+
+- Keep the configuration files isolated from the `replicant-cli` directory tree. During version upgrades, they might get overwritten.
+- After upgrade, copy your `replicant.lic` license file [to the new `REPLICANT_HOME`](#ii-download-replicant-and-create-a-home-repository).
+- Copy the contents of your older `$REPLICANT_HOME/lib` directory to the new version `lib` directory `$REPLICANT_HOME/lib`.
+
 ## Database Specific Setup Overview
 
 Different source and target databases may have slightly more specific and different setup instructions than the general guidelines provided in this Quickstart Guide. Follow the six steps below for a pipeline specific setup for Replicant:
