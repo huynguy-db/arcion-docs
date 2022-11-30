@@ -54,8 +54,8 @@ The replication occurs from a source MariaDB system to a target MariaDB system. 
 The source has the following properties:
 
 - It has two databases DB1 and DB2.
-- DB1 has four tables: C1, C2, C3, and C4.
-- DB2 has two tables: C5 and C6.
+- DB1 has four tables: T1, T2, T3, and T4.
+- DB2 has two tables: T5 and T6.
 
 Now follow the steps below:
 
@@ -73,30 +73,30 @@ For more information about MariaDB's connection configuration files, see [MariaD
 ### Prepare the filter files
 1. In machine N1, create a new filter file `mariadb_filter_repl1.yaml` to specify databases or tables for replicating from N1. Put the filter file inside the `REPLICANT_HOME/filter` directory of N1.
 
-2. Specify tables DB1.C1, DB1.C2, DB1.C3 in the filer file of N1. For example:
+2. Specify tables DB1.T1, DB1.T2, DB1.T3 in the filer file of N1. For example:
 
     ```YAML
     allow:
     - catalog: "DB1"
       types: [TABLE]
         allow:
-          C1:
-          C2:
-          C3:
+          T1:
+          T2:
+          T3:
     ```
 
 3. In machine N2, create a new filter file `mariadb_filter_repl2.yaml` to specify databases or tables for replicating from N2. Put the filter file inside the `REPLICANT_HOME/filter` directory of N2.
 
-4. Specify tables DB1.C4, DB1.C5, DB1.C6 in the filer file of N2. For example:
+4. Specify tables DB1.T4, DB1.T5, DB1.T6 in the filer file of N2. For example:
 
     ```YAML
     allow:
     - catalog: "DB1"
       types: [TABLE]
         allow:
-          C4:
-          C5:
-          C6:
+          T4:
+          T5:
+          T6:
     ```
 For more information on how you can write filters, see [Filter Configuration]({{< relref "filter-reference" >}}).
 
