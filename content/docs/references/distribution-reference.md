@@ -135,6 +135,10 @@ conf/conn/mariadb_src_repl2.yaml conf/conn/mariadb_dst.yaml \
 {{< /tab >}}
 {{< /tabs >}}
 
+{{< hint "info" >}}
+**Tip:** You can stop replication at any time and then resume it using the `--resume` argument. For more information, see [Additional Replicant Commands]({{< relref "../running-replicant#additional-replicant-commands" >}}).
+{{< /hint >}}
+
 Notice the `--distribute` parameter with the full path to the distribution configuration file. Also make sure that the `--id` you specify in your Replicant command matches [the `leader` and worker IDs in the distribution configuration file](#group).
 
 
