@@ -61,11 +61,6 @@ To use log-based CDC, the Oracle database must be in ARCHIVELOG mode. To check w
   ALTER DATABASE OPEN
   ```
 
-After you've set the database to ARCHIVELOG mode, set the destination for the log archive:
-  ```BASH
-  ALTER SYSTEM SET log_archive_dest = '$PATH_TO_REDO_LOG_FILES' scope=spfile  
-  ```
-
 ### Set permissions
 
 1. Once the database is in ARCHIVELOG mode, grant the EXECUTE_CATALOG_ROLE role to use the DBMS_LOGMNR package:
