@@ -10,28 +10,34 @@ bookHidden: false
 
 The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory.
 
-## I. Install mysqlbinlog Utility on Replicate Host
+## I. Install mysqlbinlog utility on Replicant Host
 
-1. Install a compatible mysqlbinlog utility (compatible with the source MySQL server) on the machine where replicate will be running
-  * **Note**: The easiest way to install the correct mysqlbin log utility is to install the the the same MySQL server version as your source MySQL System. After installation, you can stop this MySQL server running on replicate’s host using the command
-    ```BASH
-    sudo systemctl stop mysql
-    ```
-## II. Enable binlogging in MariaDB server
-1. Edit MySQL config file var/lib/my.cnf (create the file if does not exist) and add the lines shown below:
+Install a compatible `mysqlbinlog` utility (compatible with the source MySQL server) on the machine where Replicant will be running. The easiest way to install the correct version of `mysqlbinlog` is to install the the the same MySQL server version as your source MySQL System. After installation, you can stop the running  MySQL server on Replicant host using the following command:
+
+  ```BASH
+  sudo systemctl stop mysql
+  ```
+
+## II. Enable binary logging in MariaDB server
+
+1. Add the following lines to the MySQL configuration file `/var/lib/my.cnf`. Create the file if it doesn't already exist.
+  
     ```SHELL
     [mysqld]
     log-bin=mysql-log.bin
     ```
-2. Export `$MYSQL_HOME` path:
-    ```SQL
+
+2. Export the `$MYSQL_HOME` path:
+
+    ```SHELL
     export MYSQL_HOME=/var/lib/mysql
     ```
+
 3. Restart MySQL:
     ```BASH
     sudo systemctl restart mysql
     ```
-4. Verify if binlogging is turned on:
+4. Verify if binary logging is turned on:
     ```BASH
     mysql -u root -p
     ```
@@ -50,7 +56,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     +---------------------------------+--------------------------------+
     7 rows in set (0.011 sec)
     ```
-5. Set binglog format:
+5. Set the binary log format:
     ```BASH
     mysql -u root -p
     ```
@@ -58,21 +64,24 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     mysql> SET GLOBAL binlog_format = 'ROW'
     ```
 
-## III. Setup MySQL User for Replicant
+## III. Set up MySQL user for Replicant
 1.	Create MySQL user:
     ```SQL
     CREATE USER 'username'@'replicate_host' IDENTIFIED BY 'password';
     ```
+    
 2.	Grant the following privileges on all tables involved in replication:
     ```SQL
     GRANT SELECT ON "<user_database>"."<table_name>" TO 'username'@'replicate_host';
     ```
+
 3.	Grant the following Replication privileges:
     ```SQL
     GRANT REPLICATION CLIENT ON *.* TO 'username'@'replicate_host';
     GRANT REPLICATION SLAVE ON *.* TO 'username'@'replicate_host';
     ```
-4.	Verify if created user can access bin logs:
+
+4.	Verify if created user can access binary logs:
     ```SQL
     MariaDB [(none)]> show binary logs;
     +------------------+-----------+
@@ -85,8 +94,6 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     +------------------+-----------+
     4 rows in set (0.001 sec)
     ```
-
-
 
 ## IV. Set up Connection Configuration
 
@@ -101,53 +108,61 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     ```YAML
     type: MARIADB
 
-    host: 127.0.0.1 #Replace 127.0.0.1 with your MariaDB server host
-    port: 3306 #Replace 3306 with the port number to connect to your MariaDB server
+    host: HOSTNAME
+    port: PORT_NUMBER
 
-    username: "replicant" #Replace replicant with your username that connects to your MariaDB server
-    password: "Replicant#123" #Replace Replicant#123 with the your user's password
+    username: "USERNAME"
+    password: "PASSWORD"
 
     slave-server-ids: [1]
     max-connections: 30 #Maximum number of connections replicant can open in MariaDB
     ```
 
-## V. Setup Filter Configuration
+    Replace the following:
+    - *`HOSTNAME`*: the hostname of your MariaDB host
+    - *`PORT_NUMBER`*: the port number of the host
+    - *`USERNAME`*: a valid username that connects to your MariaDB server
+    - *`PASSWORD`*: the password associated with *`USERNAME`*.
+
+## V. Set up Filter Configuration
 
 1. From ```$REPLICANT_HOME```, navigate to the filter configuration file:
     ```BASH
     vi filter/mariadb_filter.yaml
     ```
 
-2. In accordance to you replication needs, specify the data which is to be replicated. Use the format of the example explained below:  
+2. According to your replication needs, specify the data that you need to replicate. Use the format of the following example:  
 
     ```yaml
     allow:
-      #In this example, data of object type Table in the catalog tpch will be replicated
       catalog: "tpch"
       types: [TABLE]
 
-      #From database tpch, only the NATION, ORDERS, and PART tables will be replicated.
-      #Note: Unless specified, all tables in the database will be replicated
       allow:
         NATION:
-        #Within NATION, only the US and AUS columns will be replicated
         allow: ["US, AUS"]
 
         ORDERS:  
-          #Within ORDERS, only the product and service columns will be replicated as long as they meet the condition o_orderkey < 5000
           allow: ["product", "service"]
           conditions: "o_orderkey < 5000"
 
-        PART: #All columns in the table PART will be replicated without any predicates
+        PART:
       ```
+      
+      The preceding sample consists of the following elements:
 
-      The following is a template of the format you must follow:
+      - Data of object type `TABLE` in the catalog `tpch` will be replicated.
+      - From database `tpch`, only the `NATION`, `ORDERS`, and `PART` tables will be replicated. If you don't specify anything, all tables will be replicated.
+      - Within `NATION`, only the `US` and `AUS` columns will be replicated.
+      - From the `ORDERS` table, only the `product` and `service` columns will be replicated as long as they meet the condition you specified in `conditions`.
+      - Since the `PART` column doesn't specify any table, all of its tables will be replicated.
+
+      The preceeding sample follows the followig generic format. You must adhere to this format for specifying your filters.
 
       ```YAML
       allow:
         catalog: <your_catalog_name>
         types: <your_object_type>
-
 
         allow:
           <your_table_name>:
@@ -160,11 +175,11 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
           <your_table_name>:         
       ```
-For a detailed explanation of configuration parameters in the filter file, read: [Filter Reference]({{< ref "/docs/references/filter-reference" >}} "Filter Reference")
+For a detailed explanation of configuration parameters in the filter file, see [Filter Reference]({{< ref "/docs/references/filter-reference" >}} "Filter Reference").
 
-## VI. Set up Extractor Configuration
+## VI. Create heartbeat table
 
-In real-time replication, for accurate computation of latency, you must create a heartbeat table in the source MariaDB.
+For real-time replication,  you must create a heartbeat table in the source MariaDB. This ensures an accurate computation of latency. To create a heartbeat table, follow these steps:
 
 1. Create a heartbeat table in the catalog/schema you are going to replicate with the following DDL:
    ```SQL
@@ -173,44 +188,48 @@ In real-time replication, for accurate computation of latency, you must create a
      PRIMARY KEY("timestamp"));
    ```
 
-2. Grant ```INSERT```, ```UPDATE```, and ```DELETE``` privileges on the heartbeat table to the user configured for replication
+2. Grant ```INSERT```, ```UPDATE```, and ```DELETE``` privileges on the heartbeat table to the user configured for replication.
 
-3. From ```$REPLICANT_HOME```, navigate to the extractor configuration file:
+## VII. Set up Extractor configuration
+
+1. From ```$REPLICANT_HOME```, navigate to the Extractor configuration file:
    ```BASH
    vi conf/src/mariadb.yaml
    ```
 
-4. Under the Realtime Section, make the necessary changes as follows:
-    ```YAML
-    realtime:
-      heartbeat:
-        enable: true
-        catalog: "tpch" #Replace tpch with your database name
-        table-name [20.09.14.3]: replicate_io_cdc_heartbeat #Replace replicate_io_cdc_heartbeat with your heartbeat table's name if applicable
-        column-name [20.10.07.9]: timestamp #Replace timestamp with your heartbeat table's column name if applicable
-    ```
-5. Below is a sample extractor file with commonly used configuration parameters:
+2. The Extractor configuration file has two parts:
+   
+   - Parameters related to snapshot mode.
+   - Parameters related to realtime mode.
+
+    ### Parameters related to snapshot mode
+    For snapshot mode, the following is a sample configuration:
+
     ```YAML
     snapshot:
       threads: 16
       fetch-size-rows: 15_000
 
-    #  per-table-config:
-    #  - catalog: tpch
-    #    tables:
-    #      ORDERS:
-    #        num-jobs: 1
-    #      LINEITEM:
-    #        row-identifier-key: [L_ORDERKEY]
-    #        split-key: l_orderkey
-
-    realtime:
-      threads: 4
-      fetch-size-rows: 10_000
-
-      heartbeat:
-        enable: true
-        catalog: tpch
-        interval-ms: 10000
+      per-table-config:
+      - catalog: tpch
+        tables:
+          ORDERS:
+            num-jobs: 1
+          LINEITEM:
+            row-identifier-key: [L_ORDERKEY]
+            split-key: l_orderkey
     ```
-For a detailed explanation of configuration parameters in the extractor file, read: [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference")
+
+    ### Parameters related to realtime mode
+    For operating in realtime mode, define your configurations in the `realtime` section of the configuration file. The following is a sample:
+    
+      ```YAML
+      realtime:
+        heartbeat:
+          enable: true
+          catalog: "tpch" #Replace tpch with your database name
+          table-name: replicate_io_cdc_heartbeat #Replace replicate_io_cdc_heartbeat with your heartbeat table's name if applicable
+          column-name: timestamp #Replace timestamp with your heartbeat table's column name if applicable
+      ```
+
+For a detailed explanation of configuration parameters in the extractor file, see [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference").
