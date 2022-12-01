@@ -50,9 +50,9 @@ Replicant requires the JDBC driver for Oracle as a dependency. To obtain the app
 
 ## III. Set up Change Data Capture (CDC)
 
-### Set archive log destination
+### Enable ARCHIVELOG mode
 
-To use log-based CDC, the Oracle database must be in ARCHIVELOG mode. To check what mode the database is in, use the ```ARCHIVE LOG LIST``` command. To set the database in ARCHIVELOG mode, use the following commands:
+To use log-based CDC, the Oracle database must be in ARCHIVELOG mode. To check what mode the database is in, use the `ARCHIVE LOG LIST` command. To set the database in ARCHIVELOG mode, use the following commands:
   
   ```SQL
   SHUTDOWN IMMEDIATE
