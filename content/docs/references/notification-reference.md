@@ -181,10 +181,10 @@ The following parameters are available to configure lag notifications:
 Whether to enable lag notifications.
 
 ### `threshold-ms`
-Threshold value in milliseconds. If replication lag is below this value and for [`stable-time-out-s` seconds](#stable-time-out-s) , Replicant sends a notification. If replication lag increases above this value, Replicant sends a new notification once the lag stabilizes below this threshold value for [`stable-time-out-s` seconds](#stable-time-out-s) again.
+The threshold value in milliseconds.
 
 ### `stable-time-out-s`
-A timeout value in seconds within which we expect the replication to recover from lag and stabilize. If replication lag stabilizes within this time period and goes below [`threshold-ms` milliseconds](#threshold-ms), Replicant sends a notification.
+A timeout value in seconds within which we expect the replication to recover from lag and stabilize.
 
 ### `check-interval-s`
 The time period in seconds after which Replicant calculates the global lag every time. In case of [distributed replication]({{< relref "distribution-reference" >}}), Replicant calculates the lag across all Replicant nodes.
@@ -197,6 +197,9 @@ lag-notification:
   threshold-ms: 10_000
   stable-time-out-ms: 60_000
 ```
+### How lag notifications work
+Only the first time when replication lag is below [the threshold value `threshold-ms`](#threshold-ms) for [`stable-time-out-s` seconds](#stable-time-out-s) , Replicant sends a notification. As long replication lag stays below [`threshold-ms`](#threshold-ms), Replicant doesn't send any new notification. If replication lag increases over the threshold value, Replicant sends a new notification once the lag stabilizes below the threshold value for [`stable-time-out-s` seconds](#stable-time-out-s) again.
+
 
 {{< hint "info" >}}
 **Note:**
