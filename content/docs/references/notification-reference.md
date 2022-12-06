@@ -171,7 +171,7 @@ script-alert:
 ## Configure lag notifications
 The notification configuration file lets you specifically configure notifications about replication lags. For example, you can configure Replicant to send you notification when replication is lagging more than a threshold value.
 
-You need to specify your configurations under the `lag-notification` section of the notification configuration file. For more information, see the sample at the end of this section. 
+You need to specify your configurations under the `lag-notification` section of the notification configuration file. For more information, see the sample at the end of this section. To understand how lag notifications work, see [How lag notifications work](#how-lag-notifications-work).
 
 The following parameters are available to configure lag notifications:
 
@@ -198,7 +198,7 @@ lag-notification:
   stable-time-out-ms: 60_000
 ```
 ### How lag notifications work
-Only the first time when replication lag is below [the threshold value `threshold-ms`](#threshold-ms) for [`stable-time-out-s` seconds](#stable-time-out-s) , Replicant sends a notification. As long replication lag stays below [`threshold-ms`](#threshold-ms), Replicant doesn't send any new notification. If replication lag increases over the threshold value, Replicant sends a new notification once the lag stabilizes below the threshold value for [`stable-time-out-s` seconds](#stable-time-out-s) again.
+Replicant sends a notification only the first time when replication lag is below [the threshold value `threshold-ms`](#threshold-ms) for [`stable-time-out-s` seconds](#stable-time-out-s). As long replication lag stays below [`threshold-ms`](#threshold-ms), Replicant doesn't send any new notification. If replication lag increases over the threshold value, Replicant sends a new notification once the lag stabilizes below the threshold value for [`stable-time-out-s` seconds](#stable-time-out-s) again.
 
 
 {{< hint "info" >}}
