@@ -14,7 +14,9 @@ When loading data into S3, Replicant first converts the data extracted from the 
 Both types of files are structured conforming to the replicated data. In the following sections, we discuss both CSV and JSON file formats for snapshot and realtime replication modes with examples.
 
 
-## CSV file format for snapshot mode
+## CSV file format
+
+### Snapshot mode
 
 In snapshot mode, if the original table contains _X_ columns,  Replicant assigns a row in the CSV file for holding the data of those _X_ columns. For example, if the original table has three columns containing the values `0`, `Africa`, and `Africa` respectively, the the data in the CSV file has the following structure:
 
@@ -22,7 +24,7 @@ In snapshot mode, if the original table contains _X_ columns,  Replicant assigns
 0, AFRICA ,AFRICA
 ```
 
-## CSV file format for full and realtime mode
+### Full and realtime mode
 
 In full and realtime mode, if the original table contains _X_ columns, a row in the CSV file contains data for _3X+3_ columns. Every row corresponds to a single DML operation.
 
@@ -44,7 +46,7 @@ You can interpret the first _3X_ columns of a row as _X_ triplets, where each tr
 
 In the following sections, we go through some examples for insert, update, and delete operations.
 
-### Sample insert operation
+#### Sample insert operation
 Consider the following DML for an insert operation:
 
 ```DML  
@@ -62,7 +64,7 @@ timestamp"":1620787841959,""extractionTimestamp"":1620787841959,""dscId"":/
 `INSERT` statement doesn’t have any OLD_VAL section. Every triplet has EXISTS_VAL as `1`.
 
 
-### Sample update operation
+#### Sample update operation
 Consider the following DML for an update operation:
 
 ```DML
@@ -80,7 +82,7 @@ USA,NULL,1,NULL,NULL,0,NULL,10,2,U,"{""extractorId"":0,""nodeID"":""node1"",/
 
 In the preceeding `UPDATE` statement, the `SET` section corresponds to NEW_VAL and the `WHERE` section corresponds to OLD_VAL. `r_name` has no presence in any section. That's why EXISTS_VAL is `0`.
 
-### Sample delete operation
+#### Sample delete operation
 Consider the following DML for a delete operation:
 
 ```DML
@@ -95,21 +97,9 @@ NULL,NULL,0,NULL,NULL,0,NULL,10,2,D,"{""extractorId"":0,""nodeID"":""node1"/
 "updateCount"":1,""deleteCount"":1,""replaceCount"":0}"
 ```
 
-## JSON file format for snapshot mode
+## JSON file format
 
-In snapshot mode, if the original table contains _X_ columns, each row in the JSON file contains data for a single column in key-value pairs. For example, if the original table has three columns named `r_regionkey`, `r_comment`, and `r_name`, and the columns respectively contain the values `0`,`No comment`, and `Africa`, then the JSON file represents the data in the following way:
-
-```JSON
-{
-	"r_regionkey": "0",
-	"r_comment": "No comment",
-	"r_name": "AFRICA"
-}
-```
-
-## JSON file format for full and realtime mode
-
-For full and realtime mode, the JSON file has the following parameters to represent table data in Arcion internal CDC format:
+For snapshot, full, and realtime mode, the JSON file has the following parameters to represent table data in Arcion internal CDC format:
 
 ### `tableName`
 The catalog, schema, or table name.
@@ -176,9 +166,145 @@ An integer. It can have the following four values:
 ### `operationcount`
 Counts the total number of delete, insert, or update events Replicant has processed untill now.
 
-In the following sections, we go through some examples for insert, update, and delete operations.
+### Examples for snapshot mode
+In the following sections, we go through some examples for insert, update, and delete operations in snapshot mode.
 
-### Sample insert Operation
+#### Sample insert operation
+Consider the following DML for an insert operation:
+
+```DML
+INSERT INTO tpch_scale_0_01.nation values(100,"Testing name",2,"Testing comment");
+```
+
+The JSON file structure for the preceeding operation is as follows:
+
+```JSON
+{
+  "tableName":{
+    "namespace":{
+      "catalog":"tpch_scale_0_01",
+      "schema":"default_schema",
+      "hash":-27122659
+    },
+    "name":"nation",
+    "hash":-1893420405
+  },
+  "opType":"I",
+  "cursor":"{\"extractorId\":0,\"timestamp\":1657516903000,\"extractionTimestamp\":1657516904088,\"log\":\"log-bin.000010\",\"position\":7461,\"logSeqNum\":1,\"slaveServerId\":1,\"v\":2}",
+  "before":{
+    "n_comment":"null",
+    "n_nationkey":"null",
+    "n_regionkey":"null",
+    "n_name":"null"
+  },
+  "after":{
+    "n_comment":"Testing comment",
+    "n_nationkey":"100",
+    "n_regionkey":"2",
+    "n_name":"Testing name"
+  },
+  "exists":{
+    "n_comment":"1",
+    "n_nationkey":"1",
+    "n_regionkey":"1",
+    "n_name":"1"
+  },
+  "operationcount":"{\"insertCount\":30,\"updateCount\":0,\"deleteCount\":0,\"replaceCount\":0}"
+}
+```
+
+#### Sample update operation
+Consider the following DML for an update operation:
+
+```DML
+UPDATE tpch_scale_0_01.nation set n_name="Updating test name" where n_nationkey=100;
+```
+
+The JSON file structure for the preceeding operation is as follows:
+
+```JSON
+{
+  "tableName":{
+    "namespace":{
+      "catalog":"tpch_scale_0_01",
+      "schema":"default_schema",
+      "hash":-27122659
+    },
+    "name":"nation",
+    "hash":-1893420405
+  },
+  "opType":"U",
+  "cursor":"{\"extractorId\":0,\"timestamp\":1657516946000,\"extractionTimestamp\":1657516947142,\"log\":\"log-bin.000010\",\"position\":9149,\"logSeqNum\":1,\"slaveServerId\":1,\"v\":2}",
+  "before":{
+    "n_comment":"Testing comment",
+    "n_nationkey":"100",
+    "n_regionkey":"2",
+    "n_name":"Testing name"
+  },
+  "after":{
+    "n_comment":"Testing comment",
+    "n_nationkey":"100",
+    "n_regionkey":"2",
+    "n_name":"Updating test name"
+  },
+  "exists":{
+    "n_comment":"3",
+    "n_nationkey":"3",
+    "n_regionkey":"3",
+    "n_name":"3"
+  },
+  "operationcount":"{\"insertCount\":30,\"updateCount\":1,\"deleteCount\":0,\"replaceCount\":0}"
+}
+```
+
+#### Sample delete operation
+Consider the following DML for a delete operation:
+
+```DML
+DELETE from tpch_scale_0_01.nation where n_nationkey=100;
+```
+
+The JSON file structure for the preceeding operation is as follows:
+
+```JSON
+{
+  "tableName":{
+    "namespace":{
+      "catalog":"tpch_scale_0_01",
+      "schema":"default_schema",
+      "hash":-27122659
+    },
+    "name":"nation",
+    "hash":-1893420405
+  },
+  "opType":"D",
+  "cursor":"{\"extractorId\":0,\"timestamp\":1657516954000,\"extractionTimestamp\":1657516955151,\"log\":\"log-bin.000010\",\"position\":9872,\"logSeqNum\":1,\"slaveServerId\":1,\"v\":2}",
+  "before":{
+    "n_comment":"Testing comment",
+    "n_nationkey":"100",
+    "n_regionkey":"2",
+    "n_name":"Updating test name"
+  },
+  "after":{
+    "n_comment":"null",
+    "n_nationkey":"null",
+    "n_regionkey":"null",
+    "n_name":"null"
+  },
+  "exists":{
+    "n_comment":"2",
+    "n_nationkey":"2",
+    "n_regionkey":"2",
+    "n_name":"2"
+  },
+  "operationcount":"{\"insertCount\":30,\"updateCount\":1,\"deleteCount\":1,\"replaceCount\":0}"
+}
+```
+
+### Examples for full and realtime mode
+In the following sections, we go through some examples for insert, update, and delete operations in realtime mode.
+
+#### Sample insert operation
 Consider the following DML for an insert operation:
 
 ```DML
@@ -220,7 +346,7 @@ The JSON file structure for the preceeding operation is as follows:
 }
 ```
 
-### Sample update Operation
+#### Sample update Operation
 Consider the following DML for an update operation:
 
 ```DML
@@ -263,7 +389,7 @@ The JSON file structure for the preceeding operation is as follows:
 }
 ```
 
-### Sample delete Operation
+#### Sample delete Operation
 Consider the following DML for a delete operation:
 
 ```DML
