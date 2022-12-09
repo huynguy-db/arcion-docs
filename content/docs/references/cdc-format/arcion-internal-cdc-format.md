@@ -97,7 +97,7 @@ NULL,NULL,0,NULL,NULL,0,NULL,10,2,D,"{""extractorId"":0,""nodeID"":""node1"/
 
 ## JSON file format for snapshot mode
 
-In snapshot mode, if the original table contains _X_ columns, a row in the CSV file contains data for _X_ columns. For example, if the original table has three columns named `r_regionkey`, `r_comment`, and `r_name`, and the columns respectively contain the values `0`,`No comment`, and `Africa`, then the JSON file represents the data in the following way:
+In snapshot mode, if the original table contains _X_ columns, each row in the JSON file contains data for a single column in key-value pairs. For example, if the original table has three columns named `r_regionkey`, `r_comment`, and `r_name`, and the columns respectively contain the values `0`,`No comment`, and `Africa`, then the JSON file represents the data in the following way:
 
 ```JSON
 {
