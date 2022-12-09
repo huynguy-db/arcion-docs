@@ -233,6 +233,10 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
       ```SQL
       ALTER SESSION SET QUOTED_IDENTIFIERS_IGNORE_CASE = TRUE;
       ```
+      After executing the preceeding command, you can select table with lower case names by surrounding the names with double quotation marks.
+
+
+
       
 
     ### Use Type-2 CDC
