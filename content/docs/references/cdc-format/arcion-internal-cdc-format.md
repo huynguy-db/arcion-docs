@@ -117,7 +117,7 @@ The catalog, schema, or table name.
 ### `opType`
 The event type. The following three event types are available corresponding to three DML operations:
 
-  <dl>
+  <dl class="dl-indent">
 
   <dt><code>I</code></dt>
   <dd>
@@ -148,7 +148,7 @@ The image of the rows once execution of the query finished.
 ### `exists`
 An integer. It can have the following four values:
 
-<dl>
+<dl class="dl-indent" >
 
   <dt><code>0</code></dt>
   <dd>
