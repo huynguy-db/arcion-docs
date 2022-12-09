@@ -11,8 +11,6 @@ Arcion Replicant uses [the Debezium format](https://debezium.io/) to represent C
 ## Overview
 Replicant specifically follows the format for Debezium MySQL connector for Apache Kafka as data target. For more information, see [Debezium connector for MySQL](https://debezium.io/documentation/reference/stable/connectors/mysql.html).
 
-For any update operation that changes a row's primary key field(s), Debezium represents it as a pair of delete and create events. In our implementation of Kafka as target using Debezium format, you may expect an update on primary key as a normal update event. For more information about Debezium's primary key updates, see [MySQL primary key updates](https://debezium.io/documentation/reference/stable/connectors/mysql.html#mysql-primary-key-updates).
-
 ## Examples
 In this section, we'll see how insert, update, and delete events look like in Debezium format for snapshot and realtime mode.
 
