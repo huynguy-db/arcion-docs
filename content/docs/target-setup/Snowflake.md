@@ -231,13 +231,9 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     - Enable PK/UK logging if Source table has PK/UK. If table does not have any PK, then only enable full logging. For example, if you're loading data from Oracle, it has support for UK logging.
     - You might want to select any table in your Snowflake dashboard while operating. Due to a Snowflake limitation, problems may arise if table name contains lower case. So you need to execute the following command first:
       ```SQL
-      ALTER SESSION SET QUOTED_IDENTIFIERS_IGNORE_CASE = TRUE;
+      ALTER SESSION SET QUOTED_IDENTIFIERS_IGNORE_CASE = FALSE;
       ```
       After executing the preceeding command, you can select table with lower case names by surrounding the names with double quotation marks.
-
-
-
-      
 
     ### Use Type-2 CDC
     From version 22.07.19.3 onwards, Arcion supports Type-2 CDC for Snowflake as the Target. Type-2 CDC enables a Target to have a history of all transactions performed in the Source. For example:
