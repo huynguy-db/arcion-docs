@@ -10,7 +10,7 @@ weight: 5
 Replicant can send you important notifications regarding various replication status. For example, you can easily choose the type of notifications, notification recipients, and so on. Having up to date information always at your disposal can significantly help you monitor your data pipelines more effectively.
 
 ## Overview
-You can choose to receive 
+You can choose to receive notifications through either emails, or use a custom script. See the following sections for more information on each.
 
 ## The notification configuration file
 The notification configuration file `notifications.yaml` specifies the types of notifications Replicant sends. You can find a sample notification configuration file inside the `conf/notification` directory of [your Arcion self-hosted download]({{< relref "../quickstart#ii-download-replicant-and-create-a-home-repository" >}}). To know about the available configuration parameters in the notification configuration file, see the following sections.
