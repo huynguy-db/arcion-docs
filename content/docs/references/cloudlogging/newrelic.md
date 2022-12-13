@@ -28,7 +28,7 @@ Region where New Relic is hosted. Available regions are `US` and `EU`.
 
 ### `metrics-logging`
 Option to configure replication statistics that you want to send to New Relic. It has the following parameters:
-  <dl>
+  <dl class="dl-indent">
 
   <dt><code>enable</code></dt>
   <dd>
@@ -55,7 +55,7 @@ Option to configure replication statistics that you want to send to New Relic. I
   
 ### `trace-logging`
 Option to configure replication logs that you want to send to New Relic. It has the following parameters:
-  <dl>
+  <dl class="dl-indent">
 
   <dt><code>enable</code></dt>
   <dd>

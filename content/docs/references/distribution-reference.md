@@ -19,7 +19,7 @@ The replication group. Each group can be uniquely identified with an ID. See the
 
 You can configure each group with the following parameters:
 
-<dl>
+<dl class="dl-indent">
 <dt><code>id</code></dt>
 <dd> 
 A unique ID to identify the logical replication group—for example, <code>test-group</code>.

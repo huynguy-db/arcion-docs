@@ -173,7 +173,7 @@ With this set and `retry-transactions` set to `true`, Relicant retries each real
 ### `replay-consistency` *[v20.09.14.1]*
 Indicates the type of transactional consistency. The following values are possible:
 
-  <dl>
+  <dl class="dl-indent">
 
   <dt><code>GLOBAL</code></dt>
   <dd> Real-time replication is performed with global transactional consistency.
