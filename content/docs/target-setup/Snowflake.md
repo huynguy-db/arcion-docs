@@ -300,7 +300,7 @@ From version A.B.X.Y, Arcion supports [Snowflake Iceberg tables]((https://docs.s
 
   - *`<volume_name>`*: the name of the new external volume
   - *`<iam_role>`*: the Amazon Resource Name (ARN) of the IAM role you created
-  - *`<path>`*: an optional path that can provide granular control over objects in the bucket. 
+  - *`<path>`*: an optional path that can provide granular control over objects in the bucket 
 
 For more information on granting Snowflake access to your Amazon S3 bucket, see [Accessing Amazon S3 Using External Volumes
 ](https://docs.snowflake.com/en/LIMITEDACCESS/table-external-volume-s3.html).
