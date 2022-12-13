@@ -1,7 +1,7 @@
 ---
 pageTitle: Documentation for Snowflake Target connector
 title: Snowflake
-description: "Set up Snowflake as Target for your data pipelines using Arcion Snowflake connector. Learn about Type-2 CDC support for Snowflake as Target."
+description: "Set up Snowflake as Target for your data pipelines using Arcion Snowflake connector. Learn about Type-2 CDC and Snowflake Iceberg tables support."
 weight: 10
 bookHidden: false
 ---
@@ -273,3 +273,59 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
       csv-publish-method: READ
     ```
   For a detailed explanation of configuration parameters in the Applier file, read [Applier Reference]({{< ref "/docs/references/applier-reference" >}}).
+
+## Use Snowflake Iceberg Tables
+From version A.B.X.Y, Arcion supports [Snowflake Iceberg tables]((https://docs.snowflake.com/en/LIMITEDACCESS/tables-iceberg.html)) as target for both snapshot-based and realtime replication. To use Snowflake Iceberg tables as target, follow the instructions in the following sections.
+
+### Prerequisites
+
+1. Create an Amazon S3 bucket (if it doesn't exist).
+
+2. Create external volume in Snowflake for your AWS S3 bucket using the `CREATE EXTERNAL VOLUME` command:
+
+  ```SQL
+  CREATE EXTERNAL VOLUME <volume_name>
+    STORAGE_LOCATIONS =
+      (
+        (
+        NAME = '<volume_name>'
+        STORAGE_PROVIDER = 'S3'
+        STORAGE_AWS_ROLE_ARN = '<iam_role>'
+        STORAGE_BASE_URL = 's3://<bucket>[/<path>/]'
+        )
+      ); 
+  ```
+
+  Replace the following:
+
+  - *`<volume_name>`*: the name of the new external volume
+  - *`<iam_role>`*: the Amazon Resource Name (ARN) of the IAM role you created
+  - *`<path>`*: an optional path that can provide granular control over objects in the bucket. 
+
+For more information on granting Snowflake access to your Amazon S3 bucket, see [Accessing Amazon S3 Using External Volumes
+](https://docs.snowflake.com/en/LIMITEDACCESS/table-external-volume-s3.html).
+
+### Specify Iceberg as table type in Applier configuration file
+In [your Applier configuration file](#ii-set-up-applier-configuration), you need to set the `table-type` property to `ICEBERG` under [the `per-table-config` configuration]({{< ref "docs/references/applier-reference#per-table-config" >}}). For example, look at the following sample Applier configuration:
+
+```YAML
+snapshot:
+  threads: 8
+
+  batch-size-rows: 600_000
+  txn-size-rows: 600_000
+  per-table-config:
+  - catalog: "CATALOG"
+    schema: "SCHEMA"
+    tables:
+      TABLE_NAME:
+        table-type: ICEBERG
+
+  bulk-load:
+    enable: true
+    type: FILE
+    save-file-on-error: true
+```
+
+{{< hint "warning" >}} **Attention:** In realtime replication, Replicant first creates the destination tables with a one-time data snapshot to transfer all existing data from the source. In this "snapshot phase", Replicant needs to know beforehand whether or not you're using Iceberg tables. For this reason, you _must always_ use the `snapshot` section of the Applier configuration file to specify your `per-table-config` parameters, including what the `table-type` is. For more information about how different Replicant modes work, see [Running Replicant]({{< ref "docs/running-replicant" >}}).
+{{< /hint >}}
