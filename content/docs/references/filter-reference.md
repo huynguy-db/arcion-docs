@@ -65,12 +65,12 @@ If source and target systems support a different query language and a different 
 Same as <code>src-conditions</code>.
 </dd>
 
-<dt><code>allow-update-any</code> <i>[20.05.12.3]</i></dt>
+<dt><code>allow-update-any</code> <i>[v20.05.12.3]</i></dt>
 <dd>
 This option is relevant to real time (CDC based replication). When a list of columns is specified here, replicant publishes update operations on this table only when any of the columns specified here are found modified in the received UPDATE logs from the source system.
 </dd>
 
-<dt><code>allow-update-all</code> <i>[20.05.12.3]</i></dt>
+<dt><code>allow-update-all</code> <i>[v20.05.12.3]</i></dt>
 <dd>
 This option is relevant to real time( CDC based replication). When a list of columns is specified here, replicant publishes update operations on this table only when all of the columns specified here are found modified in the received UPDATE logs from the source system.
 </dd>
