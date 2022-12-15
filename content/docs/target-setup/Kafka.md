@@ -243,4 +243,13 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
       #       num-shards: 16
     ```
 
+{{< hint "warning" >}}
+**Attention:**
+- During replication, Replicant stores metadata information related to replicated tables in a special topic with the prefix `replicate_io_replication_schema`. You can configure the replication factor and partitioning for this topic using the `replication-factor` and `num-shards` parameters respectively in [the `snapshot` section of the Applier configuration file](#parameters-related-to-snapshot-mode). _You must set these parameters for the metadata topic in [the `snapshot` section of your Applier configuration file](#parameters-related-to-snapshot-mode)_, even if you're operating in realtime mode. The reason is that in real-time replication, Replicant first creates the destination tables with a one-time data snapshot to transfer all existing data from the source. It's in this “snapshot phase” Replicant also configures the metadata topic. 
+  
+  For more information about how different Replicant modes work, see [Running Replicant]({{< ref "docs/running-replicant" >}}).
+
+- Replicant uses Kafka’s transactional API for writing data in batches to Kafka. Transactional API ensures exactly-once delivery semantics.
+{{< /hint >}}
+
 For a detailed explanation of configuration parameters in the applier file, read [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference").
