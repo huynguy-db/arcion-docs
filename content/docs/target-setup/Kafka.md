@@ -64,46 +64,71 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
     ### Parameters related to snapshot mode
     For snapshot mode, the following Kafka-specific parameters are available:
-    - `replication-factor`*[v21.12.02.6]*: Replication factor for data topics. For Kafka cluster setup this defines the factor in which Kafka topic partitions are replicated on different brokers. We pass this config value to Kafka and Kafka drives the partition level replication.
-    - `num-shards`*[v21.12.02.6]*: Number of partitions per data topic. By default this is set to a number of applier threads for getting the best possible scaling by allowing each individual applier thread to write to an independent partition of a Kafka topic.
-    - `shard-key`*[v21.12.02.6]*: Shard key to be used for partitioning data topics.
-    - `shard-function`[21.12.02.6]: Sharding function to be used to deduce the partition allotment based on `shard-key` for all data topics. Values allowed are `MOD` and `NONE`.
+
+    #### `replication-factor` *[v21.12.02.6]*
+    Replication factor for data topics. For Kafka cluster setup this defines the factor in which Kafka topic partitions are replicated on different brokers. We pass this config value to Kafka and Kafka drives the partition level replication.
+
+    #### `num-shards` *[v21.12.02.6]*
+    Number of partitions per data topic. By default this is set to a number of applier threads for getting the best possible scaling by allowing each individual applier thread to write to an independent partition of a Kafka topic.
+
+    #### `shard-key` *[v21.12.02.6]*
+    Shard key to be used for partitioning data topics.
+
+    #### `shard-function` *[v21.12.02.6]*
+    Sharding function to be used to deduce the partition allotment based on `shard-key` for all data topics. Values allowed are `MOD` and `NONE`.
 
       *Default: By default, this parameter is set to `NONE`, meaning Kafka will use it’s partitioning algorithm.*
 
-    - `kafka-compression-type`*[v20.05.12.3]*: Compression type. Allowed values are `lz4`, `snappy`, `gzip`, and `none`.
+    #### `kafka-compression-type` *[v20.05.12.3]*
+    Compression type. Allowed values are `lz4`, `snappy`, `gzip`, and `none`.
 
       *Default: By default, this parameter is set to `lz4`.*
 
-    - `kafka-batch-size-in-bytes`*[v20.05.12.3]*: batch size for Kafka producer.
+    #### `kafka-batch-size-in-bytes` *[v20.05.12.3]*
+    Batch size for Kafka producer.
     
       *Default: By default, this parameter is set to `100000`.*
 
-    - `kafka-buffer-memory-size-in-bytes*`*[v20.05.12.3]*: Memory allocated to Kafka client to store unsent messages. (Default set to 67108864)
+    #### `kafka-buffer-memory-size-in-bytes*` *[v20.05.12.3]*
+    Memory allocated to Kafka client to store unsent messages. (Default set to 67108864)
 
       *Default: By default, this parameter is set to `67108864`.*
 
-    - `kafka-linger-ms`*[v20.05.12.3]*: Config used to give more time for Kafka batches to fill (in milliseconds).
+    #### `kafka-linger-ms` *[v20.05.12.3]*
+    Config used to give more time for Kafka batches to fill (in milliseconds).
 
       *Default: By default, this parameter is set to `10`.*
 
-    - `kafka-interceptor-classes`*[v21.09.17.2]*: Config used to specify list of interceptor classes. It corresponds to Kafka’s `ProducerConfig.INTERCEPTOR_CLASSES_CONFIG.`
-    - `producer-max-block-ms`*[v22.07.19.7]*: Corresponds to the [`max.block.ms` parameter of Kafka Producer](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#producerconfigs_max.block.ms).
+    #### `kafka-interceptor-classes` *[v21.09.17.2]*
+    Config used to specify list of interceptor classes. It corresponds to Kafka’s `ProducerConfig.INTERCEPTOR_CLASSES_CONFIG.`
+    #### `producer-max-block-ms` *[v22.07.19.7]*
+    Corresponds to the [`max.block.ms` parameter of Kafka Producer](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#producerconfigs_max.block.ms).
 
-        *Default: Default value is `60_000`.*
+      *Default: Default value is `60_000`.*
 
-    - `create-topic-timeout-ms`*[v22.07.19.7]*: Specifies the timeout for topic creation.
+    #### `create-topic-timeout-ms` *[v22.07.19.7]*
+    Specifies the timeout for topic creation.
 
-        *Default: Default value is `60_000`.*
+      *Default: Default value is `60_000`.*
 
-    - `per-table-config`*[v20.12.04.6]*: This configuration allows you to specify various properties for target tables on a per table basis.
-      - `replication-factor`*[v21.12.02.6]*: Replication factor for data topics. For Kafka cluster setup, this defines the factor in which Kafka topic partitions are replicated on different brokers. We pass this config value to Kafka and Kafka drives the partition level replication.
-      - `num-shards`*[v21.12.02.6]*: Number of partitions per data topic. By default this is set to a number of applier threads for getting the best possible scaling by allowing each individual applier thread to write to an independent partition of a Kafka topic.
-      - `shard-key`*[v21.12.02.6]*: Shard key to be used for partitioning data topic.
-      - `shard-function`*[v21.12.02.6]*: Sharding function to be used to deduce the partition allotment based on `shard-key` for all data topics. Values allowed are `MOD` and `NONE`.
-        
-        *Default: By default, this parameter is set to `NONE`, meaning Kafka will use it’s partitioning algorithm.*
-    
+    #### `per-table-config` *[v20.12.04.6]*
+    This configuration allows you to specify various properties for target tables on a per table basis like the following:
+      <dl class="dl-indent">
+       <dt><code>replication-factor</code> <i>[v21.12.02.6]</i></dt>
+       <dd>Replication factor for data topics. For Kafka cluster setup, this defines the factor in which Kafka topic partitions are replicated on different brokers. We pass this config value to Kafka and Kafka drives the partition level replication.</dd>
+
+      <dt><code>num-shards</code> <i>[v21.12.02.6]</i></dt>
+       <dd>Number of partitions per data topic. By default this is set to a number of applier threads for getting the best possible scaling by allowing each individual applier thread to write to an independent partition of a Kafka topic.</dd>
+
+      <dt><code>shard-key</code> <i>[v21.12.02.6]</i></dt>
+       <dd>Shard key to be used for partitioning data topic.</dd>
+
+      <dt><code>shard-function</code> <i>[v21.12.02.6]</i></dt>
+       <dd>Sharding function to be used to deduce the partition allotment based on `shard-key` for all data topics. Values allowed are <code>MOD</code> and <code>NONE</code>. 
+       
+      <i>Default: By default, this parameter is set to `NONE`, meaning Kafka will use it’s partitioning algorithm.</i></dd>
+      </dl>
+
     Below is a sample config for `snapshot` mode:
 
     ```YAML
@@ -124,45 +149,70 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     ### Parameters related to realtime mode
     If you want to operate in realtime mode, you can use a `realtime` section to specify your configuration. The following Kafka-specific parameters are available:
 
-    - `replication-factor`*[v21.12.02.6]*: Replication factor for CDC topics. For Kafka cluster setup this defines the factor in which Kafka topic partitions are replicated on different brokers. We pass this config value to Kafka and Kafka drives the partition level replication.
-    - `num-shards`*[v21.12.02.6]*:  Number of partitions to be created for all CDC log topics.
-    - `shard-key`*[v21.12.02.6]*: Shard key to be used for partitioning CDC logs in all target topics.
-    - `shard-function`[21.12.02.6]: Sharding function to be used to deduce the partition allotment based on `shard-key` for all CDC log topics. Values allowed are `MOD` and `NONE`.
+    #### `replication-factor` *[v21.12.02.6]*
+    Replication factor for CDC topics. For Kafka cluster setup this defines the factor in which Kafka topic partitions are replicated on different brokers. We pass this config value to Kafka and Kafka drives the partition level replication.
+
+    #### `num-shards`*[v21.12.02.6]* 
+    Number of partitions to be created for all CDC log topics.
+    
+    #### `shard-key` *[v21.12.02.6]*
+    Shard key to be used for partitioning CDC logs in all target topics.
+    
+    #### `shard-function` *[v21.12.02.6]*
+    Sharding function to be used to deduce the partition allotment based on `shard-key` for all CDC log topics. Values allowed are `MOD` and `NONE`.
 
       *Default: By default, this parameter is set to `NONE`, meaning Kafka will use it’s partitioning algorithm.*
 
-    - `kafka-compression-type`*[v20.05.12.3]*: Compression type. Allowed values are `lz4`, `snappy`, `gzip`, and `none`.
+    #### `kafka-compression-type` *[v20.05.12.3]*
+    Compression type. Allowed values are `lz4`, `snappy`, `gzip`, and `none`.
 
       *Default: By default, this parameter is set to `lz4`.*
 
-    - `kafka-batch-size-in-bytes`*[v20.05.12.3]*: batch size for Kafka producer.
+    #### `kafka-batch-size-in-bytes` *[v20.05.12.3]*
+    Batch size for Kafka producer.
     
       *Default: By default, this parameter is set to `100000`.*
 
-    - `kafka-buffer-memory-size-in-bytes*`*[v20.05.12.3]*: Memory allocated to Kafka client to store unsent messages. (Default set to 67108864)
+    #### `kafka-buffer-memory-size-in-bytes*` *[v20.05.12.3]*
+    Memory allocated to Kafka client to store unsent messages. (Default set to 67108864)
 
       *Default: By default, this parameter is set to `67108864`.*
 
-    - `kafka-linger-ms`*[v20.05.12.3]*: Config used to give more time for Kafka batches to fill (in milliseconds).
+    #### `kafka-linger-ms` *[v20.05.12.3]*
+    Config used to give more time for Kafka batches to fill (in milliseconds).
 
       *Default: By default, this parameter is set to `10`.*
 
-    - `kafka-interceptor-classes`*[v21.09.17.2]*: Config used to specify list of interceptor classes. It corresponds to Kafka’s `ProducerConfig.INTERCEPTOR_CLASSES_CONFIG.`
-    - `producer-max-block-ms`*[v22.07.19.7]*: Corresponds to the [`max.block.ms` parameter of Kafka Producer](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#producerconfigs_max.block.ms).
+    #### `kafka-interceptor-classes` *[v21.09.17.2]*
+    Config used to specify list of interceptor classes. It corresponds to Kafka’s `ProducerConfig.INTERCEPTOR_CLASSES_CONFIG.`
+    
+    #### `producer-max-block-ms` *[v22.07.19.7]*
+    Corresponds to the [`max.block.ms` parameter of Kafka Producer](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#producerconfigs_max.block.ms).
 
-        *Default: Default value is `60_000`.*
+      *Default: Default value is `60_000`.*
 
-    - `create-topic-timeout-ms`*[v22.07.19.7]*: Specifies the timeout for topic creation.
+    #### `create-topic-timeout-ms` *[v22.07.19.7]*
+    Specifies the timeout for topic creation.
 
-        *Default: Default value is `60_000`.*
+      *Default: Default value is `60_000`.*
 
-    - `per-table-config`*[v20.12.04.6]*: This configuration allows you to specify various properties for target tables on a per table basis.
-      - `replication-factor`*[v21.12.02.6]*: Replication factor for CDC topics. For Kafka cluster setup this defines the factor in which Kafka topic partitions are replicated on different brokers. We pass this config value to Kafka and Kafka drives the partition level replication.
-      - `num-shards`*[v21.12.02.6]*: Number of partitions per data topic. By default this is set to a number of applier threads for getting the best possible scaling by allowing each individual applier thread to write to an independent partition of a Kafka topic.
-      - `shard-key`*[v21.12.02.6]*: Shard key to be used for partitioning data topic.
-      - `shard-function`*[v21.12.02.7]*: Sharding function to be used to deduce the partition allotment based on `shard-key` for all data topics. Values allowed are `MOD` and `NONE`.
-        
-        *Default: By default, this parameter is set to `NONE`, meaning Kafka will use it’s partitioning algorithm.*
+    #### `per-table-config` *[v20.12.04.6]*
+    This configuration allows you to specify various properties for target tables on a per table basis like the following:
+      <dl class="dl-indent">
+       <dt><code>replication-factor</code> <i>[v21.12.02.6]</i></dt>
+       <dd>Replication factor for data topics. For Kafka cluster setup, this defines the factor in which Kafka topic partitions are replicated on different brokers. We pass this config value to Kafka and Kafka drives the partition level replication.</dd>
+
+      <dt><code>num-shards</code> <i>[v21.12.02.6]</i></dt>
+       <dd>Number of partitions per data topic. By default this is set to a number of applier threads for getting the best possible scaling by allowing each individual applier thread to write to an independent partition of a Kafka topic.</dd>
+
+      <dt><code>shard-key</code> <i>[v21.12.02.6]</i></dt>
+       <dd>Shard key to be used for partitioning data topic.</dd>
+
+      <dt><code>shard-function</code> <i>[v21.12.02.6]</i></dt>
+       <dd>Sharding function to be used to deduce the partition allotment based on `shard-key` for all data topics. Values allowed are <code>MOD</code> and <code>NONE</code>.
+
+      <i>Default: By default, this parameter is set to `NONE`, meaning Kafka will use it’s partitioning algorithm.</i></dd>
+      </dl>
     
     Below is a sample config for `realtime` mode:
 
