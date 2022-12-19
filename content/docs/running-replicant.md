@@ -161,7 +161,7 @@ Replicant has another write mode, `--synchronize-deletes`,  which is relevant on
 Replicant has the following four replication options:
 
   * `overwrite`: This option enables completely overwriting the existing replication with the specified -`-id`. The option makes replicant:
-    -	Override the existing replicated tables on target (if any) honoring the specified WriteMode (REPLACE/TRUNCATE/APPEND).
+    -	Overwrite the existing replicated tables on target (if any) honoring the specified WriteMode (REPLACE/TRUNCATE/APPEND).
     -	Overwrite the directory with name %id% created under data directory.
     -	Overwrites all internal metadata tables created by replicant on the metadata storage.
   * `resume`: This option enables resuming the existing replication with the specified `--id`. Note that you can either specify the `overwrite` option or the `resume` option, but not both.
