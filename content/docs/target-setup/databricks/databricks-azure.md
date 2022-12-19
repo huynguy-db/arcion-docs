@@ -15,10 +15,10 @@ On this page, you'll find step-by-step instructions on how to set up your Azure 
 - A Databricks account on Azure
 - Azure container in ADLS Gen2 (Azure Data Lake Storage Gen2)
 
-## Setup guide
-After making sure of the prerequisities in the preceeding section, follow these steps to set up  your Azure Databricks with Arcion:
+<!-- ## Setup guide -->
+After making sure of the prerequisities in the preceeding section, follow these steps to set up  your Azure Databricks with Arcion.
 
-### I. Create a Databricks cluster
+## I. Create a Databricks cluster
 To create a Databricks cluster, follow these steps:
 
 1. Log in to your Databricks account.
@@ -33,31 +33,32 @@ To create a Databricks cluster, follow these steps:
 
 6. Click **Create Cluster**.
 
-### II. Get connection details for Databricks cluster
+## II. Get connection details for Databricks cluster
 To establish connection between your Databricks instance and Arcion, you need to provide the connection details for your cluster. The connection details are available from Databricks JDBC and ODBC drivers configuration page. To get the connection details, follow these steps:
 
 1. Navigate to **Advanced Options** and click the **JDBC/ODBC** tab.
 
 2. Make a note of the following values. These are necessary to configure Arcion Replicant for replication.
 
-  - **Server Hostname**
-  - **Port**
-  - **JDBC URL**
+   - **Server Hostname**
+   - **Port**
+   - **JDBC URL**
 
-### III. Create a personal access token for the Databricks cluster
+## III. Create a personal access token for the Databricks cluster
 To create a personal access token, see [Generate a personal access token](https://docs.databricks.com/dev-tools/api/latest/authentication.html#token-management) in Databricks documentation. Make a note of the token as it's required to configure Arcion Replicant for replication.
 
-### IV. Configure ADLS container as stage
-1. Follow these steps in [Access Azure Data Lake Storage Gen2 and Blob Storage
-](https://docs.databricks.com/external-data/azure-storage.html).
+## IV. Configure ADLS container as stage
+1. Frist you need to set up access to ADLS. You can set up access in the following two ways:
+   - [Access Azure Data Lake Storage Gen2 or Blob Storage using OAuth 2.0 with an Azure service principal](https://docs.databricks.com/external-data/azure-storage.html#access-azure-data-lake-storage-gen2-or-blob-storage-using-oauth-20-with-an-azure-service-principal).
+   - [Access Azure Data Lake Storage Gen2 or Blob Storage using a SAS token](https://docs.databricks.com/external-data/azure-storage.html#access-azure-data-lake-storage-gen2-or-blob-storage-using-a-sas-token).
 
 2. Open your Databricks console and go to [the cluster configuration page](https://docs.databricks.com/clusters/configure.html).
 
 3. Click **Compute**.
 
-3. Expand the **Advanced Options** section.
+4. Expand the **Advanced Options** section.
 
-4. In the **Spark Config** box, paste the following settings:
+5. In the **Spark Config** box, paste the following settings:
     ```spark
     spark.hadoop.fs.azure.account.auth.type.STORAGE_ACCOUNT_NAME.dfs.core.windows.net OAuth
     spark.hadoop.fs.azure.account.oauth.provider.type.STORAGE_ACCOUNT_NAME.dfs.core.windows.net org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider
@@ -73,9 +74,28 @@ To create a personal access token, see [Generate a personal access token](https:
     - *`KEY_STORED_IN_SECRET_SCOPE`*: the name of the key containing the client secret
     - *`DIRECTORY_ID`*: the Directory (tenant) ID for the Azure Active Directory (Azure AD) application
 
- 5. Copy the  *`SECRET_KEY`* from Azure portal. These keys are required for establishing a connection from Arcion Replicant to ADLS. Replicant only uses these credentials to upload files to or delete from ADLS container.
+ 6. Copy the  *`SECRET_KEY`* from Azure portal. These keys are required for establishing a connection from Arcion Replicant to ADLS. Replicant only uses these credentials to upload files to or delete from ADLS container.
 
-### V. Configure Replicant connection for Databricks
+
+## V. Obtain the JDBC Driver for Databricks
+
+Replicant requires the Databricks JDBC Driver as a dependency. To obtain the appropriate driver, follow the steps below: 
+
+{{< tabs "databricks-jdbc-driver-download" >}}
+{{< tab "For Legacy Databricks" >}}
+- Download the [JDBC 4.2-compatible Databricks JDBC Driver ZIP](https://databricks-bi-artifacts.s3.us-east-2.amazonaws.com/simbaspark-drivers/jdbc/2.6.22/SimbaSparkJDBC42-2.6.22.1040.zip).
+- From the downloaded ZIP, locate and extract the `SparkJDBC42.jar` file.
+- Put the `SparkJDBC42.jar` file inside `$REPLICANT_HOME/lib` directory.
+{{< /tab >}}
+{{< tab "For Databricks Unity Catalog" >}}
+- Go to the [Databricks JDBC Driver download page](https://www.databricks.com/spark/jdbc-drivers-download) and download the driver.
+- From the downloaded ZIP, locate and extract the `DatabricksJDBC42.jar` file.
+- Put the `DatabricksJDBC42.jar` file inside `$REPLICANT_HOME/lib` directory.
+{{< /tab >}}
+
+{{< /tabs >}}
+
+## VI. Configure Replicant connection for Databricks
 In this step, you need to provide the Databricks connection details to Arcion. To do so, follow these steps:
 
 1. You can find a sample connection configuration file `databricks.yaml` in the `$REPLICANT_HOME/conf/conn/` directory. 
@@ -84,7 +104,7 @@ In this step, you need to provide the Databricks connection details to Arcion. T
      - Parameters related to target Databricks server connection.
      - Parameters related to stage configuration.
 
-    #### Parameters related to target Databricks server connection
+    ### Parameters related to target Databricks server connection
     If you store your Databricks server connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/references/secrets-manager" >}}). Otherwise, you can put your credentials in plain form like the sample below:
 
     ```YAML
@@ -106,3 +126,124 @@ In this step, you need to provide the Databricks connection details to Arcion. T
     - *`PASSWORD`*: the password associated with *`USERNAME`*
 
     Feel free to change the values of `max-connections` and `max-metadata-connections` as you need.
+
+    {{< hint "info" >}}For [Databricks Unity Catalog](https://www.databricks.com/product/unity-catalog), set the connection `type` to `DATABRICKS_LAKEHOUSE`. For more information, see [Databricks Unity Catalog Support](#databricks-unity-catalog-support-beta).{{< /hint >}}
+
+## VII. Set up Applier Configuration
+
+1. From `$REPLICANT_HOME`, navigate to the applier configuration file:
+    ```BASH
+    vi conf/dst/databricks.yaml
+    ```
+2. The configuration file has two parts:
+
+    - Parameters related to snapshot mode.
+    - Parameters related to realtime mode.
+
+    ### Parameters related to snapshot mode
+    For snapshot mode, make the necessary changes as follows:
+
+      ```YAML
+      snapshot:
+        threads: 16 #Maximum number of threads Replicant should use for writing to the target
+
+        #If bulk-load is used, Replicant will use the native bulk-loading capabilities of the target database
+        bulk-load:
+          enable: true
+          type: FILE
+          serialize: true|false #Set to true if you want the generated files to be applied in serial/parallel fashion
+      ```
+    There are some additional parameters available that you can use in snapshot mode:
+
+    ```YAML
+    snapshot:
+      enable-optimize-write: true
+      enable-auto-compact:  true
+      enable-unmanaged-delta-table: false
+      unmanaged-delta-table-location:
+      init-sk: false
+      per-table-config:
+        init-sk: false
+        shard-key:
+        enable-optimize-write: true
+        enable-auto-compact: true
+        enable-unmanaged-delta-table: false
+        unmanaged-delta-table-location:
+    ```
+    These parameters are specific to Databricks as destination. More details about these parameters are as follows:
+    - `enable-optimize-write`: Databricks dynamically optimizes Apache Spark partition sizes based on the actual data, and attempts to write out 128 MB files for each table partition. This is an approximate size and can vary depending on dataset characteristics. 
+
+      *Default: By default, this parameter is set to `true`*.
+    - `enable-auto-compact`: After an individual write, Databricks checks if files can be compacted further. If so, it runs an `OPTIMIZE` job to further compact files for partitions that have the most number of small files. The job is run with 128 MB file sizes instead of the 1 GB file size used in the standard `OPTIMIZE`.
+
+      *Default: By default, this parameter is set to `true`*.
+    - `enable-unmanaged-delta-table`: An unmanaged table is a Spark SQL table for which Spark manages only the metadata. The data is stored in the path provided by the user. So when you perform `DROP TABLE <example-table>`, Spark removes only the metadata and not the data itself. The data is still present in the path you provided.
+
+      *Default: By default, this parameter is set to `false`*.
+    - `unmanaged-delta-table-location`: The path where data for the unmanaged table is to be stored. It can be a Databricks DBFS path (for example `FileStore/tables`), or an S3 path (for example, `s3://replicate-stage/unmanaged-table-data`) where the S3 bucket is accessible to Databricks.
+    - `init-sk`: Partition-key on the source table is represented as a shard-key by replicant. By default the target table does not include this sharding information. If `init-sk` is true we add the shard-key/partition key to target table create SQL. Shard-key replication is disabled by default because DML replication with partitioned tables in Databricks is very slow if the partition key has a high distinct count.
+
+      *Default: By default, this parameter is set to `false`*.
+    - `per-table-config`: This configuration allows you to specify various properties for target tables on a per table basis.
+      - `init-sk`: Partition-key on the source table is represented as a shard-key by replicant. By default, the target table does not include this sharding information. If `init-sk` is true we add the shard-key/partition key to target table create SQL. Shard-key replication is disabled by default because DML replication with partitioned tables in\ databricks is very slow if the partition key has a high distinct count.
+
+        *Default: By default, this parameter is set to `false`*.
+      - `shard-key`: Shard key to be used for partitioning the target table.
+      - `enable-optimize-write`: Databricks dynamically optimizes Apache Spark partition sizes based on the actual data, and attempts to write out 128 MB files for each table partition. This is an approximate size and can vary depending on dataset characteristics.
+
+        *Default: By default, this parameter is set to `true`*.
+      - `enable-auto-compact`: After an individual write, Databricks checks if files can be compacted further. If so, it runs an `OPTIMIZE` job to further compact files for partitions that have the most number of small files. The job is run with 128 MB file sizes instead of the 1 GB file size used in the standard `OPTIMIZE`.
+
+        *Default: By default, this parameter is set to `true`*.
+      - `enable-unmanaged-delta-table`: An unmanaged table is a Spark SQL table for which Spark manages only the metadata. The data is stored in the path provided by the user. So when you perform `DROP TABLE <example-table>`, Spark removes only the metadata and not the data itself. The data is still present in the path you provided.
+
+        *Default: By default, this parameter is set to `false`*.
+
+      - `unmanaged-delta-table-location`: The path where data for the unmanaged table is to be stored. It can be a Databricks DBFS path (for example `FileStore/tables`), or an S3 path (for example, `s3://replicate-stage/unmanaged-table-data`) where the S3 bucket is accessible to Databricks.
+
+    ### Parameters related to realtime mode
+    If you want to operate in realtime mode, you can use the `realtime` section to specify your configuration. For example:
+
+    ```YAML
+    realtime:
+      threads: 4 #Maximum number of threads Replicant should use for writing to the target
+    ```
+
+    ### Enabling Type-2 CDC
+    From version 22.07.19.3 onwards, Arcion supports Type-2 CDC for Databricks as the Target. Type-2 CDC enables a Target to have a history of all transactions performed in the Source. For example:
+
+    - An INSERT in the Source is an INSERT in the Target.
+    - An UPDATE in the Source is an INSERT in the Target with additional metadata like Operation Performed, Time of Operation, etc.
+    - A DELETE in the Source is an INSERT in the Target: INSERT with OPER_TYPE as DELETE.
+
+    Currently, Arcion supports the following metadata related to source-specific fields:
+
+    - `query_timestamp`: Time at which the user on Source fired a query.
+    - `extraction_timestamp`: Time at which Replicant detected the DML from logs.
+    - `OPER_TYPE`: Type of the operation (INSERT/UPDATE/DELETE).
+
+    The primary requirement for Type-2 CDC is to *enable full row logging* in the Source.
+
+   {{< hint "info" >}}
+  Currently, support for Type-2 CDC is limited to the following cases: 
+  - Sources that support CDC.
+  - `realtime` and `full` modes.
+   {{< /hint >}}
+
+    To enable Type-2 CDC for your Databricks target, follow the steps below:
+    
+    1. Add the following two parameters under the `realtime` section of the Databricks Applier configuration file:
+
+        ```YAML
+        realtime:
+          enable-type2-cdc: true
+          replay-strategy: NONE
+        ```
+
+    2. In the Extractor configuration file of Source, add the following parameter under the `snapshot` section:
+
+        ```YAML
+        snapshot:
+          csv-publish-method: READ
+        ```
+  For a detailed explanation of configuration parameters in the Applier file, read [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference").
