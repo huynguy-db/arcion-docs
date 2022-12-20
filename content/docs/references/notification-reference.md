@@ -183,8 +183,8 @@ Whether to enable lag notifications.
 ### `threshold-ms`
 The threshold value in milliseconds.
 
-### `stable-time-out-s`
-A timeout value in seconds within which we expect the replication to recover from lag and stabilize.
+### `stable-time-out-ms`
+A timeout value in milliseconds within which we expect the replication to recover from lag and stabilize below [`threshold-ms`](#threshold-ms).
 
 ### `check-interval-s`
 The time period in seconds after which Replicant calculates the global lag every time. In case of [distributed replication]({{< relref "distribution-reference" >}}), Replicant calculates the lag across all Replicant nodes.
@@ -194,12 +194,16 @@ The following is a sample lag notification configuration:
 ```YAML
 lag-notification:
   enable: true
+  notify-above-threshold: false
   threshold-ms: 10_000
   stable-time-out-ms: 60_000
 ```
 ### How lag notifications work
-Replicant sends a notification only the first time when replication lag is below [the threshold value `threshold-ms`](#threshold-ms) for [`stable-time-out-s` seconds](#stable-time-out-s). As long replication lag stays below [`threshold-ms`](#threshold-ms), Replicant doesn't send any new notification. If replication lag increases over the threshold value, Replicant sends a new notification once the lag stabilizes below the threshold value for [`stable-time-out-s` seconds](#stable-time-out-s) again.
+You can configure lag notifications in two ways: 
+- Get notification when replication lag is *below the threshold value [`threshold-ms`](#threshold-ms)*. You can choose this by setting `notify-above-threshold` to `false`.
+- Get notification when replication lag is *above the threshold value [`threshold-ms`](#threshold-ms)*. You can choose this by setting `notify-above-threshold` to `true`.
 
+Replicant sends a lag notification only when replication lag is continously out of range of threshold value [`threshold-ms`](#threshold-ms) for [`stable-time-out-ms`](#threshold-ms) period of time. After sending a notification, Replicant won't send any further notification untill the replication lag is in the range of [`threshold-ms`](#threshold-ms). After lag enters in the range of [`threshold-ms`](#threshold-ms), if replication lag again goes out of range of [`threshold-ms`](#threshold-ms) for [`stable-time-out-ms`](#threshold-ms) period of time, Replicant will send a new notification. Replicant will continue operating in this manner.
 
 {{< hint "info" >}}
 **Note:**
