@@ -74,7 +74,7 @@ To create a personal access token, see [Generate a personal access token](https:
     - *`KEY_STORED_IN_SECRET_SCOPE`*: the name of the key containing the client secret
     - *`DIRECTORY_ID`*: the Directory (tenant) ID for the Azure Active Directory (Azure AD) application
 
- 6. Copy the  *`SECRET_KEY`* from Azure portal. These keys are required for establishing a connection from Arcion Replicant to ADLS. Replicant only uses these credentials to upload files to or delete from ADLS container.
+ 6. Copy the *`SECRET_KEY`* from Azure portal. These keys are required for establishing a connection from Arcion Replicant to ADLS. Replicant only uses these credentials to upload files to or delete from ADLS container.
 
 
 ## V. Obtain the JDBC Driver for Databricks
@@ -129,6 +129,26 @@ In this step, you need to provide the Databricks connection details to Arcion. T
 
     {{< hint "info" >}}For [Databricks Unity Catalog](https://www.databricks.com/product/unity-catalog), set the connection `type` to `DATABRICKS_LAKEHOUSE`. For more information, see [Databricks Unity Catalog Support](#databricks-unity-catalog-support-beta).{{< /hint >}}
 
+    ### Parameters related to stage configuration
+    It is mandatory to use an external stage to hold the data files and load them on the target database from there. The `stage` section allows specifying the details Replicant needs to connect to and use a given stage.
+
+      - `type`*[v21.06.14.1]*: The stage type. For Azure Databricks, the `type` is `AZURE`.
+      {{< hint "info" >}}For [Databricks Unity Catalog](https://www.databricks.com/product/unity-catalog), set `type` to `DATABRICKS_LAKEHOUSE`. For more information, see [Databricks Unity Catalog Support](#databricks-unity-catalog-support-beta).{{< /hint >}}
+      - `root-dir`: The directory created under ADLS container. This directory is used to stage bulk-load files.
+      - `conn-url`*[v21.06.14.1]*: The name of the ADLS container.        
+      - `account-name`*[v21.06.14.1]*: The name of the ADLS storage account.
+      - `secret-key`*[v21.06.14.1]*: The `SECRET_KEY` for the user with write/delete access on ADLS container. This is the last step when [you configure ADLS container as stage](#iv-configure-adls-container-as-stage).
+
+      The following is a sample stage configuration for Azure Databricks:
+
+      ```YAML
+      stage:
+        type: AZURE
+        root-dir: "replicate-stage/databricks-stage"
+        conn-url: "replicant-container"
+        account-name: "replicant-storageaccount"
+        secret-key: "YOUR_SECRET_KEY"
+      ```
 ## VII. Set up Applier Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the applier configuration file:

@@ -73,7 +73,7 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
 
     
     ### Parameters related to stage configuration
-    It is mandatory to use `DATABRICKS_DBFS` or an external stage like S3 to hold the data files and load them on the target database from there. This section allows specifying details required for Replicant to connect and use a given stage.
+    It is mandatory to use `DATABRICKS_DBFS` or an external stage like S3 to hold the data files and load them on the target database from there. The `stage` section allows specifying the details Replicant needs to connect to and use a given stage.
 
       - `type`*[v21.06.14.1]*: The stage type. Allowed stages are `S3`, `AZURE`, `GCP`, and `DATABRICKS_DBFS`.
       {{< hint "info" >}}For [Databricks Unity Catalog](https://www.databricks.com/product/unity-catalog), set `type` to `DATABRICKS_LAKEHOUSE`. For more information, see [Databricks Unity Catalog Support](#databricks-unity-catalog-support-beta).{{< /hint >}}
