@@ -1,13 +1,16 @@
 ---
-pageTitle: Documentation for Databricks Target connector
-title: Databricks Delta Lake
-description: "Get fast, reliable, and real-time data ingestion into Databricks Lakehouse with Arcion, boasting features like Unity Catalog, Type-2 CDC, and more."
+pageTitle: Documentation for Databricks Target on AWS
+title: Databricks on AWS
+description: "Learn how to set up Arcion with AWS Databricks to get robust, reliable, highly available and distributed data analytics."
 weight: 1
 bookHidden: false
 ---
-# Destination Databricks Delta Lake
 
-The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
+# Destination AWS Databricks
+
+On this page, you'll find step-by-step instructions on how to set up your AWS Databricks instance with Arcion.
+
+The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the following steps.
 
 ## I. Obtain the JDBC Driver for Databricks
 
@@ -70,7 +73,7 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
 
     
     ### Parameters related to stage configuration
-    It is mandatory to use `DATABRICKS_DBFS` or an external stage like S3 to hold the data files and load them on the target database from there. This section allows specifying details required for Replicant to connect and use a given stage.
+    It is mandatory to use `DATABRICKS_DBFS` or an external stage like S3 to hold the data files and load them on the target database from there. The `stage` section allows specifying the details Replicant needs to connect to and use a given stage.
 
       - `type`*[v21.06.14.1]*: The stage type. Allowed stages are `S3`, `AZURE`, `GCP`, and `DATABRICKS_DBFS`.
       {{< hint "info" >}}For [Databricks Unity Catalog](https://www.databricks.com/product/unity-catalog), set `type` to `DATABRICKS_LAKEHOUSE`. For more information, see [Databricks Unity Catalog Support](#databricks-unity-catalog-support-beta).{{< /hint >}}
