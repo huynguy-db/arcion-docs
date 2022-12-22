@@ -97,10 +97,6 @@ The following configuration parameters are available for snapshot mode:
           max-jobs-per-chunk:
           split-key:
           split-method:  
-             split-method:  
-          split-method:  
-             split-method:  
-          split-method:  
           extraction-method:
           tpt-num-files-per-job:
           row-identifier-key:
@@ -118,15 +114,7 @@ The following configuration parameters are available for snapshot mode:
           row-identifier-key:
           extraction-priority:
           normalize: #Only for Mongo Database as source   
-            normalize: #Only for Mongo Database as source   
-          normalize: #Only for Mongo Database as source   
-            normalize: #Only for Mongo Database as source   
-          normalize: #Only for Mongo Database as source   
             de-duplicate:
-            extract-upto-depth:               
-              extract-upto-depth:               
-            extract-upto-depth:               
-              extract-upto-depth:               
             extract-upto-depth:               
       ```
 
