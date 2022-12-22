@@ -1,7 +1,7 @@
 ---
 pageTitle: Documentation for Databricks Target on AWS
 title: Databricks on AWS
-description: "Learn how to set up Arcion with AWS Databricks to get robust, reliable, highly available and distributed data analytics."
+description: "Learn how to set up Arcion with AWS Databricks. Leverage features like Type-2 CDC, Unity Catalog, and more."
 weight: 1
 bookHidden: false
 ---

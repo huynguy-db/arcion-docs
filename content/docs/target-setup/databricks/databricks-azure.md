@@ -1,7 +1,7 @@
 ---
 pageTitle: Documentation for Databricks Target on Azure
 title: Databricks on Azure
-description: "Learn how to set up Databricks on Azure and connect Arcion to build a robust data analytics pipeline."
+description: "Set up Arcion with Databricks on Azure. Leverage Azure Data Lake Storage as stage, Type-2 CDC, and Databricks Unity Catalog."
 weight: 2
 bookHidden: false
 ---
