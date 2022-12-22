@@ -228,7 +228,7 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
     - An UPDATE in the Source is an INSERT in the Target with additional metadata like Operation Performed, Time of Operation, etc.
     - A DELETE in the Source is an INSERT in the Target: INSERT with OPER_TYPE as DELETE.
 
-    Currently, Arcion supports the following metadata related to source-specific fields:
+    Arcion supports the following metadata related to source-specific fields:
 
     - `query_timestamp`: Time at which the user on Source fired a query.
     - `extraction_timestamp`: Time at which Replicant detected the DML from logs.
@@ -237,7 +237,7 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
     The primary requirement for Type-2 CDC is to *enable full row logging* in the Source.
 
    {{< hint "info" >}}
-  Currently, support for Type-2 CDC is limited to the following cases: 
+  Support for Type-2 CDC is limited to the following cases: 
   - Sources that support CDC.
   - `realtime` and `full` modes.
    {{< /hint >}}
@@ -262,7 +262,7 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
 
 ## Databricks Unity Catalog Support (Beta)
 
-{{< hint "info" >}}**Note:** This feature is currently in beta. {{< /hint >}}
+{{< hint "info" >}}**Note:** This feature is in beta. {{< /hint >}}
 
 From version 22.08.31.3 onwards, Arcion has added support for [Databricks Unity Catalog](https://www.databricks.com/product/unity-catalog). The support is still in beta phase, with complete support to land gradually in future releases.
 
@@ -293,5 +293,5 @@ As of now, note the following about the state of Arcion's Unity Catalog support:
       - *`DATA_FILE_FORMAT`*: the type of data file format. Supported formats are `PARQUET` and `CSV`.
         
         *Default: `PARQUET`*.
-- We'll be using `SparkJDBC42` driver for Legacy Databricks (`DATABRICKS_DELTALAKE`) and `DatabricksJDBC42` for Unity catalog (`DATABRICKS_LAKEHOUSE`). For instructions on how to obtain these drivers, see [Obtain the JDBC Driver for Databricks](#i-obtain-the-jdbc-driver-for-databricks).
-- Replicant currently supports Unity Catalog on AWS and AZURE.
+- We use `SparkJDBC42` driver for Legacy Databricks (`DATABRICKS_DELTALAKE`) and `DatabricksJDBC42` for Unity catalog (`DATABRICKS_LAKEHOUSE`). For instructions on how to obtain these drivers, see [Obtain the JDBC Driver for Databricks](#i-obtain-the-jdbc-driver-for-databricks).
+- Replicant supports Unity Catalog on AWS and Azure platforms.

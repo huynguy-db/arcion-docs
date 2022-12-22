@@ -236,7 +236,7 @@ In this step, you need to provide the Databricks connection details to Arcion. T
     - An UPDATE in the Source is an INSERT in the Target with additional metadata like Operation Performed, Time of Operation, etc.
     - A DELETE in the Source is an INSERT in the Target: INSERT with OPER_TYPE as DELETE.
 
-    Currently, Arcion supports the following metadata related to source-specific fields:
+    Arcion supports the following metadata related to source-specific fields:
 
     - `query_timestamp`: Time at which the user on Source fired a query.
     - `extraction_timestamp`: Time at which Replicant detected the DML from logs.
@@ -245,7 +245,7 @@ In this step, you need to provide the Databricks connection details to Arcion. T
     The primary requirement for Type-2 CDC is to *enable full row logging* in the Source.
 
    {{< hint "info" >}}
-  Currently, support for Type-2 CDC is limited to the following cases: 
+  Support for Type-2 CDC is limited to the following cases: 
   - Sources that support CDC.
   - `realtime` and `full` modes.
    {{< /hint >}}
@@ -267,3 +267,39 @@ In this step, you need to provide the Databricks connection details to Arcion. T
           csv-publish-method: READ
         ```
   For a detailed explanation of configuration parameters in the Applier file, read [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference").
+
+## Databricks Unity Catalog Support (Beta)
+
+{{< hint "info" >}}**Note:** This feature is in beta. {{< /hint >}}
+
+From version 22.08.31.3 onwards, Arcion has added support for [Databricks Unity Catalog](https://www.databricks.com/product/unity-catalog). The support is still in beta phase, with complete support to land gradually in future releases.
+
+As of now, note the following about the state of Arcion's Unity Catalog support:
+
+- Legacy Databricks only supports two-level namespace:
+
+    - Schemas
+    - Tables
+
+  With introduction of Unity Catalog, Databricks now exposes a [three-level namespace](https://docs.databricks.com/data-governance/unity-catalog/queries.html#three-level-namespace-notation) that organizes data. 
+    - Catalogs 
+    - Schemas 
+    - Tables
+
+  Arcion adds support for Unity Catalog by introducing a new child storage type (`DATABRICKS_LAKEHOUSE` child of `DATABRICKS_DELTALAKE`).
+- If you're using Unity Catalog, notice the following when configuring your Target Databricks with Arcion:
+  - Set the connection `type` to `DATABRICKS_LAKEHOUSE` in the [connection configuration file](#ii-set-up-connection-configuration).
+  - To avoid manual steps to configure staging, Databricks has introduced personal staging. To read the staging URL, we've added a new configuration parameter `UNITY_CATALOG_PERSONAL_STAGE`. The complete `stage` configuration is as follows:
+    ```YAML
+    stage:
+      type: UNITY_CATALOG_PERSONAL_STAGE
+      staging-url: STAGING_URL
+      file-format: DATA_FILE_FORMAT
+    ```
+    Replace the following:
+      - *`STAGING_URL`*: the temporary staging URL—for example, `stage://tmp/userName/rootDir`.
+      - *`DATA_FILE_FORMAT`*: the type of data file format. Supported formats are `PARQUET` and `CSV`.
+        
+        *Default: `PARQUET`*.
+- We use `SparkJDBC42` driver for Legacy Databricks (`DATABRICKS_DELTALAKE`) and `DatabricksJDBC42` for Unity catalog (`DATABRICKS_LAKEHOUSE`). For instructions on how to obtain these drivers, see [Obtain the JDBC Driver for Databricks](#i-obtain-the-jdbc-driver-for-databricks).
+- Replicant supports Unity Catalog on AWS and Azure platforms.
