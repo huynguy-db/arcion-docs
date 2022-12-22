@@ -19,7 +19,11 @@ log-reader: REDOLOG
 transaction-store-location: PATH_TO_TRANSACTION_STORAGE
 ```
 
-Replace *`PATH_TO_TRANSACTION_STORAGE`* with the location of Oracle transaction storage.
+Replace *`PATH_TO_TRANSACTION_STORAGE`* with the path to a temporary location on the Arcion server. This temporary location stores information about uncommitted Oracle transactions that we track until they're committed or rolled back.
+
+{{< hint "warning" >}}
+**Caution:** If the source database often has a high number of long running uncommitted transactions, you need to increase the storage size to accommodate them.
+{{< /hint >}}
 
 ## Grant Necessary Permissions
 
