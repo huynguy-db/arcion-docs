@@ -81,8 +81,14 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
    ```BASH
    vi conf/src/teradata.yaml
    ```
-  
-    a. For snapshot mode, make the necessary changes as follows in the `snapshot` section of the configuration file:
+
+2. The configuration file has two parts:
+
+    - Parameters related to snapshot mode.
+    - Parameters related to delta snapshot mode.
+
+    ### Parameters related to snapshot mode
+    For snapshot mode, make the necessary changes in the `snapshot` section of the configuration file. The following is a working sample:
 
     ```YAML
     snapshot:
@@ -94,54 +100,50 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
       verifyRowCount: false
       _traceDBTasks: true
 
-    #  split-method: RANGE  # Allowed values are RANGE, MODULO
-    #  extraction-method: QUERY # Allowed values are QUERY, TPT
-    #  tpt-num-files-per-job: 16
-    #  native-extract-options:
-    #    charset: "ASCII"  #Allowed values are ASCII, UTF8
-    #    compression-type: "GZIP" #Allowed values are GZIP and NONE
+      split-method: RANGE  # Allowed values are RANGE, MODULO
+      extraction-method: QUERY # Allowed values are QUERY, TPT
+      tpt-num-files-per-job: 16
+      native-extract-options:
+        charset: "ASCII"  #Allowed values are ASCII, UTF8
+        compression-type: "GZIP" #Allowed values are GZIP and NONE
+    ```
+    You can also configure your table-specific requirements under the `per-table-config` section like the following:
 
-      per-table-config:
-      - schema: tpch
-        tables:
-    #     testTable
-    #       split-key: split-key-column
-          part:
-            split-key: partkey
-          partsupp:
-            split-key: partkey
-          supplier:
-          orders:
-            split-key: orderkey
-    #        split-method: RANGE      #Table level overridable config, allowed values : RANGE, MODULO
-    #        extraction-method: TPT   # Allowed values are QUERY, TPT
-    #        tpt-num-files-per-job: 16
-    #        extraction-priority: 2  #Higher value is higher priority. Both positive and negative values are allowed. Default priority is 0 if unspecified.
-    #        split-hints:
-    #          row-count-estimate: 15000
-    #          split-key-min-value: 1
-    #          split-key-max-value: 60_000
-    #        native-extract-options:
-    #          charset: "ASCII"  #Allowed values are ASCII, UTF8
-    #          column-size-map:  #User specified column size/length to be used while exporting with TPT
-    #            "COL1": 2
-    #            "COL2": 4
-    #            "COL3": 3
-    #          compression-type: "GZIP"
-
-          parts_view:
-            row-identifier-key: [partkey]
-            split-key: last_update_time
-          partsupp_macro:
-            update-key: [partkey]
-            split-key: last_update_time
+    ```YAML
+    per-table-config:
+    - schema: tpch
+      tables:
+        testTable
+          split-key: split-key-column
+        part:
+          split-key: partkey
+        partsupp:
+          split-key: partkey
+        supplier:
+        orders:
+          split-key: orderkey
+          split-method: RANGE      #Table level overridable config, allowed values : RANGE, MODULO
+          extraction-method: TPT   # Allowed values are QUERY, TPT
+          tpt-num-files-per-job: 16
+          extraction-priority: 2  #Higher value is higher priority. Both positive and negative values are allowed. Default priority is 0 if unspecified.
+          split-hints:
+            row-count-estimate: 15000
+            split-key-min-value: 1
+            split-key-max-value: 60_000
+          native-extract-options:
+            charset: "ASCII"  #Allowed values are ASCII, UTF8
+            column-size-map:  #User specified column size/length to be used while exporting with TPT
+              "COL1": 2
+              "COL2": 4
+              "COL3": 3
+            compression-type: "GZIP"
     ```
 
-    b. For delta snapshot mode, make the necessary changes as follows in the `delta-snapshot` section of the configuration file:
+    ### Parameters related to delta snapshot mode
+    For delta snapshot mode, make the necessary changes in the `delta-snapshot` section of the configuration file like the following:
 
     ```YAML
     delta-snapshot:
-
       threads: 32
       fetch-size-rows: 10_000
 
@@ -150,11 +152,11 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
       _max-delete-jobs-per-chunk: 32
 
       split-method: RANGE  # Allowed values are RANGE, MODULO
-    #  extraction-method: QUERY # Allowed values are QUERY, TPT
-    #  tpt-num-files-per-job: 16
-    #  native-extract-options:
-    #    charset: "ASCII"  #Allowed values are ASCII, UTF8
-    #    compression-type: "GZIP"
+      extraction-method: QUERY # Allowed values are QUERY, TPT
+      tpt-num-files-per-job: 16
+      native-extract-options:
+        charset: "ASCII"  #Allowed values are ASCII, UTF8
+        compression-type: "GZIP"
 
       split-key: last_update_time
       delta-snapshot-key: last_update_time
@@ -162,53 +164,33 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
       delta-snapshot-delete-interval: 10
       _traceDBTasks: true
       replicate-deletes: false
-
-      per-table-config:
-      - schema: tpch
-        tables:
-    #     testTable
-    #        split-key: split-key-column  # Any numeric/timestamp column with sufficiently large number of distincts
-    #        extraction-method: TPT   # Allowed values are QUERY, TPT
-    #        tpt-num-files-per-job: 16
-    #        extraction-priority: 1  #Higher value is higher priority. Both positive and negative values are allowed. Default priority is 0 if unspecified.
-    #        split-hints:
-    #          row-count-estimate: 100000  # Estimated row count, if supplied replicant will leverage
-    #          split-key-min-value: 1      #Lower bound of split key value
-    #          split-key-max-value: 60_000 #Upper bound of split key value, if supplied replicant will leverage and avoid querying source database for the same
-    #        native-extract-options:
-    #          charset: "UTF8"  #Allowed values are ASCII, UTF8
-    #          column-size-map:  #User specified column size/length to be used while exporting with TPT
-    #            "COL1": 2
-    #            "COL2": 4
-    #            "COL3": 3
-    #          compression-type: "GZIP"
-
-    #       delta-snapshot-key: delta-snapshot-key-column  # A monotonic increasing numeric/timestamp column which gets new value on each INSERT/UPDATE
-    #       row-identifier-key: [col1, col2]   # A set of columns which uniquely identify a row
-    #       update-key: [col1, col2]  # A set of columns which replicant should use to perform deletes/updates during incremental replication
-          part:
-            split-key: partkey
-            row-identifier-key: [partkey]
-          partsupp:
-            split-key: partkey
-            row-identifier-key: [partkey, suppkey]
-          supplier:
-          orders:
-            split-key: orderkey
-            split-method: MODULO
-            split-hints:
-              row-count-estimate: 15000
-              split-key-min-value: 1
-              split-key-max-value: 60_000
-
-          parts_view:
-            update-key: [partkey]
-            delta-snapshot-key: last_update_time
-            split-key: last_update_time
-          partsupp_macro:
-            update-key: [partkey]
-            delta-snapshot-key: last_update_time
-            split-key: last_update_time
     ```
+    You can also configure your table-specific requirements under the `per-table-config` section like the following:
+
+    ```YAML
+    per-table-config:
+    - schema: tpch
+      tables:
+       testTable
+          split-key: split-key-column  # Any numeric/timestamp column with sufficiently large number of distincts
+          extraction-method: TPT
+          native-extract-options:
+            compression-type: "GZIP"
+            control-chars:
+              delimiter: '~'
+              quote: '"'
+              # If extraction method is TPT, delimiter in a string is escaped using the provided escape char.
+              # https://docs.teradata.com/r/Teradata-Parallel-Transporter-Reference/July-2017/DataConnector-Operator/
+              # Usage-Notes/TextDelimiter-and-EscapeTextDelimiter
+              escape: "\\"
+              line-end: "\n"
+              # If multi-char-delimiter is provided, it will have higher precedence than delimiter.
+              # Applicable only if extraction method is TPT.
+              multi-char-delimiter: "|~|"
+    ```
+
+    {{< hint "warning" >}}
+  **Important:** When using `TPT` as the `extraction-method`, _do not_ specify the `null-string` parameter under the `control-chars` section. Notice the preceeding sample for context. This is necessary because Teradata generates empty strings for both null and empty strings by default in TPT extracted CSV files. According to what the target supports, Replicant converts these empty strings to appropriate null values.
+    {{< /hint >}}
 
 For a detailed explanation of configuration parameters in the extractor file, read [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference").
