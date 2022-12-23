@@ -190,7 +190,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     ```
 
     {{< hint "warning" >}}
-  **Important:** When using `TPT` as the `extraction-method`, _do not_ specify the `null-string` parameter under the `control-chars` section. Notice the preceeding sample for context. This is necessary because Teradata generates empty strings for both null and empty strings by default in TPT extracted CSV files. According to what the target supports, Replicant converts these empty strings to appropriate null values.
+  **Important:** When using `TPT` as the `extraction-method`, _do not_ specify the `null-string` parameter under the `control-chars` section. Notice the preceeding sample for context. This is necessary because Teradata generates empty strings for both null and empty strings by default in TPT extracted CSV files. According to what the target supports, Replicant tries to convert these empty strings into appropriate null values.
     {{< /hint >}}
 
 For a detailed explanation of configuration parameters in the extractor file, read [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference").
