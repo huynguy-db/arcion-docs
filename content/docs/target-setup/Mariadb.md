@@ -5,40 +5,71 @@ description: "Learn how to securely connect to, ensure database privileges on, a
 weight: 9
 bookHidden: false
 ---
-# Destination Maria Database
+# Destination MariaDB
 
 The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
 
-## I. Set up Connection Configuration
+## I. Prerequisites
+
+Pay attention to the following before configuring MariaDB as the Target system:
+
+- Make sure the specified user has `CREATE TABLE` and `CREATE TEMPORARY TABLE` privileges on the catalogs/schemas into which replicated tables should be created.
+- If you want Replicant to create catalogs/schemas for you on the target MariaDB system, then you also need to grant `CREATE DATABASE`/`CREATE SCHEMA` privileges to the user.
+- If this user does not have `CREATE DATABASE` privilege, then create a database manually with name `io_blitzz` and grant all privileges for it to the user specified here. Replicant uses this database for internal checkpointing and metadata management.  
+
+{{< hint "info" >}}
+The database/schema of your choice on a different instance of your choice name can be configured using the metadata config feature. For more information, see [Metadata Configuration](/docs/references/metadata-reference).
+{{< /hint >}}
+
+
+## II. Set up Connection Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the sample MariaDB connection configuration file:
     ```BASH
     vi conf/conn/mariadb_dst.yaml
     ```
-2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/references/secrets-manager). 
-    
+2. You can establish connection with Target MariaDB using either SSL or plain username and password.
+
+    ### Connect using username and password
+    If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/references/secrets-manager). 
+        
     Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
     ```YAML
     type: MARIADB
 
-    host: localhost #Replace localhost with your MariaDB host
-    port: 57565 #Replace the 57565 with the port of your host
-
-    username: "replicant" #Replace replicant with the username of your user that connects to your MariaDB server
-    password: "Replicant#123" #Replace Replicant#123 with your user's password
+    host: HOSTNAME
+    port: PORT_NUMBER
+    
+    username: "USERNAME"
+    password: "PASSWORD" 
 
     max-connections: 30 #Specify the maximum number of connections replicant can open in MariaDB
     max-retries: 10 #Number of times any operation on the system will be re-attempted on failures.
     retry-wait-duration-ms: 1000 #Duration in milliseconds replicant should wait before performing then next retry of a failed operation
+    ```
+    Replace the following:
+    - *`HOSTNAME`*: the hostname of the Target MariaDB host
+    - *`PORT_NUMBER`*: the relevant port number of the MariaDB host
+    - *`USERNAME`*: the username credential that connects to the MariaDB host
+    - *`PASSWORD`*: the password associated with *`USERNAME`*
+
+    ### Connect using SSL
+    If you use SSL for connection, you don't need to provide the `host`, `port`, `username`, and `password` parameters separately like the preceeding sample. Rather, specify a single connection URL that connects to the MariaDB server containing the necessary credentials. You can specify this URL with the `url` parameter in the connection configuration file.
+
+    The connection URL has the following syntax:
 
     ```
-    - Make sure the specified user has `CREATE TABLE` and `CREATE TEMPORARY TABLE` privileges on the catalogs/schemas into which replicated tables should be created.
-    - If you want Replicant to create catalogs/schemas for you on the target MariaDB system, then you also need to grant `CREATE DATABASE`/`CREATE SCHEMA` privileges to the user.
-    - If this user does not have `CREATE DATABASE` privilege, then create a database manually with name `io_blitzz` and grant all privileges for it to the user specified here. Replicant uses this database for internal checkpointing and metadata management.  
+    mariadb://HOST:POST/DATABASE_NAME?user=USERNAMEpassword=PASSWORD&useSSL=true&allowPublicKeyRetrieval=true"
+    ```
 
-        {{< hint "info" >}} The database/schema of your choice on a different instance of your choice name can be configured using the metadata config feature. For more information, see [Metadata Configuration](/docs/references/metadata-reference).{{< /hint >}}
+    Replace the following:
+    - *`HOST`*: the hostname of the Target MariaDB host
+    - *`PORT`*: the relevant port number of the MariaDB host
+    - *`DATABASE_NAME`*: the name of the MariaDB database
+    - *`USERNAME`*: the username credential that connects to the MariaDB host
+    - *`PASSWORD`*: the password associated with *`USERNAME`*
 
-## II. Set up Applier Configuration
+## III. Set up Applier Configuration
 
 1. From `$REPLICANT_HOME`, naviagte to the sample MariaDB applier configuration file:
     ```BASH
