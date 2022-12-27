@@ -214,6 +214,17 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
         #For versions 20.09.14.3 and beyond
         native-load-configs: #Specify the user-provided LOAD configuration string which will be appended to the s3 specific LOAD SQL command
     ```
+    #### Enable clustering
+    To improve performance, primary keys and unique keys need to be clustering keys on Snowflake side.
+    We can achieve that by making primary and unique keys as clustering keys when Replicant creates the tables.
+
+    To enable clustered table creation, set the `force-use-clustered-key` parameter to `true` in your Applier configuration file. By default, it's set to `false` and Snowflake tables don't have clustering keys designated to them.
+
+    {{< hint "warning" >}}
+  **Important:** You must run Replicant with the `--replace` option for clustering to work.
+    {{< /hint >}}
+
+    For more information on Snowflake clustering, see [Clustering Keys & Clustered Tables](https://docs.snowflake.com/en/user-guide/tables-clustering-keys.html).
     ### Parameters related to realtime mode
     If you want to operate in realtime mode, you can use the `realtime` section to specify your configuration. For example:
 
