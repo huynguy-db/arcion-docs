@@ -115,6 +115,30 @@ Controls enabling denormalization in the database. It has only one parameter:
 
     Enable or disable denormalization. This parameter is only supported for MongoDB as a Source. You must specify the denormalized JSON query via the `--src-queries` argument for the Source relational database.
 
+### `use-upsert-based-recovery` *[v22.11]*
+`true` or `false`.
+
+Whether to enable upsert-based recovery for snapshot mode.
+
+This parameter controls Replicant's behavior for recovery. By default, upon resuming from a crash, Replicant ignores the completed jobs and deletes any uncommitted or partially executed jobs. Then it goes on to execute those remaining jobs. 
+
+Delete operation is expensive and slows down operations in most databases. We can get past this by skipping the delete operation entirely, without violating primary or unique key constraints. Replicant achieves this by performing upsert operations to complete the uncommitted jobs.
+
+If `use-upsert-based-recovery` is set to `true`, Replicant restarts the partially executed jobs on the Extractor side, while the Applier performs upsert operations on rows in the target tables.
+
+{{< hint "info" >}}
+**Note:** Arcion Replicant supports upsert-based recovery for the following target databases:
+- [MySQL]({{< ref "/docs/target-setup/mysql" >}})
+- [PostgreSQL]({{< ref "/docs/target-setup/postgresql" >}})
+- [SingleStore]({{< ref "/docs/target-setup/singlestore" >}})
+  
+Upsert-based recovery won't work in the following situations:
+
+- The target database doesn't support upsert operation.
+- A table doesn't have a candidate key (primary or unique key).
+
+In the these situations, Replicant falls back to the default behavior for recovery.
+{{< /hint >}}
 
 ## Realtime Mode
 Replicant can run in realtime mode using the default configurations. But changing certain parameters may improve real time replication performance depending on the use case. The following configuration parameters are available for realtime mode:
@@ -215,3 +239,26 @@ This configuration allows you to specify various properties for specific target 
 `true` or `false`.
 
 Enabling this parameter will force Replicant to skip a table/collection that Replicant is unable to load on to the Target even after multiple attempts. Instead, Replicant will continue replicating other tables.
+
+### `replay-replace-as-upsert`
+`true` or `false`.
+
+Whether to enable upsert-based recovery when [operating in full mode]({{< ref "running-replicant#replicant-full-mode" >}}).
+
+It controls how Replicant replays replace operations to address realtime changes in [full mode replication]({{< ref "running-replicant#replicant-full-mode" >}}). 
+
+For example, some insert operations can occur during the snapshot phase. Replicant's default behavior in this case is replaying replace operation by performing delete and then insert. This slows down replication in many cases. If you set `replay-replace-as-upsert` to `true`, Replicant replays replace operation using upsert.
+
+{{< hint "info" >}}
+**Note:** Arcion Replicant supports upsert-based recovery for the following target databases:
+- [MySQL]({{< ref "/docs/target-setup/mysql" >}})
+- [PostgreSQL]({{< ref "/docs/target-setup/postgresql" >}})
+- [SingleStore]({{< ref "/docs/target-setup/singlestore" >}})
+  
+Upsert-based recovery won't work in the following situations:
+
+- The target database doesn't support upsert operation.
+- A table doesn't have a candidate key (primary or unique key).
+
+In the these situations, Replicant falls back to the default behavior for recovery.
+{{< /hint >}}
