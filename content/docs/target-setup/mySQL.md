@@ -94,5 +94,8 @@ Pay attention to the following before configuring MySQL as the Target system:
         #For versions 20.09.14.3 and beyond
         native-load-configs: #Specify the user-provided LOAD configuration string which will be appended to the s3 specific LOAD SQL command
     ```
+{{< hint "warning" >}}
+**Caution:** By default, MySQL disables local data loading which causes bulk loading to fail. So if you want to use bulk loading, make sure to set [the `local_infile` system variable](https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_local_infile) to `1` in your [MySQL option file](https://dev.mysql.com/doc/refman/8.0/en/option-files.html).
+{{< /hint >}}
 
 For a detailed explanation of configuration parameters in the applier file, read [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference").

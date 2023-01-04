@@ -92,5 +92,8 @@ The database/schema of your choice on a different instance of your choice name c
       #For versions 20.09.14.3 and beyond
       native-load-configs: #Specify the user-provided LOAD configuration string which will be appended to the s3 specific LOAD SQL command
     ```
+{{< hint "warning" >}}
+**Caution:** By default, MariaDB disables local data loading which causes bulk loading to fail. So if you want to use bulk loading, make sure to enable [the `local_infile` system variable](https://mariadb.com/docs/server/ref/mdb/system-variables/local_infile/) in your [MariaDB option file](https://mariadb.com/kb/en/configuring-mariadb-with-option-files/).
+{{< /hint >}}
 
 For a detailed explanation of configuration parameters in the applier file, read [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference").
