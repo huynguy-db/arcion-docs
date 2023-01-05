@@ -17,22 +17,27 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     sudo systemctl stop mysql
     ```
 
-## II. Enable binlogging in MySQL server
+## II. Enable binary logging in MySQL server
 
-1. Edit MySQL config file var/lib/my.cnf (create the file if does not exist) and add below lines
+1. Open the MySQL option file `var/lib/my.cnf` (create the file if it doesn't already exist). Add the following lines in the file:
+
     ```SHELL
     [mysqld]
     log-bin=mysql-log.bin
+    binlog_format=ROW
     ```
-2. Export `$MYSQL_HOME` path
+    The first line [specifies the base name to use for binary log files](https://dev.mysql.com/doc/refman/8.0/en/replication-options-binary-log.html#option_mysqld_log-bin). The second line [sets the binary logging format](https://dev.mysql.com/doc/refman/8.0/en/replication-options-binary-log.html#sysvar_binlog_format).
+
+2. Export `$MYSQL_HOME` path with the following command:
     ```SQL
     export MYSQL_HOME=/var/lib/mysql
     ```
-3. Restart MySQL
+3. Restart MySQL with the following command:
+  
     ```BASH
     sudo systemctl restart mysql
     ```
-4. Verify if binlogging is turned on
+4. Verify if binlogging is turned on with the following command:
     ```BASH
     mysql -u root -p
     ```
@@ -51,15 +56,8 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     +---------------------------------+--------------------------------+
     7 rows in set (0.011 sec)
     ```
-5. Set binglog format
-    ```BASH
-    mysql -u root -p
-    ```
-    ```MYSQL
-    mysql> SET GLOBAL binlog_format = 'ROW'
-    ```
 
-## III. Setup MySQL User for Replicant
+## III. Set up MySQL User for Replicant
 1.	Create MySQL user
     ```SQL
     CREATE USER 'username'@'replicate_host' IDENTIFIED BY 'password';
@@ -165,12 +163,14 @@ For a detailed explanation of configuration parameters in the filter file, read:
 
 For real-time replication, you must create a heartbeat table in the source MySQL
 
-1. Create a heartbeat table in the catalog/schema you are going to replicate with the following DDL
-   ```SQL
-   CREATE TABLE "<user_database>"."replicate_io_cdc_heartbeat"(
-     "timestamp" BIGINT NOT NULL,
-     PRIMARY KEY("timestamp"));
-   ```
+1. Create a heartbeat table in the catalog/schema you are going to replicate with the following DDL:
+   
+    ```SQL
+    CREATE TABLE `<user_database>`.`replicate_io_cdc_heartbeat`(
+      timestamp BIGINT NOT NULL,
+      PRIMARY KEY(timestamp));
+    ```
+    Replace `<user_database>` with the name of your specific database.
 
 2. Grant ```INSERT```, ```UPDATE```, and ```DELETE``` privileges for the heartbeat table to the user configured for replication
 

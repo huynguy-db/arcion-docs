@@ -20,24 +20,26 @@ Install a compatible `mysqlbinlog` utility (compatible with the source MySQL ser
 
 ## II. Enable binary logging in MariaDB server
 
-1. Add the following lines to the MySQL configuration file `/var/lib/my.cnf`. Create the file if it doesn't already exist.
-  
+1. Open the MariaDB option file `var/lib/my.cnf` (create the file if it doesn't already exist). Add the following lines in the file:
+
     ```SHELL
     [mysqld]
     log-bin=mysql-log.bin
+    binlog_format=ROW
     ```
+    The first line [enables binary logging and specifies the filename to write the logs to](https://mariadb.com/kb/en/replication-and-binary-log-system-variables/#log_bin). The second line [sets the binary logging format](https://mariadb.com/docs/skysql/ref/mdb/system-variables/binlog_format/).
 
-2. Export the `$MYSQL_HOME` path:
+2. Export the `$MYSQL_HOME` path with the following command:
 
     ```SHELL
     export MYSQL_HOME=/var/lib/mysql
     ```
 
-3. Restart MySQL:
+3. Restart MySQL with the following command:
     ```BASH
     sudo systemctl restart mysql
     ```
-4. Verify if binary logging is turned on:
+4. Verify if binary logging is turned on with the following command:
     ```BASH
     mysql -u root -p
     ```
@@ -55,13 +57,6 @@ Install a compatible `mysqlbinlog` utility (compatible with the source MySQL ser
     | sql_log_bin                     | ON                             |
     +---------------------------------+--------------------------------+
     7 rows in set (0.011 sec)
-    ```
-5. Set the binary log format:
-    ```BASH
-    mysql -u root -p
-    ```
-    ```MYSQL
-    mysql> SET GLOBAL binlog_format = 'ROW'
     ```
 
 ## III. Set up MySQL user for Replicant
