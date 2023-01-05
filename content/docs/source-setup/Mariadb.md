@@ -178,10 +178,11 @@ For real-time replication,  you must create a heartbeat table in the source Mari
 
 1. Create a heartbeat table in the catalog/schema you are going to replicate with the following DDL:
    ```SQL
-   CREATE TABLE "<user_database>"."replicate_io_cdc_heartbeat"(
-     "timestamp" BIGINT NOT NULL,
-     PRIMARY KEY("timestamp"));
-   ```
+    CREATE TABLE `<user_database>`.`replicate_io_cdc_heartbeat`(
+      timestamp BIGINT NOT NULL,
+      PRIMARY KEY(timestamp));
+    ```
+    Replace `<user_database>` with the name of your specific database.
 
 2. Grant ```INSERT```, ```UPDATE```, and ```DELETE``` privileges on the heartbeat table to the user configured for replication.
 
