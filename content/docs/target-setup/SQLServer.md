@@ -31,7 +31,7 @@ The password associated with `username`.
 The maximum number of connections Replicant uses to load data into the SQL Server system.
 
 {{< hint "info" >}}
-#### For Arcion self-hosted
+#### For Arcion self-hosted only
 You can store your connection credentials in AWS Secrets Manager instead of putting them in plain form in the connection configuration file. In that case, you can tell Replicant to retrieve those credentials. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/references/secrets-manager).
 {{< /hint >}}
 
@@ -112,9 +112,30 @@ For more information about the configuration parameters for `realtime` mode, see
 ## Delta-snapshot modes
 Arcion Replicant supports the following `delta-snapshot` modes:
 
-- `UPDATE_INSERT`
-- `DELETE_INSERT`
-- `SINGLE_DELETE_INSERT`
+<dl class="dl-indent">
+  <dt><code>UPDATE_INSERT</code></dt>
+  <dd> This mode works in the following manner:
+    <ul> 
+    <li>Data is inserted into a temporary table.</li>
+    <li>Non-matching data is inserted from the temporary table into the original table.</li>
+    <li>Matching data is updated from the temporary table to the original table.</li>
+    </ul>
+  </dd>
+
+  <dt><code>DELETE_INSERT</code></dt>
+  <dd>This mode works in the following manner:
+    <ul>
+    <li>Data is inserted into a temporary table.</li>
+    <li>Matching data is deleted from the original table.</li>
+    <li>Data is copied from the temporary table to the original table.</li>
+    </ul>
+  </dd>
+
+  
+  <dt><code>SINGLE_DELETE_INSERT</code></dt>
+  <dd>
+ 	This mode works in same way as <code>DELETE_INSERT</code> except that it works in parallel for multiple Applier threads.
+  </dd>
 
 ## Enable recovery
 To enable recovery, you must run Replicant CLI with the `--replace` option. For more information, see [Running Replicant]({{< ref "running-replicant" >}}).
