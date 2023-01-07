@@ -171,9 +171,9 @@ We use Samba to share a directory between the host running Replicant and the Win
 
     Replace the following:
 
-    - _`PATH_TO_SHARED_DIR`_: the path to the shared directory on the network—for example, `/home/replicant/arcion_work/replicant-core/data/{replication_id}/tmp`_.
-    - _`USERNAME`_: the effective username for a user accessing `path`.
-    - _`GROUPNAME`_: the effective group for a user accessing `path`.
+    - _`PATH_TO_SHARED_DIR`_: the path to the shared directory on the network—for example, `/home/replicant/arcion_work/replicant-core/data/{replication_id}/tmp`_
+    - _`USERNAME`_: the effective username for a user accessing `path`
+    - _`GROUPNAME`_: the effective group for a user accessing `path`
   
     Other machine on the same network or VM sees the `path` with the `Replicant` section name (specified in square brackets). Make sure that `force user` and `force group` both have permissions to read files from the shared directory.
 
