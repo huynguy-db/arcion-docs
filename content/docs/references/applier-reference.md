@@ -240,7 +240,7 @@ This configuration allows you to specify various properties for specific target 
 
 Enabling this parameter will force Replicant to skip a table/collection that Replicant is unable to load on to the Target even after multiple attempts. Instead, Replicant will continue replicating other tables.
 
-### `replay-replace-as-upsert`
+### `replay-replace-as-upsert` *[v22.11]*
 `true` or `false`.
 
 Whether to enable upsert-based recovery when [operating in full mode]({{< ref "running-replicant#replicant-full-mode" >}}).
