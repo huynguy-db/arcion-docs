@@ -132,7 +132,7 @@ If `use-upsert-based-recovery` is set to `true`, Replicant restarts the partiall
 - [PostgreSQL]({{< ref "/docs/target-setup/postgresql" >}})
 - [SingleStore]({{< ref "/docs/target-setup/singlestore" >}})
   
-Upsert-based recovery won't work in the following situations:
+Upsert-based recovery doesn't work in the following situations:
 
 - The target database doesn't support upsert operation.
 - A table doesn't have a candidate key (primary or unique key).
@@ -255,7 +255,7 @@ For example, some insert operations can occur during the snapshot phase. Replica
 - [PostgreSQL]({{< ref "/docs/target-setup/postgresql" >}})
 - [SingleStore]({{< ref "/docs/target-setup/singlestore" >}})
   
-Upsert-based recovery won't work in the following situations:
+Upsert-based recovery doesn't work in the following situations:
 
 - The target database doesn't support upsert operation.
 - A table doesn't have a candidate key (primary or unique key).
