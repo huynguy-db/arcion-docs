@@ -137,7 +137,7 @@ Upsert-based recovery doesn't work in the following situations:
 - The target database doesn't support upsert operation.
 - A table doesn't have a candidate key (primary or unique key).
 
-In the these situations, Replicant falls back to the default behavior for recovery.
+In these situations, Replicant falls back to the default behavior for recovery.
 {{< /hint >}}
 
 ## Realtime Mode
@@ -260,5 +260,5 @@ Upsert-based recovery doesn't work in the following situations:
 - The target database doesn't support upsert operation.
 - A table doesn't have a candidate key (primary or unique key).
 
-In the these situations, Replicant falls back to the default behavior for recovery.
+In these situations, Replicant falls back to the default behavior for recovery.
 {{< /hint >}}
