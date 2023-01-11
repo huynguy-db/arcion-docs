@@ -52,12 +52,12 @@ A list of columns in the table <code>TABLE_NAME</code> which should be replicate
 
 <dt><code>conditions</code></dt>
 <dd>
-A predicate to be used for filtering the data while extracting from the source. If the source system is an SQL system, you can specify the exact SQL predicate which replicant should use while extracting data. Please note that the same predicate is executed on both the source and target systems to achieve the required end to end filtering of data during replication.
+A predicate for filtering the data while extracting from the source. If the source system is an SQL system, you can specify the exact SQL predicate which Replicant should use while extracting data. Please note that the same predicate is executed on both the source and target systems to achieve the required end to end filtering of data during replication.
 </dd>
 
 <dt><code>src-conditions</code></dt>
 <dd>
-If source and target systems support a different query language and a different mechanism to specify predicates (e.g. source Oracle supporting SQL predicates while MongoDB supporting JSON predicates), then you must specify the same filtering condition in both languages in src-conditions and dst-conditions for the source and target systems respectively.
+Sometimes source and target systems support a different query language and a different mechanism to specify predicates. For example, source Oracle supporting SQL predicates while MongoDB supporting JSON predicates. In that case, you must specify the same filtering condition in both languages in <code>src-conditions</code> and <code>dst-conditions</code> for the source and target systems respectively.
 </dd>
 
 <dt><code>dst-conditions</code></dt>
@@ -67,12 +67,12 @@ Same as <code>src-conditions</code>.
 
 <dt><code>allow-update-any</code> <i>[v20.05.12.3]</i></dt>
 <dd>
-This option is relevant to real time (CDC based replication). When a list of columns is specified here, replicant publishes update operations on this table only when any of the columns specified here are found modified in the received UPDATE logs from the source system.
+This option is relevant for realtime (CDC-based) replication. It contains a list of columns. Replicant publishes update operations on this table only if <em>any</em> of the columns you specify here have been modified. Replicant looks for modifications in the UPDATE logs it receives from the source system.
 </dd>
 
 <dt><code>allow-update-all</code> <i>[v20.05.12.3]</i></dt>
 <dd>
-This option is relevant to real time( CDC based replication). When a list of columns is specified here, replicant publishes update operations on this table only when all of the columns specified here are found modified in the received UPDATE logs from the source system.
+This option is relevant for realtime (CDC-based) replication. It contains a list of columns. Replicant publishes update operations on this table only if <em>all</em> of the columns you specify here have been modified. Replicant looks for modifications in the UPDATE logs it receives from the source system.
 </dd>
 
 </dl>
