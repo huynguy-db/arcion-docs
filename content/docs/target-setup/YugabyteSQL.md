@@ -9,7 +9,7 @@ bookHidden: false
 
 The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
 
-## I. Set up Connection Configuration
+## I. Set up connection configuration
 
 1. From `$REPLICANT_HOME`, navigate to the sample YugabyteSQL connection configuration file:
     ```BASH
@@ -38,8 +38,20 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
         {{< hint "info" >}} The database/schema of your choice on a different instance of your choice name can be configured using the metadata config feature. For more information, see [Metadata Configuration](/docs/references/metadata-reference).{{< /hint >}}
 
+## II. Configure mapper file (optional)
+If you want to define data mapping from source to your target YugabyteSQL, specify the mapping rules in the mapper file. The following is a sample mapper configuration for a **Oracle-to-YugabyteSQL** pipeline:
 
-## II. Set up Applier Configuration
+```YAML
+rules:
+  [tpch, public]:
+    source:
+    - "tpch"
+convert-case: DEFAULT
+```
+
+For more information on how to define the mapping rules and run Replicant CLI with the mapper file, see [Mapper Configuration]({{< ref "/docs/references/mapper-reference" >}}).
+
+## III. Set up Applier configuration
 
 1.  From `$REPLICANT_HOME`, naviagte to the sample YugabyteSQL Applier configuration file:
 

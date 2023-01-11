@@ -93,7 +93,30 @@ You can also find sample Mapper files for different pipelines in the `mapper` di
 
 There maybe cases where the Target database does not support the name length of tables in the Source database. In those cases, you can make use of the following options inside a mapper file to enable trimming of table and column names:
 
-  1. `dynamic-identifier-name-trimming`*[v20.12.04.5]*: `true` of `false`. When set to `true`, table/column names are trimmed so that it fits the length Target supports.
-  2. `identifier-mapping-table-namespace`*[v20.12.04.5]*: Represents the namespace where the mappings of table/column are stored in Target database.
-    - `catalog`: Specify catalog name if applicable.
-    - `schema`: Specify schema name if applicable.
+### `dynamic-identifier-name-trimming` *[v20.12.04.5]*
+`true` of `false`. 
+
+When set to `true`, table or column names are trimmed so that it fits the length the target supports.
+  
+### `identifier-mapping-table-namespace` *[v20.12.04.5]*
+
+Represents the namespace where the mappings of table or column are stored in the target database.
+  
+  - `catalog`: Specify catalog name if applicable.
+  - `schema`: Specify schema name if applicable.
+
+## Convert letter case for database objects
+In cases where the target database requires database object names (tables or columns) to be in particular letter case, you can use the `convert-case` option inside the mapper file:
+
+### `convert-case` _[v21.06.14.3]_
+The letter case to use for table or column names while mapping. The following values are allowed:
+
+- `DEFAULT`
+- `LOWERCASE`
+- `UPPERCASE`
+  
+When set to `LOWERCASE` or `UPPERCASE`, Replicant converts table or column names to the appropriate letter case while mapping. When set to `DEFAULT`, Replicant maintains the letter case of source object names.
+
+{{< hint "info" >}}
+**Note:** If the table is explicitly mapped, then that mapping will override the convert-case behaviour. If a source table named `REGION` is mapped to destination table `region_lowercase`, then this mapping will override the `convert-case` rule for this table. So, on target the table name becomes `region_lowercase` instead of uppercase `REGION`.
+{{< /hint >}}
