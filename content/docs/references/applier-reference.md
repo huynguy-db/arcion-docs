@@ -184,7 +184,7 @@ This indicates which columns should be included in the SET part of the UPDATE op
 `true` or `false`.
 
 {{< hint "info" >}}
-**Note:** Available for systems that support ACID transactions.
+**Note:** The default value of this parameter is `true` for PostgreSQL and YugabyteSQL targets. For other target databases, the default is `true` for those supporting ACID transactions (except MongoDB). Otherwise, the default is `false`.
 {{< /hint >}}
 
 With this set to `true`, Replicant tries each real-time transaction again in the event of failures. The number of retries and wait duration between each retry depends on the connection configuration of the Target system.
