@@ -167,6 +167,16 @@ delta-snapshot:
 
   delta-snapshot-key: col1
   delta-snapshot-interval: 10
+  
+  per-table-config:
+  - catalog: tpch
+    schema: public
+    tables:
+      part:
+        delta-snapshot-key: last_update_time
+      lineitem:
+        delta-snapshot-key: last_update_time
+        row-identifier-key: [l_orderkey, l_linenumber]
 ```
 For more information about the configuration parameters for `delta-snapshot` mode, see [Delta snapshot mode]({{< ref "/docs/references/extractor-reference#delta-snapshot-mode" >}}).
 
