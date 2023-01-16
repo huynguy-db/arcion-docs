@@ -114,7 +114,7 @@ You need to verify that the necessary permissions are in place on source SQL Ser
     - *`KEYSTORE_PASSWORD`*: the KeyStore password. This is optional. If you don’t want to specify the KeyStore password here, then you must use the UUID from your license file as the KeyStore password. Remember to keep your license file somewhere safe in order to keep this password secure.
 
 ## IV. Set up Extractor Configuration
-To configure replication mode according to your requirements, specify your configuration in the Extractor configuration file. You can find a sample Extractor configuration file `sqlserver.yaml` in the `$REPLICANT_HOME/conf/src` directory. 
+To configure replication mode according to your requirements, specify your configuration in the Extractor configuration file. You can find a sample Extractor configuration file `sqlserver.yaml` in the `$REPLICANT_HOME/conf/src` directory. For a detailed explanation of configuration parameters in the Extractor file, see [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference").
 
 You can configure the following replication modes by specifying the parameters under their respective sections in the configuration file:
 
@@ -151,6 +151,8 @@ snapshot:
           split-key-min-value: 1
           split-key-max-value: 60000
 ```
+For more information about the configuration parameters for `snapshot` mode, see [Snapshot Mode]({{< ref "/docs/references/applier-reference#snapshot-mode" >}})
+
 ### Specify `delta-snapshot` mode parameters
 The following is a sample configuration for operating in `delta-snapshot` mode:
 
@@ -163,9 +165,10 @@ delta-snapshot:
   max-jobs-per-chunk: 32
   _max-delete-jobs-per-chunk: 32
 
-  delta-snapshot-key: last_update_time
+  delta-snapshot-key: col1
   delta-snapshot-interval: 10
 ```
+For more information about the configuration parameters for `delta-snapshot` mode, see [Delta snapshot mode]({{< ref "/docs/references/applier-reference#delta-snapshot-mode" >}}).
 
 ### Specify `realtime` mode parameters
 The following is a sample configuration for operating in `realtime` mode:
@@ -176,5 +179,6 @@ realtime:
   fetch-size-rows: 10000
   fetch-duration-per-extractor-slot-s: 3
 ```
+For more information about the configuration parameters for `realtime` mode, see [Realtime Mode]({{< ref "/docs/references/applier-reference#realtime-mode" >}}).
 
-For a detailed explanation of configuration parameters in the extractor file, read [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference").
+
