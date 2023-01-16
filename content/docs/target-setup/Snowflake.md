@@ -286,7 +286,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
   For a detailed explanation of configuration parameters in the Applier file, read [Applier Reference]({{< ref "/docs/references/applier-reference" >}}).
 
 ## Use Snowflake Iceberg Tables
-From version A.B.X.Y, Arcion supports [Snowflake Iceberg tables]((https://docs.snowflake.com/en/LIMITEDACCESS/tables-iceberg.html)) as target for both snapshot-based and realtime replication. To use Snowflake Iceberg tables as target, follow the instructions in the following sections.
+From version 23.01.05.3, Arcion supports [Snowflake Iceberg tables]((https://docs.snowflake.com/en/LIMITEDACCESS/tables-iceberg.html)) as target for both snapshot-based and realtime replication. To use Snowflake Iceberg tables as target, follow the instructions in the following sections.
 
 ### Prerequisites
 
