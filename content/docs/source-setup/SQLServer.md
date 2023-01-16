@@ -114,47 +114,67 @@ You need to verify that the necessary permissions are in place on source SQL Ser
     - *`KEYSTORE_PASSWORD`*: the KeyStore password. This is optional. If you don’t want to specify the KeyStore password here, then you must use the UUID from your license file as the KeyStore password. Remember to keep your license file somewhere safe in order to keep this password secure.
 
 ## IV. Set up Extractor Configuration
+To configure replication mode according to your requirements, specify your configuration in the Extractor configuration file. You can find a sample Extractor configuration file `sqlserver.yaml` in the `$REPLICANT_HOME/conf/src` directory. 
 
-1. From `$REPLICANT_HOME`, navigate to the applier configuration file:
-   ```BASH
-   vi conf/src/sqlserver.yaml
-   ```
-2. Make the necessary changes as follows:
+You can configure the following replication modes by specifying the parameters under their respective sections in the configuration file:
 
-   ```YAML
-   snapshot:
-     threads: 16
-     fetch-size-rows: 5_000
+- `snapshot`
+- `realtime`
+- `delta-snapshot`
+  
+See the following sections for more information.
 
-     _traceDBTasks: true
-   #  min-job-size-rows: 1_000_000
-   #  max-jobs-per-chunk: 32
+For more information about different Replicant modes, see [Running Replicant]({{< ref "running-replicant" >}}).
 
-   #  per-table-config:
-   #  - catalog: tpch      
-   #    schema: dbo
-   #    tables:
-   #      lineitem:
-   #        row-identifier-key: [l_orderkey, l_linenumber]
-   #        split-key: l_orderkey
-   #        split-hints:
-   #          row-count-estimate: 15000
-   #          split-key-min-value: 1
-   #          split-key-max-value: 60000
+### Specify `snapshot` mode parameters
 
-   realtime:
-    # agent-connection:
-    #   enable: true #Enable reading files from the remote server over a socket.
-    #   host: # Host running remote SQL Server CDC agent
-    #   username: # Specified in `domain\user` format.
-    #   password:
-    #   port:
-     threads: 4
-     fetch-size-rows: 10000
-     fetch-duration-per-extractor-slot-s: 3
-   ```
+The following is a sample configuration for operating in `snapshot` mode:
 
-   * The `agent-connection` field is optional. It defines the parameters used to connect to the socket-based file server.
-     * The user can be either local to the remote system or a domain account, but must have read/write access to the directory on the remote system where transaction files are written. This is configured as the staging directory on the remote system.
+```YAML
+snapshot:
+  threads: 16
+  fetch-size-rows: 5_000
+
+  _traceDBTasks: true
+  min-job-size-rows: 1_000_000
+  max-jobs-per-chunk: 32
+
+  per-table-config:
+  - catalog: tpch      
+    schema: dbo
+    tables:
+      lineitem:
+        row-identifier-key: [l_orderkey, l_linenumber]
+        split-key: l_orderkey
+        split-hints:
+          row-count-estimate: 15000
+          split-key-min-value: 1
+          split-key-max-value: 60000
+```
+### Specify `delta-snapshot` mode parameters
+The following is a sample configuration for operating in `delta-snapshot` mode:
+
+```YAML
+delta-snapshot:
+  threads: 32
+  fetch-size-rows: 10_000
+
+  min-job-size-rows: 1_000_000
+  max-jobs-per-chunk: 32
+  _max-delete-jobs-per-chunk: 32
+
+  delta-snapshot-key: last_update_time
+  delta-snapshot-interval: 10
+```
+
+### Specify `realtime` mode parameters
+The following is a sample configuration for operating in `realtime` mode:
+
+```YAML
+realtime:
+  threads: 4
+  fetch-size-rows: 10000
+  fetch-duration-per-extractor-slot-s: 3
+```
 
 For a detailed explanation of configuration parameters in the extractor file, read [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference").
