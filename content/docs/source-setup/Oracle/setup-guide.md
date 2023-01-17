@@ -3,6 +3,7 @@
 pageTitle: Oracle Source Setup Guide
 title: "Setup guide"
 description: "Set up Oracle as Source. We discuss Oracle User, CDC, necessary permissions, filters, connection and Extractor details for snapshot and realtime replication."
+weight: 1
 ---
 
 # Oracle Source Setup Guide

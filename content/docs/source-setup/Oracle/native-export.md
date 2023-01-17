@@ -3,6 +3,7 @@
 pageTitle: Oracle Native Export
 title: "Native Export"
 description: "Learn how to configure Arcion Replicant to use Oracle's native Data Pump Export (`expdp`) utility for exporting table data."
+weight: 3
 ---
 
 # Oracle Native Export
