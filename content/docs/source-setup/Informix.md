@@ -2,7 +2,7 @@
 pageTitle: IBM Informix Source Connector 
 title: IBM Informix
 description: "Get in-depth documentation for Informix as Source in Arcion. Set up CDC, configure logical logs, and use the latest Source Column Transformation feature."
-weight: 9
+
 bookHidden: false
 ---
 

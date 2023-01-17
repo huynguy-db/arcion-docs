@@ -2,7 +2,7 @@
 pageTitle: Cassandra Source Connector Documentation
 title: Cassandra
 description: "Read step-by-step instructions on how to set up fast, CDC-based data pipelines from Cassandra Sources using Arcion Cassandra connector."
-weight: 5
+
 bookHidden: false
 ---
 # Source Cassandra

@@ -2,7 +2,7 @@
 pageTitle: Documentation for YugabyteSQL Target connector
 title: YugabyteSQL
 description: "Ingest data into YugabyteSQL in minutes with seamless schema conversion using Arcion Yugabyte connector."
-weight: 2
+
 bookHidden: false
 ---
 # Destination YugabyteSQL

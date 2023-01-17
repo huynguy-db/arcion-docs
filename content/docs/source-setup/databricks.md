@@ -2,7 +2,7 @@
 pageTitle: Documentation for Databricks Source connector
 title: Databricks Delta Lake
 description: "Arcion offers fast, reliable, and real-time data ingestion for Databricks Lakehouse, supporting bleeding-edge features like Unity Catalog."
-weight: 1
+
 bookHidden: true
 bookSearchExclude: true
 ---

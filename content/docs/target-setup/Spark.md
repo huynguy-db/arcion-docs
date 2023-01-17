@@ -2,7 +2,7 @@
 pageTitle: Apache Spark connector by Arcion
 title: Apache Spark
 description: "Get enterprise-grade data ingestion into Apache Spark's distributed analytics engine with native bulk loading support."
-weight: 14
+
 bookHidden: false
 ---
 

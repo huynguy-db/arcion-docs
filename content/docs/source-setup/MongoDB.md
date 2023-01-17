@@ -2,7 +2,7 @@
 pageTitle: Documentation for MongoDB Source connector
 title: MongoDB
 description: "Arcion supports MongoDB as Source. Learn how to set up MongoDB in your data pipelines and get fast, reliable replications."
-weight: 3
+
 bookHidden: false
 ---
 

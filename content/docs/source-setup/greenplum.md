@@ -2,7 +2,7 @@
 pageTitle: Greenplum Source Connector Documentation
 title: Greenplum
 description: "Read the setup instructions for streaming data from Greenplum Source, the analytics Postgres database."
-weight: 16
+
 bookHidden: false
 ---
 # Source Greenplum

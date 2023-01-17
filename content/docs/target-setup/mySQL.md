@@ -2,7 +2,7 @@
 pageTitle: Ingest data into MySQL
 title: MySQL
 description: "Using Arcion's high-performance replication engine, load data into MySQL. Securely connect with necessary permissions and enable native-fast bulk-loading."
-weight: 9
+
 bookHidden: false   
 ---
 # Destination MySQL

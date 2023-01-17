@@ -2,7 +2,7 @@
 pageTitle: IBM Db2 as Target
 title: IBM Db2
 description: "Learn how to set up IBM Db2 as Target for your data pipelines using Arcion IBM Db2 connector."
-weight: 17
+
 bookHidden: false
 ---
 # Destination IBM Db2

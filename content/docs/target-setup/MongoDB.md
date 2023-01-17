@@ -2,7 +2,7 @@
 pageTitle: Documentation for MongoDB Target connector
 title: MongoDB
 description: "Migrate terabytes of data to MongoDB with automatic schema conversion, powered by CDC."
-weight: 19
+
 bookHidden: false
 ---
 

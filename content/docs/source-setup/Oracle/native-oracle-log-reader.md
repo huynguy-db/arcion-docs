@@ -1,5 +1,5 @@
 ---
-weight: 2
+
 pageTitle: Use Native Oracle Log Reader (Beta)
 title: "Native Log Reader"
 description: "Learn how to configure Arcion Replicant to read from and make use of Oracle redo log files. Learn how to use ASM or the file system directly for logs."

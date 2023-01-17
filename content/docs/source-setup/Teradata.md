@@ -2,7 +2,7 @@
 pageTitle: Teradata Source Connector Documentation
 title: Teradata
 description: "Step-by-step guide on how to mobilize data from Teradata"
-weight: 7
+
 bookHidden: false
 ---
 

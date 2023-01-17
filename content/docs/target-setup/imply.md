@@ -2,7 +2,7 @@
 pageTitle: Set up Imply as data Target
 title: Imply
 description: "Get high-performance and high-volume data streaming into Imply and ensure faster feedback from the real-time analytics database."
-weight: 18
+
 bookHidden: false
 ---
 

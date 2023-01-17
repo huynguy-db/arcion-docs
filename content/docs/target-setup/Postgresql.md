@@ -2,7 +2,7 @@
 pageTitle: PostgreSQL Target Connector
 title: PostgreSQL
 description: "Get fast data ingestion into PostgreSQL with Arcion PostgreSQL connector, with native bulk loading and realtime capabilities."
-weight: 5
+
 bookHidden: false
 ---
 # Destination PostgreSQL

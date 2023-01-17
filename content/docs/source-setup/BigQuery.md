@@ -2,7 +2,7 @@
 pageTitle: Google BigQuery Source Connector
 title: Google BigQuery
 description: "Mobilize data from your BigQuery warehouse to other platforms of your choice using Arcion BigQuery connector."
-weight: 13
+
 bookHidden: false
 ---
 # Source Google BigQuery

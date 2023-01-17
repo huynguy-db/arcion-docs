@@ -2,7 +2,7 @@
 pageTitle: SAP HANA Source Connector Documentation
 title: SAP HANA
 description: "Arcion supports SAP HANA as data Source. Connect using native JDBC client and tune Extractor parameters to suit your requirements."
-weight: 12
+
 bookHidden: false
 ---
 

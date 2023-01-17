@@ -2,7 +2,7 @@
 pageTitle: Documentation for Db2 Source with Kafka and MQ
 title: Kafka and MQ
 description: "Db2 connector by Arcion integrates natively with Kafka and IBM MQ, making it easier to manage CDC logs. Learn everything about it right here."
-weight: 1
+
 bookHidden: false
 ---
 

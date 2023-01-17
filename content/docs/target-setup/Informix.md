@@ -2,7 +2,7 @@
 pageTitle: Load data into IBM Informix
 title: IBM Informix
 description: "Get in-depth documentation on how to set up IBM Informix as data Target with Arcion, from setting up secure connection to enabling CDC-based replication."
-weight: 15
+
 bookHidden: false
 ---
 # Destination IBM Informix

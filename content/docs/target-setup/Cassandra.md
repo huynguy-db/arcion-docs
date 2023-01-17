@@ -2,7 +2,7 @@
 pageTitle: Cassandra Target Connector Documentation
 title: Cassandra
 description: "Learn all the conifgurations for fast data ingestion into your Cassandra databases, with support for bulk loading."
-weight: 6
+
 bookHidden: false
 ---
 # Destination Cassandra

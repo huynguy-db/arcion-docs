@@ -2,7 +2,7 @@
 pageTitle: CockroachDB as Target
 title: Cockroach
 description: "Find out how you can get robust data ingestion into CockroachDB using Arcion. Learn about necessary database permissions, stage configuration, and more."
-weight: 7
+
 bookHidden: false
 ---
 # Destination Cockroach

@@ -2,7 +2,7 @@
 pageTitle: Documentation for Snowflake Target connector
 title: Snowflake
 description: "Set up Snowflake as Target for your data pipelines using Arcion Snowflake connector. Learn about Type-2 CDC and Snowflake Iceberg tables support."
-weight: 10
+
 bookHidden: false
 ---
 # Destination Snowflake

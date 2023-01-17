@@ -2,7 +2,7 @@
 pageTitle: Documentation for YugabyteCQL Target connector
 title: YugabyteCQL
 description: "Learn everything you need to know for setting up YugabyteCQL as data Target for your data pipelines using Arcion Yugabyte connector."
-weight: 4
+
 bookHidden: false
 ---
 # Destination YugabyteCQL

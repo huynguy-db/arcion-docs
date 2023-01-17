@@ -2,7 +2,7 @@
 pageTitle: Documentation for SingleStore Target connector
 title: SingleStore
 description: "Learn how to ingest data to SingleStore for analytics and ML, using Arcion's bleeding-edge CDC technology to keep data up-to-date."
-weight: 8
+
 bookHidden: false
 ---
 # Destination SingleStore

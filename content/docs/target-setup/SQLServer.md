@@ -2,7 +2,7 @@
 pageTitle: SQL Server Target Connector Documentation
 title: Microsoft SQL Server
 description: "Get realtime data replication into Microsoft SQL Server at scale. Choose from different replication modes and use bulk loading for faster ingestion."
-weight: 20
+
 bookHidden: false
 ---
 # Destination Microsoft SQL Server

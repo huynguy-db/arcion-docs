@@ -2,7 +2,7 @@
 pageTitle: Salesforce Source Connector Documentation
 title: Salesforce
 description: "Arcion can help you get more growth out of Salesforce's CRM. Add Replicant as a Connected App, connect, and mobilize Salesforce data for all of your needs."
-weight: 6
+
 bookHidden: false
 ---
 # Source Salesforce
