@@ -8,8 +8,17 @@ bookHidden: false
 
 # Replication of source queries
 Replicant can perform replication of the results of source queries from source database systems to the target database systems. Source queries can be custom queries, macros, user-defined functions (UDFs), and stored procedures.
+ 
+Arcion supports this feature for the following source database systems:
 
-To use this feature, follow the instructions in the subsequent sections:
+- [IBM Informix]({{< ref "docs/source-setup/informix" >}})
+- [Oracle]({{< ref "docs/source-setup/oracle" >}})
+- [SingleStore]({{< ref "docs/source-setup/singlestore" >}})
+- [Teradata]({{< ref "docs/source-setup/teradata" >}})
+
+Source query replication is supported only for snapshot mode.
+
+To use this feature, follow the instructions in the subsequent sections.
 
 ## Configure `src-queries` parameters
 The configuration for source queries lives in a YAML configuration file. You can find sample configuration files in the `$REPLICANT_HOME/conf/query/src` directory, where `$REPLICANT_HOME` is [your Arcion self-hosted download]({{< ref "docs/quickstart/#ii-download-replicant-and-create-a-home-repository" >}}).
@@ -64,6 +73,27 @@ src-queries :
     partsupp_macro: "call tpch.partsupp_macro($'2020-02-17 04:35:17.520000'$)"
   queries :
     PART_sql: "select P_PARTKEY, P_NAME, blitzz_io_delta_snapshot_key from tpch.PART where replicate_io_delta_snapshot_key >= $'2020-07-21 05:43:24'$ "
+```
+
+## Specify query names in the filter file
+After setting up [the `src-queries` configuration file](#configure-src-queries-parameters), you need to specify the query names inside the [filter file]({{< ref "docs/references/filter-reference" >}}). These names are the logical names [`MACRO_NAME`](#macros) and [`QUERY_NAME`](#queries) that you defined in the `src-queries` configuration file].
+
+To do so, following these steps: 
+
+- Include the special tag `QUERY` inside your filter `types` list. 
+- Specify the logical names for your queries or macros under the `allow` field.
+
+This tells Replicant to allow replication of each query you define under the `allow` field. For example, the following shows a sample filter configuration for Teradata. It includes the `QUERY` tag, and specifies the `ng_test_tbd_sql` query under the `allow` field.
+
+```YAML
+allow:
+- schema : "tpch"
+  types: [TABLE, QUERY]
+  allow:
+    nation:
+    region:
+    ng_test_tbd_sql:
+    supplier :  
 ```
 
 ## Run Replicant
