@@ -1,15 +1,16 @@
 ---
 pageTitle: Documentation for Snowflake Target connector
-title: Snowflake
-description: "Set up Snowflake as Target for your data pipelines using Arcion Snowflake connector. Learn about Type-2 CDC and Snowflake Iceberg tables support."
-
+title: Setup guide
+description: "Set up Snowflake target for snapshot and realtime replication. We discuss RSA authentication, clustering tables support, and more."
 bookHidden: false
+weight: 1
 ---
-# Destination Snowflake
+
+# Destination Snowflake setup guide
 
 The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
 
-## I. Set up Connection Configuration
+## I. Set up connection configuration
 
 1. From `$REPLICANT_HOME`, navigate to the sample Snowflake connection configuration file:
     ```BASH
@@ -71,15 +72,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
         - `password`: This field is optional. If you don't specify the keystore password here, then you must use the UUID from your license file as the keystore password. Remember to keep your license file somewhere safe in order to keep this password secure.
 
     ### Parameters related to stage configuration
-    - `stage`: By default, Replicant uses Snowflake’s native stage for bulk loading. But it's possible to use a native or an external stage like Azure to hold the data files and then load them on the target Snowflake server from there. This section allows you to specify the details Replicant needs to connect to and use a specific stage.
-
-    - `type`*[v21.06.14.1]*: The stage type. Allowed stages are `NATIVE`, `S3`, and `AZURE`.
-    - `root-dir`: Specify a directory on stage which can be used to stage bulk-load files.
-    -`conn-url`*[v21.06.14.1]*: URL for the stage. For example, if stage is `S3`, specify bucket name; for `AZURE`, specify container name.
-    - `key-id` : This config is valid for `S3` stage type only. Access Key ID for AWS account hosting s3.
-    - `account-name`*[v21.06.14.1]* : This config is valid for `AZURE` type only. Name of the ADLS storage account.
-    -`secret-key`*[v21.06.14.1]*: This config is valid for both `S3` and `AZURE` types. For example, Secret Access Key for AWS account hosting s3 or ADLS account.
-    - `token`*[v21.06.14.1]*:  This config is valid for `AZURE` type only. Indicates the SAS token for Azure storage.
+    Stage configuration allows you to tune native or external staging area for bulk loading. For more information, see [Stage configuration]({{< relref "stage-configuration" >}}).
 
     ### Use RSA key pair for authentication
     You can also choose to use [Snowflake's key pair authentication support](https://docs.snowflake.com/en/user-guide/key-pair-auth.html) for enhanced authentication security instead of using basic authentication via username and password. 
@@ -128,7 +121,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     -----END PUBLIC KEY-----
     ```
 
-    #### Store the Private and Public Keys Securely
+    #### Store the private and public keys securely
 
     After following the above steps, you should find the private and public key files saved in a local directory of your system. Note down the path to those files. The private key is stored using the PKCS#8 (Public Key Cryptography Standards) format and is encrypted using the passphrase you specified in the [first step](#generate-the-private-key).
 
@@ -185,7 +178,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
     {{< hint "info" >}}**Note**: If you specify the `private-key-path` and `private-key-passphrase` parameters, you don't need to specify the `password` parameter in the connection configuration file. {{< /hint >}}
 
-## II. Set up Applier Configuration
+## II. Set up Applier configuration
 
 1. From `$REPLICANT_HOME`, naviagte to the sample Snowflake applier configuration file:
     ```BASH
@@ -246,100 +239,5 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
       ```
       After executing the preceeding command, you can select table with lower case names by surrounding the names with double quotation marks.
 
-    ### Use Type-2 CDC
-    From version 22.07.19.3 onwards, Arcion supports Type-2 CDC for Snowflake as the Target. Type-2 CDC enables a Target to have a history of all transactions performed in the Source. For example:
-
-    - An INSERT in the Source is an INSERT in the Target.
-    - An UPDATE in the Source is an INSERT in the Target with additional metadata like Operation Performed, Time of Operation, etc.
-    - A DELETE in the Source is an INSERT in the Target: INSERT with OPER_TYPE as DELETE.
-
-    Arcion supports the following metadata related to source-specific fields:
-
-    - `query_timestamp`: Time at which the user on Source fired a query.
-    - `extraction_timestamp`: Time at which Replicant detected the DML from logs.
-    - `OPER_TYPE`: Type of the operation (INSERT/UPDATE/DELETE).
-
-    The primary requirement for Type-2 CDC is to *enable full row logging* in the Source.
-
-    {{< hint "info" >}}
-  **Note:** Support for Type-2 CDC is limited to the following cases: 
-  - Sources that support CDC.
-  - `realtime` and `full` modes.
-    {{< /hint >}}
-
-    To enable Type-2 CDC for your Snowflake target, follow the steps below:
     
-    1. Add the following two parameters under the `realtime` section of the Snowflake Applier configuration file:
 
-    ```YAML
-    realtime:
-      enable-type2-cdc: true
-      replay-strategy: NONE
-    ```
-
-    2. In the Extractor configuration file of Source, add the following parameter under the `snapshot` section:
-
-    ```YAML
-    snapshot:
-      csv-publish-method: READ
-    ```
-  For a detailed explanation of configuration parameters in the Applier file, read [Applier Reference]({{< ref "/docs/references/applier-reference" >}}).
-
-## Use Snowflake Iceberg Tables
-{{< hint "info" >}}
-**Note:** This feature is only available in [Arcion self-hosted CLI](https://www.arcion.io/self-hosted).
-{{< /hint >}}
-From version 23.01.05.3, Arcion supports [Snowflake Iceberg tables]((https://docs.snowflake.com/en/LIMITEDACCESS/tables-iceberg.html)) as target for both snapshot-based and realtime replication. To use Snowflake Iceberg tables as target, follow the instructions in the following sections.
-
-### Prerequisites
-
-1. Create an Amazon S3 bucket (if it doesn't exist).
-
-2. Create external volume in Snowflake for your AWS S3 bucket using the `CREATE EXTERNAL VOLUME` command:
-
-  ```SQL
-  CREATE EXTERNAL VOLUME <volume_name>
-    STORAGE_LOCATIONS =
-      (
-        (
-        NAME = '<volume_name>'
-        STORAGE_PROVIDER = 'S3'
-        STORAGE_AWS_ROLE_ARN = '<iam_role>'
-        STORAGE_BASE_URL = 's3://<bucket>[/<path>/]'
-        )
-      ); 
-  ```
-
-  Replace the following:
-
-  - *`<volume_name>`*: the name of the new external volume
-  - *`<iam_role>`*: the Amazon Resource Name (ARN) of the IAM role you created
-  - *`<path>`*: an optional path that can provide granular control over objects in the bucket 
-
-For more information on granting Snowflake access to your Amazon S3 bucket, see [Accessing Amazon S3 Using External Volumes
-](https://docs.snowflake.com/en/LIMITEDACCESS/table-external-volume-s3.html).
-
-### Specify Iceberg as table type in Applier configuration file
-In [your Applier configuration file](#ii-set-up-applier-configuration), you need to set the `table-type` property to `ICEBERG` under [the `per-table-config` configuration]({{< ref "docs/references/applier-reference#per-table-config" >}}). For example, look at the following sample Applier configuration:
-
-```YAML
-snapshot:
-  threads: 8
-
-  batch-size-rows: 600_000
-  txn-size-rows: 600_000
-  per-table-config:
-  - catalog: "CATALOG"
-    schema: "SCHEMA"
-    tables:
-      TABLE_NAME:
-        table-type: ICEBERG
-
-  bulk-load:
-    enable: true
-    type: FILE
-    save-file-on-error: true
-```
-
-{{< hint "warning" >}} **Attention:** In realtime replication, Replicant first creates the destination tables with a one-time data snapshot to transfer all existing data from the source. In this "snapshot phase", Replicant needs to know beforehand whether or not you're using Iceberg tables. For this reason, you _must always_ use the `snapshot` section of the Applier configuration file to specify your `per-table-config` parameters, including what the `table-type` is. For more information about how different Replicant modes work, see [Running Replicant]({{< ref "docs/running-replicant" >}}).
-{{< /hint >}}
