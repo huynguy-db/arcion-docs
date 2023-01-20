@@ -97,14 +97,14 @@ For Oracle versions below 19c, grant the following permissions:
 
   ```SQL
   GRANT SELECT ON v_$logmnr_contents TO <USERNAME>;
-  GRANT SELECT ON gv$archived_log to $USERNAME;
+  GRANT SELECT ON gv_$archived_log to <USERNAME>;
   ```
 {{< /tab >}}
 {{< tab "For Oracle 19c and above" >}}
 For Oracle versions 19C and above, Replicant requires additional access to v_$logfile.:
   ```SQL
   GRANT SELECT ON v_$logmnr_contents TO <USERNAME>;
-  GRANT SELECT ON gv$archived_log to $USERNAME;
+  GRANT SELECT ON gv_$archived_log to <USERNAME>;
   GRANT SELECT ON v_$logfile TO <USERNAME>;
   ```
 {{< /tab >}}
