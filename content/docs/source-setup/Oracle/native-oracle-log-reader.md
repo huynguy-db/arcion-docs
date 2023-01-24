@@ -91,9 +91,28 @@ Replicant supports using Oracle Automatic Storage Management (ASM) for logs. To 
   
 ### File system
 
-To use the file system directly, Replicant must have access to the redo log files for reading. If Replicant's path(s) to redo log files is different from the database's path, you must include the path to the redo log files explicitly [in the Source connection configuration file]({{< relref "setup-guide#vi-set-up-connection-configuration" >}}). For example:
+To use the file system directly, Replicant must have access to the redo log files for reading. You can allow this access in one of the following two ways:
+- Share the locations of the redo log files directly with Replicant.
+- Multiplex the redo log files to an alternative location and make that location accessible to Replicant.
 
-  ```YAML
-  log-path: /home/replicant-user/shared/redo/online
-  archive-log-path: /home/replicant-user/shared/redo/archive
-  ```
+If you decide to multiplex the redo log files, you must specify the paths [in the source connection configuration file]({{< relref "setup-guide#vi-set-up-connection-configuration" >}}) using the `log-path` and `archive-log-path` parameters:
+
+```YAML
+log-path: PATH_TO_MULTIPLEXED_ONLINE_REDO_LOG_FILES
+archive-log-path: PATH_TO_MULTIPLEXED_ARCHIVE_REDO_LOG_FILES
+```
+
+Replace the following:
+- *`PATH_TO_MULTIPLEXED_ONLINE_REDO_LOG_FILES`*: path to the location on the disk where the online redo logs are multiplexed
+- *`PATH_TO_MULTIPLEXED_ARCHIVE_REDO_LOG_FILES`*: path to the location on the disk where the archived redo logs are multiplexed
+
+If Replicant's path(s) to redo log files is different from the database's path, you must include the path(s) explicitly [in the source connection configuration file]({{< relref "setup-guide#vi-set-up-connection-configuration" >}}) using the `alt-log-path` and `alt-archive-log-path` parameters:
+
+```YAML
+alt-log-path: REPLICANT_PATH_TO_ONLINE_REDO_LOG_FILES
+alt-archive-log-path: REPLICANT_PATH_TO_ARCHIVE_REDO_LOG_FILES
+```
+
+Replace the following:
+- *`REPLICANT_PATH_TO_ONLINE_REDO_LOG_FILES`*: path to the online redo logs relative to Replicant
+- *`REPLICANT_PATH_TO_ARCHIVE_REDO_LOG_FILES`*: path to the archived redo logs relative to Replicant
