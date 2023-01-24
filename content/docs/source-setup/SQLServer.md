@@ -126,7 +126,7 @@ See the following sections for more information.
 
 For more information about different Replicant modes, see [Running Replicant]({{< ref "running-replicant" >}}).
 
-### Specify `snapshot` mode parameters
+### `snapshot` mode
 
 The following is a sample configuration for operating in `snapshot` mode:
 
@@ -153,7 +153,7 @@ snapshot:
 ```
 For more information about the configuration parameters for `snapshot` mode, see [Snapshot Mode]({{< ref "/docs/references/extractor-reference#snapshot-mode" >}})
 
-### Specify `delta-snapshot` mode parameters
+### `delta-snapshot` mode
 The following is a sample configuration for operating in `delta-snapshot` mode:
 
 ```YAML
@@ -180,7 +180,16 @@ delta-snapshot:
 ```
 For more information about the configuration parameters for `delta-snapshot` mode, see [Delta snapshot mode]({{< ref "/docs/references/extractor-reference#delta-snapshot-mode" >}}).
 
-### Specify `realtime` mode parameters
+### `realtime` mode
+
+#### Create the heartbeat table 
+For [`full` mode replication]({{< ref "docs/running-replicant#replicant-full-mode" >}}), you need to create a heartbeat table. For example:
+
+```SQL
+CREATE TABLE "tpcc"."dbo"."replicate_io_cdc_heartbeat"("timestamp" BIGINT NOT NULL, PRIMARY KEY("timestamp"))
+```
+
+#### Specify `realtime` mode parameters
 The following is a sample configuration for operating in `realtime` mode:
 
 ```YAML
@@ -188,6 +197,11 @@ realtime:
   threads: 4
   fetch-size-rows: 10000
   fetch-duration-per-extractor-slot-s: 3
+  heartbeat:
+    enable: true
+    catalog: "tpcc"
+    schema: "dbo"
+    interval-ms: 10000
 ```
 For more information about the configuration parameters for `realtime` mode, see [Realtime Mode]({{< ref "/docs/references/extractor-reference#realtime-mode" >}}).
 
