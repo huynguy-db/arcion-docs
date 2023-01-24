@@ -184,8 +184,8 @@ For real-time replication, you must create a heartbeat table in the source MySQL
       heartbeat:
         enable: true
         catalog: tpch #Replace tpch with the name of the database containing your heartbeat table
-        table-name [20.09.14.3]: replicate_io_cdc_heartbeat #Replace replicate_io_cdc_heartbeat with your heartbeat table's name if applicable
-        column-name [20.10.07.9]: timestamp #Replace timestamp with your heartbeat table's column name if applicable
+        table-name: replicate_io_cdc_heartbeat #Replace replicate_io_cdc_heartbeat with your heartbeat table's name if applicable
+        column-name: timestamp #Replace timestamp with your heartbeat table's column name if applicable
     ```
 5. Below is a sample extractor file with commonly used configuration parameters:
     ```YAML
