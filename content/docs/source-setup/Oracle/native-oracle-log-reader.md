@@ -20,7 +20,7 @@ log-reader: {REDOLOG|REDOLOG_ARCHIVE_ONLY}
 transaction-store-location: PATH_TO_TRANSACTION_STORAGE
 ```
 
-Set `log-reader` to any of the following two values:
+Set `log-reader` to one of the following two values:
 
 - **`REDOLOG`**. Replicant extracts recrods from online log files as well as archive log files.
 - **`REDOLOG_ARCHIVE_ONLY`**. Replicant extracts recrods only from archive log files.
