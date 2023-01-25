@@ -22,8 +22,8 @@ transaction-store-location: PATH_TO_TRANSACTION_STORAGE
 
 Set `log-reader` to one of the following two values:
 
-- **`REDOLOG`**. Replicant extracts recrods from online log files as well as archive log files.
-- **`REDOLOG_ARCHIVE_ONLY`**. Replicant extracts recrods only from archive log files.
+- **`REDOLOG`**. Replicant extracts records from online log files as well as archive log files.
+- **`REDOLOG_ARCHIVE_ONLY`**. Replicant extracts records only from archive log files.
 
 Replace *`PATH_TO_TRANSACTION_STORAGE`* with the path to a temporary location on the Arcion server. This temporary location stores information about uncommitted Oracle transactions that we track until they're committed or rolled back.
 
