@@ -12,8 +12,8 @@ weight: 1
 Please ensure your host machine that will run Replicant meets the following minimum hardware and software prerequisites.
 
 ### Minimum Hardware Requirements
-* 32 CPU and 64GB Memory
-* 1 TB SSD/NVMe space
+* 16 CPU cores and 32GB of memory
+* 100GB-200GB of SSD/NVMe storage space
 
 ### Minimum System Requirements
 * Linux (CentOS/Ubuntu/Redhat)
