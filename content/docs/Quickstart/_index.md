@@ -19,6 +19,10 @@ Please ensure your host machine that will run Replicant meets the following mini
 * Linux (CentOS/Ubuntu/Redhat)
 * JDK 8 either from a JRE or JDK installation
 
+{{< hint "info" >}}
+**Note:** The storage requirements may increase depending on your source-target pair and method of replication.
+{{< /hint >}}
+
 ## II. Download Replicant and Create a Home Repository
 
 1. Download the latest version of Replicant from [Arcion Self-hosted](https://www.arcion.io/self-hosted).
