@@ -22,21 +22,36 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     ```YAML
     type: YUGABYTESQL
 
-    host: localhost #Replace localhost with your YugabyteSQL host
-    port: 5433 #Replace the 57565 with the port of your host
+    host: HOSTNAME
+    port: PORT_NUMBER
 
-    username: 'replicant' #Replace replicant with the username of your user that connects to your YugabyteSQL server
-    password: 'Replicant#123' #Replace Replicant#123 with your user's password
+    database: 'DATABASE_NAME'
+    username: 'USERNAME'
+    password: 'PASSWORD'
 
-    max-connections: 30 #Specify the maximum number of connections replicant can open in YugabyteSQL
-    max-retries: 10 #Number of times any operation on the system will be re-attempted on failures.
-    retry-wait-duration-ms: 1000 #Duration in milliseconds replicant should wait before performing then next retry of a failed operation
+    max-connections: 30
+    max-retries: 10
+    retry-wait-duration-ms: 1000
+
+    socket-timeout-s: 60
     ```
+
+    Replace the following:
+    
+    - *`HOSTNAME`*: the hostname of the YugabyteDB cluster
+    - *`PORT_NUMBER`*: the port number (default port is `5433`)
+    - *`DATABASE_NAME`*: the name of the database you're connecting to (default is `yugabyte`)
+    - *`USERNAME`*: the username for the YugabyteDB database
+    - *`PASSWORD`*: the password associated with *`USERNAME`*
+
+    The timeout value `socket-timeout-s` is used for socket read operations. The timeout is specified in seconds and a value of zero means that it is disabled.
+
+    Pay attention to the following before proceeding to the next steps:
     - Make sure the specified user has `CREATE TABLE` on the catalogs/schemas into which replicated tables should be created.
     - If you want Replicant to create catalogs/schemas for you on the target YugabyteSQL system, then you also need to grant `CREATE DATABASE`/`CREATE SCHEMA` privileges to the user.
     - If this user does not have `CREATE DATABASE` privilege, then create a database manually with name `io` and grant all privileges for it to the user specified here. Replicant uses this database for internal checkpointing and metadata management.  
 
-        {{< hint "info" >}} The database/schema of your choice on a different instance of your choice name can be configured using the metadata config feature. For more information, see [Metadata Configuration](/docs/references/metadata-reference).{{< /hint >}}
+        {{< hint "info" >}} The database or schema of your choice on a different instance of your choice name can be configured using the metadata config feature. For more information, see [Metadata Configuration](/docs/references/metadata-reference).{{< /hint >}}
 
 ## II. Configure mapper file (optional)
 If you want to define data mapping from source to your target YugabyteSQL, specify the mapping rules in the mapper file. The following is a sample mapper configuration for a **Oracle-to-YugabyteSQL** pipeline:
