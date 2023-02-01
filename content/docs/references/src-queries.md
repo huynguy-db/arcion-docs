@@ -73,11 +73,11 @@ After you've configured [the `src-queries` configuration file](#configure-src-qu
 
 ```YAML
 allow:
-- schema : "tpch"
+- schema: "tpch"
   types: [QUERY]
 ```
 
-If the filter `types` list contains any other type besides `QUERY`, you must explicitly specify the logical names under the `allow` field. These logical names are [`MACRO_NAME`](#macros) and [`QUERY_NAME`](#queries) that you defined in the `src-queries` configuration file. For example:
+If the filter `types` list contains any other type besides `QUERY`, you must explicitly specify the logical names under the `allow` field. These logical names are [`MACRO_NAME`](#macros) and [`QUERY_NAME`](#queries) that you defined in [the `src-queries` configuration file](#configure-src-queries-parameters). For example, the following sample specifies the `ng_test_tbd_sql` query and the tables under the `allow` field.
 
 ```YAML
 allow:
