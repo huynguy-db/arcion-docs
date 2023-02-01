@@ -82,3 +82,14 @@ This option is relevant for realtime (CDC-based) replication. It contains a list
 {{< hint "warning" >}}
 **Important:** We recommend that you create an index on the columns of the target table which are part of `dst-conditions`.
 {{< /hint >}}
+
+## Run Replicant
+After you have a filter file ready, run Replicant with the `--filter` option, providing it the path to the filter file. For example:
+
+```sh
+./bin/replicant full \
+conf/conn/oracle_src.yaml conf/conn/databricks.yaml \
+--extractor conf/src/oracle.yaml \
+--applier conf/dst/databricks.yaml \
+--filter filter/oracle_filter.yaml \
+```
