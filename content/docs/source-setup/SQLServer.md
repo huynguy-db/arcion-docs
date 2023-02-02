@@ -182,6 +182,10 @@ For more information about the configuration parameters for `delta-snapshot` mod
 
 ### `realtime` mode
 
+{{< hint "danger" >}}
+**Warning:** For [`full` mode replication to work]({{< relref "docs/running-replicant#replicant-full-mode" >}}), make sure that all the tables that need to be replicated have primary keys on them.
+{{< /hint >}}
+
 #### Create the heartbeat table 
 For [`full` mode replication]({{< ref "docs/running-replicant#replicant-full-mode" >}}), you need to create a heartbeat table. For example:
 
