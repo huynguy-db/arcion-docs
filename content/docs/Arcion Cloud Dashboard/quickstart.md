@@ -16,6 +16,9 @@ In this section, we'll get familiar with the Arcion Cloud Dashboard UI by going 
 
   ![Arcion Cloud Dashboard after logging in for the first time](/images/arcion_cloud_dashboard_after_signing_in.png)
 
+## Whitelist IP
+You need to whitelist our NAT IP `52.52.196.143`.
+
 ## New Replication Details
 
 - Click on **New Replication**. You'll need to fill in the following details of the replication:
