@@ -17,7 +17,7 @@ In this section, we'll get familiar with the Arcion Cloud Dashboard UI by going 
   ![Arcion Cloud Dashboard after logging in for the first time](/images/arcion_cloud_dashboard_after_signing_in.png)
 
 ## Whitelist IP
-You need to whitelist our NAT IP `52.52.196.143`.
+Whitelist our NAT IP `52.52.196.143` in your firewall, so that Arcion can connect to your source or destination database.
 
 ## New Replication Details
 
