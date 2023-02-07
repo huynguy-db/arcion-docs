@@ -104,7 +104,7 @@ snapshot:
 
   keyspaces:
     testdb:
-      replication-property: "{'class': 'SimpleStrategy! replication_factor" : 1}"
+      replication-property: "{'class' : 'SimpleStrategy', 'replication_factor' : 1}"
       durable-writes: true
       enable-cdc: false
 ```
