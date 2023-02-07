@@ -17,59 +17,140 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     ```
 2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/references/secrets-manager). 
     
-    Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
+    Otherwise, you can put your credentials like usernames and passwords in plain form using the following format:
+
     ```YAML
     type: YUGABYTE_CQL
 
     #You can specify multiple Cassandra nodes using the format below:
     cassandra-nodes:
-      node1: #Replace node1 with your node name
-        host: 172.17.0.2 #Replace 172.17.0.2 with your node's host
-        port: 9042 #Replace 9042 with your node's port
-      node2: #Replace node2 with your node name
-        host: 172.17.0.3 #Replace 172.17.0.3 with your node's host
-        port: 9043 #Replace 9042 with your node's port    
+      NODE_NAME:
+        host: NODE_HOST
+        port: PORT_NUMBER
+    
+    username: USERNAME
+    password: PASSWORD
 
-    username: 'replicant' #Replace replicant with your username that connects to your Cassandra server
-    password: 'Replicant#123' #Replace Replicant123#  with your user's password
-
-    #read-consistency-level: LOCAL_QUORUM  
-    #write-consistency-level: LOCAL_QUORUM
-
-    max-connections: 30 #Specify the maximum number of connections replicant can open in YugabyteCQL
+    max-connections: MAX_NUMBER_OF_CONNECTIONS 
     ```
-      - Allowed values for `read-consistency-level` and `write-consistency-level` are: 
-        - `ANY`
-        - `ONE`
-        - `TWO`
-        - `THREE`
-        - `QUORUM`
-        - `ALL`
-        - `LOCAL_QUORUM `(default value)
-        - `EACH_QUORUM`
-        - `SERIAL`
-        - `LOCAL_SERIAL`
-        - `LOCAL_ONE`
 
-## II. Set up Applier Configuration
+    Replace the following:
 
-1. From `$REPLICANT_HOME`, naviagte to the sample YugabyteSQL Applier configuration file:
-    ```BASH
-    vi conf/dst/yugabytecql.yaml
-    ```
-2. The file contains the following sample snapshot configuration:
+    - *`NODE_NAME`*: the node name
+    - *`NODE_HOST`*: the node host
+    - *`PORT_NUMBER`*: the port number in *`NODE_HOST`*
+    - *`USERNAME`*: the username that connects to the Cassandra server
+    - *`PASSWORD`*: the password associated with *`USERNAME`*
+    - *`MAX_NUMBER_OF_CONNECTIONS`*: the maximum number of connections replicant can open in YugabyteCQL
+
+    You can also configure the [read consistency levels](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Readconsistencylevels) and [write consistency levels](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html#Writeconsistencylevels) by setting the following two parameters in the connection configuration file:
+
+    - `read-consistency-level`
+    - `write-consistency-level`
+
+    The following consistency levels are supported:
+
+     - `ANY`
+     - `ONE`
+     - `TWO`
+     - `THREE`
+     - `QUORUM`
+     - `ALL`
+     - `LOCAL_QUORUM `
+     - `EACH_QUORUM`
+     - `SERIAL`
+     - `LOCAL_SERIAL`
+     - `LOCAL_ONE`
+
+    *Default: `LOCAL_QUORUM`.*
+
+    The following is a sample connection configuration file:
 
     ```YAML
-    snapshot:
-      threads: 16
+    type: YUGABYTE_CQL
 
-      bulk-load:
-        enable: true
-        type: FILE #FILE or PIPE
-        serialize: true
+    cassandra-nodes:
+      node1:
+        host: 172.17.0.2
+        port: 9042
+      node2: 
+        host: 172.17.0.3 
+        port: 9043
 
-        #For versions 20.09.14.3 and beyond
-        native-load-configs: #Specify the user-provided LOAD configuration string which will be appended to the s3 specific LOAD SQL command
+    username: 'alex'
+    password: 'alex#123'
+
+    read-consistency-level: LOCAL_QUORUM 
+    write-consistency-level: LOCAL_QUORUM
+
+    max-connections: 30
     ```
+
+## II. Set up Applier Configuration
+To configure replication according to your requirements, specify your configuration in the Applier configuration file. You can find a sample Applier configuration file `yugabytecql.yaml` in the `$REPLICANT_HOME/conf/dst` directory.
+
+For more information on running Replicant in different modes, see [Running Replicant]({{< ref "docs/running-replicant" >}}).
+
+You can configure YugabyteCQL for operating in either snapshot or realtime modes:
+
+### Configure `snapshot` mode
+For operating in snapshot mode, specify your configuration under the `snapshot` section of the conifiguration file. For example:
+
+```YAML
+snapshot:
+  threads: 16
+  txn-size-rows: 65_000
+  skip-tables-on-failures : false
+
+  keyspaces:
+    testdb:
+      replication-property: "{'class': 'SimpleStrategy! replication_factor" : 1}"
+      durable-writes: true
+      enable-cdc: false
+```
+
+Notice that you need to specify [the namespace configuration](https://docs.datastax.com/en/cql-oss/3.3/cql/cql_reference/cqlCreateKeyspace.html) under `keyspaces`. It follows this format:
+
+```YAML
+keyspaces:
+  KEYSPACE_NAME:                                   
+    replication-property: "REPLICATION_PROPERTIES"  
+    durable-writes: {true|false}
+    enable-cdc: {true|false}
+```
+
+In the preceeding format:
+
+- *`KEYSPACE_NAME`*: The keyspace name.
+- *`REPLICATION_PROPERTIES`*: The replication strategy. Corresponds to `REPLICATION` in the [CREATE KEYSPACE docs](https://docs.datastax.com/en/cql-oss/3.3/cql/cql_reference/cqlCreateKeyspace.html).
+- `durable-writes`: Corresponds to `DURABLE_WRITES` in the [CREATE KEYSPACE docs](https://docs.datastax.com/en/cql-oss/3.3/cql/cql_reference/cqlCreateKeyspace.html).
+- `enable-cdc`: Corresponds to `cdc` in the [CREATE TABLE docs](https://docs.datastax.com/en/cql-oss/3.3/cql/cql_reference/cqlCreateTable.html#cqlCreateTable).
+
+#### Use bulk loading
+If you want to use bulk loading in snapshot mode, use [the `bulk-load` section]({{< relref "docs/references/applier-reference#bulk-load" >}}) to specify your configuration. For example:
+
+```YAML
+snapshot:
+  threads: 16
+  txn-size-rows: 65_000
+  skip-tables-on-failures : false
+
+  bulk-load:
+    enable: true
+    type: FILE
+```
+
+{{< hint "info" >}}
+**Note:** For YugabyteCQL, only `FILE` type bulk loading is supported.
+{{< /hint >}}
+
+### Configure `realtime` mode
+For operating in realtime mode, specify your configuration under the `realtime` section of the conifiguration file. For example:
+
+```YAML
+realtime:
+  txn-size-rows: 65_000
+  skip-tables-on-failures : false
+```
 
 For a detailed explanation of configuration parameters in the Applier file, see [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference").
