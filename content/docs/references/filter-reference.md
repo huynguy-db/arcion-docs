@@ -10,7 +10,9 @@ weight: 2
 You can instruct Replicant which data collections, tables, or files to replicate to best suit your replication strategy.
 
 ## The filter configuration file
-The filter configuration file contains a set of filter rules. Replicant follows these rules while carrying out replication. You can find sample filter configuration files for different source databases inside the `filter` directory of [your Arcion self-hosted download]({{< relref "../quickstart#ii-download-replicant-and-create-a-home-repository" >}}).
+The filter configuration file contains a set of filter rules. Replicant follows these rules while carrying out replication. You can filter tables, views, and queries. 
+
+There are sample filter configuration files for different source databases inside the `filter` directory of [your Arcion self-hosted download]({{< relref "../quickstart#ii-download-replicant-and-create-a-home-repository" >}}).
 
 The following configuration parameters are available that you can use to lay out your filters:
 
@@ -31,7 +33,13 @@ The source database schema that needs to be replicated. Each schema must have a 
 
 <dt><code>types</code></dt>
 <dd>
-The data type(s) to be replicated from the source catalog <code>catalog</code> enclosed in square brackets. For example, the <code>TABLE</code> type data. You can specify multiple data types.
+The data type(s) to be replicated from the source catalog <code>catalog</code> enclosed in square brackets. The following types are supported:
+
+- `TABLE`
+- `VIEW`
+- `QUERY`
+
+You can specify multiple data types.
 </dd>
 
 <dt><code>allow</code></dt>
@@ -93,3 +101,25 @@ conf/conn/oracle_src.yaml conf/conn/databricks.yaml \
 --applier conf/dst/databricks.yaml \
 --filter filter/oracle_filter.yaml \
 ```
+
+## Filter queries
+If you're [replicating source queries]({{< relref "src-queries" >}}), you need to whitelist them in the filter file. To do so, include the special tag `QUERY` inside your filter `types` list. This instructs Replicant to allow all the queries under that specific catalog or schema. For example:
+
+```YAML
+allow:
+- schema: "tpch"
+  types: [QUERY]
+```
+
+If the filter `types` list contains any other type besides `QUERY`, you must explicitly specify the logical names under the `allow` field. These logical names are [`MACRO_NAME`]({{< relref "src-queries#macros" >}}) and [`QUERY_NAME`]({{< relref "src-queries#queries" >}}) that you defined in [the `src-queries` configuration file]({{< relref "src-queries#configure-src-queries-parameters" >}}). For example, the following sample specifies the `ng_test_tbd_sql` query and the tables under the `allow` field.
+
+```YAML
+allow:
+- schema : "tpch"
+  types: [TABLE, QUERY]
+    nation:
+    region:
+    ng_test_tbd_sql:
+    supplier:  
+```
+

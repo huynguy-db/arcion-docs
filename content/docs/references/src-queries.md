@@ -38,7 +38,7 @@ MACRO_NAME: MACRO_COMMAND
 
 You must specify specify this value in the macro command at the appropriate argument location by enclosing it in `$` characters.
 
-[See the example](#example) to better understand how to define the value within the macro.
+[See the example](#example-configuration) to better understand how to define the value within the macro.
 
 For more information about `delta-snapshot-key` in Extractor configuration, see [Delta snapshot mode]({{< ref "docs/references/extractor-reference#delta-snapshot-mode" >}}). 
 {{< /hint >}}
@@ -52,7 +52,7 @@ QUERY_NAME: SQL_QUERY
 
 `SQL_QUERY` is the exact SQL query that you want Replicant to replicate. `QUERY_NAME` acts as a logical name of the query. Replicant uses the same name for the table containing the results of this query.
 
-[See the example](#example) to better understand how to define queries.
+[See the example](#example-configuration) to better understand how to define queries.
 
 
 ### Example configuration
@@ -69,31 +69,13 @@ src-queries :
 ```
 
 ## Whitelist queries in the filter file
-After you've configured [the `src-queries` configuration file](#configure-src-queries-parameters), include the special tag `QUERY` inside your filter `types` list. This instructs Replicant to allow all the queries under that specific catalog or schema. For example:
+After you've configured [the `src-queries` configuration file](#configure-src-queries-parameters), follow the instructions in [Filter queries]({{< relref "filter-reference#filter-queries" >}}). 
 
-```YAML
-allow:
-- schema: "tpch"
-  types: [QUERY]
-```
-
-If the filter `types` list contains any other type besides `QUERY`, you must explicitly specify the logical names under the `allow` field. These logical names are [`MACRO_NAME`](#macros) and [`QUERY_NAME`](#queries) that you defined in [the `src-queries` configuration file](#configure-src-queries-parameters). For example, the following sample specifies the `ng_test_tbd_sql` query and the tables under the `allow` field.
-
-```YAML
-allow:
-- schema : "tpch"
-  types: [TABLE, QUERY]
-  allow:
-    nation:
-    region:
-    ng_test_tbd_sql:
-    supplier:  
-```
-
-## Run Replicant
-After you have a `src-queries` configuration file ready, run Replicant with the `--src-queries` option. The option takes the full path to your `src-queries` configuration file as its argument. For example:
+## Run Replicant with query and filter options
+Run Replicant with both the `--src-queries` and `--filter` options. These options take the full path to your `src-queries` configuration file and the filter file as their arguments respectively. For example:
 
 ```sh
 ./bin/replicant full conf/conn/singlestore.yaml conf/conn/db2.yaml \
---src-queries conf/query/src/singlestore_queries.yaml
+--src-queries conf/query/src/singlestore_queries.yaml \
+--filter filter/singlestore_filter.yaml
 ```
