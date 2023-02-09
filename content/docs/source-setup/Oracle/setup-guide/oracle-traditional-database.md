@@ -1,8 +1,8 @@
 ---
 
-pageTitle: Oracle Source Setup Guide
-title: "Setup guide"
-description: "Set up Oracle as Source. We discuss Oracle User, CDC, necessary permissions, filters, connection and Extractor details for snapshot and realtime replication."
+pageTitle: Setup guide for Oracle traditional database source
+title: "Oracle traditional database"
+description: "Set up Oracle as source. We discuss Oracle User, CDC, necessary permissions, filters, connection and Extractor details for snapshot and realtime replication."
 weight: 1
 ---
 
@@ -218,7 +218,7 @@ You have to enable either primary key or all column logging at either the databa
     ALTER PLUGGABLE DATABASE $PDB_NAME OPEN READ WRITE FORCE;
     ```
 
-The following steps describe how to set up Replicant. We'll refer [the extracted `replicant-cli`]({{< relref "../../quickstart#ii-download-replicant-and-create-a-home-repository" >}}) as the `$REPLICANT_HOME` directory in the following steps.
+The following steps describe how to set up Replicant. We'll refer [the extracted `replicant-cli`]({{< relref "docs/quickstart#ii-download-replicant-and-create-a-home-repository" >}}) as the `$REPLICANT_HOME` directory in the following steps.
 
 
 ## VI. Set up Connection Configuration
