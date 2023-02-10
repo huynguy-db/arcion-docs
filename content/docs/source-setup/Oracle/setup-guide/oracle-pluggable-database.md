@@ -74,7 +74,7 @@ retry-wait-duration-ms: 1000
 ```
 
 ### 2. Set up Extractor configuration
-For Extractor configuration, you can use the same parameters as a traditional Oracle database source. For more information, see [Parameters related to snapshot mode]({{< relref "oracle-traditional-database#parameters-related-to-snapshot-mode" >}}).
+For Extractor configuration, you can use the same parameters as a traditional Oracle database source. For more information, see [Parameters related to snapshot mode]({{< relref "oracle-traditional-database#parameters-related-to-snapshot-mode" >}}) and [Snapshot mode in Extractor reference]({{< ref "docs/references/extractor-reference#snapshot-mode" >}}).
 
 ### 3. Run Replicant
 Run Replicant with the `snapshot` option, specifying the connection, Extractor, and Applier configuration files. For example:
@@ -179,7 +179,21 @@ Before starting realtime replication, you need to [fetch the schemas first]({{< 
 
 You can pass a different location for the output file.
 
-### 3. Specify the starting SCN
+### 3. Set up Extractor configuration
+For Extractor configuration, you need to specify your configuration under the `realtime` section of the Extractor configuration file. The following steps are specific to Oracle PDB:
+
+#### I. Specify the heartbeat table and schema details
+Create the heartbeat table in the CDB and pass its details using [the `heartbeat` parameter]({{< relref "docs/references/extractor-reference#heartbeat" >}}). For example:
+
+```YAML
+realtime:
+  heartbeat:
+    enable: true
+    schema: "C##REPLICANT"
+    interval-ms: 10000
+```
+
+#### II. Specify the starting SCN
 Notice that we [get the current SCN in the first section](#get-the-current-scn). For realtime replication, you need to specify that SCN as the starting SCN in the `realtime` section of the Extractor configuration file:
 
 ```YAML
@@ -190,10 +204,9 @@ realtime:
 
 The reason for this is to apply anything that happens after the snapshot starts.
 
-### 4. Set up Extractor configuration
-For Extractor configuration, you can use the same parameters as a traditional Oracle database source. For more information, see [Parameters related to realtime mode]({{< relref "oracle-traditional-database#parameters-related-to-realtime-mode" >}}).
+The rest of the Extractor parameters available to you are the same as a traditional Oracle database source. For more information, see [Parameters related to realtime mode]({{< relref "oracle-traditional-database#parameters-related-to-realtime-mode" >}}) and [Realtime mode Extractor reference]({{< relref "docs/references/extractor-reference#realtime-mode" >}}).
 
-### 5. Run Replicant
+### 4. Run Replicant
 As the last step, run Replicant with the necessary options and arguments. Remember to use the `--src-schemas` option to specify [the schema we fetch in the second step](#2-fetch-schemas).
 
 ```sh
