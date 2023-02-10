@@ -2,7 +2,7 @@
 
 pageTitle: Setup guide for Oracle Source connector
 title: "Setup guide"
-description: "Set up Oracle as both single tenant and multitenant source for your data pipelines using Arcion Oracle connector."
+description: "Set up Oracle as both single tenant and multitenant source using Arcion's Oracle connector. Arcion supports both Oracle traditional and PDB database"
 bookCollapseSection: true
 ---
 

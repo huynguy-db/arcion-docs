@@ -2,7 +2,7 @@
 
 pageTitle: Setup guide for Oracle traditional database source
 title: "Oracle traditional database"
-description: "Set up Oracle as source. We discuss Oracle User, CDC, necessary permissions, filters, connection and Extractor details for snapshot and realtime replication."
+description: "Learn how to replicate data from Oracle traditional database using snapshot and realtime, CDC-based replication with Arcion."
 weight: 1
 ---
 
@@ -418,8 +418,8 @@ For real-time replication, you must create a heartbeat table in the source Oracl
         interval-ms: 10000
         table-name: replicate_io_cdc_heartbeat
 
-      #start-position:
-        #start-scn: 2362927
+      start-position:
+        start-scn: 2362927
     ```
     
 For a detailed explanation of configuration parameters in the Extractor file, see [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference").
