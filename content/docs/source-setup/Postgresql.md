@@ -289,7 +289,26 @@ The following options are available:
 |-----------|-------------|----------------|
 |`enable` | Whether to enable auto-reinit. If enabled, Replicant detects DDLs on source. | <ul><li>`true`</li><li>`false`</li></ul> |
 |`ddl-replication-mode`| Mode of DDL replication. |<ul><li>`REINIT`</li><li>`INLINE`</li></ul><p>*Default: `REINIT`* |
-|`detect-ddl-interval`| The interval of DDL detection in seconds. For example, if set to `600`, Replicant detects DDLs after every 600 seconds.|   
+|`detect-ddl-interval`| The interval of DDL detection in seconds. For example, if set to `600`, Replicant detects DDLs after every 600 seconds.|
+
+The following is a sample realtime configuration that uses the auto-reinit feature:
+
+```YAML
+realtime:
+  threads: 4 
+  fetch-size-rows: 10000
+  fetch-duration-per-extractor-slot-s: 3
+  _traceDBTasks: true
+  ddl-replication:
+    enable: true
+    detect-ddl-interval: 600
+
+  heartbeat:
+    enable: true
+    catalog: tpch
+    schema: public
+    interval-ms: 10000
+```
 
 ## Replication without replication-slots
 
