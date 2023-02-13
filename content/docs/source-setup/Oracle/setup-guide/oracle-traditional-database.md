@@ -204,24 +204,7 @@ You have to enable either primary key or all column logging at either the databa
     GRANT SELECT ON SYS.ALL_IND_EXPRESSIONS TO <USERNAME>;
     ```
 
-## V. Grant Pluggable Database (PDB) Permissions
-
-1. Ensure that you are connected as a common user with privileges granted on both CDB$ROOT and PDB
-
-2. Provide following additional permissions:
-    ```SQL
-    GRANT SET CONTAINER TO $USERNAME CONTAINER=ALL;
-    GRANT SELECT ON DBA_PDBS to <USERNAME> CONTAINER=ALL;
-    ```  
-3. Open pluggable database:
-    ```SQL
-    ALTER PLUGGABLE DATABASE $PDB_NAME OPEN READ WRITE FORCE;
-    ```
-
-The following steps describe how to set up Replicant. We'll refer [the extracted `replicant-cli`]({{< relref "docs/quickstart#ii-download-replicant-and-create-a-home-repository" >}}) as the `$REPLICANT_HOME` directory in the following steps.
-
-
-## VI. Set up Connection Configuration
+## V. Set up Connection Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the connection configuration file:
     ```BASH
@@ -249,7 +232,7 @@ The following steps describe how to set up Replicant. We'll refer [the extracted
     {{< /hint >}}
 
 
-## VII. Set up Filter Configuration
+## VI. Set up Filter Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the filter configuration file:
     ```BASH
@@ -300,7 +283,7 @@ The following steps describe how to set up Replicant. We'll refer [the extracted
       ```
 For a detailed explanation of configuration parameters in the filter file, read: [Filter Reference]({{< ref "/docs/references/filter-reference" >}} "Filter Reference")
 
-## VIII. Set up Extractor Configuration
+## VII. Set up Extractor Configuration
 
 For real-time replication, you must create a heartbeat table in the source Oracle.
 

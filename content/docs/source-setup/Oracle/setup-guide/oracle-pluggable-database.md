@@ -10,6 +10,24 @@ This page contains instructions for setting up Oracle PDB as data source. Oracle
 
 Arcion supports both snapshot and realtime replication for Oracle PDB.
 
+
+## Grant PDB permissions
+
+1. Ensure that you're connected as [a common user](https://docs.oracle.com/database/121/ADMQS/GUID-DA54EBE5-43EF-4B09-B8CC-FAABA335FBB8.htm) with privileges granted on both `CDB$ROOT`, the CDC container, and the PDB.
+
+2. Provide following additional permissions:
+
+    ```SQL
+    GRANT SET CONTAINER TO <USERNAME> CONTAINER=ALL;
+    GRANT SELECT ON DBA_PDBS to <USERNAME> CONTAINER=ALL;
+    ``` 
+
+3. Change the open mode of the PDB to `READ WRITE`:
+
+    ```SQL
+    ALTER PLUGGABLE DATABASE $PDB_NAME OPEN READ WRITE FORCE;
+    ```
+
 ## Get the current SCN
 Take note of the current system change number (SCN) with the following SQL command:
 
