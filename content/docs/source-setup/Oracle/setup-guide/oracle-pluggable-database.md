@@ -111,7 +111,7 @@ For more information about running Replicant in snapshot mode, see [Replicant sn
 For [realtime mode]({{< ref "docs/running-replicant#replicant-realtime-mode" >}}), follow these steps.
 
 ### 1. Set up connection configuration
-For realtime replication, you need to connect to the [multitenant container database (CDB)](https://docs.oracle.com/database/121/CNCPT/glossary.htm#GUID-135FF536-DE9B-40CF-9F42-C246762BD77F). Using the `pdb-connection` field, you also need to pass the PDB connetion details.
+For realtime replication, you need to connect to the [multitenant container database (CDB)](https://docs.oracle.com/database/121/CNCPT/glossary.htm#GUID-135FF536-DE9B-40CF-9F42-C246762BD77F). Using the `pdb-connection` field, you also need to pass the PDB connection details.
 
 The following is the configuration structure:
 
