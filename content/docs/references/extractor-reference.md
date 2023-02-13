@@ -379,17 +379,6 @@ This parameter is only supported for MongoDB as a source. It configures the norm
 |`de-duplicate`| Whether to de-duplicate data during normalization.|<ul><li>`REINIT`</li><li>`INLINE`</li></ul><p>*Default: `false`* |
 |`extract-upto-depth`| The depth upto which the MongoDB document should be extracted.| *Default: `INT_MAX`*  |
 
-### `ddl-replication` *[v23.01]*
-This parameter is for enabling and configuring the auto-reinit functionality. If it's enabled, Replicant detects any DDL change on source table and reinitializes the table to sync the schema.
-
-The following options are available:
-
-| Option | Description | Allowed values |
-|-----------|-------------|----------------|
-|`enable` | Whether to enable auto-reinit. If enabled, Replicant detects DDLs on source. | <ul><li>`true`</li><li>`false`</li></ul> |
-|`ddl-replication-mode`| Mode of DDL replication. |<ul><li>`REINIT`</li><li>`INLINE`</li></ul><p>*Default: `REINIT`* |
-|`detect-ddl-interval`| The interval of DDL detection in seconds. For example, if set to `600`, Replicant detects DDLs after every 600 seconds.|                |
-
 ### `per-table-config`
 You can use this section to override certain configurations in specific tables if necessary. It follows [the same structure as described in the `per-table-config` of snapshot mode](#per-table-config).
 

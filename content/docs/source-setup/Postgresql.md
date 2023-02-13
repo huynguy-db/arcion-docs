@@ -9,15 +9,17 @@ bookHidden: false
 
 The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory.
 
-## I. Create a user in postgresql
+## I. Create a user in PostgreSQL
 
-1. Log in to postgresql client:
+1. Log in to PostgreSQL client:
+
     ```BASH
     psql -U $POSTGRESQL_ROOT_USER
     ```
 
-2. Create a user used for replication:
-    ```sql
+2. Create a user for replication:
+
+    ```SQL
     CREATE USER <username> PASSWORD '<password>';
     ```
 
@@ -25,37 +27,37 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
     ```SQL
     GRANT USAGE ON SCHEMA "<schema>" TO <username>;
-    ```
-
-    ```sql
-    GRANT
-    SELECT
-    ON ALL TABLES IN SCHEMA "<schema>" TO <username>;
-    ```
-
-    ```SQL
+    GRANT SELECT ON ALL TABLES IN SCHEMA "<schema>" TO <username>;
     ALTER ROLE <username> WITH REPLICATION;
     ```
 
+## II. Set up PostgreSQL for Replication
 
-## II. Setup PostgreSQL for Replication
-1. Edit postgresql.conf:
+1. Open the PostgreSQL configuration file `postgresql.conf`:
+
    ```BASH
    vi $PGDATA/postgresql.conf
    ```
 
-2. Change the parameters below as follows:
-    ```Xorg
+2. Change the following parameters:
+
+    ```
     wal_level = logical
     max_replication_slots = 1 #Can be increased if more slots need to be created
     ```
 
-3. To perform log consumption for CDC replication from the PostgreSQL server, you must either use the test_decoding plugin that is by default installed in PostgreSQL or you must install the logical decoding plugin wal2json
+3. To perform log consumption for CDC replication from the PostgreSQL server, you must do either of the following:
 
-    **Instructions for using wal2json**
-    1. Install the wal2json plugin with the steps from the following link: https://github.com/eulerto/wal2json/blob/master/README.md
+    - Use the `test_decoding` plugin that is by default installed in PostgreSQL.
+    - Install the logical decoding plugin `wal2json`.
 
-    2. Create a logical replication slot for the given catalog to be replicated with the following SQL:
+    See the following two sections for instructions on how to set up these plugins.
+
+    ### Instructions for using `wal2json`
+    1. Follow the instructions in [the `wal2json` project README](https://github.com/eulerto/wal2json/blob/master/README.md) to Install the `wal2json` plugin.
+
+    2. Create a logical replication slot for the catalog to be replicated with the following SQL:
+
         ```SQL
         SELECT 'init' FROM pg_create_logical_replication_slot('<replication_slot_name>', 'wal2json');
         ```
@@ -64,27 +66,28 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
         SELECT * from pg_replication_slots;
         ```
 
-     **Instructions for using test_decoding**
+    ### Instructions for using `test_decoding`
 
-    If you are using the test_decoding plugin, you do not need to install anything as PostgreSQL comes equipped with it.
+    If you're using the `test_decoding` plugin, you don't need to install anything as it comes pre-installed with PostgreSQL.
 
-    1. Use the following sql to create a logical replication slot for test_decoding plugin:
+    1. Use the following SQL to create a logical replication slot for the `test_decoding` plugin:
+
         ```SQL
         SELECT 'init' FROM pg_create_logical_replication_slot('<replication_slot_name>', 'test_decoding');
         ```
-    2. Verify the slot has been created:
-        ```sql
+        
+    2. Verify that the slot has been created:
+
+        ```SQL
         SELECT * from pg_replication_slots;
         ```
 
-4. Set the replicant identity to FULL for the tables  part of the replication process that do no have a primary key:
+4. Set the Replicant identity to `FULL` for the tables  part of the replication process that do no have a primary key:
+
    ```SQL
    ALTER TABLE <table_name> REPLICA IDENTITY FULL;
    ```
 
-<br></br>
-
-**For the proceeding steps 3-5, position yourself in ```$REPLICANT_HOME``` directory**
 ## III. Set up Connection Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the connection configuration file:
@@ -213,63 +216,105 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 For a detailed explanation of configuration parameters in the filter file, read: [Filter Reference]({{< ref "/docs/references/filter-reference" >}} "Filter Reference")
 
 ## V. Set up Extractor Configuration
+To configure replication according to your requirements, specify your configuration in the Extractor configuration file. You can find a sample Extractor configuration file `postgresql.yaml` in the `$REPLICANT_HOME/conf/src` directory. For a detailed explanation of configuration parameters in the Extractor file, see [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference").
 
-For real-time replication, you must create a heartbeat table in the source PostgreSQL
+You can configure the following replication modes by specifying the parameters under their respective sections in the configuration file:
+
+- `snapshot`
+- `realtime`
+- `delta-snapshot`
+  
+See the following sections for more information.
+
+For more information about different Replicant modes, see [Running Replicant]({{< ref "running-replicant" >}}).
+
+### Configure `snapshot` replication
+The following is a sample configuration for operating in `snapshot` mode:
+
+```YAML
+snapshot:
+  threads: 16
+  fetch-size-rows: 5_000
+
+  _traceDBTasks: true
+  min-job-size-rows: 1_000_000
+  max-jobs-per-chunk: 32
+
+  per-table-config:
+  - catalog: tpch
+    schema: public
+    tables:
+      lineitem:
+        row-identifier-key: [l_orderkey, l_linenumber]
+        split-key: l_orderkey
+        split-hints:
+          row-count-estimate: 15000
+          split-key-min-value: 1
+          split-key-max-value: 60_00
+```
+
+For more information about the configuration parameters for `snapshot` mode, see [Snapshot Mode]({{< ref "/docs/references/extractor-reference#snapshot-mode" >}}).
+
+### Configure `realtime` replication
+For realtime replication, you must create a heartbeat table in the source PostgreSQL database.
 
 1. Create a heartbeat table in any schema of the database you are going to replicate with the following DDL:
+
     ```SQL
     CREATE TABLE "<user_database>"."public"."replicate_io_cdc_heartbeat"("timestamp" INT8 NOT NULL, PRIMARY  KEY("timestamp"))
     ```
 
-2. Grant ```INSERT```, ```UPDATE```, and ```DELETE``` privileges to the user configured for replication
+2. Grant `INSERT`, `UPDATE`, and `DELETE` privileges to the user configured for replication.
 
-3. From `$REPLICANT_HOME`, navigate to the extractor configuration file:
-    ```BASH
-    vi conf/src/postgresql.yaml
+3. Specify your configuration under the `realtime` section of the Extractor configuration file. For example:
+
+    ```YAML
+    realtime:
+      heartbeat:
+        enable: true
+        catalog: "postgres"
+        schema: "public"
+        table-name: replicate_io_cdc_heartbeat
+        column-name: timestamp
     ```
-4. Under the Realtime Section, make the necessary changes as follows:
-     ```YAML
-     realtime:
-       heartbeat:
-         enable: true
-         catalog: "postgres" #Replace postgres with your database name
-         schema: "public" #Replace public with your schema name
-         table-name [20.09.14.3]: replicate_io_cdc_heartbeat #Heartbeat table name if changed
-         column-name [20.10.07.9]: timestamp #Heartbeat table column name if changed
-     ```
 
+For more information about the configuration parameters for `realtime` mode, see [Realtime Mode]({{< ref "/docs/references/extractor-reference#realtime-mode" >}}).
 
+#### `ddl-replication` *[v23.01]*
+This parameter is for enabling and configuring the auto-reinit functionality for PostgreSQL source. If `ddl-replication` is enabled, Replicant detects any DDL change on source table and reinitializes the table to sync the schema.
+
+The following options are available:
+
+| Option | Description | Allowed values |
+|-----------|-------------|----------------|
+|`enable` | Whether to enable auto-reinit. If enabled, Replicant detects DDLs on source. | <ul><li>`true`</li><li>`false`</li></ul> |
+|`ddl-replication-mode`| Mode of DDL replication. |<ul><li>`REINIT`</li><li>`INLINE`</li></ul><p>*Default: `REINIT`* |
+|`detect-ddl-interval`| The interval of DDL detection in seconds. For example, if set to `600`, Replicant detects DDLs after every 600 seconds.|   
 
 ## Replication without replication-slots
 
-If you are unable to create replication slots in postgresql using either wal2json or test_decoding then Replicant supports a mode delta-snapshot. In delta-snapshot Replicant uses postgres’s internal column to identify changes.
+If you're unable to create replication slots in PostgreSQL using either `wal2json` or `test_decoding,` then you can use a third mode of replication called [delta-snapshot]({{< ref "docs/running-replicant#replicant-delta-snapshot-mode" >}}). In delta-snapshot, Replicant uses PostgreSQL's internal column to identify changes.
 
-Note: It is strongly recommended to supply a row-identifier-key in the per-table-config section for a table which does not have a PK/UK defined
+{{< hint "danger" >}}
+**Caution:** We strongly recommend that you specify [a `row-identifier-key`]({{< ref "docs/references/extractor-reference#row-identifier-key" >}}) in [the `per-table-config`]({{< ref "docs/references/extractor-reference#per-table-config-2" >}}) section for a table which does not have a primary key or a unique key defined.
+{{< /hint >}}
 
-1. From `$REPLICANT_HOME`, navigate to the extractor configuration file:
-    ```BASH
-    vi/conf/src/postgresql_delta.yaml
-    ```
-2. Under the delta snapshot section, make the necessary changes as follows:
-      ```YAML
-      delta-snapshot:
-        row-identifier-key: [orderkey,suppkey] #Replace orderkey, suppkey with your  global row-identifier-key identifier which specifies the column(s) that are unique in the data collections being replicated
-        update-key: [partkey] #Replace partkey with your global update key if your table does not have unique row-identifier-keys and you still want to perform incremental replication
-        replicate-deletes: true|false #Enable or disable delete replication
+You can specify your configuration under the `delta-snapshot` section of the Extractor configuration file. For example:
 
-        #In the following section, you can specify configurations for certain tables. For any specified tables, Replicant will override the global configurations and replicate the table in accordance to the configurations set for that table below.
-        per-table-config:
-        - catalog: tpch #Replace tpch with the catalog of the table is in
-          schema: public #Replace public with the schema the table is in
-          tables:
-            <table_name>: #Replace <table_name> with your table name
-              row-key-identifier: #Enter a row-key-identifier for this table if applicable
-              update-key: #Enter an update-key for this table if applicable
-              replicate-deletes: #Enable or disable  delete replication  
+```YAML
+delta-snapshot:
+  row-identifier-key: [orderkey,suppkey]
+  update-key: [partkey]
+  replicate-deletes: true|false
 
-            #The following is an example of a specified table named lineitem1. Replicant will use the configurations provided for table lineitem1 when replicating the table instead of the global configurations specifed above the per-table-config section.
-            lineitem1:
-              row-identifier-key: [l_orderkey, l_linenumber]
-              split-key: l_orderkey
-              replicate-deletes: false
-       ```
+  per-table-config:
+  - catalog: tpch
+    schema: public
+    tables:
+      lineitem1:
+        row-identifier-key: [l_orderkey, l_linenumber]
+        split-key: l_orderkey
+        replicate-deletes: false
+```
+
+For more information about the configuration parameters for `delta-snapshot` mode, see [Delta-snapshot Mode]({{< ref "/docs/references/extractor-reference#delta-snapshot-mode" >}}).
