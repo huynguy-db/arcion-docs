@@ -53,7 +53,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
 ## II. Set up Applier Configuration    
 
-1. From `$REPLICANT_HOME`, naviagte to the sample Kafka applier configuration file:
+1. From `$REPLICANT_HOME`, naviagte to the sample Kafka Applier configuration file:
    ```BASH
    vi conf/dst/kafka.yaml
    ```
@@ -217,30 +217,29 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     Below is a sample config for `realtime` mode:
 
     ```YAML
-
     realtime:
       txn-size-rows: 1000
       before-image-format: ALL  # Allowed values : KEY, ALL
       after-image-format: ALL   # Allowed values : UPDATED, ALL
-      # kafka-compression-type: lz4
-      # shard-key: id
-      # num-shards: 1
-      # shard-function: MOD # Allowed values: MOD, NONE. NONE means storage will use its default sharding
-      # skip-tables-on-failures : false
-      # producer-max-block-ms: 60_000
-      # create-topic-timeout-ms: 100_000
+      kafka-compression-type: lz4
+      shard-key: id
+      num-shards: 1
+      shard-function: MOD # Allowed values: MOD, NONE. NONE means storage will use its default sharding
+      skip-tables-on-failures : false
+      producer-max-block-ms: 60_000
+      create-topic-timeout-ms: 100_000
 
-      # per-table-config:
-      # - tables:
-      #     io_blitzz_nation:
-      #       shard-key: id
-      #       num-shards: 16 #default: 1
-      #       shard-function: NONE
-      #     io_blitzz_region:
-      #       shard-key: id
-      #     io_blitzz_customer:
-      #       shard-key: custkey
-      #       num-shards: 16
+      per-table-config:
+      - tables:
+          io_blitzz_nation:
+            shard-key: id
+            num-shards: 16 #default: 1
+            shard-function: NONE
+          io_blitzz_region:
+            shard-key: id
+          io_blitzz_customer:
+            shard-key: custkey
+            num-shards: 16
     ```
 
 {{< hint "warning" >}}
@@ -251,6 +250,12 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
   For more information about how different Replicant modes work, see [Running Replicant]({{< ref "docs/running-replicant" >}}).
 
 - Replicant uses Kafka’s transactional API for writing data in batches to Kafka. Transactional API ensures exactly-once delivery semantics.
+
+- Replicant doesn’t address realtime changes for views when replicating from the following databases to Kafka:
+
+  - [Informix]({{< ref "docs/source-setup/informix" >}})
+
+  - [PostgreSQL]({{< ref "docs/source-setup/postgresql" >}})
 {{< /hint >}}
 
-For a detailed explanation of configuration parameters in the applier file, read [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference").
+For a detailed explanation of configuration parameters in the applier file, see [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference").
