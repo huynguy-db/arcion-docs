@@ -2,7 +2,7 @@
 pageTitle: Using credential stores for storing user credentials
 title: Setting up Credential Store
 description: "Replicant can consume credential information from a credential store. This page describes the necessary steps for creating a credential store."
-weight: 12
+weight: 13
 bookHidden: false
 ---
 

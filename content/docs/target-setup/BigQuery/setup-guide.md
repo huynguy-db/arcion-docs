@@ -1,9 +1,9 @@
 ---
-pageTitle: Set up Google BigQuery as target
+pageTitle: Google BigQuery Target Connector Documentation
 title: Setup guide
-description: "Set up BigQuery as target, supporting realtime replication using load job method and Storage Write API."
-weight: 1
+description: "Load terabyte-scale data into BigQuery. Build real-time data streams for real-time analytics and accelerate your business with Arcion BigQuery connector."
 bookHidden: false
+weight: 1
 ---
 
 # Setup guide for Google BigQuery target
@@ -67,7 +67,12 @@ For more information about different Replicant modes, see [Running Replicant]({{
 For a detailed explanation of configuration parameters in the Applier file, see [Applier Reference]({{< ref "/docs/references/applier-reference" >}}).
 
 ### Configure `snapshot` replication
-The following is a sample configuration for operating in `snapshot` mode:
+For [`snapshot`]({{< ref "docs/running-replicant#replicant-snapshot-mode" >}}) replication, Replicant supports the following two methods:
+
+- [Loading data with conventional load job method]({{< relref "replication-methods#load-data-with-load-job-method" >}}) (Default method).
+- [Streaming data using BigQuery Storage Write API]({{< relref "replication-methods#load-data-using-the-storage-write-api" >}}).
+
+The following is a sample configuration that uses the default load job method:
 
 ```YAML
 snapshot:
@@ -75,6 +80,8 @@ snapshot:
 
   batch-size-rows: 100_000_000
   txn-size-rows: 1_000_000_000
+  
+  use-write-storage-api: false
 
   bulk-load:
     enable: true
@@ -90,21 +97,10 @@ For more information about the configuration parameters for snapshot mode, see [
 ### Configure `realtime` replication
 For [`realtime`]({{< ref "docs/running-replicant#replicant-realtime-mode" >}}) replication, Replicant supports the following two methods:
 
-- [Loading data with conventional load job method](#load-data-with-load-job-method).
-- [Streaming data using BigQuery Storage Write API](#load-data-using-the-storage-write-api).
+- [Loading data with conventional load job method]({{< relref "replication-methods#load-data-with-load-job-method" >}}) (Default method).
+- [Streaming data using BigQuery Storage Write API]({{< relref "replication-methods#load-data-using-the-storage-write-api" >}}).
 
-{{< hint "info" >}}
-**Tip:** When choosing between the load job method and the Storage Write API, consider the following: 
-
-- Load job method is comparatively slower. In some cases, it can be two to three times slower. But it offers more reliability.
-- Storage Write API offers faster data loading and streaming, but is less reliable.
-{{< /hint >}}
-
-
-#### Load data with load job method
-This method uses [the conventional load job method](https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-csv) to load data into BigQuery partitions and tables. This is the default method and configurable using different [Applier configuration parameters]({{ ref "docs/references/applier-reference" >}}).
-
-The following is a sample configuration that uses load job method to load data in realtime:
+The following is a sample configuration for operating in `realtime` mode using the load job method:
 
 ```YAML
 realtime:
@@ -123,10 +119,7 @@ realtime:
             enable-dependency-tracking: true
 ```
 
-#### Load data using the Storage Write API
-This method uses the [BigQuery Storage Write API](https://cloud.google.com/bigquery/docs/write-api-streaming) to stream data into BigQuery. You can choose this method by setting the `use-write-storage-api` parameter to `true` under the `realtime` sectin of the Applier configuration file.
-
-The following is a sample configuration that uses the Storatge Write API to load data in realtime:
+The following is a sample configuration for operating in `realtime` mode using the Storage Write API:
 
 ```YAML
 realtime:
@@ -148,6 +141,7 @@ realtime:
           enable-dependency-tracking: true
 ```
 
-#### Replay strategies
-Replay strategies are how Arcion implements CDC changes and applies them in real-time to the target. For more information about replay strategies for BigQuery target, see [Replay strategies]({{< relref "replay-strategies" >}}).
+For more information about the configuration parameters for realtime mode, see [Realtime Mode]({{< ref "/docs/references/applier-reference#realtime-mode" >}}).
 
+#### Replay strategies
+Replay strategies are how Arcion implements CDC changes and applies them in realtime to the target. For more information about replay strategies for BigQuery target, see [Replay strategies for BigQuery and Databricks targets]({{< relref "replay-strategies" >}}).

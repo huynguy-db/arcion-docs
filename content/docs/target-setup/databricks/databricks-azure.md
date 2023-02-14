@@ -260,6 +260,8 @@ In this step, you need to provide the Databricks connection details to Arcion. T
           replay-strategy: NONE
         ```
 
+        Replay strategies are how Arcion implements CDC changes and applies them in realtime to the target. For more information about replay strategies for Databricks, see [Replay strategies for BigQuery and Databricks targets]({{< relref "replay-strategies" >}}).
+
     2. In the Extractor configuration file of Source, add the following parameter under the `snapshot` section:
 
         ```YAML

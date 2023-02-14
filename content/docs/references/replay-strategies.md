@@ -1,21 +1,26 @@
 ---
-pageTitle: Replay strategies for realtime replication into BigQuery
+pageTitle: Replay strategies for realtime replication
 title: Replay strategies
-description: "Learn how Arcion captures CDC changes for realtime data ingestion into BigQuery."
+description: "Learn how Arcion captures CDC changes for realtime data ingestion into BigQuery and Databricks."
 bookHidden: false
-weight: 2
+weight: 12
 ---
 
-# Replay strategies for BigQuery
+# Replay strategies for BigQuery and Databricks targets
 
-Replay strategies are how Arcion implements CDC changes and applies them in real-time to the target. 
+Replay strategies are how Arcion implements CDC changes and applies them in realtime to the target.
 
 ## Overview
 All replay startegies append a special column called `OPERATION_TYPE` to each operation to identify the nature of operation. An operation can be either an insert (I), an update (U), or a delete (D) operation.
 
-Replicant automatically chooses the best replay strategy to use for your BigQuery target. So you don't always have to explicitly specify it.
+Replay strategies apply to the following targets:
 
-You can set the replay strategy using the `replay-strategy` realtime parameter. The following replay strategies are supported for realtime BigQuery target:
+- [BigQuery]({{< ref "docs/target-setup/bigquery" >}}) 
+- [Databricks]({{< ref "docs/target-setup/databricks" >}})
+
+Replicant automatically chooses the best replay strategy to use. So you don't always have to explicitly specify it.
+
+You can set the replay strategy using the `replay-strategy` realtime parameter. Arcion supports the following replay strategies for realtime BigQuery and Databricks targets:
 
 ### `NONE`
 When a set of upcoming operations arrives, the Applier buffers the operation and applies the buffered batch if upcoming operation and buffered operation has different operation type. In case of _update-update_, it applies the buffered operation if `SET` or `WHERE` statements are different.

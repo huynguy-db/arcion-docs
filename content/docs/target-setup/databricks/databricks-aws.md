@@ -246,18 +246,20 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
     
     1. Add the following two parameters under the `realtime` section of the Databricks Applier configuration file:
 
-    ```YAML
-    realtime:
-      enable-type2-cdc: true
-      replay-strategy: NONE
-    ```
+        ```YAML
+        realtime:
+          enable-type2-cdc: true
+          replay-strategy: NONE
+        ```
+
+        Replay strategies are how Arcion implements CDC changes and applies them in realtime to the target. For more information about replay strategies for Databricks, see [Replay strategies for BigQuery and Databricks targets]({{< relref "replay-strategies" >}}).
 
     2. In the Extractor configuration file of Source, add the following parameter under the `snapshot` section:
 
-    ```YAML
-    snapshot:
-      csv-publish-method: READ
-    ```
+        ```YAML
+        snapshot:
+          csv-publish-method: READ
+        ```
   For a detailed explanation of configuration parameters in the Applier file, read [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference").
 
 ## Databricks Unity Catalog Support (Beta)
