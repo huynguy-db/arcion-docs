@@ -226,8 +226,12 @@ In this step, you need to provide the Databricks connection details to Arcion. T
 
     ```YAML
     realtime:
-      threads: 4 #Maximum number of threads Replicant should use for writing to the target
+      threads: 4
     ```
+
+    {{< details title="Replay strategies for realtime replication" open=false >}}
+  Replay strategies are how Arcion implements CDC changes and applies them in realtime to the target. For more information about replay strategies in Databricks target, see [Replay strategies for BigQuery and Databricks targets]({{< relref "replay-strategies" >}}).
+    {{< /details >}}
 
     ### Enabling Type-2 CDC
     From version 22.07.19.3 onwards, Arcion supports Type-2 CDC for Databricks as the Target. Type-2 CDC enables a Target to have a history of all transactions performed in the Source. For example:
@@ -259,8 +263,6 @@ In this step, you need to provide the Databricks connection details to Arcion. T
           enable-type2-cdc: true
           replay-strategy: NONE
         ```
-
-        Replay strategies are how Arcion implements CDC changes and applies them in realtime to the target. For more information about replay strategies for Databricks, see [Replay strategies for BigQuery and Databricks targets]({{< relref "replay-strategies" >}}).
 
     2. In the Extractor configuration file of Source, add the following parameter under the `snapshot` section:
 
