@@ -23,7 +23,7 @@ This method of replication uses the [BigQuery Storage Write API](https://cloud.g
 To use this method, first, make sure you have the necessary `bigquery.tables.updateData` permissions. For more information, see [Required permissions](https://cloud.google.com/bigquery/docs/write-api#required_permissions).
 
 ### Configuration
-You can use the Storage Write API method by setting the `use-write-storage-api` parameter to `true` under the `realtime` or `snapshot` sectin of the Applier configuration file. See [Configure `realtime` replication]({{< relref "setup-guide#configure-realtime-replication" >}}) and [Configure `snapshot` replication]({{< relref "setup-guide#configure-snapshot-replication" >}}) for sample configurations.
+You can use the Storage Write API method by setting the `use-write-storage-api` parameter to `true` under the `realtime` or `snapshot` section of the Applier configuration file. See [Configure `realtime` replication]({{< relref "setup-guide#configure-realtime-replication" >}}) and [Configure `snapshot` replication]({{< relref "setup-guide#configure-snapshot-replication" >}}) for sample configurations.
 
 ## Decide which method of replication to use
 The load job method is the conventional method of loading data, while the Storage Write API is the latest streaming API by BigQuery. When choosing between the load job method and the Storage Write API, please consider [the advantatages of using the Storage Write API](https://cloud.google.com/bigquery/docs/write-api#advantages).

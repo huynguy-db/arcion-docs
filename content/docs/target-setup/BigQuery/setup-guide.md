@@ -72,7 +72,7 @@ For [`snapshot`]({{< ref "docs/running-replicant#replicant-snapshot-mode" >}}) r
 - [Loading data with conventional load job method]({{< relref "replication-methods#load-data-with-load-job-method" >}}) (Default method).
 - [Streaming data using BigQuery Storage Write API]({{< relref "replication-methods#load-data-using-the-storage-write-api" >}}).
 
-The following is a sample configuration that uses the default load job method:
+The following sample uses the default load job method:
 
 ```YAML
 snapshot:
@@ -90,6 +90,24 @@ snapshot:
     serialize: true
 
   use-quoted-identifiers: false
+```
+
+The following sample enables the Storage Write API for snapshot replication:
+
+```YAML
+snapshot:
+  threads: 16
+
+  batch-size-rows: 100_000_000
+  txn-size-rows: 1_000_000_000
+  
+  use-write-storage-api: true
+
+  bulk-load:
+    enable: true
+    type: FILE
+    save-file-on-error: true
+    serialize: true
 ```
 
 For more information about the configuration parameters for snapshot mode, see [Snapshot Mode]({{< ref "/docs/references/applier-reference#snapshot-mode" >}}).
