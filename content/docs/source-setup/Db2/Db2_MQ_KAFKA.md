@@ -342,13 +342,9 @@ cdc-log-config:
       interval-ms: 10000
   ```
 
-  In the sample above, notice the following details:
+  In preceeding sample, notice the following details:
   
-  - The parameter `commit-time` specifies the timestamp in UTC under `start-position`. To get a timestamp in UTC, you can execute the following query:
-
-    ```SQL
-    SELECT CURRENT TIMESTAMP - CURRENT TIMEZONE AS UTC_TIMESTAMP FROM SYSIBM.SYSDUMMY1
-    ```
+  - The `start-position` parameter specifi[es the starting log position for realtime replication. For more information, see [Db2 with MQ in Extractor Reference]({{< ref "docs/references/extractor-reference#db2-with-mq" >}}).
   - If you've set `message-format` to `DELIMITED`, set `replicate-empty-string-as-null` to `true`.
     {{< /tab >}}
     {{< tab "Db2 Kafka" >}}
@@ -375,7 +371,7 @@ cdc-log-config:
   ```
 
   In the sample above, notice the following details:
-  - The parameter `start-offset` specifies the timestamp under `start-position`. Allowed values for this parameters are `NONE`, `EARLIEST`, and `LATEST`.
+  - The `start-position` parameter specifi[es the starting log position for realtime replication. For more information, see [Db2 with Kafka in Extractor Reference]({{< ref "docs/references/extractor-reference#db2-with-kafka" >}}).
   - If you've set `message-format` to `DELIMITED`, set `replicate-empty-string-as-null` to `true`.
   {{< /tabs >}}
 

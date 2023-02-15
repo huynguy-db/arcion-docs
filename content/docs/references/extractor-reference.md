@@ -313,11 +313,25 @@ Specifies the starting log position for realtime replication. The structure for 
 {{< tabs "start-position-for-dbs" >}}
 {{< tab "IBM Db2" >}}
 
+### Db2 with MQ
 #### `commit-time`
-Timestamp from [source IBM Db2]({{< relref "docs/source-setup/db2" >}}) in UTC. For example, the following query will give the timestamp in UTC:
+Timestamp from source Db2 MQ in UTC. For example, the following query will give the timestamp in UTC:
 ```SQL
 SELECT CURRENT TIMESTAMP - CURRENT TIMEZONE AS UTC_TIMESTAMP FROM SYSIBM.SYSDUMMY1
 ```
+
+For more information, see [the Db2 MQ tab in Parameters related to realtime mode]({{< relref "docs/source-setup/db2/db2_mq_kafka#parameters-related-to-realtime-mode" >}})
+
+
+### Db2 with Kafka
+#### `start-offset`
+Specifies the timestamp for source Db2 Kafka. The following values are possible for `start-offset`: 
+
+- `NONE`
+- `EARLIEST`
+- `LATEST`
+
+For more information, see [the Db2 Kafka tab in Parameters related to realtime mode]({{< relref "docs/source-setup/db2/db2_mq_kafka#parameters-related-to-realtime-mode" >}})
 {{< /tab >}}
 
 {{< tab "MySQL" >}}
