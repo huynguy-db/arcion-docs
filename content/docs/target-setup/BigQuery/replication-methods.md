@@ -19,8 +19,9 @@ For [`realtime`]({{< ref "docs/running-replicant#replicant-realtime-mode" >}}) a
 ## Load data using the Storage Write API
 This method of replication uses the [BigQuery Storage Write API](https://cloud.google.com/bigquery/docs/write-api-streaming) to stream data into BigQuery. 
 
-### Required permissions
-To use this method, first, make sure you have the necessary `bigquery.tables.updateData` permissions. For more information, see [Required permissions](https://cloud.google.com/bigquery/docs/write-api#required_permissions).
+### Requirements
+- Make sure you have the necessary `bigquery.tables.updateData` permissions. For more information, see [Required permissions](https://cloud.google.com/bigquery/docs/write-api#required_permissions).
+- Provide your credentials by setting the [`GOOGLE_APPLICATION_CREDENTIALS` environment variable to the path of the JSON file that contains your service account key](https://cloud.google.com/docs/authentication/provide-credentials-adc#wlif-key). Setting this variable authenticates you so that Replicant can use the Storage Write API.
 
 ### Configuration
 You can use the Storage Write API method by setting the `use-write-storage-api` parameter to `true` under the `realtime` or `snapshot` section of the Applier configuration file. See [Configure `realtime` replication]({{< relref "setup-guide#configure-realtime-replication" >}}) and [Configure `snapshot` replication]({{< relref "setup-guide#configure-snapshot-replication" >}}) for sample configurations.
