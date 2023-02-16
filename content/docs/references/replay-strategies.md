@@ -28,8 +28,6 @@ When a set of upcoming operations arrives, the Applier buffers the operations an
 
 The Applier applies the buffered batch if the operations meet one of the preceeding criteria. The Applier applies the buffered operations using the `MERGE` statement on target.
  
-In case of _update-update_, the Applier applies the buffered operation if `SET` or `WHERE` statements are different.
-
 ### `INSERT_DELETE`
 Requires FULL logging for after and before images. In this strategy, Replicant takes the following approach to operations:
 
@@ -39,12 +37,12 @@ Requires FULL logging for after and before images. In this strategy, Replicant t
 
 Replicant also introduces a special column called `REPLICATE_IO_VERSION_METADATA`. The _insert-delete approach_ helps preserve only the latest version of each row. It also enables batching even if operations depend on the same row.
 
-Version column of delete is lesser than versioning column of insert. All rows having version lesser than delete operations are deleted if matched.
-
 ### `INSERT_MERGE`
 Same as [`INSERT_DELETE`](#insert_delete) but deletes are deleted using `MERGE` statement instead of `DELETE` statement.
 
 ### `IN_MEMORY_MERGE`
-This strategy applies only to tables with valid row identifier keys, primary keys, or unique keys. `IN_MEMORY_MERGE` requires only updated columns for logging. 
+This strategy applies only to tables with valid row-identifier keys, primary keys, or unique keys. `IN_MEMORY_MERGE` requires only updated columns for logging. 
 
 In this strategy, Replicant calculates the checksum of row identifier keys, primary keys, or unique keys and persists the checksum in memory. Replicant uses this checksum to resolve conflicting operations. For example, update over insert or insert over delete. These conflicting operations are meant to apply to the same row. So Replicant resolves them in memory. After resolving, the Applier applies them using the `MERGE` statement.
+
+There is always a single row-identifier key (might have multiple columns) and a single primary key (might have multiple columns) for a table. If a table has multiple unique keys, we consider only one unique key in the absence of a row-identifier key.
