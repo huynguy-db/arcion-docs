@@ -11,8 +11,6 @@ weight: 12
 Replay strategies are how Arcion implements CDC changes and applies them in realtime to the target.
 
 ## Overview
-All replay startegies append a special column called `OPERATION_TYPE` to each operation to identify the nature of operation. An operation can be either an insert (I), an update (U), or a delete (D) operation.
-
 Replay strategies apply to the following targets:
 
 - [BigQuery]({{< ref "docs/target-setup/bigquery" >}}) 
@@ -20,25 +18,33 @@ Replay strategies apply to the following targets:
 
 Replicant automatically chooses the best replay strategy to use. So you don't always have to explicitly specify it.
 
-You can set the replay strategy using the `replay-strategy` realtime parameter. Arcion supports the following replay strategies for realtime BigQuery and Databricks targets:
+You can set the replay strategy using the `replay-strategy` realtime parameter. Arcion supports the following replay strategies for realtime [BigQuery]({{< ref "docs/target-setup/bigquery" >}}) and [Databricks](({{< ref "docs/target-setup/databricks" >}})) targets:
 
 ### `NONE`
-When a set of upcoming operations arrives, the Applier buffers the operation and applies the buffered batch if upcoming operation and buffered operation has different operation type. In case of _update-update_, it applies the buffered operation if `SET` or `WHERE` statements are different.
+When a set of upcoming operations arrives, the Applier buffers the operations and checks the following criteria: 
+
+- The upcoming operation and the buffered operation has different operation types.
+- The upcoming operation depends on the buffered operation.
+
+The Applier applies the buffered batch if the operations meet one of the preceeding criteria. The Applier applies the buffered operations using the `MERGE` statement on target.
+ 
+In case of _update-update_, the Applier applies the buffered operation if `SET` or `WHERE` statements are different.
 
 ### `INSERT_DELETE`
-In this strategy, Replicant takes the following approach to operations:
+Requires FULL logging for after and before images. In this strategy, Replicant takes the following approach to operations:
 
 - Every insert is applied as an insert. 
 - Every delete is applied as a delete. 
-- Every update is broken down into insert + delete. 
+- Every update or replace is broken down into insert + delete. 
 
-Replicant also introduces a special column called `REPLICATE_IO_VERSION_METADATA`. Version column of delete is lesser than versioning column of insert. All rows having version lesser than delete operations are deleted if matched.
+Replicant also introduces a special column called `REPLICATE_IO_VERSION_METADATA`. The _insert-delete approach_ helps preserve only the latest version of each row. It also enables batching even if operations depend on the same row.
+
+Version column of delete is lesser than versioning column of insert. All rows having version lesser than delete operations are deleted if matched.
 
 ### `INSERT_MERGE`
 Same as [`INSERT_DELETE`](#insert_delete) but deletes are deleted using `MERGE` statement instead of `DELETE` statement.
 
 ### `IN_MEMORY_MERGE`
-Requires only updated columns for logging. A checksum of each operation in a buffered batch is maintained in memory to resolve conflicting operations. For example, update over insert or insert over delete. These conflicting opers which are meant to apply on the same row are resolved in memory. Once resolved, they are applied as [`MERGE` strategy](#merge) only.
+This strategy applies only to tables with valid row identifier keys, primary keys, or unique keys. `IN_MEMORY_MERGE` requires only updated columns for logging. 
 
-### `MERGE`
-Requires FULL logging for after image. `MERGE` statement performs insert/update/delete based on value of `OPERATION_TYPE` column for each row matching with temporary table row. This could lead to cyclic dependency exception. This is resolved by executing `MERGE` statement with complex queries managing cyclic dependency with group subqueries. This complex subqueries can be enabled by default by setting `enable-dependency-tracking` to `true`.
+In this strategy, Replicant calculates the checksum of row identifier keys, primary keys, or unique keys and persists the checksum in memory. Replicant uses this checksum to resolve conflicting operations. For example, update over insert or insert over delete. These conflicting operations are meant to apply to the same row. So Replicant resolves them in memory. After resolving, the Applier applies them using the `MERGE` statement.
