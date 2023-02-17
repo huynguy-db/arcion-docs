@@ -72,7 +72,7 @@ For [`snapshot`]({{< ref "docs/running-replicant#replicant-snapshot-mode" >}}) r
 - [Loading data with conventional load job method]({{< relref "replication-methods#load-data-with-load-job-method" >}}) (Default method).
 - [Streaming data using BigQuery Storage Write API]({{< relref "replication-methods#load-data-using-the-storage-write-api" >}}).
 
-The following sample uses the default load job method:
+#### Sample configuration with load job method
 
 ```YAML
 snapshot:
@@ -92,7 +92,7 @@ snapshot:
   use-quoted-identifiers: false
 ```
 
-The following sample enables the Storage Write API for snapshot replication:
+#### Sample configuration with Storage Write API
 
 ```YAML
 snapshot:
@@ -118,7 +118,7 @@ For [`realtime`]({{< ref "docs/running-replicant#replicant-realtime-mode" >}}) r
 - [Loading data with conventional load job method]({{< relref "replication-methods#load-data-with-load-job-method" >}}) (Default method).
 - [Streaming data using BigQuery Storage Write API]({{< relref "replication-methods#load-data-using-the-storage-write-api" >}}).
 
-The following is a sample configuration for operating in `realtime` mode using the load job method:
+#### Sample configuration with load job method
 
 ```YAML
 realtime:
@@ -137,7 +137,7 @@ realtime:
             enable-dependency-tracking: true
 ```
 
-The following is a sample configuration for operating in `realtime` mode using the Storage Write API:
+#### Sample configuration with Storage Write API
 
 ```YAML
 realtime:
