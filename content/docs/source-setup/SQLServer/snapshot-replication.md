@@ -1,0 +1,124 @@
+---
+pageTitle: Documentation for delta-snapshot replication from SQL Server
+title: "Snapshot replication"
+description: "Set up IBM Db2 as data Source using Arcion Db2 connector. Arcion supports Db2 on Kafka/MQ, Native LUW, and i Series AS/400 platforms."
+weight: 1
+---
+
+# Snapshot replication from SQL Server
+In snapshot replication, Replicant first creates the destination schemas. After creating the schemas, Replicant captures all the existing data from the source and transfers it to the target database.
+
+You can enable snapshot replication by running Replicant with the `snapshot` argument. For more information, see [Replicant snapshot mode]({{< ref "docs/running-replicant#replicant-snapshot-mode" >}}).
+
+Follow the steps in the following sections to set up SQL Server for `snapshot` mode replication. In these steps, `$REPLICANT_HOME` refers to [your Arcion Self-hosted CLI download directory]({{< ref "docs/quickstart#ii-download-replicant-and-create-a-home-repository" >}}).
+
+## I. Required Permissions
+
+To allow replication, you need to first verify that the necessary permissions are in place on source SQL Server. For more information, see [SQL Server User Permissions](/docs/references/source-prerequisites/sqlserver/#sql-server-user-permissions).
+
+## II. Set up connection configuration
+Specify the connection details of your SQL Server instance to Replicant in one of the following two ways:
+
+- [A connection configuration file](#using-a-connection-configuration-file)
+- [AWS Secrets Manager](#aws-secrets-manager)
+- [KeyStore](#using-keystore-for-credentials)
+
+### Using a connection configuration file.
+The connection configuration fild holds the connection details and login credentials.
+You can find a sample connection configuration file `sqlserver.yaml` in the `$REPLICANT_HOME/conf/conn` directory. The following configuration parameters are available:
+
+#### `type`
+The connection type representing the database. In this case, it's `SQLSERVER`.
+
+#### `host`
+The hostname of your SQL Server system.
+
+#### `port`
+The port number to connect to the `host`.
+
+#### `username`
+The username credential to access the SQL Server system.
+
+#### `password`
+The password associated with `username`.
+
+#### `auth-type`
+The authentication protocol for the connection. The following protocols are supported:
+
+- `NATIVE` (Default)
+- `NLTM`
+    
+Default authentication protocol is always `NATIVE` if you don't explicitly set the `auth-type` parameter.
+
+In case of `NLTM` protocol, provide the [`username`](#username) in `DOMAIN\USER` format—for example, `domain\alex`.
+
+#### `is_azure`
+Optional parameter. If you're hosting SQL Server on Azure, you must set this parameter to `true`.
+
+#### `max-connections` 
+The maximum number of connections Replicant uses to load data into the SQL Server system.
+
+The following is a sample connection configuration:
+
+
+```YAML
+type: SQLSERVER
+
+host: localhost
+port: 1433
+
+username: 'USERNAME'
+password: 'PASSWORD'
+database: 'tpcc'
+
+max-connections: MAX_NUMBER_OF_CONNECTIONS
+```
+
+### AWS Secrets Manager
+If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/references/secrets-manager). 
+
+### Use KeyStore for credentials
+Replicant supports consuming login credentials from a _credentials store_. Instead of specifying username and password [in plain form](#using-a-connection-configuration-file), you can keep them in a KeyStore and provide the KeyStore details in the connection configuration file like below:
+
+```YAML
+credentials-store:
+    type: {PKCS12|JKS|JCEKS}
+    path: PATH_TO_KEYSTORE_FILE
+    key-prefix: PREFIX_OF_THE_KEYSTORE_ENTRY
+    password: KEYSTORE_PASSWORD
+```
+
+Replace the following:
+
+- *`PATH_TO_KEYSTORE_FILE`*: The path to your KeyStore file.
+- *`PREFIX_OF_THE_KEYSTORE_ENTRY`*: The prefix of your KeyStore entries. You can create entries in the credential store using a prefix that preceeds each credential alias. For example, you can create KeyStore entries with aliases `sqlserver_username` and `sqlserver_password`. You can then set `key-prefix` to `sqlserver_`.
+- *`KEYSTORE_PASSWORD`*: The KeyStore password. This parameter is optional. If you don’t want to specify the KeyStore password here, then you must use the UUID from your license file as the KeyStore password. Remember to keep your license file somewhere safe in order to keep the KeyStore password secure.
+
+## III. Set up Extractor configuration
+To configure snapshot replication according to your requirements, specify your configuration in the Extractor configuration file. You can find a sample Extractor configuration file `sqlserver.yaml` in the `$REPLICANT_HOME/conf/src` directory. 
+
+All configuration parameters for `snapshot` mode live under the `snapshot` section. The following is a sample configuration:
+
+```YAML
+snapshot:
+  threads: 16
+  fetch-size-rows: 5_000
+
+  _traceDBTasks: true
+  min-job-size-rows: 1_000_000
+  max-jobs-per-chunk: 32
+
+  per-table-config:
+  - catalog: tpch      
+    schema: dbo
+    tables:
+      lineitem:
+        row-identifier-key: [l_orderkey, l_linenumber]
+        split-key: l_orderkey
+        split-hints:
+          row-count-estimate: 15000
+          split-key-min-value: 1
+          split-key-max-value: 60000
+```
+
+For more information about the configuration parameters in `snapshot` mode, see [Snapshot Mode]({{< ref "/docs/references/extractor-reference#snapshot-mode" >}}).
