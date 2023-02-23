@@ -1,21 +1,19 @@
 ---
-pageTitle: Documentation for snapshot replication from SQL Server
-title: "Delta-snapshot replication"
-description: "Set up IBM Db2 as data Source using Arcion Db2 connector. Arcion supports Db2 on Kafka/MQ, Native LUW, and i Series AS/400 platforms."
-bookHidden: false
-weight: 2
+pageTitle: Use SQL Server change tracking for real-time replication
+title: "Change tracking"
+description: "Use SQL Server Change Tracking as CDC Extractor to replicate data in realtime from Microsoft SQL Server."
+weight: 1
 ---
 
-# Delta-snapshot replication from SQL Server
-Delta-snapshot is a recurring snapshot replication. In delta-snapshot, Replicant replicates the delta (difference) of the records that have been inserted or updated since the previous delta-snapshot iteration. Replicant uses the delta-snapshot key column and the recovery table to identify the set of delta records that have changed since the previous delta-snapshot iteration. The change can result from insert, update, or delete operations.
+# Real-time replication from SQL Server with change tracking
+For real-time replicaiton from SQL Server, you can choose SQL Server Change Tracking as a CDC Extractor. Follow these steps to set up real-time replication using change tracking.
 
-You can enable delta-snapshot replication by running Replicant with the `delta-snapshot` option. For more information, see [Replicant delta-snapshot mode]({{< ref "docs/running-replicant#replicant-delta-snapshot-mode" >}}).
-
-Follow the steps in the following sections to set up SQL Server for `delta-snapshot` mode replication. In these steps, `$REPLICANT_HOME` refers to [your Arcion Self-hosted CLI download directory]({{< ref "docs/quickstart#ii-download-replicant-and-create-a-home-repository" >}}).
-
-## I. Required Permissions
-
+## I. Prerequisites
+### Required Permissions
 To allow replication, you need to first verify that the necessary permissions are in place on source SQL Server. For more information, see [SQL Server User Permissions](/docs/references/source-prerequisites/sqlserver/#sql-server-user-permissions).
+
+### Primary keys on tables
+For [full mode replication]({{< relref "../full-mode-replication" >}}) with change tracking, make sure that all the tables that you need to replicate have primary keys.
 
 ## II. Set up connection configuration
 Specify the connection details of your SQL Server instance to Replicant in one of the following two ways:
@@ -53,6 +51,14 @@ Default authentication protocol is always `NATIVE` if you don't explicitly set t
 
 In case of `NLTM` protocol, provide the [`username`](#username) in `DOMAIN\USER` format—for example, `domain\alex`.
 
+#### `extractor`
+The CDC Extractor to use for real-time replication. 
+
+To use SQL Server Change Tracking, follow these steps:
+
+- Set `extractor` to `CHANGE`.
+- Follow the instructions in [Enable change tracking](#enable-change-tracking).
+
 #### `is_azure`
 Optional parameter. If you're hosting SQL Server on Azure, you must set this parameter to `true`.
 
@@ -71,6 +77,8 @@ port: 1433
 username: 'USERNAME'
 password: 'PASSWORD'
 database: 'tpcc'
+
+extractor: CHANGE
 
 max-connections: MAX_NUMBER_OF_CONNECTIONS
 ```
@@ -95,32 +103,47 @@ Replace the following:
 - *`PREFIX_OF_THE_KEYSTORE_ENTRY`*: The prefix of your KeyStore entries. You can create entries in the credential store using a prefix that preceeds each credential alias. For example, you can create KeyStore entries with aliases `sqlserver_username` and `sqlserver_password`. You can then set `key-prefix` to `sqlserver_`.
 - *`KEYSTORE_PASSWORD`*: The KeyStore password. This parameter is optional. If you don’t want to specify the KeyStore password here, then you must use the UUID from your license file as the KeyStore password. Remember to keep your license file somewhere safe in order to keep the KeyStore password secure.
 
-## III. Set up Extractor configuration
-To configure snapshot replication according to your requirements, specify your configuration in the Extractor configuration file. You can find a sample Extractor configuration file `sqlserver.yaml` in the `$REPLICANT_HOME/conf/src` directory. 
+## III. Create the heartbeat table 
+For [`full` mode replication]({{< relref "../full-mode-replication" >}}), you need to create a heartbeat table. For example:
 
-All configuration parameters for `delta-snapshot` mode live under the `delta-snapshot` section. The following is a sample configuration:
-
-```YAML
-delta-snapshot:
-  threads: 32
-  fetch-size-rows: 10_000
-
-  min-job-size-rows: 1_000_000
-  max-jobs-per-chunk: 32
-  _max-delete-jobs-per-chunk: 32
-
-  delta-snapshot-key: col1
-  delta-snapshot-interval: 10
-  
-  per-table-config:
-  - catalog: tpch
-    schema: public
-    tables:
-      part:
-        delta-snapshot-key: last_update_time
-      lineitem:
-        delta-snapshot-key: last_update_time
-        row-identifier-key: [l_orderkey, l_linenumber]
+```SQL
+CREATE TABLE "tpcc"."dbo"."replicate_io_cdc_heartbeat"("timestamp" BIGINT NOT NULL, PRIMARY KEY("timestamp"))
 ```
 
-For more information about the configuration parameters in `delta-snapshot` mode, see [Snapshot Mode]({{< ref "/docs/references/extractor-reference#snapshot-mode" >}}).
+## IV. Set up Extractor configuration
+To configure real-time replication according to your requirements, specify your configuration in the Extractor configuration file. You can find a sample `sqlserver.yaml` in the `$REPLICANT_HOME/conf/src` directory. 
+
+All configuration parameters for `realtime` mode live under the `realtime` section. The following is a sample configuration:
+
+```YAML
+realtime:
+  threads: 4
+  fetch-size-rows: 10000
+  fetch-duration-per-extractor-slot-s: 3
+  heartbeat:
+    enable: true
+    catalog: "tpcc"
+    schema: "dbo"
+    interval-ms: 10000
+```
+
+For more information about the configuration parameters in `realtime` mode, see [Realtime Mode]({{< ref "/docs/references/extractor-reference#realtime-mode" >}}).
+
+## Enable change tracking
+To use change tracking, you must enable change tracking in all databases and tables:
+
+1.  Enable change tracking in database:
+  
+
+    ```SQL
+    ALTER DATABASE database_name SET CHANGE_TRACKING = ON  
+    (CHANGE_RETENTION = 2 DAYS, AUTO_CLEANUP = ON)
+    ```
+    Replace *`database_name`* with the name of the database you want to enable change tracking on.
+
+2. Enable change tracking on table:
+
+    ```SQL
+    ALTER TABLE table_name ENABLE CHANGE_TRACKING
+    ```
+    Replace *`table_name`* with the name of the table you want to enable change tracking on.

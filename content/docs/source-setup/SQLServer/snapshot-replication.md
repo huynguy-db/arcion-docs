@@ -8,7 +8,7 @@ weight: 1
 # Snapshot replication from SQL Server
 In snapshot replication, Replicant first creates the destination schemas. After creating the schemas, Replicant captures all the existing data from the source and transfers it to the target database.
 
-You can enable snapshot replication by running Replicant with the `snapshot` argument. For more information, see [Replicant snapshot mode]({{< ref "docs/running-replicant#replicant-snapshot-mode" >}}).
+You can enable snapshot replication by running Replicant with the `snapshot` option. For more information, see [Replicant snapshot mode]({{< ref "docs/running-replicant#replicant-snapshot-mode" >}}).
 
 Follow the steps in the following sections to set up SQL Server for `snapshot` mode replication. In these steps, `$REPLICANT_HOME` refers to [your Arcion Self-hosted CLI download directory]({{< ref "docs/quickstart#ii-download-replicant-and-create-a-home-repository" >}}).
 
