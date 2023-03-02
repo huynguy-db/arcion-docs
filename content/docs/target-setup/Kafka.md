@@ -73,6 +73,10 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
     Creates a separate topic for snapshot and CDC data if `true`. If `false`, a single topic contains the data for snapshot and CDC.
 
+    _Default: `true`._
+    {{< hint "info" >}} `split-topic` is applicable _only_ when [`replication-format`](#replication-format) is set to `JSON`.
+    {{< /hint >}}
+
     #### `replication-format`
     The structure of the published events.
 
