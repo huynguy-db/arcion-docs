@@ -130,11 +130,32 @@ In the preceeding sample:
 Feel free to change these two values as you need.
 
 ## II. Set up Applier configuration
-To configure replication mode according to your requirements, specify your configuration in the Applier configuration file. You can find a sample Applier configuration file `redis_stream.yaml` in the `$REPLICANT_HOME/conf/dst` directory.
+To configure replication mode according to your requirements, specify your configuration in the Applier configuration file. You can find a sample Applier configuration file `redis_stream.yaml` in the `$REPLICANT_HOME/conf/dst` directory. For example:
+
+```YAML
+split-stream: false
+
+snapshot:
+  threads: 16
+
+realtime:
+  threads: 16
+  replay-consistency: GLOBAL
+```
 
 For more information on running Replicant in different modes, see [Running Replicant]({{< ref "docs/running-replicant" >}}).
 
-You can configure Redis Streams for operating in either snapshot or realtime modes: 
+You can configure Redis Streams for operating in either [snapshot](#configure-snapshot-mode) or [realtime](#configure-realtime-mode) modes.
+
+### Global configuration parameters
+Global configuration parameters live at the global scope of the Applier configuration file. Since these parameters are defined globally, they affect both snapshot and real-time replication. The following global Applier configuration parameters are available.
+
+#### `split-stream`
+`true` or `false`.
+
+Creates a separate stream for snapshot and CDC data if `true`. If `false`, a single stream contains the data for snapshot and CDC.
+
+_Default: `true`._
 
 ### Configure `snapshot` mode
 For operating in snapshot mode, specify your configuration under the `snapshot` section of the conifiguration file. For example:
@@ -260,15 +281,15 @@ Each message has a key and a value. It has schema and payload following the sche
 
 3. For each delete operation, there is a tombstone event generated with the key same as the previous delete operation and value set to `“default“`.
 
-{{< details title="Sample key and value structure" open=false >}}
+{{< details title="Click to see sample key and value structure" open=false >}}
 
-
+### Key structure
 ```JSON
 {
   "schema": {
     "type": "struct",
     "optional": false,
-    "name": "REDIS_STREAM_Connector.tpch_scale_0_01.region.Key",
+    "name": "REDIS_STREAM_Connector.tpch.region.Key",
     "fields": [
       {
         "type": "int32",
@@ -278,25 +299,24 @@ Each message has a key and a value. It has schema and payload following the sche
     ]
   },
   "payload": {
-    "r_regionkey": "1"
+    "r_regionkey": "0"
   }
 }
 ```
 
-The following is the value structure for the preceeding sample:
-
+### Value structure
 ```JSON
 {
   "schema": {
     "type": "struct",
     "optional": false,
-    "name": "REDIS_STREAM_Connector.tpch_scale_0_01.region.Envelope",
+    "name": "REDIS_STREAM_Connector.tpch.region.Envelope",
     "fields": [
       {
         "type": "struct",
         "optional": false,
         "field": "before",
-        "name": "REDIS_STREAM_Connector.tpch_scale_0_01.region.Value",
+        "name": "REDIS_STREAM_Connector.tpch.region.Value",
         "fields": [
           {
             "type": "int32",
@@ -319,7 +339,7 @@ The following is the value structure for the preceeding sample:
         "type": "struct",
         "optional": false,
         "field": "after",
-        "name": "REDIS_STREAM_Connector.tpch_scale_0_01.region.Value",
+        "name": "REDIS_STREAM_Connector.tpch.region.Value",
         "fields": [
           {
             "type": "int32",
@@ -366,23 +386,28 @@ The following is the value structure for the preceeding sample:
           },
           {
             "type": "string",
-            "optional": true,
-            "field": "snapshot"
-          },
-          {
-            "type": "string",
             "optional": false,
             "field": "db"
           },
           {
             "type": "string",
-            "optional": true,
-            "field": "sequence"
+            "optional": false,
+            "field": "schema"
           },
           {
             "type": "string",
             "optional": true,
             "field": "table"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "query"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "snapshot"
           },
           {
             "type": "int64",
@@ -408,11 +433,6 @@ The following is the value structure for the preceeding sample:
             "type": "int32",
             "optional": false,
             "field": "row"
-          },
-          {
-            "type": "int64",
-            "optional": true,
-            "field": "query"
           }
         ]
       },
@@ -453,183 +473,39 @@ The following is the value structure for the preceeding sample:
   },
   "payload": {
     "before": {
-      "r_regionkey": "1",
-      "r_comment": "TestReplication",
-      "r_name": "AMERICA"
+      "r_regionkey": "0",
+      "r_comment": "lar deposits. blithely final packages cajole. regular waters are final requests. regular accounts are according to ",
+      "r_name": "AFRICA"
     },
     "after": {
-      "r_regionkey": "1",
-      "r_comment": "Replication Works!",
-      "r_name": "AMERICA"
+      "r_regionkey": "0",
+      "r_comment": "Test_Replication",
+      "r_name": "AFRICA"
     },
     "source": {
-      "query": "UPDATE tpch_scale_0_01.region SET r_regionkey=1 AND r_name=AMERICA AND r_comment=Replication Works! WHERE r_regionkey=1 AND r_name=AMERICA AND r_comment=TestReplication",
-      "thread": 1533,
+      "schema": null,
+      "query": "UPDATE tpch.region SET r_regionkey=0 AND r_name=AFRICA AND r_comment=Test_Replication WHERE r_regionkey=0 AND r_name=AFRICA AND r_comment=lar deposits. blithely final packages cajole. regular waters are final requests. regular accounts are according to ",
+      "thread": 160,
       "server_id": "1",
       "version": "5.7.24",
-      "file": "log-bin.000004",
+      "file": "log-bin.000001",
       "connector": "MYSQL",
-      "pos": 5748188,
+      "pos": 1248,
       "name": "REDIS_STREAM_Connector",
       "gtid": null,
       "row": 1,
-      "ts_ms": 1670357178000,
-      "db": "tpch_scale_0_01",
+      "ts_ms": 1677158088000,
+      "db": "tpch",
       "table": "region",
-      "snapshot": false
+      "snapshot": "false"
     },
-    "op": "UPDATE",
-    "ts_ms": 1670337378446,
+    "op": "u",
+    "ts_ms": 1677138289062,
     "transaction": {
       "id": "",
       "total_order": 1
     }
   }
-}
-```
-{{< /details >}}
-
-## Schema Dump Structure
-Content in this stream is used for internal purposes by Replicant. For example, to support [`fetch-schemas` mode]({{< relref "docs/running-replicant#fetch-schemas" >}}).
-
-The key for the schema dump is a constant string `“schema“` whereas the value holds the schema information for tables.
-
-{{< details title="Sample schema value structure" open=false >}}
-```JSON
-{
-  "form": {
-    "schemas": [
-      "java.util.ArrayList",
-      [
-        {
-          "catalog": "tpch_scale_0_01",
-          "schema": null,
-          "tables": [
-            "java.util.ArrayList",
-            [
-              {
-                "name": "region",
-                "sharded": false,
-                "columns": [
-                  "java.util.ArrayList",
-                  [
-                    {
-                      "name": "r_regionkey",
-                      "type": "INT",
-                      "default": null,
-                      "notNull": true,
-                      "identity": false,
-                      "generated": false,
-                      "selectSql": null,
-                      "cdcTransformFunction": null
-                    },
-                    {
-                      "name": "r_name",
-                      "type": "CHAR(25)",
-                      "default": null,
-                      "notNull": true,
-                      "identity": false,
-                      "generated": false,
-                      "selectSql": null,
-                      "cdcTransformFunction": null
-                    },
-                    {
-                      "name": "r_comment",
-                      "type": "VARCHAR(152)",
-                      "default": null,
-                      "notNull": false,
-                      "identity": false,
-                      "generated": false,
-                      "selectSql": null,
-                      "cdcTransformFunction": null
-                    },
-                    {
-                      "name": "new_col",
-                      "type": "VARCHAR(10)",
-                      "default": null,
-                      "notNull": false,
-                      "identity": false,
-                      "generated": false,
-                      "selectSql": null,
-                      "cdcTransformFunction": null
-                    },
-                    {
-                      "name": "new_col1",
-                      "type": "VARCHAR(10)",
-                      "default": null,
-                      "notNull": false,
-                      "identity": false,
-                      "generated": false,
-                      "selectSql": null,
-                      "cdcTransformFunction": null
-                    },
-                    {
-                      "name": "new_col2",
-                      "type": "VARCHAR(10)",
-                      "default": null,
-                      "notNull": false,
-                      "identity": false,
-                      "generated": false,
-                      "selectSql": null,
-                      "cdcTransformFunction": null
-                    },
-                    {
-                      "name": "new_col3",
-                      "type": "VARCHAR(10)",
-                      "default": null,
-                      "notNull": false,
-                      "identity": false,
-                      "generated": false,
-                      "selectSql": null,
-                      "cdcTransformFunction": null
-                    }
-                  ]
-                ],
-                "shardKey": null,
-                "uniqueKeys": [
-                  "java.util.ArrayList",
-                  []
-                ],
-                "foreignKeys": [
-                  "java.util.ArrayList",
-                  []
-                ],
-                "createSQL": null,
-                "objectType": "TABLE",
-                "primaryKey": {
-                  "name": null,
-                  "columns": [
-                    "java.util.ArrayList",
-                    [
-                      "r_regionkey"
-                    ]
-                  ]
-                },
-                "indexes": null,
-                "rowCount": null
-              }
-            ]
-          ],
-          "views": [
-            "java.util.ArrayList",
-            []
-          ]
-        }
-      ]
-    ],
-    "userRoles": {
-      "users": [
-        "java.util.ArrayList",
-        []
-      ],
-      "roles": [
-        "java.util.ArrayList",
-        []
-      ]
-    },
-    "encrypted": false
-  },
-  "sourceType": "MYSQL"
 }
 ```
 {{< /details >}}
