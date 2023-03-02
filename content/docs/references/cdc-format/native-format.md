@@ -24,41 +24,6 @@ To represent change events in snapshot mode, a simple JSON structure is used. Fo
 }
 ```
 ### Change events in realtime mode
-For change events in realtime mode, the the following keys in the JSON structure corresponds to various details about the event and the table. See the examples in this section for sample NATIVE format structures for different events.
-
-#### `tableName`
-The fully qualified name of the table.
-
-#### `opType`
-The event type. 
-
-The following three event types are available that corresponds to three DML operations:
-
-<dl class="dl-indent">
-
-<dt>
-
-`I`
-
-</dt>
-<dd>An insert operation.</dd>
-
-<dt>
-
-`U`
-
-</dt>
-<dd>An update operation.</dd>
-
-<dt>
-
-`D`
-
-</dt>
-<dd>A delete operation.</dd>
-
-</dl>
-
 
 #### `INSERT` event
 {{< details title="Click to see sample" open=false >}}
@@ -167,4 +132,53 @@ The following three event types are available that corresponds to three DML oper
   "after": null
 }
 ```
-{{ /details }}
+{{< /details >}}
+
+In the preceeding samples, notice the following keys that correspond to various details about the event and the table:
+
+#### `tableName`
+The fully qualified name of the table.
+
+#### `opType`
+The event type. 
+
+The following three event types are available that corresponds to three DML operations:
+
+<dl class="dl-indent">
+
+<dt>
+
+`I`
+
+</dt>
+<dd>An insert operation.</dd>
+
+<dt>
+
+`U`
+
+</dt>
+<dd>An update operation.</dd>
+
+<dt>
+
+`D`
+
+</dt>
+<dd>A delete operation.</dd>
+
+</dt>
+<dd>An insert operation.</dd>
+
+</dl>
+
+#### `cursor` 
+The metadata of extraction event. 
+
+#### `before` 
+The image of the rows before the execution of the event.
+
+#### `after` 
+The image of the rows after execution of the event.
+
+
