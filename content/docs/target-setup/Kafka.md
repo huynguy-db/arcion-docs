@@ -57,10 +57,29 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
    ```BASH
    vi conf/dst/kafka.yaml
    ```
-2. The configuration file has two parts:
+2. The configuration file can contain global Applier parameters followed by snapshot and realtime parameters:
 
+    - Global configuration parameters
     - Parameters related to snapshot mode.
     - Parameters related to realtime mode.
+
+    ### Global configuration parameters
+    Global configuration parameters live at the global scope of the Applier configuration file. So you _must_ specify them at the topmost place of the Applier configuration file. Since these parameters are defined globally, they affect both snapshot and real-time replication.
+    
+    The following global Applier configuration parameters are available.
+
+    #### `split-topic`
+    `true` or `false`.
+
+    Creates a separate topic for snapshot and CDC data if `true`. If `false`, a single topic contains the data for snapshot and CDC.
+
+    #### `replication-format`
+    The structure of the published events.
+
+    The following values are allowed:
+
+    - [`NATIVE`]({{< ref "docs/references/cdc-format/native-format" >}})
+    - [`JSON`]({{< ref "docs/references/cdc-format/json-cdc-format" >}})
 
     ### Parameters related to snapshot mode
     For snapshot mode, the following Kafka-specific parameters are available:

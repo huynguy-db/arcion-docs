@@ -17,7 +17,7 @@ Replicant supports JSON CDC format for the following sources:
 - [SAP ASE]({{< ref "docs/source-setup/sap_ase" >}})
 - [Microsoft SQL Server]({{< ref "docs/source-setup/sqlserver" >}})
 
-<!-- Replicant specifically follows the format for Debezium MySQL connector for Apache Kafka as data target. For more information, see [Debezium connector for MySQL](https://debezium.io/documentation/reference/stable/connectors/mysql.html). -->
+To use JSON CDC format, set [the global Applier parameter `replication-format` to `JSON`]({{< relref "docs/target-setup/kafka#replication-format" >}}) in your Applier configuration file.
 
 ### DML message structure
 1. Each message has a key and a value. The key uniquely identifies the change.
