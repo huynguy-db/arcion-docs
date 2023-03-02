@@ -1,6 +1,6 @@
 ---
-pageTitle: JSON CDC format 
-title: JSON CDC format for Kafka
+pageTitle: JSON CDC format for CDC changes in Kafka target
+title: JSON CDC format
 description: "Arcion Replicant uses JSON CDC format to track CDC changes for Apache Kafka as target for realtime replication."
 weight: 2
 ---
@@ -27,7 +27,7 @@ Replicant supports JSON CDC format for the following sources:
 5. For each delete operation, Replicant generates a tombstone event. The event possesses the same key as the previous delete operation and the value set to `“default“`.
 
 ## Examples
-In this section, we'll see how insert, update, and delete events look like in JSON CDC format for snapshot and realtime modes.
+In this section, we'll see how insert, update, and delete events look like in JSON CDC format for snapshot and realtime mode.
 
 ### Change events in snapshot mode
 
