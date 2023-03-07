@@ -18,23 +18,65 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
    vi conf/conn/singlestore.yaml
    ```
 
-2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/references/secrets-manager). 
+2. For connecting to the SingleStore server, you can choose between two methods for an authenticated connection:
+
+    - [Using basic username and password authentication](#connect-with-username-and-password).
+    - [Using SSL](#connect-using-ssl).
+
+    ### Connect with username and password
+    For connecting to SingleStore using via basic username and password authentication, you have the following two options:
+
+    {{< tabs "username-pwd-authentication" >}}
+    {{< tab "Specify credentials in plain text" >}}
+
+  You can specify your credentials in plain form in the connection configuration file like the following sample:
+  ```YAML
+  type: SINGLESTORE
+
+  host: HOSTNAME
+  port: PORT_NUMBER
+
+  username: 'USERNAME'
+  password: 'PASSWORD'
+
+  max-connections: 30
+  max-retries: 10
+  retry-wait-duration-ms: 1000
+  ```
+
+  Replace the following:
+
+  - *`HOSTNAME`*: hostname of the SingleStore server
+  - *`PORT_NUMBER`*: port number of the SingleStore server
+  - *`USERNAME`*: the SingleStore username
+  - *`PASSWORD`*: the password associated with *`USERNAME`*
+    {{< /tab >}}
+
+    {{< tab "Fetch credentials from AWS Secrets Manager" >}}
+  If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/references/secrets-manager). 
+    {{< /tab >}}
+    {{< /tabs >}}
     
-    Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
+    ### Connect using SSL
+    To connect to SingleStore using SSL, follow these steps:
 
-   ```YAML
-    type: SINGLESTORE
+    1. Configure the server-side requirements by following the instructions in [Server Configuration for Secure Client and Intra-Cluster Connections](https://docs.singlestore.com/db/v8.0/en/security/encryption/ssl-secure-connections/server-configuration-for-secure-client-and-intra-cluster-connections.html).
+    2. Specify the SSL parameters to Replicant using the `ssl` section in the connection configuration file for SingleStore. For example:
 
-    host: localhost #Replace localhost with address to your SingleStore host
-    port: 3306 #Replace default port 3306 if needed
+        ```YAML
+        type: SINGLESTORE
 
-    username: 'replicant' #Replace replicant with your SingleStore user
-    password: 'Replicant#123' #Replace Replicant#123 with your user's password
+        ssl:
+          enable: true
+          trust-store:
+            path: "PATH_TO_CA_CERTIFICATE_FILE"
 
-    max-connections: 30 #Maximum number of connections replicant can open in SingleStore 
-    max-retries: 10
-    retry-wait-duration-ms: 1000
-    ```
+        max-connections: 30
+        max-retries: 10
+        retry-wait-duration-ms: 1000
+        ```
+
+        Replace *`PATH_TO_CA_CERTIFICATE_FILE`* with the full path to your SSL CA certificate file—for example, `"/home/alex/workspace/ca-cert.pem"`.
    
 ## II. Set up Extractor Configuration
 
