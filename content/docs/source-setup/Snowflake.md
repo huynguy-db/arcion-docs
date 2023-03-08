@@ -32,6 +32,9 @@ To create stage table as an intermediate buffer of the CDC process, follow the i
     - Parameters related to stage configuration.
 
     ### Parameters related to Source Snowflake server connection
+    {{< hint "info" >}}
+  **Note:** All communications with Snowflake happens through port 443, the standard port for HTTPS. So all data is encrypted and secure with SSL by default.
+    {{< /hint >}}
     For connecting to Source Snowflake server, you can choose between two methods for an authenticated connection: 
     - [RSA key pair authentication](#use-rsa-key-pair-for-authentication)
     - Basic username and password authentication
