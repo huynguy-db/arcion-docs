@@ -147,16 +147,6 @@ For more information on running Replicant in different modes, see [Running Repli
 
 You can configure Redis Streams for operating in either [snapshot](#configure-snapshot-mode) or [realtime](#configure-realtime-mode) modes.
 
-### Global configuration parameters
-Global configuration parameters live at the global scope of the Applier configuration file. Since these parameters are defined globally, they affect both snapshot and real-time replication. The following global Applier configuration parameters are available.
-
-#### `split-stream`
-`true` or `false`.
-
-Creates a separate stream for snapshot and CDC data if `true`. If `false`, a single stream contains the data for snapshot and CDC.
-
-_Default: `true`._
-
 ### Configure `snapshot` mode
 For operating in snapshot mode, specify your configuration under the `snapshot` section of the conifiguration file. For example:
 
@@ -166,6 +156,7 @@ snapshot:
   batch-size-rows: 10_000
   txn-size-rows: 10_000
 ```
+For more information about the Applier parameters for `snapshot` mode, see [Snapshot Mode]({{< ref "/docs/references/applier-reference#snapshot-mode" >}}).
 
 #### Additional parameters
 
@@ -173,8 +164,6 @@ snapshot:
 `true` or `false`.
 
 During snapshot replication, if a given batch fails, Replicant retries the failed rows. You can set this parameter to `true` if you want to log the failed rows in [the trace.log file]({{< ref "docs/references/troubleshooting#the-log-files" >}}).
-
-For more information about the Applier parameters for `snapshot` mode, see [Snapshot Mode]({{< ref "/docs/references/applier-reference#snapshot-mode" >}}).
 
 ### Configure `realtime` mode
 For operating in realtime mode, specify your configuration under the `realtime` section of the conifiguration file. For example:
@@ -188,6 +177,15 @@ realtime:
 ```
 
 For more information about the configuration parameters for `realtime` mode, see [Realtime Mode]({{< ref "/docs/references/applier-reference#realtime-mode" >}}).
+
+### Additional parameters
+
+#### `split-stream`
+`true` or `false`.
+
+Creates a separate stream for snapshot and CDC data if `true`. If `false`, a single stream contains the data for snapshot and CDC. `split-stream` is a global parameter for `realtime` mode. So you can't change it on a per-table basis.
+
+_Default: `true`._
 
 ## Design considerations
 
