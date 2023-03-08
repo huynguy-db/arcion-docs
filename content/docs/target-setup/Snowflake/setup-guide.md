@@ -22,6 +22,9 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     - Parameters related to stage configuration.
 
     ### Parameters related to target Snowflake server connection
+    {{< hint "info" >}}
+  **Note:** All communications with Snowflake happens through port 443, the standard port for HTTPS. So all data is encrypted and secure with SSL by default.
+    {{< /hint >}}
     For connecting to target Snowflake server, you can choose between two methods for an authenticated connection: 
     - [RSA key pair authentication](#use-rsa-key-pair-for-authentication)
     - Basic username and password authentication
