@@ -13,7 +13,7 @@ For real-time replicaiton from SQL Server, you can choose [SQL Server Agent]({{<
 To allow replication, you need to first verify that the necessary permissions are in place on source SQL Server. For more information, see [SQL Server User Permissions](/docs/references/source-prerequisites/sqlserver/#sql-server-user-permissions).
 
 ### Primary keys on tables
-For [full mode replication]({{< relref "../full-mode-replication" >}}) with SQL Server Agent, all the tables that you need to replicate must have primary keys. If it's not possible to define primary key on a table, follow the steps in [Replicate tables without primary keys](#replicate-tables-without-primary-keys).
+For [full mode replication]({{< relref "../full-mode-replication" >}}) with SQL Server Agent, we recommend that all the tables that you need to replicate have primary keys. If it's not possible to define primary key on a table, follow the instructions in [Replicate tables without primary keys](#replicate-tables-without-primary-keys).
 
 ## II. Set up connection configuration
 Specify the connection details of your SQL Server instance to Replicant in one of the following two ways:
@@ -130,52 +130,39 @@ realtime:
 For more information about the configuration parameters in `realtime` mode, see [Realtime Mode]({{< ref "/docs/references/extractor-reference#realtime-mode" >}}).
 
 ## Replicate tables without primary keys
-To use SQL Server Agent as CDC Extractor, all replicated tables must have primary keys. However, you can follow these steps to replicate a table that doesn't have a primary key:
+To use SQL Server Agent as CDC Extractor, we recommend that all replicated tables have primary keys. However, it's possible to replicate tables without primary keys if the tables meet the following criteria:
 
-1. For a table with no primary key, create an indexed view with schema binding. For example, consider the following table with no primary key:
+> _The tables must have a set of non-nullable columns that uniquely identify each row._
 
-    ```SQL
-    CREATE TABLE dbo.nopk(
-    c1 int NOT NULL,
-    c2 varchar(20) NULL);
-    ```
-   
-   Create the indexed view with schema binding for the table:
+Replicant replicates table without a primary key by creating a view of that table and then replicating that view instead. By default, each view Replicant creates has the following two properties: 
 
-    ```SQL
-    CREATE VIEW dbo.vw_nopk
-    WITH SCHEMABINDING
-    AS
-    SELECT c1, c2 FROM dbo.nopk
-    ```
+- Each view belongs to the `dbo` schema. 
+- The name of each view starts the prefix `replicant_`. 
 
-2. Specify a unique index on the view:
+However, you can change these default properties by specifying the following respective parameters in [the SQL Server source connection configuration file](#using-a-connection-configuration-file): 
 
-    ```SQL
-    CREATE UNIQUE CLUSTERED INDEX CI_vw_nopk ON dbo.vw_nopk
-    ( c1 ASC)
-    ```
+### `auxiliary-object-schema`
+The name of the schema to which the view belongs to.
 
-3. Include the view in [your filter]({{< ref "docs/references/filter-reference" >}}) instead of the table:
+### `auxiliary-object-prefix`
+The prefix to use for the name of each view.
 
-    ```YAML
-    allow:
-    - catalog: "test"
-      schema: ["dbo"]
-      types: [TABLE, VIEW]
-      allow:
-        vw_nopk:
-    ```
+For example, the following connection configuration for SQL Server uses the preceeding parameters to set the view properties:
 
-4. To keep the table's original name in target, create a [Mapper rule]({{< ref "docs/references/mapper-reference" >}}) to change the table's name:
+```YAML
+type: SQLSERVER
 
-    ```YAML
-    rules:
-      [mytargetdb, dbo]:
-        source:
-        - [test, dbo]
-        tables:
-          nopk:
-            source:
-              [test, dbo, vw_nopk]:
-    ```
+host: localhost
+port: 1433
+
+username: 'alex'
+password: 'alex1995'
+database: 'tpcc'
+
+extractor: LOG
+
+max-connections: 30
+
+auxiliary-object-schema: 'admin'
+auxiliary-object-prefix: 'price_'
+```
