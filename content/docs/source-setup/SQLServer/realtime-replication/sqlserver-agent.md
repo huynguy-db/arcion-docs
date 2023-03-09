@@ -134,10 +134,10 @@ To use SQL Server Agent as CDC Extractor, we recommend that all replicated table
 
 > _The tables must have a set of non-nullable columns that uniquely identify each row._
 
-Replicant replicates table without a primary key by creating a view of that table and then replicating that view instead. By default, each view Replicant creates has the following two properties: 
+Replicant replicates a table without a primary key by creating a view of that table and then replicating that view instead. By default, each view Replicant creates has the following two properties: 
 
 - Each view belongs to the `dbo` schema. 
-- The name of each view starts the prefix `replicant_`. 
+- The name of each view starts with the prefix `replicant_`. 
 
 However, you can change these default properties by specifying the following respective parameters in [the SQL Server source connection configuration file](#using-a-connection-configuration-file): 
 
