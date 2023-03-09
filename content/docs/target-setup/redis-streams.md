@@ -138,14 +138,13 @@ When mapping source object names to Redis streams, you can choose between two de
 To configure replication mode according to your requirements, specify your configuration in the Applier configuration file. You can find a sample Applier configuration file `redis_stream.yaml` in the `$REPLICANT_HOME/conf/dst` directory. For example:
 
 ```YAML
-split-stream: false
-
 snapshot:
   threads: 16
 
 realtime:
   threads: 16
   replay-consistency: GLOBAL
+  split-stream: false
 ```
 
 For more information on running Replicant in different modes, see [Running Replicant]({{< ref "docs/running-replicant" >}}).
