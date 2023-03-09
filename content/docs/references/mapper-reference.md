@@ -120,3 +120,47 @@ When set to `LOWERCASE` or `UPPERCASE`, Replicant converts table or column names
 {{< hint "info" >}}
 **Note:** If the table is explicitly mapped, then that mapping will override the convert-case behaviour. If a source table named `REGION` is mapped to destination table `region_lowercase`, then this mapping will override the `convert-case` rule for this table. So, on target the table name becomes `region_lowercase` instead of uppercase `REGION`.
 {{< /hint >}}
+
+## Delimiter in Kafka topic and Redis stream names
+Replicant supports either dot (`.`), or underscore (`_`) as the delimiter in Kafka topic and Redis stream names. This allows you to map your source database object names to the appropriate format in [Kafka]({{< ref "docs/target-setup/kafka" >}}) and [Redis Streams]({{< ref "docs/target-setup/redis-streams" >}}).
+
+To set the delimiter, set the `object-name-concat-delimiter` parameter to one of the following values in the Mapper file:
+
+<dl class="dl-indent" >
+<dt>
+
+**`DOT`**
+</dt>
+<dd>
+
+Use dot (`.`) as the delimiter. 
+
+For example, source table name `<catalog>.<schema>.<table>` is mapped to `<catalog>.<schema>.<table>`.
+
+</dd>
+
+<dt> 
+
+**`UNDERSCORE`**
+</dt> 
+
+<dd>
+
+Use underscore (`_`) as the delimiter. Underscore is the default delimiter for Kafka topic and Redis stream names.
+
+For example, source table name `<catalog>.<schema>.<table>` is mapped to `<catalog>_<schema>_<table>`.
+</dd>
+
+For example, notice the following Mapper sample is for MySQL-to-Kafka pipeline:
+
+```YAML
+rules:
+  [topic_prefix_r]:
+    source:
+    - [io,replicate]
+  [topic_prefix_s]:
+    source:
+    - [tpch_scale_0_01]
+
+object-name-concat-delimiter: DOT
+```

@@ -129,7 +129,12 @@ In the preceeding sample:
 
 Feel free to change these two values as you need.
 
-## II. Set up Applier configuration
+## II. Configure mapper file (optional)
+If you want to define data mapping from your source to Redis Streams, specify the mapping rules in the mapper file. For more information on how to define the mapping rules and run Replicant CLI with the mapper file, see [Mapper Configuration]({{< ref "/docs/references/mapper-reference" >}}).
+
+When mapping source object names to Redis streams, you can choose between two delimiters for stream names. For more information, see [Delimiter in Kafka topic and Redis stream names]({{< ref "/docs/references/mapper-reference#delimiter-in-kafka-topic-and-redis-stream-names" >}}).
+
+## III. Set up Applier configuration
 To configure replication mode according to your requirements, specify your configuration in the Applier configuration file. You can find a sample Applier configuration file `redis_stream.yaml` in the `$REPLICANT_HOME/conf/dst` directory. For example:
 
 ```YAML

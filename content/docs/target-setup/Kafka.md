@@ -51,7 +51,12 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
         *Default: `30` seconds*
 
-## II. Set up Applier Configuration    
+## II. Configure mapper file (optional)
+If you want to define data mapping from your source to Kafka, specify the mapping rules in the mapper file. For more information on how to define the mapping rules and run Replicant CLI with the mapper file, see [Mapper Configuration]({{< ref "/docs/references/mapper-reference" >}}).
+
+When mapping source object names to Kafka topics, you can choose between two delimiters for topic names. For more information, see [Delimiter in Kafka topic and Redis stream names]({{< ref "/docs/references/mapper-reference#delimiter-in-kafka-topic-and-redis-stream-names" >}}).
+
+## III. Set up Applier Configuration    
 
 1. From `$REPLICANT_HOME`, naviagte to the sample Kafka Applier configuration file:
    ```BASH
