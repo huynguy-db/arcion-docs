@@ -188,30 +188,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
           }
         ]
       },
-      {
-        "type": "struct",
-        "optional": true,
-        "field": "transaction",
-        "name": null,
-        "fields": [
-          {
-            "type": "string",
-            "optional": false,
-            "field": "id"
-          },
-          {
-            "type": "int64",
-            "optional": false,
-            "field": "total_order"
-          },
-          {
-            "type": "int64",
-            "optional": false,
-            "field": "data_collection_order"
-          }
-        ]
-      },
-      {
+     {
         "type": "string",
         "optional": false,
         "field": "op"
@@ -249,11 +226,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
     },
     "op": "r",
     "ts_ms": null,
-    "transaction": {
-      "id": "",
-      "total_order": null
-    }
-  }
+   }
 }
 ```
 
@@ -421,29 +394,6 @@ In this section, we'll see how insert, update, and delete events look like in JS
         ]
       },
       {
-        "type": "struct",
-        "optional": true,
-        "field": "transaction",
-        "name": null,
-        "fields": [
-          {
-            "type": "string",
-            "optional": false,
-            "field": "id"
-          },
-          {
-            "type": "int64",
-            "optional": false,
-            "field": "total_order"
-          },
-          {
-            "type": "int64",
-            "optional": false,
-            "field": "data_collection_order"
-          }
-        ]
-      },
-      {
         "type": "string",
         "optional": false,
         "field": "op"
@@ -481,11 +431,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
     },
     "op": "c",
     "ts_ms": 1677139769357,
-    "transaction": {
-      "id": "",
-      "total_order": 1
     }
-  }
 }
 ```
 {{< /details >}}
@@ -499,7 +445,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
   "schema": {
     "type": "struct",
     "optional": false,
-    "name": "KAFKA_Connector.tpch.region.Key",
+    "name": "REDIS_STREAM_Connector.tpch.region.Key",
     "fields": [
       {
         "type": "int32",
@@ -521,13 +467,13 @@ In this section, we'll see how insert, update, and delete events look like in JS
   "schema": {
     "type": "struct",
     "optional": false,
-    "name": "KAFKA_Connector.tpch.region.Envelope",
+    "name": "REDIS_STREAM_Connector.tpch.region.Envelope",
     "fields": [
       {
         "type": "struct",
         "optional": false,
         "field": "before",
-        "name": "KAFKA_Connector.tpch.region.Value",
+        "name": "REDIS_STREAM_Connector.tpch.region.Value",
         "fields": [
           {
             "type": "int32",
@@ -550,7 +496,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
         "type": "struct",
         "optional": false,
         "field": "after",
-        "name": "KAFKA_Connector.tpch.region.Value",
+        "name": "REDIS_STREAM_Connector.tpch.region.Value",
         "fields": [
           {
             "type": "int32",
@@ -573,7 +519,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
         "type": "struct",
         "optional": false,
         "field": "source",
-        "name": "KAFKA_Connector",
+        "name": "REDIS_STREAM_Connector",
         "fields": [
           {
             "type": "string",
@@ -647,30 +593,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
           }
         ]
       },
-      {
-        "type": "struct",
-        "optional": true,
-        "field": "transaction",
-        "name": null,
-        "fields": [
-          {
-            "type": "string",
-            "optional": false,
-            "field": "id"
-          },
-          {
-            "type": "int64",
-            "optional": false,
-            "field": "total_order"
-          },
-          {
-            "type": "int64",
-            "optional": false,
-            "field": "data_collection_order"
-          }
-        ]
-      },
-      {
+     {
         "type": "string",
         "optional": false,
         "field": "op"
@@ -702,7 +625,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
       "file": "log-bin.000001",
       "connector": "MYSQL",
       "pos": 1248,
-      "name": "KAFKA_Connector",
+      "name": "REDIS_STREAM_Connector",
       "gtid": null,
       "row": 1,
       "ts_ms": 1677158088000,
@@ -712,11 +635,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
     },
     "op": "u",
     "ts_ms": 1677138289062,
-    "transaction": {
-      "id": "",
-      "total_order": 1
     }
-  }
 }
 ```
 {{< /details >}}
@@ -880,29 +799,6 @@ In this section, we'll see how insert, update, and delete events look like in JS
         ]
       },
       {
-        "type": "struct",
-        "optional": true,
-        "field": "transaction",
-        "name": null,
-        "fields": [
-          {
-            "type": "string",
-            "optional": false,
-            "field": "id"
-          },
-          {
-            "type": "int64",
-            "optional": false,
-            "field": "total_order"
-          },
-          {
-            "type": "int64",
-            "optional": false,
-            "field": "data_collection_order"
-          }
-        ]
-      },
-      {
         "type": "string",
         "optional": false,
         "field": "op"
@@ -940,11 +836,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
     },
     "op": "d",
     "ts_ms": 1677139520242,
-    "transaction": {
-      "id": "",
-      "total_order": 1
-    }
-  }
+   }
 }
 ```
 
