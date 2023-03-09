@@ -151,7 +151,7 @@ Use underscore (`_`) as the delimiter. Underscore is the default delimiter for K
 For example, source table name `<catalog>.<schema>.<table>` is mapped to `<catalog>_<schema>_<table>`.
 </dd>
 
-For example, notice the following Mapper sample is for MySQL-to-Kafka pipeline:
+For example, notice the following Mapper sample for MySQL-to-Kafka pipeline:
 
 ```YAML
 rules:
