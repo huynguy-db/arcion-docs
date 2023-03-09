@@ -434,30 +434,7 @@ Each message has a key and a value. It has schema and payload following the sche
           }
         ]
       },
-      {
-        "type": "struct",
-        "optional": true,
-        "field": "transaction",
-        "name": null,
-        "fields": [
-          {
-            "type": "string",
-            "optional": false,
-            "field": "id"
-          },
-          {
-            "type": "int64",
-            "optional": false,
-            "field": "total_order"
-          },
-          {
-            "type": "int64",
-            "optional": false,
-            "field": "data_collection_order"
-          }
-        ]
-      },
-      {
+     {
         "type": "string",
         "optional": false,
         "field": "op"
@@ -499,11 +476,7 @@ Each message has a key and a value. It has schema and payload following the sche
     },
     "op": "u",
     "ts_ms": 1677138289062,
-    "transaction": {
-      "id": "",
-      "total_order": 1
     }
-  }
 }
 ```
 {{< /details >}}
