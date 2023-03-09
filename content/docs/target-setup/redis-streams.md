@@ -183,9 +183,9 @@ realtime:
 
 For more information about the configuration parameters for `realtime` mode, see [Realtime Mode]({{< ref "/docs/references/applier-reference#realtime-mode" >}}).
 
-### Additional parameters
+#### Additional parameters
 
-#### `split-stream`
+##### `split-stream`
 `true` or `false`.
 
 Creates a separate stream for snapshot and CDC data if `true`. If `false`, a single stream contains the data for snapshot and CDC. `split-stream` is a global parameter for `realtime` mode. So you can't change it on a per-table basis.
