@@ -215,3 +215,132 @@ For real-time replication, you must create a heartbeat table in the source MySQL
   If you want to use the Source Column Transformation feature of Replicant for a **MySQL-to-Databricks** pipeline, please see [Source Column Transformation](/docs/references/source-column-transformation).
   {{< /hint >}}
 For a detailed explanation of configuration parameters in the extractor file, read: [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference")
+
+## Replication of generated columns
+Replicant supports replication of generated columns from MySQL to either a different database platform, or another MySQL database.
+
+Replication of generated columns is supported for the following Replicant modes:
+
+- [`snapshot`]({{< ref "docs/running-replicant#replicant-snapshot-mode" >}})
+- [`realtime`]({{< ref "docs/running-replicant#replicant-realtime-mode" >}})
+- [`full`]({{< ref "docs/running-replicant#replicant-full-mode" >}})
+- [`fetch-schemas`]({{< ref "docs/running-replicant#fetch-schemas" >}})
+- [`infer-schemas`]({{< ref "docs/running-replicant#infer-schemas" >}})
+
+The behavior of replicating generated columns depends on the type of replication pipeline and your usage of the configuration parameters. See the following sections for more information.
+
+### Configuration parameters
+Use the following [Extractor configuration parameters](#extractor-parameters) and [CLI option](#cli-option) to control replication of generated columns.
+
+{{< hint "warning" >}}
+**Warning:**  If you specify [`create-sql`](#cli-option) or `fetch-create-sql`, only use schema name or database name in [Mapper file]({{< ref "docs/references/mapper-reference" >}}). Any Mapper rule with column names, table names, or others raises Exception.
+{{< /hint >}}
+
+
+#### Extractor parameters
+You can specify these parameters in the Extractor configuration file of MySQL.
+
+<dl class="dl-indent">
+<dt>
+
+`computed-columns`</dt>
+<dd>
+Whether to block or unblock replication of generated columns. It can take one of the following two values:
+
+- `BLOCK`
+- `UNBLOCK`
+
+The behavior of `BLOCK` and `UNBLOCK` depends on the type of replication pipeline and how you use the [`create-sql`](#cli-option) or `fetch-create-sql` parameters.
+
+</dd>
+
+<dt>
+
+`fetch-create-sql`</dt>
+<dd>
+This is a boolean parameter supporting the following two values:
+
+- **`true`**. Replicant replicates the generated columns to the target without skipping data types and functions. This means that the tables possesses the same definitions as the source.
+- **`false`**. Replicant replicates generated columns with the following characteristics:
+
+    - Replicant only replicates the data type and the data.
+    - Replicant skips replicating functions. The target database table possesses different definition than the one on the source. Replicant treats generated columns as ordinary columns.
+
+{{< hint "warning" >}}
+**Warning:** Replicant doesn't support `fetch-create-sql` for [heterogeneous pipelines](#replication-of-generated-columns-in-heterogeneous-pipeline). Any usage of `fetch-create-sql` in a heterogeneous pipeline raises Exception.
+{{< /hint >}}
+
+</dd>
+
+The following is a sample Extractor configuration for a [homogeneous pipeline](#replication-of-generated-columns-in-homogeneous-pipeline):
+
+```YAML
+snapshot:  
+  threads: 16
+  fetch-size-rows: 15_000
+  min-job-size-rows: 1_000_000  
+  max-jobs-per-chunk: 32
+  computed-columns: UNBLOCK 
+  fetch-user-roles: true
+  fetch-create-sql : true
+```
+
+The preceeding sample instructs Replicant to replicate generated columns with data, corresponding data types, and functions.
+
+#### CLI option
+Replicant self-hosted CLI exposes a CLI option `create-sql`. `create-sql` yields the same outcome as setting `fetch-create-sql` to `true`.
+
+`create-sql` holds a higher precedence than the Extractor parameter `fetch-create-sql`. If you run Replicant with the `create-sql` option, Replicant ignores the value of `fetch-create-sql`.
+
+The following is a sample command for running Replicant:
+
+```sh
+./bin/replicant full conf/conn/mysql_src.yaml conf/conn/mysql_dst.yaml \
+--filter filter/mysql_filter.yaml \
+--extractor conf/src/mysql.yaml \
+--metadata conf/metadata/postgresql.yaml \
+--replace-existing --id mf2 \
+--overwrite --create-sql
+```
+
+The preceeding command instructs Replicant to replicate the generated columns with data, the corresponding data types, and functions.
+
+{{< hint "warning" >}}
+**Warning:** Replicant doesn't support `create-sql` for [heterogeneous pipelines](#replication-of-generated-columns-in-heterogeneous-pipeline). Any usage of `create-sql` in a heterogeneous pipeline raises Exception.
+{{< /hint >}}
+
+### Replication of generated columns in heterogeneous pipeline
+A heterogeneous pipeline means replication from MySQL to another database platform.
+
+For a heterogeneous pipeline, set the `computed-columns` property to one of the following values in your Extractor configuration file:
+
+#### `BLOCK`
+Replicant skips replicating generated columns. No generated columns from your source MySQL exists in the target database you're replicating to.
+
+#### `UNBLOCK`
+Replicant replicates generated columns from source MySQL with the following caveats:
+
+- Replicant only replicates the data type and the data.
+- Replicant skips replicating functions. The target database table possesses different definition than the one on the source. Replicant treats generated columns as ordinary columns.
+
+### Replication of generated columns in homogeneous pipeline
+A homogeneous pipeline means replication between two MySQL databases.
+
+For a homogeneous pipeline, the behavior of `computed-columns` is the following. The behavior depends on the usage of the [`create-sql`](#cli-option) or `fetch-create-sql` parameters:
+
+<dl class="dl-indent" >
+<dt>
+
+With `fetch-create-sql` or `create-sql` enabled
+</dt>
+<dd>
+
+If you set `fetch-create-sql` to `true` or specify [the `create-sql` CLI option](#cli-option), Replicant replicates data and corresponding data types as well as the functions. This means that table definition on the target stays the same as source. The value of `computed-columns` holds no effect in this scenario.
+</dd>
+
+<dt>
+
+With `fetch-create-sql` or `create-sql` disabled</dt>
+<dd>
+
+If you set `fetch-create-sql` to `false` or omit [the `create-sql` CLI option](#cli-option), the behavior is the same as for a [heterogeneous pipeline](#replication-of-generated-columns-in-heterogeneous-pipeline).
