@@ -260,7 +260,7 @@ The behavior of `BLOCK` and `UNBLOCK` depends on the type of replication pipelin
 <dd>
 This is a boolean parameter supporting the following two values:
 
-- **`true`**. Replicant replicates the generated columns to the target without skipping data types and functions. This means that the tables possesses the same definitions as the source.
+- **`true`**. Replicant replicates the generated columns to the target without skipping data types and functions. This means that the tables possess the same definitions as the source.
 - **`false`**. Replicant replicates generated columns with the following characteristics:
 
     - Replicant only replicates the data type and the data.
