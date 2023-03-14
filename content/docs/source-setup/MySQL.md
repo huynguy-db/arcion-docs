@@ -310,7 +310,7 @@ The preceeding command instructs Replicant to replicate the generated columns wi
 {{< /hint >}}
 
 ### Replication of generated columns in heterogeneous pipeline
-A heterogeneous pipeline means replication from MySQL to another database platform.
+A heterogeneous pipeline means replication between two different database platforms. For example, a MySQL-to-PostgreSQL replication pipeline.
 
 For a heterogeneous pipeline, set the `computed-columns` property to one of the following values in your Extractor configuration file:
 
