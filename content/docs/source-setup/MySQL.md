@@ -324,7 +324,7 @@ Replicant replicates generated columns from source MySQL with the following cave
 - Replicant skips replicating functions. The target database table possesses different definition than the one on the source. Replicant treats generated columns as ordinary columns.
 
 ### Replication of generated columns in homogeneous pipeline
-A homogeneous pipeline means replication between two MySQL databases.
+A homogeneous pipeline means replication between two identical database platforms. For example, a MySQL-to-MySQL replication pipeline.
 
 For a homogeneous pipeline, the behavior of `computed-columns` is the following. The behavior depends on the usage of the [`create-sql`](#cli-option) or `fetch-create-sql` parameters:
 
