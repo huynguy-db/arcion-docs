@@ -291,7 +291,7 @@ Each message has a key and a value. It has schema and payload following the sche
   "schema": {
     "type": "struct",
     "optional": false,
-    "name": "REDIS_STREAM_Connector.tpch.region.Key",
+    "name": "REDIS_STREAM_Connector.tpch_scale_0_01.region.Key",
     "fields": [
       {
         "type": "int32",
@@ -301,7 +301,7 @@ Each message has a key and a value. It has schema and payload following the sche
     ]
   },
   "payload": {
-    "r_regionkey": "0"
+    "r_regionkey": "10"
   }
 }
 ```
@@ -312,13 +312,13 @@ Each message has a key and a value. It has schema and payload following the sche
   "schema": {
     "type": "struct",
     "optional": false,
-    "name": "REDIS_STREAM_Connector.tpch.region.Envelope",
+    "name": "REDIS_STREAM_Connector.tpch_scale_0_01.region.Envelope",
     "fields": [
       {
         "type": "struct",
-        "optional": false,
+        "optional": true,
         "field": "before",
-        "name": "REDIS_STREAM_Connector.tpch.region.Value",
+        "name": "REDIS_STREAM_Connector.tpch_scale_0_01.region.Value",
         "fields": [
           {
             "type": "int32",
@@ -339,9 +339,9 @@ Each message has a key and a value. It has schema and payload following the sche
       },
       {
         "type": "struct",
-        "optional": false,
+        "optional": true,
         "field": "after",
-        "name": "REDIS_STREAM_Connector.tpch.region.Value",
+        "name": "REDIS_STREAM_Connector.tpch_scale_0_01.region.Value",
         "fields": [
           {
             "type": "int32",
@@ -383,22 +383,22 @@ Each message has a key and a value. It has schema and payload following the sche
           },
           {
             "type": "int64",
-            "optional": false,
+            "optional": true,
             "field": "ts_ms"
           },
           {
             "type": "string",
-            "optional": false,
+            "optional": true,
             "field": "db"
           },
           {
             "type": "string",
-            "optional": false,
+            "optional": true,
             "field": "schema"
           },
           {
             "type": "string",
-            "optional": true,
+            "optional": false,
             "field": "table"
           },
           {
@@ -413,7 +413,7 @@ Each message has a key and a value. It has schema and payload following the sche
           },
           {
             "type": "int64",
-            "optional": false,
+            "optional": true,
             "field": "server_id"
           },
           {
@@ -423,22 +423,22 @@ Each message has a key and a value. It has schema and payload following the sche
           },
           {
             "type": "string",
-            "optional": false,
+            "optional": true,
             "field": "file"
           },
           {
             "type": "int64",
-            "optional": false,
+            "optional": true,
             "field": "pos"
           },
           {
             "type": "int32",
-            "optional": false,
+            "optional": true,
             "field": "row"
           }
         ]
       },
-     {
+      {
         "type": "string",
         "optional": false,
         "field": "op"
@@ -452,35 +452,37 @@ Each message has a key and a value. It has schema and payload following the sche
   },
   "payload": {
     "before": {
-      "r_regionkey": "0",
-      "r_comment": "lar deposits. blithely final packages cajole. regular waters are final requests. regular accounts are according to ",
-      "r_name": "AFRICA"
+      "r_regionkey": "10",
+      "r_comment": "ReplicationWorks",
+      "r_name": "Test_nation"
     },
     "after": {
-      "r_regionkey": "0",
+      "r_regionkey": "10",
       "r_comment": "Test_Replication",
-      "r_name": "AFRICA"
+      "r_name": "Test_nation"
     },
     "source": {
       "schema": null,
-      "query": "UPDATE tpch.region SET r_regionkey=0 AND r_name=AFRICA AND r_comment=Test_Replication WHERE r_regionkey=0 AND r_name=AFRICA AND r_comment=lar deposits. blithely final packages cajole. regular waters are final requests. regular accounts are according to ",
-      "thread": 160,
+      "query": "UPDATE tpch_scale_0_01.region SET r_regionkey=10 AND
+r_name=Test_nation AND r_comment=Test_Replication WHERE r_regionkey=10 AND
+r_name=Test_nation AND r_comment=ReplicationWorks",
+      "thread": 1643,
       "server_id": "1",
       "version": "5.7.24",
-      "file": "log-bin.000001",
+      "file": "log-bin.000003",
       "connector": "MYSQL",
-      "pos": 1248,
+      "pos": 96759878,
       "name": "REDIS_STREAM_Connector",
       "gtid": null,
       "row": 1,
-      "ts_ms": 1677158088000,
-      "db": "tpch",
+      "ts_ms": 1678883820000,
+      "db": "tpch_scale_0_01",
       "table": "region",
       "snapshot": "false"
     },
     "op": "u",
-    "ts_ms": 1677138289062,
-    }
+    "ts_ms": 1678864020928
+  }
 }
 ```
 {{< /details >}}

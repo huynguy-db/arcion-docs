@@ -41,7 +41,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
   "schema": {
     "type": "struct",
     "optional": false,
-    "name": "KAFKA_snapshot_connector.tpch.region.Key",
+    "name": "KAFKA_snapshot_connector.tpch_scale_0_01.region.Key",
     "fields": [
       {
         "type": "int32",
@@ -62,13 +62,13 @@ In this section, we'll see how insert, update, and delete events look like in JS
   "schema": {
     "type": "struct",
     "optional": false,
-    "name": "KAFKA_snapshot_connector.tpch.region.Envelope",
+    "name": "KAFKA_snapshot_connector.tpch_scale_0_01.region.Envelope",
     "fields": [
       {
         "type": "struct",
-        "optional": false,
+        "optional": true,
         "field": "before",
-        "name": "KAFKA_snapshot_connector.tpch.region.Value",
+        "name": "KAFKA_snapshot_connector.tpch_scale_0_01.region.Value",
         "fields": [
           {
             "type": "int32",
@@ -89,9 +89,9 @@ In this section, we'll see how insert, update, and delete events look like in JS
       },
       {
         "type": "struct",
-        "optional": false,
+        "optional": true,
         "field": "after",
-        "name": "KAFKA_snapshot_connector.tpch.region.Value",
+        "name": "KAFKA_snapshot_connector.tpch_scale_0_01.region.Value",
         "fields": [
           {
             "type": "int32",
@@ -138,17 +138,17 @@ In this section, we'll see how insert, update, and delete events look like in JS
           },
           {
             "type": "string",
-            "optional": false,
+            "optional": true,
             "field": "db"
           },
           {
             "type": "string",
-            "optional": false,
+            "optional": true,
             "field": "schema"
           },
           {
             "type": "string",
-            "optional": true,
+            "optional": false,
             "field": "table"
           },
           {
@@ -163,7 +163,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
           },
           {
             "type": "int64",
-            "optional": false,
+            "optional": true,
             "field": "server_id"
           },
           {
@@ -173,22 +173,22 @@ In this section, we'll see how insert, update, and delete events look like in JS
           },
           {
             "type": "string",
-            "optional": false,
+            "optional": true,
             "field": "file"
           },
           {
             "type": "int64",
-            "optional": false,
+            "optional": true,
             "field": "pos"
           },
           {
             "type": "int32",
-            "optional": false,
+            "optional": true,
             "field": "row"
           }
         ]
       },
-     {
+      {
         "type": "string",
         "optional": false,
         "field": "op"
@@ -204,12 +204,12 @@ In this section, we'll see how insert, update, and delete events look like in JS
     "before": null,
     "after": {
       "r_regionkey": "0",
-      "r_comment": "lar deposits. blithely final packages cajole. regular waters are final requests. regular accounts are according to ",
+      "r_comment": "Test_Replication",
       "r_name": "AFRICA"
     },
     "source": {
       "schema": null,
-      "query": "INSERT INTO tpch.region(r_regionkey, r_name, r_comment) VALUES(0, AFRICA, lar deposits. blithely final packages cajole. regular waters are final requests. regular accounts are according to )",
+      "query": "INSERT INTO tpch_scale_0_01.region(r_regionkey, r_name, r_comment) VALUES(0, AFRICA, Test_Replication)",
       "thread": null,
       "server_id": null,
       "version": "5.7.24",
@@ -220,13 +220,13 @@ In this section, we'll see how insert, update, and delete events look like in JS
       "gtid": null,
       "row": null,
       "ts_ms": null,
-      "db": "tpch",
+      "db": "tpch_scale_0_01",
       "table": "region",
       "snapshot": "true"
     },
     "op": "r",
-    "ts_ms": null,
-   }
+    "ts_ms": null
+  }
 }
 ```
 
@@ -245,7 +245,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
   "schema": {
     "type": "struct",
     "optional": false,
-    "name": "KAFKA_Connector.tpch.region.Key",
+    "name": "KAFKA_Connector.tpch_scale_0_01.region.Key",
     "fields": [
       {
         "type": "int32",
@@ -255,7 +255,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
     ]
   },
   "payload": {
-    "r_regionkey": "6"
+    "r_regionkey": "10"
   }
 }
 ```
@@ -267,13 +267,30 @@ In this section, we'll see how insert, update, and delete events look like in JS
   "schema": {
     "type": "struct",
     "optional": false,
-    "name": "KAFKA_Connector.tpch.region.Envelope",
+    "name": "KAFKA_Connector.tpch_scale_0_01.region.Key",
+    "fields": [
+      {
+        "type": "int32",
+        "optional": false,
+        "field": "r_regionkey"
+      }
+    ]
+  },
+  "payload": {
+    "r_regionkey": "10"
+  }
+}
+{
+  "schema": {
+    "type": "struct",
+    "optional": false,
+    "name": "KAFKA_Connector.tpch_scale_0_01.region.Envelope",
     "fields": [
       {
         "type": "struct",
-        "optional": false,
+        "optional": true,
         "field": "before",
-        "name": "KAFKA_Connector.tpch.region.Value",
+        "name": "KAFKA_Connector.tpch_scale_0_01.region.Value",
         "fields": [
           {
             "type": "int32",
@@ -294,9 +311,9 @@ In this section, we'll see how insert, update, and delete events look like in JS
       },
       {
         "type": "struct",
-        "optional": false,
+        "optional": true,
         "field": "after",
-        "name": "KAFKA_Connector.tpch.region.Value",
+        "name": "KAFKA_Connector.tpch_scale_0_01.region.Value",
         "fields": [
           {
             "type": "int32",
@@ -338,22 +355,22 @@ In this section, we'll see how insert, update, and delete events look like in JS
           },
           {
             "type": "int64",
-            "optional": false,
+            "optional": true,
             "field": "ts_ms"
           },
           {
             "type": "string",
-            "optional": false,
+            "optional": true,
             "field": "db"
           },
           {
             "type": "string",
-            "optional": false,
+            "optional": true,
             "field": "schema"
           },
           {
             "type": "string",
-            "optional": true,
+            "optional": false,
             "field": "table"
           },
           {
@@ -368,7 +385,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
           },
           {
             "type": "int64",
-            "optional": false,
+            "optional": true,
             "field": "server_id"
           },
           {
@@ -378,17 +395,17 @@ In this section, we'll see how insert, update, and delete events look like in JS
           },
           {
             "type": "string",
-            "optional": false,
+            "optional": true,
             "field": "file"
           },
           {
             "type": "int64",
-            "optional": false,
+            "optional": true,
             "field": "pos"
           },
           {
             "type": "int32",
-            "optional": false,
+            "optional": true,
             "field": "row"
           }
         ]
@@ -408,30 +425,31 @@ In this section, we'll see how insert, update, and delete events look like in JS
   "payload": {
     "before": null,
     "after": {
-      "r_regionkey": "6",
-      "r_comment": "Test_Comment",
-      "r_name": "Test_Region"
+      "r_regionkey": "10",
+      "r_comment": "ReplicationWorks",
+      "r_name": "Test_nation"
     },
     "source": {
       "schema": null,
-      "query": "INSERT INTO tpch.region(r_regionkey, r_name, r_comment) VALUES(6, Test_Region, Test_Comment)",
-      "thread": 160,
+      "query": "INSERT INTO tpch_scale_0_01.region(r_regionkey, r_name,
+r_comment) VALUES(10, Test_nation, ReplicationWorks)",
+      "thread": 3908,
       "server_id": "1",
       "version": "5.7.24",
-      "file": "log-bin.000001",
+      "file": "log-bin.000003",
       "connector": "MYSQL",
-      "pos": 2690,
+      "pos": 96749554,
       "name": "KAFKA_Connector",
       "gtid": null,
       "row": 1,
-      "ts_ms": 1677159568000,
-      "db": "tpch",
+      "ts_ms": 1678883495000,
+      "db": "tpch_scale_0_01",
       "table": "region",
       "snapshot": "false"
     },
     "op": "c",
-    "ts_ms": 1677139769357,
-    }
+    "ts_ms": 1678863695725
+  }
 }
 ```
 {{< /details >}}
@@ -445,7 +463,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
   "schema": {
     "type": "struct",
     "optional": false,
-    "name": "REDIS_STREAM_Connector.tpch.region.Key",
+    "name": "KAFKA_Connector.tpch_scale_0_01.region.Key",
     "fields": [
       {
         "type": "int32",
@@ -455,7 +473,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
     ]
   },
   "payload": {
-    "r_regionkey": "0"
+    "r_regionkey": "10"
   }
 }
 ```
@@ -467,13 +485,13 @@ In this section, we'll see how insert, update, and delete events look like in JS
   "schema": {
     "type": "struct",
     "optional": false,
-    "name": "REDIS_STREAM_Connector.tpch.region.Envelope",
+    "name": "KAFKA_Connector.tpch_scale_0_01.region.Envelope",
     "fields": [
       {
         "type": "struct",
-        "optional": false,
+        "optional": true,
         "field": "before",
-        "name": "REDIS_STREAM_Connector.tpch.region.Value",
+        "name": "KAFKA_Connector.tpch_scale_0_01.region.Value",
         "fields": [
           {
             "type": "int32",
@@ -494,9 +512,9 @@ In this section, we'll see how insert, update, and delete events look like in JS
       },
       {
         "type": "struct",
-        "optional": false,
+        "optional": true,
         "field": "after",
-        "name": "REDIS_STREAM_Connector.tpch.region.Value",
+        "name": "KAFKA_Connector.tpch_scale_0_01.region.Value",
         "fields": [
           {
             "type": "int32",
@@ -519,7 +537,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
         "type": "struct",
         "optional": false,
         "field": "source",
-        "name": "REDIS_STREAM_Connector",
+        "name": "KAFKA_Connector",
         "fields": [
           {
             "type": "string",
@@ -538,22 +556,22 @@ In this section, we'll see how insert, update, and delete events look like in JS
           },
           {
             "type": "int64",
-            "optional": false,
+            "optional": true,
             "field": "ts_ms"
           },
           {
             "type": "string",
-            "optional": false,
+            "optional": true,
             "field": "db"
           },
           {
             "type": "string",
-            "optional": false,
+            "optional": true,
             "field": "schema"
           },
           {
             "type": "string",
-            "optional": true,
+            "optional": false,
             "field": "table"
           },
           {
@@ -568,7 +586,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
           },
           {
             "type": "int64",
-            "optional": false,
+            "optional": true,
             "field": "server_id"
           },
           {
@@ -578,22 +596,22 @@ In this section, we'll see how insert, update, and delete events look like in JS
           },
           {
             "type": "string",
-            "optional": false,
+            "optional": true,
             "field": "file"
           },
           {
             "type": "int64",
-            "optional": false,
+            "optional": true,
             "field": "pos"
           },
           {
             "type": "int32",
-            "optional": false,
+            "optional": true,
             "field": "row"
           }
         ]
       },
-     {
+      {
         "type": "string",
         "optional": false,
         "field": "op"
@@ -607,35 +625,37 @@ In this section, we'll see how insert, update, and delete events look like in JS
   },
   "payload": {
     "before": {
-      "r_regionkey": "0",
-      "r_comment": "lar deposits. blithely final packages cajole. regular waters are final requests. regular accounts are according to ",
-      "r_name": "AFRICA"
+      "r_regionkey": "10",
+      "r_comment": "ReplicationWorks",
+      "r_name": "Test_nation"
     },
     "after": {
-      "r_regionkey": "0",
+      "r_regionkey": "10",
       "r_comment": "Test_Replication",
-      "r_name": "AFRICA"
+      "r_name": "Test_nation"
     },
     "source": {
       "schema": null,
-      "query": "UPDATE tpch.region SET r_regionkey=0 AND r_name=AFRICA AND r_comment=Test_Replication WHERE r_regionkey=0 AND r_name=AFRICA AND r_comment=lar deposits. blithely final packages cajole. regular waters are final requests. regular accounts are according to ",
-      "thread": 160,
+      "query": "UPDATE tpch_scale_0_01.region SET r_regionkey=10 AND
+r_name=Test_nation AND r_comment=Test_Replication WHERE r_regionkey=10 AND
+r_name=Test_nation AND r_comment=ReplicationWorks",
+      "thread": 1643,
       "server_id": "1",
       "version": "5.7.24",
-      "file": "log-bin.000001",
+      "file": "log-bin.000003",
       "connector": "MYSQL",
-      "pos": 1248,
-      "name": "REDIS_STREAM_Connector",
+      "pos": 96759878,
+      "name": "KAFKA_Connector",
       "gtid": null,
       "row": 1,
-      "ts_ms": 1677158088000,
-      "db": "tpch",
+      "ts_ms": 1678883820000,
+      "db": "tpch_scale_0_01",
       "table": "region",
       "snapshot": "false"
     },
     "op": "u",
-    "ts_ms": 1677138289062,
-    }
+    "ts_ms": 1678864020928
+  }
 }
 ```
 {{< /details >}}
@@ -660,7 +680,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
     ]
   },
   "payload": {
-    "r_regionkey": "0"
+    "r_regionkey": "10"
   }
 }
 ```
@@ -672,13 +692,13 @@ In this section, we'll see how insert, update, and delete events look like in JS
   "schema": {
     "type": "struct",
     "optional": false,
-    "name": "KAFKA_Connector.tpch.region.Envelope",
+    "name": "KAFKA_Connector.tpch_scale_0_01.region.Envelope",
     "fields": [
       {
         "type": "struct",
-        "optional": false,
+        "optional": true,
         "field": "before",
-        "name": "KAFKA_Connector.tpch.region.Value",
+        "name": "KAFKA_Connector.tpch_scale_0_01.region.Value",
         "fields": [
           {
             "type": "int32",
@@ -699,9 +719,9 @@ In this section, we'll see how insert, update, and delete events look like in JS
       },
       {
         "type": "struct",
-        "optional": false,
+        "optional": true,
         "field": "after",
-        "name": "KAFKA_Connector.tpch.region.Value",
+        "name": "KAFKA_Connector.tpch_scale_0_01.region.Value",
         "fields": [
           {
             "type": "int32",
@@ -743,22 +763,22 @@ In this section, we'll see how insert, update, and delete events look like in JS
           },
           {
             "type": "int64",
-            "optional": false,
+            "optional": true,
             "field": "ts_ms"
           },
           {
             "type": "string",
-            "optional": false,
+            "optional": true,
             "field": "db"
           },
           {
             "type": "string",
-            "optional": false,
+            "optional": true,
             "field": "schema"
           },
           {
             "type": "string",
-            "optional": true,
+            "optional": false,
             "field": "table"
           },
           {
@@ -773,7 +793,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
           },
           {
             "type": "int64",
-            "optional": false,
+            "optional": true,
             "field": "server_id"
           },
           {
@@ -783,17 +803,17 @@ In this section, we'll see how insert, update, and delete events look like in JS
           },
           {
             "type": "string",
-            "optional": false,
+            "optional": true,
             "field": "file"
           },
           {
             "type": "int64",
-            "optional": false,
+            "optional": true,
             "field": "pos"
           },
           {
             "type": "int32",
-            "optional": false,
+            "optional": true,
             "field": "row"
           }
         ]
@@ -812,31 +832,32 @@ In this section, we'll see how insert, update, and delete events look like in JS
   },
   "payload": {
     "before": {
-      "r_regionkey": "0",
+      "r_regionkey": "10",
       "r_comment": "Test_Replication",
-      "r_name": "AFRICA"
+      "r_name": "Test_nation"
     },
     "after": null,
     "source": {
       "schema": null,
-      "query": "DELETE FROM tpch.region WHERE r_regionkey=0 AND r_name=AFRICA AND r_comment=Test_Replication",
-      "thread": 160,
+      "query": "DELETE FROM tpch_scale_0_01.region WHERE r_regionkey=10 AND
+r_name=Test_nation AND r_comment=Test_Replication",
+      "thread": 1643,
       "server_id": "1",
       "version": "5.7.24",
-      "file": "log-bin.000001",
+      "file": "log-bin.000003",
       "connector": "MYSQL",
-      "pos": 2077,
+      "pos": 96770857,
       "name": "KAFKA_Connector",
       "gtid": null,
       "row": 1,
-      "ts_ms": 1677159319000,
-      "db": "tpch",
+      "ts_ms": 1678887161000,
+      "db": "tpch_scale_0_01",
       "table": "region",
       "snapshot": "false"
     },
     "op": "d",
-    "ts_ms": 1677139520242,
-   }
+    "ts_ms": 1678867362465
+  }
 }
 ```
 
@@ -857,7 +878,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
     ]
   },
   "payload": {
-    "r_regionkey": "0"
+    "r_regionkey": "10"
   }
 }
 ```
