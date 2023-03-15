@@ -104,13 +104,13 @@ Replicant supports creating/loading tables at the partition and subpartition lev
     *Default: By default, this parameter is set to `false`.*
 
   - `init-views-post-snapshot`*[v21.04.06.8]*: If init-views-as-views is true, this option will create views after snapshot is complete. If disabled, views are created prior to snapshot. (by default this is true).
-  - `bulk-load`: Arcion can leverage underlying support of `FILE` based bulk loading into the target system.
-    - `enable`: To enable/disable bulk loading.
+  - `bulk-load`: Arcion can leverage underlying support of `FILE` based bulk loading into the target system. The following parameters are available for bulk loading:
+    - `enable`: `true` or `false`. Whether to enable or disable bulk loading.
     - `type`: `FILE`
     - `serialize`: Specifies whether the files generated should be applied in serial/parallel fashion. Values are either `true` or `false`. 
-    - `method`: Specifies the method used to perform bulk load. The following methods are available:
+    - `method`: Specifies the method of bulk loading. The following methods are available:
       - `EXTERNAL_TABLE`: This method uses an external table to load intermediate CSV files that Replicant generates into the target Oracle. The prerequisite for this mechanism is that we need to have a shared directory between Replicant machine and target Oracle.
-      - `SQL_LOADER`: This mechanism uses [Oracle's `sqlldr` utility](https://docs.oracle.com/cd/B19306_01/server.102/b14215/part_ldr.htm) to perform client side load into target Oracle. This mechanism does not require shared directory between Replicant machine and target Oracle. The prerequisite for this mechanism is that we need to set the following three environment variables before executing the Replicant process. You can include them in `.bashrc` as well:
+      - `SQLLDR`: Uses [Oracle's `sqlldr` utility](https://docs.oracle.com/cd/B19306_01/server.102/b14215/part_ldr.htm) for client side data loading into target Oracle. `SQLLDR` does not require shared directory between Replicant machine and target Oracle. However, you need to set the following three environment variables before executing the Replicant process. You can include them in `.bashrc` as well.
 
         ```bash
         export ORACLE_HOME=<path_to_directory_containing_sqlldr_binary>
@@ -118,14 +118,15 @@ Replicant supports creating/loading tables at the partition and subpartition lev
         export PATH="$ORACLE_HOME:$PATH"
         ```
 
-        {{< hint "warning" >}}`sqlldr` has a limitation that it does not accept case-sensitive usernames. For example, `sqlldr` will not accept the first command below:
+        {{< hint "warning" >}}`sqlldr` does not accept case-sensitive usernames. For example, `sqlldr` will not accept the first command below:
         
   ```SQL
   create user “test” identified by “Test#123”
   create user test identified by “Test#123”
   ```
         {{< /hint >}}
-
+      - `NONE`: Instructs Replicant to not use a bulk loader.
+  
     - `native-load`: With this parameter set, Replicant uses the Oracle Data Pump Import (`impdp`) utility to load table data instead of JDBC. This enables Replicant to efficiently handle large-scale data. For more information, see [Oracle Native Import](#oracle-native-import). 
     
       The following configuration parameters are available under `native-load`:
