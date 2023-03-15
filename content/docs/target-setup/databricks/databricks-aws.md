@@ -44,6 +44,9 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
     - Parameters related to stage configuration.
 
     ### Parameters related to Target Databricks server connection
+    {{< hint "info" >}}
+  **Note:** All communications with Databricks happen through port 443, the standard port for HTTPS. So all data is encrypted and secure with SSL by default.
+    {{< /hint >}}
     If you store your Databricks server connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/references/secrets-manager). 
     
     Otherwise, you can put your credentials in plain form like the sample below:
