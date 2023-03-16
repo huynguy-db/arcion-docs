@@ -124,6 +124,10 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     ```
     - Default `log-reader-type` is `SQL`. If `SQL` is chosen, PostgreSQL server will periodically receive SQL statements for CDC data extraction. If `STREAM` is chosen, CDC data will be captured through `PgReplicationStream`.
 
+    {{< hint "warning" >}}
+  **Important:** Make sure that the `max_connections` in PostgreSQL is greater than the `max_connections` in the preceeding connection configuration file.
+    {{< /hint >}}
+
 3. You can also enable SSL for your connection by including the `ssl` field and specifying the necessary parameters as below:
     ```YAML
     ssl:

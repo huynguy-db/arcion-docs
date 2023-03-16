@@ -7,7 +7,16 @@ bookHidden: false
 ---
 # Destination PostgreSQL
 
-The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
+The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the following steps.
+
+## Required permissions
+- Make sure that the specified user has `CREATE TABLE` privilege on the catalogs or schemas where you want to replicate tables to.
+- To create catalogs or schemas on the target PostgresSQL system, you must grant `CREATE DATABASE` or `CREATE SCHEMA` privileges respectively to the user.
+- If the user does not have `CREATE DATABASE` privilege, then follow these two steps:
+  1. Create a database manually with the name `io`.
+  2. Grant all privileges for the `io` database to that user. 
+  
+  Replicant uses this `io` database to maintain internal checkpoint and metadata.
 
 ## I. Set up Connection Configuration
 
@@ -20,28 +29,26 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
 
     ```YAML
-      type: POSTGRESQL
+    type: POSTGRESQL
 
-      host: localhost #Replace localhost with your PostgreSQL host
-      port: 5432  #Replace the 57565 with the port of your host
+    host: localhost #Replace localhost with your PostgreSQL host
+    port: 5432  #Replace the 57565 with the port of your host
 
-      database: 'tpch' #Replace tpch with your database name
-      username: 'replicant' #Replace replicant with the username of your user that connects to your PostgreSQL server
-      password: 'Replicant#123' #Replace Replicant#123 with your user's password
+    database: 'tpch' #Replace tpch with your database name
+    username: 'replicant' #Replace replicant with the username of your user that connects to your PostgreSQL server
+    password: 'Replicant#123' #Replace Replicant#123 with your user's password
 
-      max-connections: 30 #Specify the maximum number of connections Replicant can open in PostgreSQL
-      socket-timeout-s: 60 #The timeout value for socket read operations. The timeout is in seconds and a value of zero means that it is disabled.
-      max-retries: 10 #Number of times any operation on the system will be re-attempted on failures.
-      retry-wait-duration-ms: 1000 #Duration in milliseconds replicant should wait before performing then next retry of a 
+    max-connections: 30 #Specify the maximum number of connections Replicant can open in PostgreSQL
+    socket-timeout-s: 60 #The timeout value for socket read operations. The timeout is in seconds and a value of zero means that it is disabled.
+    max-retries: 10 #Number of times any operation on the system will be re-attempted on failures.
+    retry-wait-duration-ms: 1000 #Duration in milliseconds replicant should wait before performing then next retry of a 
     ```
 
-    - Make sure the specified user has `CREATE TABLE` privilege on the catalogs/schemas into which replicated tables should be created.
-    - If you want Replicant to create catalogs/schemas for you on the target PostgresSQL system, then you also need to grant `CREATE DATABASE`/`CREATE SCHEMA` privileges to the user.
-    - If this user does not have `CREATE DATABASE` privilege, then create a database manually with name `io` and grant all privileges for it to the user specified here. Replicant uses this database for internal checkpointing and metadata management.  
+    {{< hint "warning" >}}
+  **Important:** Make sure that the `max_connections` in PostgreSQL is greater than the `max_connections` in the preceeding connection configuration file.
+    {{< /hint >}}
 
-        {{< hint "info" >}} The database/schema of your choice on a different instance of your choice name can be configured using the metadata config feature. For more information, see [Metadata Configuration](/docs/references/metadata-reference).{{< /hint >}}
-
-        {{< hint "info" >}} The `socket-timeout-s` parameter has been introduced in *v22.02.12.16* and isn't available in previous versions.{{< /hint >}}
+    The `socket-timeout-s` parameter is only supported for versions 22.02.12.16 and newer.
 
 ## II. Configure mapper file (optional)
 If you want to define data mapping from source to your target PostgreSQL, specify the mapping rules in the mapper file. The following is a sample mapper configuration for a **MySQL-to-PostgreSQL** pipeline:
