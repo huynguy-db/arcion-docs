@@ -27,7 +27,7 @@ Please ensure your host machine that will run Replicant meets the following mini
 Arcion self-hosted CLI doesn't require internet access except in the following two scenarios:
 
 - When you provide an online license for your Arcion server (the default), Arcion must connect to the internet to validate the license.
-- The Arcion on-premise Docker container connects to the internet to access the documentation on this website. This documentation seamlessly accompanies you as you set up your connections.
+- The Arcion on-premise Docker container connects to the internet to access the documentation on this website. This documentation seamlessly accompanies you as you set up connections.
 ## II. Download Replicant and Create a Home Repository
 
 1. Download the latest version of Replicant from [Arcion Self-hosted](https://www.arcion.io/self-hosted).
