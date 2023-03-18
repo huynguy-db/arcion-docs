@@ -132,7 +132,7 @@ For more information about the configuration parameters in `realtime` mode, see 
 ## Replicate tables without primary keys
 To use Arcion CDC Agent as CDC Extractor, we recommend that all replicated tables have primary keys. However, it's possible to replicate tables without primary keys if the tables meet the following criteria:
 
-> _The tables must have a set of non-nullable columns that uniquely identify each row._
+> _The tables must have a set of non-nullable columns that uniquely identifies each row._
 
 Replicant replicates a table without a primary key by creating a view of that table and then replicating that view instead. By default, each view Replicant creates has the following two properties: 
 
