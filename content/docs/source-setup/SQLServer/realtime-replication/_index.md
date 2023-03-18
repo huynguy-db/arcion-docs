@@ -1,7 +1,7 @@
 ---
 pageTitle: Documentation for realtime replication from SQL Server
 title: "Real-time replication"
-description: "In-depth guide for setting up real-time replication from SQL Server, using change tracking and Arcion's SQL Server CDC Agent."
+description: "In-depth guide for setting up real-time replication from SQL Server, using change tracking and Arcion CDC Agent."
 bookCollapseSection: true
 weight: 2
 ---
@@ -24,7 +24,7 @@ Full mode replication is a combination of snapshot and real-time mode replicatio
 For `realtime` and `full` mode replicaiton from SQL Server, you can choose from two CDC Extractors. You can specify the Extractor to use by setting the `extractor` parameter in the connection configuration file.
 
 - [Change tracking]({{< relref "change-tracking" >}})
-- [SQL Server Agent]({{< relref "sqlserver-agent" >}})
+- [Arcion CDC Agent]({{< relref "arcion-cdc-agent" >}})
 
 Follow the instructions in these two pages to operate Replicant in `realtime` and `full` mode.
 

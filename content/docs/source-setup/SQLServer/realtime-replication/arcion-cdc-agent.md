@@ -1,19 +1,19 @@
 ---
-pageTitle: Use SQL Server Agent for real-time replication
-title: "SQL Server Agent"
-description: "Learn how to set up real-time replication from SQL Server using Arcion's SQL Server Agent that uses efficient and secure CDC technology."
+pageTitle: Use Arcion CDC Agent for real-time replication
+title: "Arcion CDC Agent"
+description: "Learn how to set up real-time replication from SQL Server using Arcion CDC Agent that uses efficient and secure CDC technology."
 weight: 2
 ---
 
-# Real-time replication from SQL Server with SQL Server Agent
-For real-time replicaiton from SQL Server, you can choose [SQL Server Agent]({{< ref "docs/references/source-prerequisites/sqlserver#replicant-sql-server-agent-installation" >}}) as a CDC Extractor. Follow these steps to set up real-time replication using the SQL Server Agent.
+# Real-time replication from SQL Server with Arcion CDC Agent
+For real-time replicaiton from SQL Server, you can choose [Arcion CDC Agent]({{< ref "docs/references/source-prerequisites/sqlserver#replicant-sql-server-agent-installation" >}}) as a CDC Extractor. Follow these steps to set up real-time replication using the Arcion CDC Agent.
 
 ## I. Prerequisites
 ### Required permissions
 To allow replication, you need to first verify that the necessary permissions are in place on source SQL Server. For more information, see [SQL Server User Permissions](/docs/references/source-prerequisites/sqlserver/#sql-server-user-permissions).
 
 ### Primary keys on tables
-For [full mode replication]({{< relref "../full-mode-replication" >}}) with SQL Server Agent, we recommend that all the tables that you need to replicate have primary keys. If it's not possible to define primary key on a table, follow the instructions in [Replicate tables without primary keys](#replicate-tables-without-primary-keys).
+For [full mode replication]({{< relref "../full-mode-replication" >}}) with Arcion CDC Agent, we recommend that all the tables that you need to replicate have primary keys. If it's not possible to define primary key on a table, follow the instructions in [Replicate tables without primary keys](#replicate-tables-without-primary-keys).
 
 ## II. Set up connection configuration
 Specify the connection details of your SQL Server instance to Replicant in one of the following two ways:
@@ -54,10 +54,10 @@ In case of `NLTM` protocol, provide the [`username`](#username) in `DOMAIN\USER`
 #### `extractor`
 The CDC Extractor to use for real-time replication. 
 
-To use SQL Server Agent, follow these steps:
+To use Arcion CDC Agent, follow these steps:
 
 - Set `extractor` to `LOG`.
-- Follow the instructions in [Replicant SQL Server Agent Installation]({{< ref "docs/references/source-prerequisites/sqlserver#replicant-sql-server-agent-installation" >}}).
+- Follow the instructions in [Arcion CDC Agent Installation]({{< ref "docs/references/source-prerequisites/sqlserver#arcion-cdc-agent-installation" >}}).
 
 #### `is_azure`
 Optional parameter. If you're hosting SQL Server on Azure, you must set this parameter to `true`.
@@ -130,7 +130,7 @@ realtime:
 For more information about the configuration parameters in `realtime` mode, see [Realtime Mode]({{< ref "/docs/references/extractor-reference#realtime-mode" >}}).
 
 ## Replicate tables without primary keys
-To use SQL Server Agent as CDC Extractor, we recommend that all replicated tables have primary keys. However, it's possible to replicate tables without primary keys if the tables meet the following criteria:
+To use Arcion CDC Agent as CDC Extractor, we recommend that all replicated tables have primary keys. However, it's possible to replicate tables without primary keys if the tables meet the following criteria:
 
 > _The tables must have a set of non-nullable columns that uniquely identify each row._
 
