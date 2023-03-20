@@ -152,7 +152,10 @@ In this step, you need to provide the Databricks connection details to Arcion. T
         account-name: "replicant-storageaccount"
         secret-key: "YOUR_SECRET_KEY"
       ```
-## VII. Set up Applier Configuration
+## VII. Configure mapper file (optional)
+If you want to define data mapping from your source to Azure Databricks, specify the mapping rules in the mapper file. For more information on how to define the mapping rules and run Replicant CLI with the mapper file, see [Mapper configuration]({{< ref "docs/references/mapper-reference" >}}) and [Mapper configuration in Databricks]({{< ref "docs/references/mapper-reference#mapper-configuration-in-databricks" >}}).
+
+## IX. Set up Applier Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the applier configuration file:
     ```BASH
@@ -310,3 +313,4 @@ As of now, note the following about the state of Arcion's Unity Catalog support:
         *Default: `PARQUET`*.
 - We use `SparkJDBC42` driver for Legacy Databricks (`DATABRICKS_DELTALAKE`) and `DatabricksJDBC42` for Unity catalog (`DATABRICKS_LAKEHOUSE`). For instructions on how to obtain these drivers, see [Obtain the JDBC Driver for Databricks](#i-obtain-the-jdbc-driver-for-databricks).
 - Replicant supports Unity Catalog on AWS and Azure platforms.
+- To configure [Mapper file]({{< ref "docs/references/mapper-reference" >}}) in Unity Catalog, see [Mapping in Unity Catalog]({{< ref "docs/references/mapper-reference#mapping-in-unity-catalog" >}}).

@@ -164,3 +164,69 @@ rules:
 
 object-name-concat-delimiter: DOT
 ```
+
+## Mapper configuration in Databricks
+The Mapper file configuration in Databricks differs from other database platforms. The mapping system also varies between Legacy Databricks and Unity Catalog. 
+
+### Mapping in Legacy Databricks
+Legacy Databricks provides a two-level namespace:
+
+- Schemas (databases)
+- Tables
+
+By default, Replicant maps catalog and schema of source database to the database (schema) of Legacy Databricks. If source supports both catalog and schema, then Replicant adds schema name as suffix in the database name of Legacy Databricks.
+
+#### Sources that support catalog only
+For example, consider a MySQL table `tpch.lineitem`, meaning table `lineitem` in catalog `tpch`. Replicant maps this table to `tpch.lineitem` in Legacy Databricks.
+
+#### Sources that support schema only
+For example, consider an Oracle table `tpch.lineitem`, meaning table `lineitem` in schema `tpch`. Replicant maps this table to `tpch.lineitem` in Legacy Databricks.
+
+#### Sources that support both catalog and schema
+For example, consider a PostgreSQL table `tpch.scale_0_01.lineitem`. Replicant maps this table to `tpch_scale_0_01.lineitem` in Unity Catalog, meaning table `lineitem` in database `tpch_scale_0_01`. Replicant adds schema `scale_0_01` as a suffix to the database name.
+
+#### Use Mapper file to change the default namespace in Legacy Databricks
+The precedding sections discuss the default mapping beahvior of Replicant. However, it's possible to map source namespace to a custom namespace using the Mapper configuration file. For example:
+
+```YAML
+rules:
+  [arcion]:
+    source:
+      - tpch
+      - io_blitzz
+```
+
+In the preceeding Mapper sample, Replicant maps source catalogs `tpch` and `io_blitzz` to `arcion`. So Replicant creates each source table under `tpch` and `io_blitzz` catalogs inside `arcion` database.
+
+### Mapping in Unity Catalog
+Unity Catalog provides a three-level namespace:
+
+- Catalogs
+- Schemas (databases)
+- Tables
+
+By default, Replicant maps catalog and schema of source database to the catalog and schema of Unity Catalog respectively. 
+If source database doesn’t support catalog or schema, then Replicant maps to the default catalog `main` or the default schema `default` 
+respectively. The following three sections describe how Replicant performs mapping for different scenarios.
+
+#### Sources that support catalog only
+For example, consider a MySQL table `tpch.lineitem`, meaning table `lineitem` in catalog `tpch`. In this case, Replicant maps `tpch.lineitem` to `tpch.default.lineitem` in Unity Catalog. Since MySQL doesn’t support schema, Replicant uses the default schema `default` .
+
+#### Sources that support schema only
+For example, consider an Oracle table `tpch.lineitem`, meaning table `lineitem` in schema `tpch`. In this case, Replicant maps `tpch.lineitem` to `main.tpch.lineitem` in Unity Catalog. Since Oracle doesn’t support catalog, Replicant uses the default catalog `main` .
+
+#### Sources that support both catalog and schema
+For example, let's consider a PostgreSQL table `tpch.scale_0_01.lineitem`. Replicant maps this table to `tpch.scale_0_01.lineitem` in Unity Catalog.
+
+#### Use Mapper file to change the default namespace in Unity Catalog
+The precedding sections discuss the default mapping beahvior of Replicant. However, it's possible to map source namespace to a custom namespace using the Mapper configuration file. For example:
+
+```YAML
+rules:
+  [arcion, io]:
+    source:
+      - tpch
+      - io_blitzz
+```
+
+In the preceeding Mapper sample, Replicant maps source catalogs `tpch` and `io_blitzz` to `arcion.io`. So Replicant creates each source table under `tpch` and `io_blitzz` catalogs inside `arcion.io`.
