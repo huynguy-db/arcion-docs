@@ -12,9 +12,9 @@ If you set [the `extractor` parameter to `LOG` for your Source SQL Server](/docs
 
 In the diagram below, the Source SQL Server instance represents the location of the database or databases that would undergo replication. The Target database can be any destination that Replicant supports.
 
-![Diagram showing how Arcion Replicant Arcion CDC Agent works](/images/arcion_replicant_SQL_server_agent_architecture.png)
+![Diagram showing how Arcion CDC Agent works for real-time replication into SQL Server](/images/arcion_cdc_agent_for_sql_server.svg)
 
-The Arcion CDC Agent works by setting up push transactional replication on the source database to the local SQL Server Express instance. The local Express instance works as a "ghost target". All replicated data gets intercepted before hitting the SQL Server subscriber and handed to the Replicant process; Replicant then prepares the data for the target and applies it.
+The Arcion CDC Agent works by setting up push transactional replication on the source database to the local SQL Server Express instance. The local Express instance works as a _replication proxy_. All replicated data gets intercepted before hitting the SQL Server subscriber and handed to the Replicant process; Replicant then prepares the data for the target and applies it.
 
 ## Prerequisites
 
