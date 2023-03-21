@@ -183,9 +183,9 @@ For example, consider a MySQL table `tpch.lineitem`, meaning table `lineitem` in
 For example, consider an Oracle table `tpch.lineitem`, meaning table `lineitem` in schema `tpch`. Replicant maps this table to `tpch.lineitem` in Legacy Databricks.
 
 #### Sources that support both catalog and schema
-For example, consider a PostgreSQL table `tpch.scale_0_01.lineitem`. Replicant maps this table to `tpch_scale_0_01.lineitem` in Unity Catalog, meaning table `lineitem` in database `tpch_scale_0_01`. Replicant adds schema `scale_0_01` as a suffix to the database name.
+For example, consider a PostgreSQL table `tpch.scale_0_01.lineitem`. Replicant maps this table to `tpch_scale_0_01.lineitem` in Legacy Databricks, meaning table `lineitem` in database `tpch_scale_0_01`. Replicant adds schema `scale_0_01` as a suffix to the database name.
 
-#### Use Mapper file to change the default namespace in Legacy Databricks
+#### Use Mapper file to change default namespace mapping in Legacy Databricks
 The precedding sections discuss the default mapping beahvior of Replicant. However, it's possible to map source namespace to a custom namespace using the Mapper configuration file. For example:
 
 ```YAML
@@ -218,7 +218,7 @@ For example, consider an Oracle table `tpch.lineitem`, meaning table `lineitem` 
 #### Sources that support both catalog and schema
 For example, let's consider a PostgreSQL table `tpch.scale_0_01.lineitem`. Replicant maps this table to `tpch.scale_0_01.lineitem` in Unity Catalog.
 
-#### Use Mapper file to change the default namespace in Unity Catalog
+#### Use Mapper file to change default namespace mapping in Unity Catalog
 The precedding sections discuss the default mapping beahvior of Replicant. However, it's possible to map source namespace to a custom namespace using the Mapper configuration file. For example:
 
 ```YAML
