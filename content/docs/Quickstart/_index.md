@@ -1,21 +1,21 @@
 ---
 pageTitle: Get started with Arcion Self-hosted 
-title: Arcion Self-hosted
+title: Arcion self-hosted
 description: "Quickly get started with Arcion Self-hosted. Learn about hardware requirements, download Arcion Replicant, and set up Sources and Targets."
 weight: 1
 ---
 
-# Arcion Self-hosted Quickstart
+# Arcion self-hosted quickstart
 
-## I. Host Machine Prerequisites
+## I. Host machine requirements
 
-Please ensure your host machine that will run Replicant meets the following minimum hardware and software prerequisites.
+Please ensure your host machine that runs Replicant meets the following minimum hardware and software requirements.
 
-### Minimum Hardware Requirements
+### Minimum hardware requirements
 * 16 CPU cores and 32GB of memory
 * 100GB-200GB of SSD/NVMe storage space
 
-### Minimum System Requirements
+### Minimum system requirements
 * Linux (CentOS/Ubuntu/Redhat)
 * JDK 8 either from a JRE or JDK installation
 
@@ -30,17 +30,13 @@ Arcion self-hosted doesn't require internet access except in the following two s
 - The Arcion on-premises Docker container connects to the internet to access the documentation on this website. This documentation seamlessly appears when you set up connections using the on-premises Docker container.
 - Arcion requires internet access to remotely update the SQL Server CDC Agent in [SQL Server replication]({{< ref "docs/source-setup/sqlserver" >}}).
 
-## II. Download Replicant and Create a Home Repository
-
-1. Download the latest version of Replicant from [Arcion Self-hosted](https://www.arcion.io/self-hosted).
-
-2. Unzip the downloaded archive:
+## II. Get Arcion self-hosted
+To find out more about Arcion self-hosted, [send us a request](https://www.arcion.io/self-hosted) and someone from our team will contact you. After getting Arcion self-hosted, unzip the archive for the Replicant CLI:
 
    ```BASH
    unzip replicant-cli-<version>.zip
    ```
-This will create a directory named ```replicant-cli``` that will serve as ```REPLICANT_HOME```. For the proceeding steps, position yourself in ```REPLICANT_HOME```.
-
+This creates a directory `replicant-cli` that serves as `REPLICANT_HOME`. For the following steps, position yourself in the ```REPLICANT_HOME``` directory.
 
 ## III. Licensing
 1. Download the license file for Replicant and rename it to `replicant.lic`
@@ -49,7 +45,7 @@ This will create a directory named ```replicant-cli``` that will serve as ```REP
   {{<hint "warning" >}}You must copy the `replicant.lic` file into Replicant's home directory, not in the `licenses` folder of Replicant.{{< /hint >}}
 
 
-## IV. Setup Source Database Configuration
+## IV. Set up source database configuration
 
 1. From ```REPLICANT_HOME``` navigate to the sample connection configuration file of the source database:
 
@@ -98,7 +94,7 @@ This will create a directory named ```replicant-cli``` that will serve as ```REP
 
    ```
 
-## V. Target Database Setup
+## V. Set up target database
 
 1. From ```REPLICANT_HOME``` navigate to the sample connection configuration file of the target database:
 
@@ -127,7 +123,7 @@ This will create a directory named ```replicant-cli``` that will serve as ```REP
     For database specific examples, please refer to one of our Target database setup pages.
 
 
-## VI. Run Replicant Snapshot
+## VI. Run Replicant in snapshot mode
 
 Replicant is now ready to run in snapshot mode. The snapshot will only transfer existing data from the source database to the target database. If you would like to transfer real-time changes in addition to the snapshot, skip step VI and proceed to steps VII and VIII to run Replicant in full mode.
 
@@ -143,7 +139,7 @@ Replicant is now ready to run in snapshot mode. The snapshot will only transfer 
 
 The proceeding steps are only required if you intend to run Replicant in real-time mode.
 
-## VII. Heartbeat table setup
+## VII. Set up heartbeat table
 
 1. Create a heartbeat table in the catalog/schema you are going to replicate with the following DDL:
 
@@ -192,7 +188,7 @@ To get the most out of your upgrades, follow the tips below:
 - After upgrade, copy your `replicant.lic` license file [to the new `REPLICANT_HOME`](#ii-download-replicant-and-create-a-home-repository).
 - Copy the contents of your older `$REPLICANT_HOME/lib` directory to the new version `lib` directory `$REPLICANT_HOME/lib`.
 
-## Database Specific Setup Overview
+## Set up a specific database pipeline
 
 Different source and target databases may have slightly more specific and different setup instructions than the general guidelines provided in this Quickstart Guide. Follow the six steps below for a pipeline specific setup for Replicant:
 
