@@ -31,7 +31,7 @@ Arcion self-hosted doesn't require internet access except in the following two s
 - Arcion requires internet access to remotely update the SQL Server CDC Agent in [SQL Server replication]({{< ref "docs/source-setup/sqlserver" >}}).
 
 ## II. Get Arcion self-hosted
-To find out more about Arcion self-hosted, [send us a request](https://www.arcion.io/self-hosted) and someone from our team will contact you. After getting Arcion self-hosted, unzip the archive for the Replicant CLI:
+To find out how to download Arcion self-hosted, [send us a request](https://www.arcion.io/self-hosted) and someone from our team will contact you. After getting Arcion self-hosted, unzip the archive for the Replicant CLI:
 
    ```BASH
    unzip replicant-cli-<version>.zip
