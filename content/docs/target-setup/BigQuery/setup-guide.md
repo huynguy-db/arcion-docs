@@ -23,36 +23,42 @@ Replicant requires the JDBC driver for Google BigQuery as a dependency. To obtai
 To load data into BigQuery, you need to make sure you have the necessary IAM permissions. These permissions are required to run a load job and load data into BigQuery tables and partitions. For more information about these permissions, see [Permissions to load data into BigQuery](https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-csv#required_permissions).
 
 ## III. Set up connection configuration
+Specify our BigQuery connection details to Replicant with a connection configuration file. You can find a sample connection configuration file `bigquery.yaml` in the `$REPLICANT_HOME/conf/conn` directory.
 
-1. From `$REPLICANT_HOME`, navigate to the sample connection configuration file:
-    ```BASH
-    vi conf/conn/bigquery.yaml
-    ```
-
-2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/references/secrets-manager). 
+### Configure BigQuery server connection
+If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/references/secrets-manager). 
     
-    Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
-    ```YAML
-    type: BIGQUERY
+Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
 
-    host: https://www.googleapis.com/bigquery/v2
-    port: 443
-    project-id: bigquerytest-268904
-    auth-type: 0
-    o-auth-service-acc-email: bigquerytest@bigquerytest-268904.iam.gserviceaccount.com
-    o-auth-pvt-key-path: <path_to_oauth_private_key>
-    location: US
-    timeout: 500
+```YAML
+type: BIGQUERY
 
-    username: "xxx"
-    password: "xxxx"
+host: https://www.googleapis.com/bigquery/v2
+port: 443
+project-id: bigquerytest-268904
+auth-type: 0
+o-auth-service-acc-email: bigquerytest@bigquerytest-268904.iam.gserviceaccount.com
+o-auth-pvt-key-path: <path_to_oauth_private_key>
+location: US
+timeout: 500
 
-    max-connections: 20
+username: "xxx"
+password: "xxxx"
 
-    max-retries: 10
-    retry-wait-duration-ms: 1000
-    ```
+max-connections: 20
 
+max-retries: 10
+retry-wait-duration-ms: 1000
+```
+
+### Configure stage
+Arcion supports CSV and [Parquet](http://parquet.apache.org/) as intermediatary formats to send data to the BigQuery server. To specify the stage format, use the `stage` field in the connection configuration file:
+
+```YAML
+stage:
+  type: NATIVE
+  file-format: {CSV|PARQUET}
+```
 ## IV. Set up Applier configuration
 To configure replication according to your requirements, specify your configuration in the Applier configuration file. You can find a sample Applier configuration file `bigquery.yaml` in the `$REPLICANT_HOME/conf/dst` directory.
 
