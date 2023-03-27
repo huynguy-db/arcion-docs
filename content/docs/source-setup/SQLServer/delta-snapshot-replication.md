@@ -70,7 +70,6 @@ port: 1433
 
 username: 'USERNAME'
 password: 'PASSWORD'
-database: 'tpcc'
 
 max-connections: MAX_NUMBER_OF_CONNECTIONS
 ```

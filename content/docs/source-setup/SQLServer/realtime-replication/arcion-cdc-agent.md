@@ -76,7 +76,6 @@ port: 1433
 
 username: 'USERNAME'
 password: 'PASSWORD'
-database: 'tpcc'
 
 extractor: LOG
 
@@ -157,7 +156,6 @@ port: 1433
 
 username: 'alex'
 password: 'alex1995'
-database: 'tpcc'
 
 extractor: LOG
 

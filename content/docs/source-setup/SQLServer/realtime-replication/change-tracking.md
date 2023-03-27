@@ -76,7 +76,6 @@ port: 1433
 
 username: 'USERNAME'
 password: 'PASSWORD'
-database: 'tpcc'
 
 extractor: CHANGE
 
