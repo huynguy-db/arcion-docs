@@ -12,74 +12,85 @@ On this page, you'll find step-by-step instructions on how to set up your Azure 
 
 ## Prerequisites
 
-- A Databricks account on Azure
+- A Databricks workspace on Azure
 - Azure container in ADLS Gen2 (Azure Data Lake Storage Gen2)
 
-<!-- ## Setup guide -->
-After making sure of the prerequisities in the preceeding section, follow these steps to set up  your Azure Databricks with Arcion.
+To create a storage account, see [Create a storage account to use with Azure Data Lake Storage Gen2](https://learn.microsoft.com/en-us/azure/storage/blobs/create-data-lake-storage-account). To create a container, see [Create a container](https://learn.microsoft.com/en-us/azure/storage/blobs/blob-containers-portal#create-a-container).
 
 ## I. Create a Databricks cluster
-To create a Databricks cluster, follow these steps:
+If you want to connect to Databricks all-purpose cluster, follow these instructions:
 
-1. Log in to your Databricks account.
-
-2. In the Databricks console, click **Compute**.
-
-3. Click **Create Cluster**.
-
-4. Enter a cluster name of your choice.
-
-5. Select the latest **Databricks runtime version**.
-
+### Set up all-purpose cluster
+1. Log in to your Databricks workspace.
+2. From the Databricks console, go to **Data Science & Engineering > Compute > Create Compute**.
+3. Enter a name for your cluster.
+4. Select the latest Databricks runtime version.
+5. [Set up an external stage](#iii-configure-adls-container-as-stage).
 6. Click **Create Cluster**.
 
-## II. Get connection details for Databricks cluster
-To establish connection between your Databricks instance and Arcion, you need to provide the connection details for your cluster. The connection details are available from Databricks JDBC and ODBC drivers configuration page. To get the connection details, follow these steps:
+#### Get connection details for a cluster
+To establish connection between your Databricks instance and Arcion, you need to provide the connection details for your cluster. You provide these connection details to Replicant using [the connection configuration file](#vi-configure-replicant-connection-for-databricks). To retrieve connection details, follow these steps after you [set up a cluster](#set-up-all-purpose-cluster):
 
-1. Navigate to **Advanced Options** and click the **JDBC/ODBC** tab.
+1. Click the **Advanced Options** toggle.
+2. Click on the **JDBC/ODBC** tab and take note of the following values:
+    - Server Hostname
+    - Port
+    - JDBC URL
 
-2. Make a note of the following values. These are necessary to configure Arcion Replicant for replication.
+### Set up SQL warehouse
+1. Log in to your Databricks workspace.
+2. From the Databricks console, go to **SQL >  Review SQL warehouses > Create SQL Warehouse**.
+3. Enter a name for your SQL warehouse.
+4. Choose cluster size.
+5. [Set up an external stage](#iii-configure-adls-container-as-stage).
+6. Click **Create**.
 
-   - **Server Hostname**
-   - **Port**
-   - **JDBC URL**
+#### Get connection details for a SQL warehouse
+To establish connection between your Databricks instance and Arcion, you need to provide the connection details for your SQL warehouse. You provide these connection details to Replicant using [the connection configuration file](#vi-configure-replicant-connection-for-databricks). To retrieve connection details, follow these steps after you [set up a SQL warehouse](#set-up-sql-warehouse):
 
-## III. Create a personal access token for the Databricks cluster
-To create a personal access token, see [Generate a personal access token](https://docs.databricks.com/dev-tools/api/latest/authentication.html#token-management) in Databricks documentation. Make a note of the token as it's required to configure Arcion Replicant for replication.
+1. Navigate to the **Connection Details** tab.
+2. Take note of the following values:
 
-## IV. Configure ADLS container as stage
-1. Frist you need to set up access to ADLS. You can set up access in the following two ways:
-   - [Access Azure Data Lake Storage Gen2 or Blob Storage using OAuth 2.0 with an Azure service principal](https://docs.databricks.com/external-data/azure-storage.html#access-azure-data-lake-storage-gen2-or-blob-storage-using-oauth-20-with-an-azure-service-principal).
-   - [Access Azure Data Lake Storage Gen2 or Blob Storage using a SAS token](https://docs.databricks.com/external-data/azure-storage.html#access-azure-data-lake-storage-gen2-or-blob-storage-using-a-sas-token).
+    - Server Hostname
+    - Port
+    - JDBC URL
 
-2. Open your Databricks console and go to [the cluster configuration page](https://docs.databricks.com/clusters/configure.html).
+## II. Create a personal access token for the Databricks cluster
+To create a personal access token, see [Generate a personal access token](https://docs.databricks.com/dev-tools/api/latest/authentication.html#token-management) in Databricks documentation. You need this token to configure Arcion Replicant for replication.
 
-3. Click **Compute**.
+## III. Configure ADLS container as stage
+To grant Databricks access to ADLS, follow one of the these methods:
+- [Access Azure Data Lake Storage Gen2 or Blob Storage using OAuth 2.0 with an Azure service principal](https://docs.databricks.com/storage/azure-storage.html#access-azure-data-lake-storage-gen2-or-blob-storage-using-oauth-20-with-an-azure-service-principal).
+- [Access Azure Data Lake Storage Gen2 or Blob Storage using a SAS token](https://docs.databricks.com/storage/azure-storage.html#access-azure-data-lake-storage-gen2-or-blob-storage-using-a-sas-token).
+- [Access Azure Data Lake Storage Gen2 or Blob Storage using the account key](https://docs.databricks.com/storage/azure-storage.html#access-azure-data-lake-storage-gen2-or-blob-storage-using-the-account-key).
 
-4. Expand the **Advanced Options** section.
+The preceeding resources use Python to grant access. Instead of Python, you can use [Spark configuration properties](https://spark.apache.org/docs/latest/configuration.html) to access data in Azure storage account. 
 
-5. In the **Spark Config** box, paste the following settings:
-    ```spark
-    spark.hadoop.fs.azure.account.auth.type.STORAGE_ACCOUNT_NAME.dfs.core.windows.net OAuth
-    spark.hadoop.fs.azure.account.oauth.provider.type.STORAGE_ACCOUNT_NAME.dfs.core.windows.net org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider
-    spark.hadoop.fs.azure.account.oauth2.client.id.STORAGE_ACCOUNT_NAME.dfs.core.windows.net APPLICATION-ID
-    spark.hadoop.fs.azure.account.oauth2.client.secret.STORAGE_ACCOUNT_NAME.dfs.core.windows.net {{secrets/SECRET_SCOPE/KEY_STORED_IN_SECRET_SCOPE}}
-    spark.hadoop.fs.azure.account.oauth2.client.endpoint.STORAGE_ACCOUNT_NAME.dfs.core.windows.net https://login.microsoftonline.com/DIRECTORY_ID/oauth2/token
-    ```
-
-    Replace the following:
-    - *`STORAGE_ACCOUNT_NAME`*: the name of your ADLS Gen2 storage account
-    - *`APPLICATION_ID`*: the Application (client) ID for the Azure Active Directory (Azure AD) application
-    - *`SECRET_SCOPE`*: the name of your client secret scope
-    - *`KEY_STORED_IN_SECRET_SCOPE`*: the name of the key containing the client secret
-    - *`DIRECTORY_ID`*: the Directory (tenant) ID for the Azure Active Directory (Azure AD) application
-
- 6. Copy the *`SECRET_KEY`* from Azure portal. These keys are required for establishing a connection from Arcion Replicant to ADLS. Replicant only uses these credentials to upload files to or delete from ADLS container.
+### Configure Spark job for cluster
+1. On the cluster configuration page, click the **Advanced Options** toggle.
+2. Click the **Spark** tab.
+3. In the **Spark Config** textbox, enter your configuration properties.
 
 
-## V. Obtain the JDBC Driver for Databricks
+### Configure Spark job for SQL warehouse
+1. Click your username in the top bar of Databricks workspace and select **Admin Console** from the dropdown.
+2. Click the **SQL Warehouse Settings** tab.
+3. In the **Data Access Configuration** textbox, enter your configuration properties.
 
-Replicant requires the Databricks JDBC Driver as a dependency. To obtain the appropriate driver, follow the steps below: 
+For example, to access data in Azure storage account using storage account key, enter the following Spark configuration:
+
+```
+fs.azure.account.key.STORAGE_ACCOUNT.dfs.core.windows.net STORAGE_ACCOUNT_KEY
+``` 
+
+Replace the following:
+
+- *`STORAGE_ACCOUNT`*: your Azure storage account name
+- *`STORAGE_ACCOUNT_KEY`*: your storage account key
+
+## IV. Obtain the JDBC Driver for Databricks
+
+Replicant requires the Databricks JDBC Driver as a dependency. To obtain the appropriate driver, follow these steps: 
 
 {{< tabs "databricks-jdbc-driver-download" >}}
 {{< tab "For Legacy Databricks" >}}
@@ -95,7 +106,7 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
 
 {{< /tabs >}}
 
-## VI. Configure Replicant connection for Databricks
+## V. Configure Replicant connection for Databricks
 In this step, you need to provide the Databricks connection details to Arcion. To do so, follow these steps:
 
 1. You can find a sample connection configuration file `databricks.yaml` in the `$REPLICANT_HOME/conf/conn/` directory. 
@@ -108,7 +119,7 @@ In this step, you need to provide the Databricks connection details to Arcion. T
     {{< hint "info" >}}
   **Note:** All communications with Databricks happen through port 443, the standard port for HTTPS. So all data is encrypted and secure with SSL by default.
     {{< /hint >}}
-    If you store your Databricks server connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/references/secrets-manager" >}}). Otherwise, you can put your credentials in plain form like the sample below:
+    If you store your Databricks server connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/references/secrets-manager" >}}). Otherwise, you can put your credentials in plain form like the following sample:
 
     ```YAML
     type: DATABRICKS_DELTALAKE
@@ -133,29 +144,46 @@ In this step, you need to provide the Databricks connection details to Arcion. T
     {{< hint "info" >}}For [Databricks Unity Catalog](https://www.databricks.com/product/unity-catalog), set the connection `type` to `DATABRICKS_LAKEHOUSE`. For more information, see [Databricks Unity Catalog Support](#databricks-unity-catalog-support-beta).{{< /hint >}}
 
     ### Parameters related to stage configuration
-    It is mandatory to use an external stage to hold the data files and load them on the target database from there. The `stage` section allows specifying the details Replicant needs to connect to and use a given stage.
+    You must use an external stage to hold the data files and load that data on the target database from there. The `stage` section contains the details Replicant needs to connect to and use a specific stage. 
 
-      - `type`*[v21.06.14.1]*: The stage type. For Azure Databricks, the `type` is `AZURE`.
+      - `type`*[v21.06.14.1]*: The stage type. For Azure Legacy Databricks, set `type` to `AZURE`.
       {{< hint "info" >}}For [Databricks Unity Catalog](https://www.databricks.com/product/unity-catalog), set `type` to `DATABRICKS_LAKEHOUSE`. For more information, see [Databricks Unity Catalog Support](#databricks-unity-catalog-support-beta).{{< /hint >}}
-      - `root-dir`: The directory created under ADLS container. This directory is used to stage bulk-load files.
+      - `root-dir`: The directory under ADLS container. Replicant uses this directory to stage bulk-load files.
       - `conn-url`*[v21.06.14.1]*: The name of the ADLS container.        
-      - `account-name`*[v21.06.14.1]*: The name of the ADLS storage account.
-      - `secret-key`*[v21.06.14.1]*: The `SECRET_KEY` for the user with write/delete access on ADLS container. This is the last step when [you configure ADLS container as stage](#iv-configure-adls-container-as-stage).
+      - `account-name`*[v21.06.14.1]*: The name of the ADLS storage account. `account-name` corresponds to the same storage account in the [Configure ADLS container as stage](#iii-configure-adls-container-as-stage) section.
+      - `secret-key`*[v21.06.14.1]*: If you want to authenticate ADLS using a storage account key, specify your storage account key here.
+      - `sas-token`: If you use [shared access signature (SAS) token](https://learn.microsoft.com/en-us/azure/storage/common/storage-sas-overview) to authenticate ADLS, specify the SAS token here.
+      
+      The following shows two sample stage configurations for Azure Databricks using storage account key and SAS token.
 
-      The following is a sample stage configuration for Azure Databricks:
+      {{< tabs "sample-stage-config-for-azure-databricks" >}}
+      {{< tab "With storage account key" >}}
 
-      ```YAML
-      stage:
-        type: AZURE
-        root-dir: "replicate-stage/databricks-stage"
-        conn-url: "replicant-container"
-        account-name: "replicant-storageaccount"
-        secret-key: "YOUR_SECRET_KEY"
-      ```
-## VII. Configure mapper file (optional)
+  ```YAML
+  stage:
+    type: AZURE
+    root-dir: "replicate-stage/databricks-stage"
+    conn-url: "replicant-container"
+    account-name: "replicant-storageaccount"
+    secret-key: "YOUR_SECRET_KEY"
+  ```
+      {{< /tab >}}
+      {{< tab "With SAS token" >}}
+
+  ```YAML
+  stage:
+    type: AZURE
+    root-dir: "replicate-stage/databricks-stage"
+    conn-url: "replicant-container"
+    account-name: "replicant-storageaccount"
+    sas-token: "YOUR_SAS_TOKEN"
+  ```
+      {{< /tab >}}
+      {{< /tabs >}}
+## VI. Configure mapper file (optional)
 If you want to define data mapping from your source to Azure Databricks, specify the mapping rules in the mapper file. For more information on how to define the mapping rules and run Replicant CLI with the mapper file, see [Mapper configuration]({{< ref "docs/references/mapper-reference" >}}) and [Mapper configuration in Databricks]({{< ref "docs/references/mapper-reference#mapper-configuration-in-databricks" >}}).
 
-## IX. Set up Applier Configuration
+## VII. Set up Applier Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the applier configuration file:
     ```BASH
@@ -260,7 +288,7 @@ If you want to define data mapping from your source to Azure Databricks, specify
   - `realtime` and `full` modes.
    {{< /hint >}}
 
-    To enable Type-2 CDC for your Databricks target, follow the steps below:
+    To enable Type-2 CDC for your Databricks target, follow theese steps:
     
     1. Add the following two parameters under the `realtime` section of the Databricks Applier configuration file:
 
