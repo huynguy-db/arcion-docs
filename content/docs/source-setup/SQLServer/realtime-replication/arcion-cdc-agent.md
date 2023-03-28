@@ -15,6 +15,9 @@ To allow replication, you need to first verify that the necessary permissions ar
 ### Primary keys on tables
 For [full mode replication]({{< relref "../full-mode-replication" >}}) with Arcion CDC Agent, we recommend that all the tables that you need to replicate have primary keys. If it's not possible to define primary key on a table, follow the instructions in [Replicate tables without primary keys](#replicate-tables-without-primary-keys).
 
+### Set up Arcion CDC Agent
+To set up Arcion CDC Agent, follow the instructions in [Arcion CDC Agent]({{< ref "docs/references/source-prerequisites/sqlserver#arcion-cdc-agent" >}})
+
 ## II. Set up connection configuration
 Specify the connection details of your SQL Server instance to Replicant in one of the following two ways:
 
