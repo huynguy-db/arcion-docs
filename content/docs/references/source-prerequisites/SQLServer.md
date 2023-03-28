@@ -34,6 +34,9 @@ Before proceeding with the installation, please make sure that the following con
   - Identify a Windows login with the **sysadmin** role for the local SQL Express instance.
   - The installation will elevate to the Administrator level, so either an Administrator must run it or the Administrator login must be available.
   - If you're installing into a Virtual Machine, make sure that nested VMs are supported to co-install Replicant. Otherwise, use a separate system for Replicant.
+  - You must install the SQL Server Express instance as either one of the following instance types:
+    - Install as the default instance on the default port 1433.
+    - Install as a named instance with the SQL Browser server running.
 
 To install Arcion CDC Agent, run the installer called `remote-replicant-mssql-cdc-agent-<version>.msi`. This will start the installation wizard. Follow the steps below to complete the installation:
 
@@ -61,7 +64,7 @@ If WSL is installed in a Virtual Machine, Intel VT-x/EPT or AMD-V/RVI must be en
 If you need to install Replicant, follow the instructions in [Arcion Replicant Quickstart](/docs/quickstart/).
 {{< /hint >}} -->
 
-## Secure the connection to the CDC Agent 
+## Securely connect to the CDC Agent 
 Arcion CDC Agent installer generates a certificate for TLS/SSL communication. This certificate encrypts the connections to the CDC Agent. By default, Replicant trusts all CDC Agent connections. To ensure that Replicant connects to a trusted Agent, you must take the following measures:
 
 1. Import the TLS certificate for communication into the JRE TrustStore.
