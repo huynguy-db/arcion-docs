@@ -130,7 +130,6 @@ In this step, you need to provide the Databricks connection details to Arcion. T
     host: "HOSTNAME"
     port: "PORT_NUMBER"
     max-connections: 30
-    max-metadata-connections: 10
     ```
     Replace the following:
     - *`JDBC_URL`*: the JDBC URL that you retrieved [in the second step of this section](#ii-get-connection-details-for-databricks-cluster)
@@ -139,7 +138,7 @@ In this step, you need to provide the Databricks connection details to Arcion. T
     - *`USERNAME`*: the username that connects to your Databricks server
     - *`PASSWORD`*: the password associated with *`USERNAME`*
 
-    Feel free to change the values of `max-connections` and `max-metadata-connections` as you need.
+    `max-connections` specifies the maximum number of connections Replicant can open in Databricks. Change the value of `max-connections` as you need.
 
     {{< hint "info" >}}For [Databricks Unity Catalog](https://www.databricks.com/product/unity-catalog), set the connection `type` to `DATABRICKS_LAKEHOUSE`. For more information, see [Databricks Unity Catalog Support](#databricks-unity-catalog-support-beta).{{< /hint >}}
 
