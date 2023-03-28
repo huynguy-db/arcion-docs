@@ -141,9 +141,9 @@ agent-connection:
     - **`FILES`**: Use this mode if Replicant is running on a separate system. This is the default mode.
 
 # SQL Server user permissions
-In [full]({{< ref "docs/source-setup/sqlserver/full-mode-replication" >}}) and [real-time]({{< ref "docs/source-setup/sqlserver/realtime-replication" >}}) replication, Arcion CDC Agent uses the `config-username` user to initialize replication. The `config-username` user must possess the **sysadmin** role.
+In [full]({{< ref "docs/source-setup/sqlserver/full-mode-replication" >}}) and [real-time]({{< ref "docs/source-setup/sqlserver/realtime-replication" >}}) replication, Arcion CDC Agent uses the [`config-username` user]({{< ref "docs/source-setup/sqlserver/realtime-replication/arcion-cdc-agent#configuration-user-for-arcion-cdc-agent" >}}) to initialize replication. The `config-username` user must possess the **sysadmin** role.
 
-You also specify the database user using [the `username` parameter in the connection configuration file]({{< ref "docs/source-setup/sqlserver/realtime-replication/arcion-cdc-agent#username" >}}).
+Notice that you also specify the database user using [the `username` parameter in the connection configuration file]({{< ref "docs/source-setup/sqlserver/realtime-replication/arcion-cdc-agent#username" >}}).
 Replicant uses this `username` user for the snapshot phase. The `username` user must possess the following permissions: 
 
 1. Read access to all the databases, schemas, and tables that the user wants to replicate.
