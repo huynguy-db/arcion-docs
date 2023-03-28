@@ -89,11 +89,11 @@ If you store your connection credentials in AWS Secrets Manager, you can tell Re
 Replicant supports consuming login credentials from a _credentials store_. Instead of specifying username and password [in plain form](#using-a-connection-configuration-file), you can keep them in a KeyStore and provide the KeyStore details in the connection configuration file like below:
 
 ```YAML
-credentials-store:
-    type: {PKCS12|JKS|JCEKS}
-    path: PATH_TO_KEYSTORE_FILE
-    key-prefix: PREFIX_OF_THE_KEYSTORE_ENTRY
-    password: KEYSTORE_PASSWORD
+credential-store:
+  type: {PKCS12|JKS|JCEKS}
+  path: PATH_TO_KEYSTORE_FILE
+  key-prefix: PREFIX_OF_THE_KEYSTORE_ENTRY
+  password: KEYSTORE_PASSWORD
 ```
 
 Replace the following:
