@@ -56,8 +56,8 @@ The CDC Extractor to use for real-time replication.
 
 To use Arcion CDC Agent, follow these steps:
 
-- Set `extractor` to `LOG`.
-- Follow the instructions in [Arcion CDC Agent Installation]({{< ref "docs/references/source-prerequisites/sqlserver#arcion-cdc-agent-installation" >}}).
+1. Set `extractor` to `LOG`.
+2. Follow the instructions in [Arcion CDC Agent Installation]({{< ref "docs/references/source-prerequisites/sqlserver#arcion-cdc-agent-installation" >}}).
 
 #### `is_azure`
 Optional parameter. If you're hosting SQL Server on Azure, you must set this parameter to `true`.
@@ -82,18 +82,33 @@ extractor: LOG
 max-connections: MAX_NUMBER_OF_CONNECTIONS
 ```
 
+#### Configuration user for Arcion CDC Agent
+Arcion CDC Agent requires the **sysadmin** role to configure datbase publications and subscriptions that the Agent uses for replication. Therefore, Arcion supports new parameters in the SQL Server connection configuration file from version 23.03.01.10. 
+
+```YAML
+config-username: 'sa'
+config-password: 'Rocket0128'
+config-auth-type: NATIVE
+```
+
+The three parameters in the preceeding sample describe a _configuration user_. Arcion CDC Agent uses this configuration user to set up replication. You can specify these parameters either [in plain text form](#using-a-connection-configuration-file) or [in a KeyStore](#use-keystore-for-credentials).
+
+If you specify `config-username`, Arcion CDC Agent uses this user to set up replication. If you don't specify `config-username`, Arcion CDC Agent uses the [main `username`](#username). 
+
+We recommend that you explicitly specify these three parameters if you're using version 23.03.01.10 and later.
+
 ### AWS Secrets Manager
 If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/references/secrets-manager). 
 
 ### Use KeyStore for credentials
-Replicant supports consuming login credentials from a _credentials store_. Instead of specifying username and password [in plain form](#using-a-connection-configuration-file), you can keep them in a KeyStore and provide the KeyStore details in the connection configuration file like below:
+Replicant supports consuming login credentials from a _credentials store_. Instead of specifying username and password [in plain form](#using-a-connection-configuration-file), you can keep credentials in a KeyStore and provide the KeyStore details in the connection configuration file:
 
 ```YAML
 credentials-store:
-    type: {PKCS12|JKS|JCEKS}
-    path: PATH_TO_KEYSTORE_FILE
-    key-prefix: PREFIX_OF_THE_KEYSTORE_ENTRY
-    password: KEYSTORE_PASSWORD
+  type: {PKCS12|JKS|JCEKS}
+  path: PATH_TO_KEYSTORE_FILE
+  key-prefix: PREFIX_OF_THE_KEYSTORE_ENTRY
+  password: KEYSTORE_PASSWORD
 ```
 
 Replace the following:
