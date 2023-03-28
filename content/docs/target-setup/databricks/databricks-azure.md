@@ -138,7 +138,7 @@ In this step, you need to provide the Databricks connection details to Arcion. T
     - *`USERNAME`*: the username that connects to your Databricks server
     - *`PASSWORD`*: the password associated with *`USERNAME`*
 
-    `max-connections` specifies the maximum number of connections Replicant can open in Databricks. Change the value of `max-connections` as you need.
+    Change the value of `max-connections` as you need. It specifies the maximum number of connections Replicant can open in Databricks. 
 
     {{< hint "info" >}}For [Databricks Unity Catalog](https://www.databricks.com/product/unity-catalog), set the connection `type` to `DATABRICKS_LAKEHOUSE`. For more information, see [Databricks Unity Catalog Support](#databricks-unity-catalog-support-beta).{{< /hint >}}
 
