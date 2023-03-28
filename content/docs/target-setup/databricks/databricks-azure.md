@@ -18,9 +18,11 @@ On this page, you'll find step-by-step instructions on how to set up your Azure 
 To create a storage account, see [Create a storage account to use with Azure Data Lake Storage Gen2](https://learn.microsoft.com/en-us/azure/storage/blobs/create-data-lake-storage-account). To create a container, see [Create a container](https://learn.microsoft.com/en-us/azure/storage/blobs/blob-containers-portal#create-a-container).
 
 ## I. Create a Databricks cluster
-If you want to connect to Databricks all-purpose cluster, follow these instructions:
+Arcion supports both Databricks all-purpose cluster and SQL Warehouse. The following sections describe how set up each type of cluster.
 
 ### Set up all-purpose cluster
+If you want to connect to Databricks all-purpose cluster, follow these instructions:
+
 1. Log in to your Databricks workspace.
 2. From the Databricks console, go to **Data Science & Engineering > Compute > Create Compute**.
 3. Enter a name for your cluster.
