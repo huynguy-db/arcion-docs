@@ -101,21 +101,134 @@ We recommend that you explicitly specify these three parameters if you're using 
 If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/references/secrets-manager). 
 
 ### Use KeyStore for credentials
-Replicant supports consuming login credentials from a _credentials store_. Instead of specifying username and password [in plain form](#using-a-connection-configuration-file), you can keep credentials in a KeyStore and provide the KeyStore details in the connection configuration file:
+Replicant supports consuming login credentials from a _credentials store_. Instead of specifying username and password [in plain text](#using-a-connection-configuration-file), you can keep credentials in a KeyStore and provide the KeyStore details in the connection configuration file:
 
 ```YAML
 credentials-store:
   type: {PKCS12|JKS|JCEKS}
   path: PATH_TO_KEYSTORE_FILE
-  key-prefix: PREFIX_OF_THE_KEYSTORE_ENTRY
+  key-prefix: "PREFIX_OF_THE_KEYSTORE_ENTRY"
   password: KEYSTORE_PASSWORD
 ```
 
 Replace the following:
 
 - *`PATH_TO_KEYSTORE_FILE`*: The path to your KeyStore file.
-- *`PREFIX_OF_THE_KEYSTORE_ENTRY`*: The prefix of your KeyStore entries. You can create entries in the credential store using a prefix that preceeds each credential alias. For example, you can create KeyStore entries with aliases `sqlserver_username` and `sqlserver_password`. You can then set `key-prefix` to `sqlserver_`.
-- *`KEYSTORE_PASSWORD`*: The KeyStore password. This parameter is optional. If you don’t want to specify the KeyStore password here, then you must use the UUID from your license file as the KeyStore password. Remember to keep your license file somewhere safe in order to keep the KeyStore password secure.
+- *`PREFIX_OF_THE_KEYSTORE_ENTRY`*: The prefix of your KeyStore entries. You can create entries in the credential store using a prefix that preceeds each credential alias. For example, you can create KeyStore entries with aliases `sqlserver_username` and `sqlserver_password`. Therefore, you need to set `key-prefix` to `sqlserver_`.
+- *`KEYSTORE_PASSWORD`*: Optional parameter for the KeyStore password. If you don’t want to specify the KeyStore password here, then you must use the UUID from your license file as the KeyStore password. Keep your license file somewhere safe to keep the KeyStore password secure.
+
+Note that [the following parameters]({{< ref "docs/references/source-prerequisites/sqlserver#connect-replicant-and-arcion-cdc-agent" >}}) must have entries in the KeyStore:
+
+<dl class="dl-indent">
+<dt>
+
+[Parameters for connection between Arcion CDC Agent and Replicant]({{< ref "docs/references/source-prerequisites/sqlserver#connect-replicant-and-arcion-cdc-agent" >}})
+</dt>
+<dd>
+
+- `sql-proxy-connection`
+- `agent-connection`
+- `sql-jobs-username`
+- `sql-jobs-password`
+</dd>
+
+<dt>
+
+[Parameters for configuration user]({{< ref "docs/source-setup/sqlserver/realtime-replication/arcion-cdc-agent#configuration-user-for-arcion-cdc-agent" >}})
+</dt>
+
+<dd>
+
+- `config-username`
+- `config-password`
+</dd>
+</dl>
+KeyStore entries for usernames and passwords of the preceeding parameters follow this structure:
+
+```
+<key-prefix> + “sql-proxy-connection-”
+<key-prefix> + “agent-connection-”
+<key-prefix> + “sql-jobs-”
+```
+
+For example, consider the following KeyStore configuration:
+
+```YAML
+credential-store:
+  type: PKCS12
+  path: /data/store/sqlserver.jks
+  key-prefix: "ss_"
+  password: test01 
+```
+
+For the preceeding configuration, you need to add KeyStore entries in the following manner:
+
+<dl class="dl-indent" >
+<dt>
+
+[Username](#username) and [password](#password) of SQL Server
+</dt>
+
+<dd>
+
+```sh
+echo "sa" | keytool -importpass -keystore /data/store/sqlserver.jks -storetype pkcs12 -storepass test01 -alias ss_username -keypass test01 -noprompt
+echo "Rocket0128" | keytool -importpass -keystore /data/store/sqlserver.jks -storetype pkcs12 -storepass test01 -alias ss_password -keypass test01 -noprompt
+```
+</dd>
+
+<dt>
+
+`sql-jobs-username` and `sql-jobs-password`
+</dt>
+
+<dd>
+
+```sh
+echo "TEST\administrator" | keytool -importpass -keystore /data/store/sqlserver.jks -storetype pkcs12 -storepass test01 -alias ss_sql-jobs-username -keypass test01 -noprompt
+echo "Rocket0128" | keytool -importpass -keystore /data/store/sqlserver.jks -storetype pkcs12 -storepass test01 -alias ss_sql-jobs-password -keypass test01 -noprompt
+```
+</dd>
+
+<dt>
+
+Username and password of `sql-proxy-connection`
+</dt>
+
+<dd>
+
+```sh
+echo "sa" | keytool -importpass -keystore /data/store/sqlserver.jks -storetype pkcs12 -storepass test01 -alias ss_sql-proxy-connection-username -keypass test01 -noprompt
+echo "Rocket0128" | keytool -importpass -keystore /data/store/sqlserver.jks -storetype pkcs12 -storepass test01 -alias ss_sql-proxy-connection-password -keypass test01 -noprompt
+```
+</dd>
+
+<dt>
+
+Username and password of `agent-connection` username and password
+</dt>
+
+<dd>
+
+```sh
+echo "alexwin10\alex" | keytool -importpass -keystore /data/store/sqlserver.jks -storetype pkcs12 -storepass test01 -alias ss_agent-connection-username -keypass test01 -noprompt
+echo "Rocket0128" | keytool -importpass -keystore /data/store/sqlserver.jks -storetype pkcs12 -storepass test01 -alias ss_agent-connection-password -keypass test01 -noprompt
+```
+</dd>
+
+<dt>
+
+Username and password of configuration user
+</dt>
+
+<dd>
+
+```sh
+echo "sa" | keytool -importpass -keystore /data/store/sqlserver.jks -storetype pkcs12 -storepass test01 -alias ss_config-username -keypass test01 -noprompt
+echo "Rocket0128" | keytool -importpass -keystore /data/store/sqlserver.jks -storetype pkcs12 -storepass test01 -alias ss_config-password -keypass test01 -noprompt
+```
+</dd>
+
 
 ## III. Create the heartbeat table 
 For [`full` mode replication]({{< ref "docs/running-replicant#replicant-full-mode" >}}), you need to create a heartbeat table. For example:
