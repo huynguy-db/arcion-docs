@@ -38,6 +38,8 @@ To establish connection between your Databricks instance and Arcion, you need to
     - JDBC URL
 
 ### Set up SQL warehouse
+If you want to connect SQL warehouse (SQL Compute), follow these instructions:
+
 1. Log in to your Databricks workspace.
 2. From the Databricks console, go to **SQL >  Review SQL warehouses > Create SQL Warehouse**.
 3. Enter a name for your SQL warehouse.
@@ -66,13 +68,13 @@ To grant Databricks access to ADLS, follow one of the these methods:
 
 The preceeding resources use Python to grant access. Instead of Python, you can use [Spark configuration properties](https://spark.apache.org/docs/latest/configuration.html) to access data in Azure storage account. 
 
-### Configure Spark job for cluster
+### Spark configuration for cluster
 1. On the cluster configuration page, click the **Advanced Options** toggle.
 2. Click the **Spark** tab.
 3. In the **Spark Config** textbox, enter your configuration properties.
 
 
-### Configure Spark job for SQL warehouse
+### Spark configuration for SQL warehouse
 1. Click your username in the top bar of Databricks workspace and select **Admin Console** from the dropdown.
 2. Click the **SQL Warehouse Settings** tab.
 3. In the **Data Access Configuration** textbox, enter your configuration properties.
@@ -146,14 +148,13 @@ In this step, you need to provide the Databricks connection details to Arcion. T
     You must use an external stage to hold the data files and load that data on the target database from there. The `stage` section contains the details Replicant needs to connect to and use a specific stage. 
 
       - `type`*[v21.06.14.1]*: The stage type. For Azure Legacy Databricks, set `type` to `AZURE`.
-      {{< hint "info" >}}For [Databricks Unity Catalog](https://www.databricks.com/product/unity-catalog), set `type` to `DATABRICKS_LAKEHOUSE`. For more information, see [Databricks Unity Catalog Support](#databricks-unity-catalog-support-beta).{{< /hint >}}
       - `root-dir`: The directory under ADLS container. Replicant uses this directory to stage bulk-load files.
       - `conn-url`*[v21.06.14.1]*: The name of the ADLS container.        
       - `account-name`*[v21.06.14.1]*: The name of the ADLS storage account. `account-name` corresponds to the same storage account in the [Configure ADLS container as stage](#iii-configure-adls-container-as-stage) section.
       - `secret-key`*[v21.06.14.1]*: If you want to authenticate ADLS using a storage account key, specify your storage account key here.
       - `sas-token`: If you use [shared access signature (SAS) token](https://learn.microsoft.com/en-us/azure/storage/common/storage-sas-overview) to authenticate ADLS, specify the SAS token here.
       
-      The following shows two sample stage configurations for Azure Databricks using storage account key and SAS token.
+      The following illustrates two sample stage configurations for Azure Databricks. One sample specifies storage account key and the other sample specifies SAS token for authentication.
 
       {{< tabs "sample-stage-config-for-azure-databricks" >}}
       {{< tab "With storage account key" >}}
@@ -164,7 +165,7 @@ In this step, you need to provide the Databricks connection details to Arcion. T
     root-dir: "replicate-stage/databricks-stage"
     conn-url: "replicant-container"
     account-name: "replicant-storageaccount"
-    secret-key: "YOUR_SECRET_KEY"
+    secret-key: "YOUR_STORAGE_ACCOUNT_KEY"
   ```
       {{< /tab >}}
       {{< tab "With SAS token" >}}
