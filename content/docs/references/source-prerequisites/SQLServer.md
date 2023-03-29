@@ -94,7 +94,7 @@ To configure Replicant to connect to Arcion CDC Agent, set the following paramet
 ```YAML
 sql-jobs-username: 'WINDOWS_LOGIN_USERNAME'
 sql-jobs-password: 'WINDOWS_LOGIN_PASSWORD'
-log-path: /mnt/c/arcion/data/replicate/ # used to cache DML received from Arcion CDC Agent
+log-path: /data/transactions # used to cache DML received from Arcion CDC Agent
 sql-proxy-connection:
   host: HOSTNAME
   port: PORT_NUMBER
@@ -118,7 +118,7 @@ agent-connection:
 
 - `sql-jobs-username`, `sql-jobs-password`: These parameters specify the Windows login used on the Target system to run the replication jobs.
 
-- `log-path`: Specifies where Replicant will store the data it received from Arcion CDC Agent. If Replicant is running on the same system as Arcion CDC Agent, this path can point to the staging directory you specified during Arcion CDC Agent installation. In the sample config above, we've shown a path from within WSL using the default staging location.
+- `log-path`: Specifies where Replicant will store the data it received from Arcion CDC Agent. If Replicant is running on the same system as Arcion CDC Agent, this path can point to the staging directory you specified during Arcion CDC Agent installation.
 
 - `sql-proxy-connection`: Specifies the login used to connect to the SQL Server Express instance that works as the "ghost" target for the actual SQL Server replication. No data is inserted into this database.
   - `host`: The hostname in the format *`HOST\INSTANCE`*—for example, `mwrightwin10\SQLEXPRESS`. For Azure Managed SQL, this must be an IP address or DNS name that is accessible from Azure. By default, SQL Server Express installs a named instance called `SQLEXPRESS`. However, if a default instance is used, do not specify an instance.
