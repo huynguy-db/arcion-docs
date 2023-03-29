@@ -168,4 +168,9 @@ realtime:
 For more information about the configuration parameters for realtime mode, see [Realtime Mode]({{< ref "/docs/references/applier-reference#realtime-mode" >}}).
 
 #### Replay strategies
-Replay strategies are how Arcion implements CDC changes and applies them in realtime to the target. For more information about replay strategies for BigQuery target, see [Replay strategies for BigQuery and Databricks targets]({{< relref "replay-strategies" >}}).
+Arcion uses replay strategies to implement CDC changes and apply the changes in realtime to the target. You can specify a replay strategy by setting the `replay-strategy` parameter as you can see in the preceeding samples. Arcion supports the following replay strategies:
+
+- `NONE`
+- `INSERT_DELETE`
+- `INSERT_MERGE`
+- `IN_MEMORY_MERGE`
