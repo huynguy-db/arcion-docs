@@ -53,16 +53,6 @@ To install Arcion CDC Agent, run the installer called `remote-replicant-mssql-cd
 
 5. The next screen is **Confirm Installation**. If you're satisfied with the settings you chose in the previous steps, click **Next** to start the installation.
 
-<!-- ## Configuration
-
-{{< hint "info" >}}
-If WSL is installed in a Virtual Machine, Intel VT-x/EPT or AMD-V/RVI must be enabled for the guest and Hyper-V must be disabled on the host system.
-{{< /hint >}}
-
-{{< hint "info" >}}
-If you need to install Replicant, follow the instructions in [Arcion Replicant Quickstart](/docs/quickstart/).
-{{< /hint >}} -->
-
 ## Securely connect to the CDC Agent 
 Arcion CDC Agent installer generates a certificate for TLS/SSL communication. This certificate encrypts the connections to the CDC Agent. By default, Replicant trusts all CDC Agent connections. To ensure that Replicant connects to a trusted Agent, you must take the following measures:
 
@@ -75,16 +65,11 @@ The following sample command shows how to import the certificate.
 sudo keytool -import -alias arcion -keystore $JAVA_HOME/jre/lib/security/cacerts -file replicant.cert
 ```
 
-The preceeding command prompts you for the KeyStore password. The default password is `changeit`.
+The preceeding command prompts you for the KeyStore password. If you don't change the KeyStore password, use the default password `changeit`.
 
-{{< hint "info" >}} The location of the `replicant.cert` file is `INSTALLATION_PATH\Arcion\Replicant for Microsoft SQL Server\certs\replicant.cert`, where `INSTALLATION_PATH` is where you installed Arcion CDC Agent. If you installed Arcion CDC Agent in the default location, the certificate will be in `c:\Program Files\Arcion\Replicant for Microsoft SQL Server\certs\replicant.cert`.
-{{< /hint >}}
+The location of the `replicant.cert` file is `INSTALLATION_PATH\Arcion\Replicant for Microsoft SQL Server\certs\replicant.cert`, where `INSTALLATION_PATH` indicates where you install Arcion CDC Agent. If you install Arcion CDC Agent in the default location, the certificate lives in `c:\Program Files\Arcion\Replicant for Microsoft SQL Server\certs\replicant.cert`.
 
-{{< hint "info" >}}
-If the Replicant process is located on a different server than the Arcion CDC Agent, then you need to copy the `replicant.cert` file to the Replicant server.
-{{< /hint >}}
-
-{{< hint "info" >}}A new certificate is generated for each Agent installation. So you need to import the certificate for each Arcion CDC Agent Replicant will be connecting to.{{< /hint >}}
+Arcion CDC Agent installer generates a new certificate for each Agent installation. So you need to import the certificate for each Arcion CDC Agent Replicant connects to.
 
 ## Connect Replicant and Arcion CDC Agent
 There's a sample SQL Server connection configuration file `sqlserver.yaml` in the `conf\conn` directory inside the Replicant installation location. 
