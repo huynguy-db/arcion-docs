@@ -26,14 +26,13 @@ The Arcion CDC Agent works by setting up push transactional replication on the s
 
 ## Installation
 
-Before proceeding with the installation, please make sure that the following conditions are met:
+Before proceeding with the installation, pay attention to the following:
 
-  - Ensure that TCP ports 1433 and 6061 are open for Inbound traffic.
-  - The SQL Express instance is configured to allow the TCP protocol forces encryption.
-  - By default, SQL Server Express installs to a named instance. To connect to the instance, the SQL Server Browser service must be enabled so that it starts automatically and continues to run.
+  - Ensure that TCP ports 1433 and 6061 are open for inbound traffic.
+  - To force encryption, configure the SQL Express instance to allow TCP protocol.
+  - SQL Server Express installs to a named instance by default. To connect to the instance, you must enable the SQL Server Browser service. This enables the service to start and operate automatically.
   - Identify a Windows login with the **sysadmin** role for the local SQL Express instance.
-  - The installation will elevate to the Administrator level, so either an Administrator must run it or the Administrator login must be available.
-  - If you're installing into a Virtual Machine, make sure that nested VMs are supported to co-install Replicant. Otherwise, use a separate system for Replicant.
+  - The installation elevates to the Administrator level. Therefore, either an Administrator must run it or the Administrator login must be available.
   - You must install the SQL Server Express instance as either one of the following instance types:
     - Install as the default instance on the default port 1433.
     - Install as a named instance with the SQL Browser server running.
