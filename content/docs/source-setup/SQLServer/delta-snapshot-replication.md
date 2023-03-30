@@ -11,7 +11,7 @@ Delta-snapshot is a recurring snapshot replication. In delta-snapshot, Replicant
 
 You can enable delta-snapshot replication by running Replicant with the `delta-snapshot` option. For more information, see [Replicant delta-snapshot mode]({{< ref "docs/running-replicant#replicant-delta-snapshot-mode" >}}).
 
-Follow the steps in the following sections to set up SQL Server for `delta-snapshot` mode replication. In these steps, `$REPLICANT_HOME` refers to [your Arcion Self-hosted CLI download directory]({{< ref "docs/quickstart#ii-download-replicant-and-create-a-home-repository" >}}).
+Follow the steps in the following sections to set up SQL Server for `delta-snapshot` mode replication. In these steps, `$REPLICANT_HOME` refers to [your Arcion Self-hosted CLI download directory]({{< ref "docs/quickstart#ii-get-arcion-self-hosted" >}}).
 
 ## I. Required Permissions
 

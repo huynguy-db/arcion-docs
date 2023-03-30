@@ -19,11 +19,11 @@ For [full mode replication]({{< relref "../full-mode-replication" >}}) with Arci
 To set up Arcion CDC Agent, follow the instructions in [Arcion CDC Agent]({{< ref "docs/references/source-prerequisites/sqlserver#arcion-cdc-agent" >}}).
 
 ## II. Set up connection configuration
-Specify the connection details of your SQL Server instance to Replicant in one of the following two ways:
+Specify the connection details of your SQL Server instance to Replicant in one of the following ways:
 
 - [A connection configuration file](#using-a-connection-configuration-file)
 - [AWS Secrets Manager](#aws-secrets-manager)
-- [KeyStore](#using-keystore-for-credentials)
+- [KeyStore](#use-keystore-for-credentials)
 
 ### Using a connection configuration file.
 The connection configuration fild holds the connection details and login credentials.
