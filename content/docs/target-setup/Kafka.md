@@ -9,54 +9,154 @@ bookHidden: false
 
 The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
 
-## I. Set up Connection Configuration
+## I. Set up connection configuration
 
-1. From `$REPLICANT_HOME`, navigate to the sample Kafka connection configuration file:
-    ```BASH
-    vi conf/conn/kafka.yaml
-    ```
-2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/references/secrets-manager). 
-    
-    Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
-    ```YAML
-    type: KAFKA
+Specify your Kafka connection details to Replicant with a connection configuration file. You can find a sample connection configuration file `kafka.yaml` in the `$REPLICANT_HOME/conf/conn` directory.
 
-    username: 'replicant' #Replace replicant with the username of your user that connects to your Kafka server
-    password: 'Replicant#123' #Replace Replicant#123 with your user's password
+The following sections discuss how to connect to Kafka. In general, Arcion supports the following four methods of connection.
 
-    #ssl:
-    #  enable: true
-    #  trust-store:
-    #      path: "<path>/kafka.server.truststore.jks"
-    #      password: "<password>"
+### Connect with username and password without any data encryption
+This method allows you to connect with username and password without any data encryption. To use this method, specify the connection details in the following manner:
+<!-- To connect with username and password while no data encryption, specify your configuration in the following manner: -->
 
-    #Multiple Kafka brokers can be specified using the format below:
-    brokers:
-       broker1: #Replace broker1 with your broker name
-           host: localhost #Replace localhost with your broker's host
-           port: 19092 #Replace 19092 with your broker's port
-       broker2: #Replace broker2 with your broker name
-           host: localhost #Replace localhost with your broker's host
-           port: 29092 #Replace 29092 with your broker's port
+```YAML
+type: KAFKA
 
-    _timeout-sec: 30
-    max-retries: #Number of times any operation on the system will be re-attempted on failures.
-    retry-wait-duration-ms : #Duration in milliseconds replicant should wait before performing then next retry of a failed operation
-    ```
-      - The `username` and `password` correspond to plain SASL mechanism for authentication. For more information, see [Authentication with SASL using JAAS](https://docs.confluent.io/platform/current/kafka/authentication_sasl/index.html).
-      - For help with creating SSL keys and certificates to connect to Kafka over SSL, see [Creating SSL Keys and Certificates](https://docs.confluent.io/platform/current/security/security_tutorial.html#generating-keys-certs).
-      - The `_timeout-sec` configuration sets the following Kafka AdminClient timeout parameters:
-        - [`request.timeout.ms`](https://docs.confluent.io/platform/current/installation/configuration/admin-configs.html#adminclientconfigs_request.timeout.ms)
-        - [`default.api.timeout.ms`](https://docs.confluent.io/platform/current/installation/configuration/admin-configs.html#adminclientconfigs_default.api.timeout.ms)
+username: USERNAME
+password: PASSWORD
 
-        *Default: `30` seconds*
+auth-type: SASL
+
+brokers:
+  broker1:
+    host: HOSTNAME
+    port: PORT_NUMBER
+  broker2:
+    host: HOSTNAME
+    port: PORT_NUMBER
+  broker3:
+    host: HOSTNAME
+    port: PORT_NUMBER
+```
+
+Replace the following:
+- *`USERNAME`*: the username to connect to the Kafka server
+- *`PASSWORD`*: the password associated with *`USERNAME`*
+- *`HOSTNAME`*: the hostname fo Kafka broker
+- *`PORT_NUMBER`*: the port number of Kafka broker
+
+To use this method, you must enable username and password-based authentication on Kafka broker. This method of authentication corresponds to [Kafka’s `SASL_PLAINTEXT`  authentication mechanism](https://docs.confluent.io/platform/current/kafka/authentication_sasl/authentication_sasl_plain.html#configuring-plain).
+
+### Connect with username and password with SSL for data encryption
+This method allows you to connect with username and password while using SSL for data encryption. To use this method, specify the connection details in the following manner:
+<!-- To connect with username and password using SSL for data encryption, specify your configuration in the following manner: -->
+
+```YAML
+type: KAFKA
+
+username: USERNAME
+password: PASSWORD
+
+auth-type: SASL_SSL
+ssl:
+  enable: true
+  trust-store:
+    path: "PATH_TO_TRUSTSTORE"
+    password: "TRUSTSTORE_PASSWORD"
+
+brokers:
+  broker1:
+    host: HOSTNAME
+    port: PORT_NUMBER
+  broker2:
+    host: HOSTNAME
+    port: PORT_NUMBER
+  broker3:
+    host: HOSTNAME
+    port: PORT_NUMBER
+```
+
+Replace the following:
+- *`USERNAME`*: the username to connect to the Kafka server
+- *`PASSWORD`*: the password associated with *`USERNAME`*
+- *`HOSTNAME`*: the hostname of Kafka broker
+- *`PORT_NUMBER`*: the port number of Kafka broker
+- *`PATH_TO_TRUSTSTORE`*: path to the TrustStore with JKS type
+- *`TRUSTSTORE_PASSWORD`*: the TrustStore password
+
+To use this method, you must enable username and password-based authentication on Kafka broker. For more information, see [Security Tutorial](https://docs.confluent.io/platform/current/security/security_tutorial.html#security-tutorial).
+
+### Connect without username and password with no data encryption
+This method allows you to connect without username and password with no data encryption. To use this method, specify the connection details in the following manner:
+
+```YAML
+type: KAFKA
+
+auth-type: NONE
+
+brokers:
+  broker1:
+    host: HOSTNAME
+    port: PORT_NUMBER
+  broker2:
+    host: HOSTNAME
+    port: PORT_NUMBER
+  broker3:
+    host: HOSTNAME
+    port: PORT_NUMBER
+```
+
+Replace the following:
+- *`HOSTNAME`*: the hostname of broker server
+- *`PORT_NUMBER`*: the port number of broker server
+
+### Use SSL for both connection and data encryption
+This method provides both client authentication and data encryption using SSL. To use this method, specify your connection details in the following manner:
+
+```YAML
+type: KAFKA
+
+auth-type: SSL
+ssl:
+  enable: true
+  trust-store:
+    path: "PATH_TO_TRUSTSTORE"
+    password: "TRUSTSTORE_PASSWORD"
+  key-store:
+    path: "PATH_TO_KEYSTORE"
+    password: "KEYSTORE_PASSWORD"
+      
+brokers:
+  broker1:
+    host: HOSTNAME
+    port: PORT_NUMBER
+  broker2:
+    host: HOSTNAME
+    port: PORT_NUMBER
+  broker3:
+    host: HOSTNAME
+    port: PORT_NUMBER
+```
+
+Replace the following:
+- *`USERNAME`*: the username to connect to the Kafka server
+- *`PASSWORD`*: the password associated with *`USERNAME`*
+- *`HOSTNAME`*: the hostname of Kafka broker
+- *`PORT_NUMBER`*: the port number of Kafka broker
+- *`PATH_TO_TRUSTSTORE`*: path to the TrustStore with JKS type
+- *`TRUSTSTORE_PASSWORD`*: the TrustStore password
+- *`PATH_TO_KEYSTORE`*: path to the KeyStore with JKS type
+- *`KEYSTORE_PASSWORD`*: the KeyStore password
+
+To use this method, you must enable SSL-based client authentication and data encryption on Kafka broker. For more information, see [Encrypt and Authenticate with TLS
+](https://docs.confluent.io/platform/current/kafka/authentication_ssl.html#encrypt-and-authenticate-with-tls).
 
 ## II. Configure mapper file (optional)
 If you want to define data mapping from your source to Kafka, specify the mapping rules in the mapper file. For more information on how to define the mapping rules and run Replicant CLI with the mapper file, see [Mapper Configuration]({{< ref "/docs/references/mapper-reference" >}}).
 
 When mapping source object names to Kafka topics, you can choose between two delimiters for topic names. For more information, see [Delimiter in Kafka topic and Redis stream names]({{< ref "/docs/references/mapper-reference#delimiter-in-kafka-topic-and-redis-stream-names" >}}).
 
-## III. Set up Applier Configuration    
+## III. Set up Applier configuration    
 
 1. From `$REPLICANT_HOME`, naviagte to the sample Kafka Applier configuration file:
    ```BASH
