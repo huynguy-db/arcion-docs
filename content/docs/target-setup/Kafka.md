@@ -13,7 +13,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
 Specify your Kafka connection details to Replicant with a connection configuration file. You can find a sample connection configuration file `kafka.yaml` in the `$REPLICANT_HOME/conf/conn` directory.
 
-The following sections discuss how to connect to Kafka. In general, Arcion supports the following four methods of connection.
+The following sections discuss how to connect to Kafka. In general, Arcion supports the four methods of connection. Note that these methods depend on the corresponding settings in Kafka.
 
 ### Connect with username and password without any data encryption
 This method allows you to connect with username and password without any data encryption. To use this method, specify the connection details in the following manner:
