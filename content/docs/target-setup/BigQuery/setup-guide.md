@@ -51,6 +51,24 @@ max-retries: 10
 retry-wait-duration-ms: 1000
 ```
 
+Arcion supports both HTTP and HTTPS for BigQuery connection. 
+{{< tabs "using-http-https-in-bigquery-target-connection" >}}
+{{< tab "Use HTTP" >}}
+To use HTTP, follow these steps:
+
+- Set `http` as the protocol in the `host` URL. 
+- Set `port` to `80`.
+{{< /tab >}}
+
+{{< tab "Use HTTPS" >}}
+To use HTTPS, follow these steps:
+
+- Set `https` as the protocol in the `host` URL. 
+- Set `port` to `443`.
+
+{{< /tab >}}
+{{< /tabs >}}
+
 ### Configure stage
 Arcion supports CSV and [Parquet](http://parquet.apache.org/) as intermediatary formats to send data to the BigQuery server. To specify the stage format, use the `stage` field in the connection configuration file:
 
