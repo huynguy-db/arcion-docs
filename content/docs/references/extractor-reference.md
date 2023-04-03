@@ -124,6 +124,13 @@ This parameter is only supported for MongoDB as a source. The configuration is u
 ###  `fetch-schemas-from-system-tables` *[v20.10.07.05]*
 Option to use system tables to fetch schema information. By default, the value is `true`, and the option is enabled. If disabled, schemas need to be provided using `--src-schemas`.
 
+### `allow-table-extraction-overlap`
+`true` or `false`.
+
+Controls whether or not multiple tables can overlap during extraction. If you set this parameter to `false`, Extractor extracts only one table at a time.
+
+_Default: `true`._
+
 ### `per-table-config`
 You can use this section to override certain configurations in specific tables if necessary.
 
