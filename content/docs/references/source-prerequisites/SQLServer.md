@@ -11,11 +11,14 @@ If you set [the `extractor` parameter to `LOG` for your Source SQL Server](/docs
 
 ## Overview
 
-In the following diagram, the Source SQL Server instance represents the location of the database or databases that would undergo replication. The Target database can be any destination that Replicant supports.
+In the following diagram, the source SQL Server instance represents the location of the database or databases that undergoes replication. The target database can be any destination that Replicant supports.
 
 ![Diagram showing how Arcion CDC Agent works for real-time replication into SQL Server](/images/arcion_cdc_agent_for_sql_server.svg)
 
-The Arcion CDC Agent works by setting up push transactional replication on the source database to the local SQL Server Express instance. The local Express instance works as a _replication proxy_. All replicated data gets intercepted before hitting the SQL Server subscriber and handed to the Replicant process; Replicant then prepares the data for the target and applies it.
+The Arcion CDC Agent works by setting up push transactional replication on the source database to the local SQL Server Express instance. The local Express instance works as a _replication proxy_ in the following manner: 
+1. Arcion CDC Agent intercepts all replicated data before the data hits the SQL Server subscriber.
+2. Arcion CDC Agent then hands over the data to the Replicant process.
+3. Replicant prepares the data for the target and applies the data.
 
 ## Requirements
 
@@ -28,7 +31,7 @@ The Arcion CDC Agent works by setting up push transactional replication on the s
 
 Before proceeding with the installation, pay attention to the following:
 
-  - Ensure that TCP ports 1433 and 6061 are open for inbound traffic.
+  - Ensure that TCP ports 1433 and 6061 can accept inbound traffic.
   - To force encryption, configure the SQL Express instance to allow TCP protocol.
   - SQL Server Express installs to a named instance by default. To connect to the instance, you must enable the SQL Server Browser service. This enables the service to start and operate automatically.
   - Identify a Windows login with the **sysadmin** role for the local SQL Express instance.
@@ -37,21 +40,21 @@ Before proceeding with the installation, pay attention to the following:
     - Install as the default instance on the default port 1433.
     - Install as a named instance with the SQL Browser server running.
 
-To install Arcion CDC Agent, run the installer called `remote-replicant-mssql-cdc-agent-<version>.msi`. This will start the installation wizard. Follow the steps below to complete the installation:
+To install Arcion CDC Agent, run the installer `remote-replicant-mssql-cdc-agent-<version>.msi`. This starts the installation wizard. Follow these steps to complete the installation:
 
 1. After the first screen of the installation wizard appears, click **Next**.
 
-2. In the next **Select Installation Folder** screen, you need to choose the installation location. After making your choice, click **Next**.
+2. In the next **Select Installation Folder** screen, choose the installation location. After making your choice, click **Next**.
 
-3. The **Specify Replicant Service User** screen will appear. This is where you specify the Windows login that will run the Arcion CDC Agent service. This login must have the **sysadmin** role to access the local SQL Server Express instance. 
+3. The **Specify Replicant Service User** screen appears. Here you must specify the Windows login that runs the Arcion CDC Agent service. This login must possess the **sysadmin** role to access the local SQL Server Express instance. 
 
     After filling out the **Service User** and **Password** fields, click **Next**.
 
-4. The next screen is for specifying the staging directory. A staging directory is where Arcion CDC Agent temporarily writes the replicated data. For a production system, it is recommended that there is at least 100GB of free disk space for this temporary storage.
+4. In the next screen, specify the staging directory. Arcion CDC Agent temporarily writes the replicated data to the staging directory. For a production system, we recommend at least 100GB of free disk space for this temporary storage.
 
     After filling out the **Staging Directory** field, click on **Next**.
 
-5. The next screen is **Confirm Installation**. If you're satisfied with the settings you chose in the previous steps, click **Next** to start the installation.
+5. The **Confirm Installation** screen appears. If the settings in the preceeding steps suit your requirements, click **Next** to start the installation.
 
 ## Securely connect to the CDC Agent 
 Arcion CDC Agent installer generates a certificate for TLS/SSL communication. This certificate encrypts the connections to the CDC Agent. By default, Replicant trusts all CDC Agent connections. To ensure that Replicant connects to a trusted Agent, you must take the following measures:
@@ -67,65 +70,156 @@ sudo keytool -import -alias arcion -keystore $JAVA_HOME/jre/lib/security/cacerts
 
 The preceeding command prompts you for the KeyStore password. If you don't change the KeyStore password, use the default password `changeit`.
 
-The location of the `replicant.cert` file is `INSTALLATION_PATH\Arcion\Replicant for Microsoft SQL Server\certs\replicant.cert`, where `INSTALLATION_PATH` indicates where you install Arcion CDC Agent. If you install Arcion CDC Agent in the default location, the certificate lives in `c:\Program Files\Arcion\Replicant for Microsoft SQL Server\certs\replicant.cert`.
+You can find the `replicant.cert` file in the `INSTALLATION_PATH\Arcion\Replicant for Microsoft SQL Server\certs\` directory. `INSTALLATION_PATH` indicates where you install Arcion CDC Agent. If you install Arcion CDC Agent in the default location, the certificate occupies the `c:\Program Files\Arcion\Replicant for Microsoft SQL Server\certs\` directory.
 
 Arcion CDC Agent installer generates a new certificate for each Agent installation. So you need to import the certificate for each Arcion CDC Agent Replicant connects to.
 
 ## Connect Replicant and Arcion CDC Agent
-There's a sample SQL Server connection configuration file `sqlserver.yaml` in the `conf\conn` directory inside the Replicant installation location. 
+You can find a sample SQL Server connection configuration file `sqlserver.yaml` in the `conf\conn` directory inside the Replicant installation location. 
 
-To configure Replicant to connect to Arcion CDC Agent, set the following parameters in that configuration file:
+To configure Replicant to connect to Arcion CDC Agent, set the following parameters in the connection configuration file.
+
+### `sql-jobs-username` and `sql-jobs-password`
+These parameters specify the Windows login on the target system to run the replication jobs.
+
+### `log-path`
+Specifies where Replicant stores the data it receives from Arcion CDC Agent. If Replicant runs on the same system as Arcion CDC Agent, `log-path` points to the staging directory. Notice that you specify this staging directory during Arcion CDC Agent installation.
+
+### `sql-proxy-connection`
+Specifies the login to connect to the SQL Server Express instance. The Express instance works as a _proxy_ target for the actual SQL Server replication. Arcion inserts no data into the proxy database. The following parameters specify the proxy connection details:
+<dl class="dl-indent">
+<dt>
+
+`host` </dt> 
+<dd>
+
+The hostname of the Express instance in the format *`HOSTNAME\INSTANCE`*—for example, `alex10\SQLEXPRESS`. 
+
+If your source is an Azure-managed SQL Server instance, you must specify `host` in any one of the following manner:
+
+- An IP address
+- A fully qualified domain name (FQDN)
+
+Specify the `host` in the format *`{FQDN|IP_ADDRESS}\INSTANCE`*. 
+
+By default, SQL Server Express installs a named instance `SQLEXPRESS`. If you choose this default instance, you don't need to include the *`INSTANCE`* part in `host`.
+</dd>
+<dt>
+
+`port`</dt> 
+<dd>
+
+The port number. 
+
+If you don't use SQL Server 2019 or later, set the port to `1433`</dd>
+
+<dt> 
+
+`username`</dt>
+<dd>
+
+The username credential to log into the SQL Server Express instance.</dd>
+
+<dt>
+
+`password`</dt>
+
+<dd>
+
+The password associated with the `username` to log into the SQL Server Express instance.</dd>
+
+<dt>
+
+`auth-type`</dt>
+
+<dd>The authentication protocol.</dd>
+</dl>
+
+### `azure-file-storage-path` and `azure-file-storage-key`
+If the source database is an Azure-managed SQL Server instance, you must specify a storage account must be specified with these two parameters. This storage account acts as an intermediate storage area for the replicated data.
+
+### `sql-snapshot-folder`
+Specifies where on the source SQL Server to store the initial schema information. Do not specify this option for an Azure-managed SQL Server instance. 
+
+`sql-snapshot-folder` contains insignificant and temporary data when the replication first starts. This folder can be either a physical or a UNC path that the source SQL Server instance can access.
+
+### `agent-connection`
+Specifies the connection details for Arcion CDC Agent. The following parameters specify the Agent connection details:
+<dl class="dl-indent">
+<dt>
+
+`host` </dt> 
+<dd>
+
+The hostname of the machine where you install Arcion CDC Agent.
+</dd>
+
+<dt> 
+
+`username`</dt>
+<dd>
+
+Windows login for Arcion CDC Agent—for example, `mwrightwin10\administrator`. This login must have access to the staging directory.</dd>
+
+<dt>
+
+`password`</dt>
+
+<dd>
+
+The password associated with `username`.</dd>
+<dt>
+
+`port`</dt> 
+<dd>
+
+The port number. 
+
+_Default: `6061`._
+</dd>
+
+<dt>
+
+`mode`</dt>
+
+<dd>
+
+The connection mode. 
+
+Set this parameter to any one of the following values:
+
+  - **`CONFIG`**. Use this mode if Replicant runs on the same system.
+  - **`FILES`** (Default). Use this mode if Replicant runs on a separate system.
+
+</dd>
+</dl>
+
+The following illustrates a sample configuration:
 
 ```YAML
-sql-jobs-username: 'WINDOWS_LOGIN_USERNAME'
-sql-jobs-password: 'WINDOWS_LOGIN_PASSWORD'
+sql-jobs-username: 'alex10\administrator'
+sql-jobs-password: 'alex1234'
+
 log-path: /data/transactions # used to cache DML received from Arcion CDC Agent
 sql-proxy-connection:
-  host: HOSTNAME
-  port: PORT_NUMBER
-  username: 'USERNAME'
-  password: 'PASSWORD'
+  host: alex10
+  port: 1433
+  username: 'alex10\alex'
+  password: 'alex1234'
   auth-type: NTLM
 
-# Required for Azure Managed SQL
 azure-file-storage-path: \\arcionsqldev.file.core.windows.net\replication # be sure to use backslashes in the path
 azure-file-storage-key: DefaultEndpointsProtocol=https;AccountName=arcionsqldev;AccountKey=1GJlZ6fdfB/YT5SnPkLyKFo/5DhaqgRhiW7QVleE38FypEyIEohO9PCRbCbUA17Peavt0mqnnK12+AStjexQ4g==;EndpointSuffix=core.windows.net
 sql-snapshot-folder: c:\transactions
 
 # Details for connecting to Agent
 agent-connection:
-  host: HOSTNAME
-  username: 'USERNAME'
-  password: 'PASSWORD'
-  port: PORT_NUMBER
-  mode: {CONFIG|FILES}
+  host: alex10
+  username: 'alex10\administrator'
+  password: 'alex1234'
+  port: 6061
+  mode: CONFIG
 ```
-
-- `sql-jobs-username`, `sql-jobs-password`: These parameters specify the Windows login used on the Target system to run the replication jobs.
-
-- `log-path`: Specifies where Replicant will store the data it received from Arcion CDC Agent. If Replicant is running on the same system as Arcion CDC Agent, this path can point to the staging directory you specified during Arcion CDC Agent installation.
-
-- `sql-proxy-connection`: Specifies the login used to connect to the SQL Server Express instance that works as the "ghost" target for the actual SQL Server replication. No data is inserted into this database.
-  - `host`: The hostname in the format *`HOST\INSTANCE`*—for example, `mwrightwin10\SQLEXPRESS`. For Azure Managed SQL, this must be an IP address or DNS name that is accessible from Azure. By default, SQL Server Express installs a named instance called `SQLEXPRESS`. However, if a default instance is used, do not specify an instance.
-  - `port`: The port number.
-  - `username`: The username credential to log into the SQL Server Express instance.
-  - `password`: The password associated with the `username` to log into the SQL Server Express instance.
-  - `auth-type`: The authentication protocol used.
-
-  {{< hint "info" >}} If the source database is an Azure Managed SQL instance, the host specified for the proxy must be accessible from the Azure Managed instance. {{< /hint >}}
-
-- `azure-file-storage-path`, `azure-file-storage-key`: If the source database is an Azure Managed SQL instance, a storage account must be specified with these two parameters. This storage account is an intermediate storage area for the replicated data. 
-
-- `sql-snapshot-folder`: Specifies where on the Source SQL Server to store the initial schema information. Do not specify this option for an SQL Azure managed instance. The data stored at this location is insignificant and temporary when the replication is first started. This folder can be either a physical or UNC path accessible from the Source SQL Server instance.
-
-- `agent-connection`: Specifies the connection details for Arcion CDC Agent. 
-  - `host`: The hostname of the machine where Arcion CDC Agent is installed.
-  - `username`: Windows login for Arcion CDC Agent. This login must have access to the staging directory. Replace *`USERNAME`* with the appropriate username—for example, `mwrightwin10\administrator`.
-  - `password`: The password associated with `username`.
-  - `port`: The port number. Default port number is `6061`.
-  - `mode`: The connection mode. There are two connection modes available. Set this parameter to only one of the two following modes: 
-    - **`CONFIG`**: Use this mode if Replicant is running on the same system.
-    - **`FILES`**: Use this mode if Replicant is running on a separate system. This is the default mode.
 
 # SQL Server user permissions
 In [full]({{< ref "docs/source-setup/sqlserver/full-mode-replication" >}}) and [real-time]({{< ref "docs/source-setup/sqlserver/realtime-replication" >}}) replication, Arcion CDC Agent uses the [`config-username` user]({{< ref "docs/source-setup/sqlserver/realtime-replication/arcion-cdc-agent#configuration-user-for-arcion-cdc-agent" >}}) to initialize replication. The `config-username` user must possess the **sysadmin** role.
