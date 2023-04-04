@@ -83,24 +83,28 @@ To configure Replicant to connect to Arcion CDC Agent, set the following paramet
 These parameters specify the Windows login on the target system to run the replication jobs.
 
 ### `log-path`
-Specifies where Replicant stores the data it receives from Arcion CDC Agent. If Replicant runs on the same system as Arcion CDC Agent, `log-path` points to the staging directory. Notice that you specify this staging directory during Arcion CDC Agent installation.
+Specifies where Replicant stores the data it receives from Arcion CDC Agent. 
+
+If Replicant runs on the same system as Arcion CDC Agent, `log-path` points to the staging directory. Notice that you specify this staging directory during Arcion CDC Agent installation.
 
 ### `sql-proxy-connection`
-Specifies the login to connect to the SQL Server Express instance. The Express instance works as a _proxy_ target for the actual SQL Server replication. Arcion inserts no data into the proxy database. The following parameters specify the proxy connection details:
+Specifies the login for the SQL Server Express instance. 
+
+The source database must be able to use this login to connect to the Express instance. The Express instance works as a _proxy_ target for the actual SQL Server replication. Arcion inserts no data into the proxy database. 
+
+The following parameters specify the proxy connection details:
 <dl class="dl-indent">
 <dt>
 
 `host` </dt> 
 <dd>
 
-The hostname of the Express instance in the format *`HOSTNAME\INSTANCE`*—for example, `alex10\SQLEXPRESS`. 
+The hostname of the Express instance that the source database connects to. 
 
-If your source is an Azure-managed SQL Server instance, you must specify `host` in any one of the following manner:
+The hostname follows the format *`HOSTNAME\INSTANCE`*. You must specify the *`HOSTNAME`* in any one of the following manner:
 
 - An IP address
 - A fully qualified domain name (FQDN)
-
-Specify the `host` in the format *`{FQDN|IP_ADDRESS}\INSTANCE`*. 
 
 By default, SQL Server Express installs a named instance `SQLEXPRESS`. If you choose this default instance, you don't need to include the *`INSTANCE`* part in `host`.
 </dd>
@@ -144,7 +148,9 @@ Specifies where on the source SQL Server to store the initial schema information
 `sql-snapshot-folder` contains insignificant and temporary data when the replication first starts. This folder can be either a physical or a UNC path that the source SQL Server instance can access.
 
 ### `agent-connection`
-Specifies the connection details for Arcion CDC Agent. The following parameters specify the Agent connection details:
+Specifies the connection details for Arcion CDC Agent. 
+
+The following parameters specify the Agent connection details:
 <dl class="dl-indent">
 <dt>
 
