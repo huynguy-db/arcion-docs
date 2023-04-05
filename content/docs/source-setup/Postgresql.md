@@ -120,7 +120,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
         io_replicate1: #Replace "io-replicate1" with your replication slot name
           - wal2json
 
-    log-reader-type: {SQL|STREAM}
+    log-reader-type: {STREAM|SQL}
     ```
 
     The value of `log-reader-type` defaults to `STREAM`. If you choose `STREAM`, Replicant captures CDC data through `PgReplicationStream`. If you choose `SQL`, PostgreSQL server periodically receives SQL statements for CDC data extraction.
