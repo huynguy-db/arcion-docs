@@ -123,11 +123,13 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     log-reader-type: {SQL|STREAM}
     ```
 
-    {{< hint "warning" >}}
-  **Important:** Make sure that the `max_connections` in PostgreSQL is greater than the `max_connections` in the preceeding connection configuration file.
+    The value of `log-reader-type` defaults to `STREAM`. If you choose `STREAM`, Replicant captures CDC data through `PgReplicationStream`. If you choose `SQL`, PostgreSQL server periodically receives SQL statements for CDC data extraction.
+      {{< hint "warning" >}}
+  **Important:** 
+  - Make sure that the `max_connections` in PostgreSQL exceeds the `max_connections` in the preceeding connection configuration file.
+  - `log-reader-type` is deprecated. Avoid specifying this parameter.
     {{< /hint >}}
 
-    The default value for `log-reader-type` is `SQL`. If you choose `SQL`, PostgreSQL server periodically receives SQL statements for CDC data extraction. If you choose `STREAM`, Replicant captures CDC data through `PgReplicationStream`.
 
 1. You can also enable SSL for your connection by including the `ssl` field and specifying the necessary parameters as below:
     ```YAML
