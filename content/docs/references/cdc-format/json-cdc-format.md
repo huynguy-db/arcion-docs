@@ -20,11 +20,11 @@ Replicant supports JSON CDC format for the following sources:
 To use JSON CDC format, set [the global Applier parameter `replication-format` to `JSON`]({{< relref "docs/target-setup/kafka#replication-format" >}}) in your Applier configuration file.
 
 ### DML message structure
-1. Each message has a key and a value. The key uniquely identifies the change.
-2. Each message has a schema and a payload. The payload follows the schema definition.
-3. Replicant uses primary key, unique key, or row identifier key column is to form key structure. In the absence of primary key, unique key, or row identifier key column, Replicant uses the `“default“` string as a key. 
-4. Whenever a column that uniquely identifies a record is updated, instead of creating an update event, we generate delete and insert events. The delete event deletes existing record and insert event inserts a new record. 
-5. For each delete operation, Replicant generates a tombstone event. The event possesses the same key as the previous delete operation and the value set to `“default“`.
+1. Each message contains a key and a value. The key uniquely identifies the change.
+2. Each message contains a schema and a payload. The payload follows the schema definition.
+3. Replicant uses primary key, unique key, or row identifier key column to form key structure. In the absence of primary key, unique key, or row identifier key column, Replicant uses the `null` value for the key. 
+4. Whenever a column that uniquely identifies a record is updated, instead of creating an update event, Replicant generates delete and insert events. The delete event deletes existing record and insert event inserts a new record. 
+5. For each delete operation, Replicant generates a tombstone event. Replicant assigns the event the same key as the previous delete operation and sets the value to `null`.
 
 ## Examples
 In this section, we'll see how insert, update, and delete events look like in JSON CDC format for snapshot and realtime mode.
@@ -41,7 +41,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
   "schema": {
     "type": "struct",
     "optional": false,
-    "name": "KAFKA_snapshot_connector.tpch_scale_0_01.region.Key",
+    "name": "KAFKA_snapshot_connector.tpch.region.Key",
     "fields": [
       {
         "type": "int32",
@@ -51,7 +51,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
     ]
   },
   "payload": {
-    "r_regionkey": "0"
+    "r_regionkey": 3
   }
 }
 ```
@@ -62,13 +62,13 @@ In this section, we'll see how insert, update, and delete events look like in JS
   "schema": {
     "type": "struct",
     "optional": false,
-    "name": "KAFKA_snapshot_connector.tpch_scale_0_01.region.Envelope",
+    "name": "KAFKA_snapshot_connector.tpch.region.Envelope",
     "fields": [
       {
         "type": "struct",
         "optional": true,
         "field": "before",
-        "name": "KAFKA_snapshot_connector.tpch_scale_0_01.region.Value",
+        "name": "KAFKA_snapshot_connector.tpch.region.Value",
         "fields": [
           {
             "type": "int32",
@@ -91,7 +91,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
         "type": "struct",
         "optional": true,
         "field": "after",
-        "name": "KAFKA_snapshot_connector.tpch_scale_0_01.region.Value",
+        "name": "KAFKA_snapshot_connector.tpch.region.Value",
         "fields": [
           {
             "type": "int32",
@@ -201,28 +201,28 @@ In this section, we'll see how insert, update, and delete events look like in JS
     ]
   },
   "payload": {
-    "before": null,
+    "before": {},
     "after": {
-      "r_regionkey": "0",
-      "r_comment": "Test_Replication",
-      "r_name": "AFRICA"
+      "r_regionkey": 3,
+      "r_name": "EUROPE",
+      "r_comment": "ly final courts cajole furiously final excuse"
     },
     "source": {
-      "schema": null,
-      "query": "INSERT INTO tpch_scale_0_01.region(r_regionkey, r_name, r_comment) VALUES(0, AFRICA, Test_Replication)",
-      "thread": null,
-      "server_id": null,
-      "version": "5.7.24",
-      "file": null,
+      "version": "5.7.41",
       "connector": "MYSQL",
-      "pos": null,
       "name": "KAFKA_snapshot_connector",
-      "gtid": null,
-      "row": null,
       "ts_ms": null,
-      "db": "tpch_scale_0_01",
+      "db": "tpch",
+      "schema": null,
       "table": "region",
-      "snapshot": "true"
+      "snapshot": "true",
+      "server_id": null,
+      "gtid": null,
+      "file": null,
+      "pos": null,
+      "row": null,
+      "thread": null,
+      "query": "INSERT INTO tpch.region(r_regionkey, r_name, r_comment) VALUES(3, EUROPE, ly final courts cajole furiously final excuse)"
     },
     "op": "r",
     "ts_ms": null
@@ -245,7 +245,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
   "schema": {
     "type": "struct",
     "optional": false,
-    "name": "KAFKA_Connector.tpch_scale_0_01.region.Key",
+    "name": "KAFKA_Connector.tpch.region.Key",
     "fields": [
       {
         "type": "int32",
@@ -255,7 +255,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
     ]
   },
   "payload": {
-    "r_regionkey": "10"
+    "r_regionkey": 10
   }
 }
 ```
@@ -267,30 +267,13 @@ In this section, we'll see how insert, update, and delete events look like in JS
   "schema": {
     "type": "struct",
     "optional": false,
-    "name": "KAFKA_Connector.tpch_scale_0_01.region.Key",
-    "fields": [
-      {
-        "type": "int32",
-        "optional": false,
-        "field": "r_regionkey"
-      }
-    ]
-  },
-  "payload": {
-    "r_regionkey": "10"
-  }
-}
-{
-  "schema": {
-    "type": "struct",
-    "optional": false,
-    "name": "KAFKA_Connector.tpch_scale_0_01.region.Envelope",
+    "name": "KAFKA_Connector.tpch.region.Envelope",
     "fields": [
       {
         "type": "struct",
         "optional": true,
         "field": "before",
-        "name": "KAFKA_Connector.tpch_scale_0_01.region.Value",
+        "name": "KAFKA_Connector.tpch.region.Value",
         "fields": [
           {
             "type": "int32",
@@ -313,7 +296,7 @@ In this section, we'll see how insert, update, and delete events look like in JS
         "type": "struct",
         "optional": true,
         "field": "after",
-        "name": "KAFKA_Connector.tpch_scale_0_01.region.Value",
+        "name": "KAFKA_Connector.tpch.region.Value",
         "fields": [
           {
             "type": "int32",
@@ -423,32 +406,31 @@ In this section, we'll see how insert, update, and delete events look like in JS
     ]
   },
   "payload": {
-    "before": null,
+    "before": {},
     "after": {
-      "r_regionkey": "10",
-      "r_comment": "ReplicationWorks",
-      "r_name": "Test_nation"
+      "r_regionkey": 10,
+      "r_name": "Test_nation",
+      "r_comment": "ReplicationWorks"
     },
     "source": {
-      "schema": null,
-      "query": "INSERT INTO tpch_scale_0_01.region(r_regionkey, r_name,
-r_comment) VALUES(10, Test_nation, ReplicationWorks)",
-      "thread": 3908,
-      "server_id": "1",
-      "version": "5.7.24",
-      "file": "log-bin.000003",
+      "version": "5.7.41",
       "connector": "MYSQL",
-      "pos": 96749554,
       "name": "KAFKA_Connector",
-      "gtid": null,
-      "row": 1,
-      "ts_ms": 1678883495000,
-      "db": "tpch_scale_0_01",
+      "ts_ms": 1680798995000,
+      "db": "tpch",
+      "schema": null,
       "table": "region",
-      "snapshot": "false"
+      "snapshot": "false",
+      "server_id": "1",
+      "gtid": null,
+      "file": "mysql-log.000013",
+      "pos": 30407,
+      "row": 1,
+      "thread": 309,
+      "query": "INSERT INTO tpch.region(r_regionkey, r_name, r_comment) VALUES(10, Test_nation, ReplicationWorks)"
     },
     "op": "c",
-    "ts_ms": 1678863695725
+    "ts_ms": 1680779196386
   }
 }
 ```
@@ -463,7 +445,7 @@ r_comment) VALUES(10, Test_nation, ReplicationWorks)",
   "schema": {
     "type": "struct",
     "optional": false,
-    "name": "KAFKA_Connector.tpch_scale_0_01.region.Key",
+    "name": "KAFKA_Connector.tpch.region.Key",
     "fields": [
       {
         "type": "int32",
@@ -473,7 +455,7 @@ r_comment) VALUES(10, Test_nation, ReplicationWorks)",
     ]
   },
   "payload": {
-    "r_regionkey": "10"
+    "r_regionkey": 1
   }
 }
 ```
@@ -481,17 +463,40 @@ r_comment) VALUES(10, Test_nation, ReplicationWorks)",
 ##### Value structure
 
 ```JSON
+
+KEY
+
 {
   "schema": {
     "type": "struct",
     "optional": false,
-    "name": "KAFKA_Connector.tpch_scale_0_01.region.Envelope",
+    "name": "KAFKA_Connector.tpch.region.Key",
+    "fields": [
+      {
+        "type": "int32",
+        "optional": false,
+        "field": "r_regionkey"
+      }
+    ]
+  },
+  "payload": {
+    "r_regionkey": 1
+  }
+}
+
+VALUE
+
+{
+  "schema": {
+    "type": "struct",
+    "optional": false,
+    "name": "KAFKA_Connector.tpch.region.Envelope",
     "fields": [
       {
         "type": "struct",
         "optional": true,
         "field": "before",
-        "name": "KAFKA_Connector.tpch_scale_0_01.region.Value",
+        "name": "KAFKA_Connector.tpch.region.Value",
         "fields": [
           {
             "type": "int32",
@@ -514,7 +519,7 @@ r_comment) VALUES(10, Test_nation, ReplicationWorks)",
         "type": "struct",
         "optional": true,
         "field": "after",
-        "name": "KAFKA_Connector.tpch_scale_0_01.region.Value",
+        "name": "KAFKA_Connector.tpch.region.Value",
         "fields": [
           {
             "type": "int32",
@@ -625,36 +630,34 @@ r_comment) VALUES(10, Test_nation, ReplicationWorks)",
   },
   "payload": {
     "before": {
-      "r_regionkey": "10",
-      "r_comment": "ReplicationWorks",
-      "r_name": "Test_nation"
+      "r_regionkey": 1,
+      "r_name": "AMERICA",
+      "r_comment": "hs use ironic, even requests. s"
     },
     "after": {
-      "r_regionkey": "10",
-      "r_comment": "Test_Replication",
-      "r_name": "Test_nation"
+      "r_regionkey": 1,
+      "r_name": "AMERICA",
+      "r_comment": "TestReplication"
     },
     "source": {
-      "schema": null,
-      "query": "UPDATE tpch_scale_0_01.region SET r_regionkey=10 AND
-r_name=Test_nation AND r_comment=Test_Replication WHERE r_regionkey=10 AND
-r_name=Test_nation AND r_comment=ReplicationWorks",
-      "thread": 1643,
-      "server_id": "1",
-      "version": "5.7.24",
-      "file": "log-bin.000003",
+      "version": "5.7.41",
       "connector": "MYSQL",
-      "pos": 96759878,
       "name": "KAFKA_Connector",
-      "gtid": null,
-      "row": 1,
-      "ts_ms": 1678883820000,
-      "db": "tpch_scale_0_01",
+      "ts_ms": 1680799780000,
+      "db": "tpch",
+      "schema": null,
       "table": "region",
-      "snapshot": "false"
+      "snapshot": "false",
+      "server_id": "1",
+      "gtid": null,
+      "file": "mysql-log.000013",
+      "pos": 53709,
+      "row": 1,
+      "thread": 309,
+      "query": "UPDATE tpch.region SET r_regionkey=1 AND r_name=AMERICA AND r_comment=TestReplication WHERE r_regionkey=1 AND r_name=AMERICA AND r_comment=hs use ironic, even requests. s"
     },
     "op": "u",
-    "ts_ms": 1678864020928
+    "ts_ms": 1680779981001
   }
 }
 ```
@@ -680,7 +683,7 @@ r_name=Test_nation AND r_comment=ReplicationWorks",
     ]
   },
   "payload": {
-    "r_regionkey": "10"
+    "r_regionkey": 1
   }
 }
 ```
@@ -692,13 +695,13 @@ r_name=Test_nation AND r_comment=ReplicationWorks",
   "schema": {
     "type": "struct",
     "optional": false,
-    "name": "KAFKA_Connector.tpch_scale_0_01.region.Envelope",
+    "name": "KAFKA_Connector.tpch.region.Envelope",
     "fields": [
       {
         "type": "struct",
         "optional": true,
         "field": "before",
-        "name": "KAFKA_Connector.tpch_scale_0_01.region.Value",
+        "name": "KAFKA_Connector.tpch.region.Value",
         "fields": [
           {
             "type": "int32",
@@ -721,7 +724,7 @@ r_name=Test_nation AND r_comment=ReplicationWorks",
         "type": "struct",
         "optional": true,
         "field": "after",
-        "name": "KAFKA_Connector.tpch_scale_0_01.region.Value",
+        "name": "KAFKA_Connector.tpch.region.Value",
         "fields": [
           {
             "type": "int32",
@@ -832,31 +835,30 @@ r_name=Test_nation AND r_comment=ReplicationWorks",
   },
   "payload": {
     "before": {
-      "r_regionkey": "10",
-      "r_comment": "Test_Replication",
-      "r_name": "Test_nation"
+      "r_regionkey": 1,
+      "r_name": "AMERICA",
+      "r_comment": "TestReplication"
     },
-    "after": null,
+    "after": {},
     "source": {
-      "schema": null,
-      "query": "DELETE FROM tpch_scale_0_01.region WHERE r_regionkey=10 AND
-r_name=Test_nation AND r_comment=Test_Replication",
-      "thread": 1643,
-      "server_id": "1",
-      "version": "5.7.24",
-      "file": "log-bin.000003",
+      "version": "5.7.41",
       "connector": "MYSQL",
-      "pos": 96770857,
       "name": "KAFKA_Connector",
-      "gtid": null,
-      "row": 1,
-      "ts_ms": 1678887161000,
-      "db": "tpch_scale_0_01",
+      "ts_ms": 1680799967000,
+      "db": "tpch",
+      "schema": null,
       "table": "region",
-      "snapshot": "false"
+      "snapshot": "false",
+      "server_id": "1",
+      "gtid": null,
+      "file": "mysql-log.000013",
+      "pos": 59647,
+      "row": 1,
+      "thread": 309,
+      "query": "DELETE FROM tpch.region WHERE r_regionkey=1 AND r_name=AMERICA AND r_comment=TestReplication"
     },
     "op": "d",
-    "ts_ms": 1678867362465
+    "ts_ms": 1680780168069
   }
 }
 ```
@@ -878,7 +880,7 @@ r_name=Test_nation AND r_comment=Test_Replication",
     ]
   },
   "payload": {
-    "r_regionkey": "10"
+    "r_regionkey": 1
   }
 }
 ```
@@ -886,7 +888,7 @@ r_name=Test_nation AND r_comment=Test_Replication",
 The value for [the preceeding Tombstone key structure is the `"default"` string](#dml-message-structure):
 
 ```JSON
-"default"
+null
 ```
 
 
