@@ -9,7 +9,7 @@ weight: 3
 Replicant must be run in one of three replication modes: full, snapshot, realtime, and delta-snapshot. When starting Replicant, you must specify your desired mode of replication using a command line argument (`full`, `realtime`, or `delta-snapshot`). In addition to the multiple different modes, Replicant can also be run with additional settings/options. All of the modes, options, and commands to run Replicant are explained below.
 
 
-## Replicant Full Mode
+## Replicant full mode
 
 **With Basic Configurations**
 
@@ -44,7 +44,7 @@ Finally, Replicant in full mode can either be run with only the bare minimum req
 **Note**: Replicant shows various useful replication statistics in the dashboard while the replication is in progress.
 
 
-## Replicant Snapshot Mode
+## Replicant snapshot mode
 
 Use the following command to run Replicant in snapshot mode:
 ```Bash
@@ -60,7 +60,7 @@ Use the following command to run Replicant in snapshot mode:
 In snapshot mode, Replicant first creates the destination schemas, just as in full mode. Once the schemas are created, Replicant captures all the existing data from the source and transfers it to the destination, also known as Replicant's data snapshot. Once all data has been moved to the destination, a summary file will be generated and sent in an email notification if you have configured Replicant to do so. After finishing the snapshot, Replicant will immediately shutdown.
 
 
-## Replicant Realtime Mode
+## Replicant realtime mode
 
 Use the following command to run Replicant in realtime mode:
 ```Bash
@@ -74,7 +74,7 @@ conf/conn/target_database_name_dst.yaml \
 
 In real-time mode, replicant first creates the destination schemas if they are not already present. If the destination schemas are present, Replicant  appends to the existing tables. In real-time mode Replicant starts replicating real-time operations obtained from log-based CDC. By default, real-time mode starts replicating from latest log position, but a custom start position can be specified by the user in real-time section of extractor configuration file.
 
-## Replicant Delta Snapshot Mode
+## Replicant delta-snapshot mode
 
 Use the following command to run Replicant in delta snapshot mode:
 
@@ -92,7 +92,7 @@ The delta snapshot is a recurring snapshot which replicates the *delta* of the r
 
 To know how you can specify delta snapshot parameters in Extractor configuration file, see [Delta Snapshot Mode in Extractor Configuration](/docs/references/extractor-reference/#delta-snapshot-mode).
 
-## Replicant Init Mode
+## Replicant initialization mode
 
 Use the following command to run Replicant in init mode:
 ```BASH
@@ -103,7 +103,7 @@ conf/conn/target_database_name_dst.yaml
 In init mode, Replicant will retrieve the existing source schemas and create equivalent schemas on the destination.
 
 
-## Fetch-Schemas
+## Fetch-schemas
 
 Replicant can fetch schemas to analyze the current contents of a source or destination.
 
@@ -118,7 +118,7 @@ By, providing an option --output-file <output_path> you can change the default d
 
 Once the schema is fetched, it is possible to modify the file to specify custom selectSql expressions. The modified file can then be specified to replicant through `--src-schemas switch` to Replicant.
 
-## Infer-Schemas
+## Infer-schemas
 
 Inferring schemas is the process of fetching a schema from the source database and conforming it to the destination database.
 
@@ -130,7 +130,7 @@ For example, for the command  `./bin/replicant infer-schemas conf/conn/oracle_sr
 
 Before transferring the database content, it is recommended to examine the schemas on the destination and tailor them to the your specific needs by inferring schemas. Such modified inferred schemas file can be supplied to replicant through `--dst-schemas switch`.
 
-## Write Modes Explained
+## Write modes
 
 In case of a collision at the destination system, Replicant will by default warn the user and exit with an error in order to preserve the existing data at the destination. If a collision is expected to happen for some data, the error can be resolved by providing the appropriate destination schema's file.
 
@@ -144,7 +144,30 @@ Additionally, while using `--truncate-existing` or `--replace-existing`, a you c
 
 Replicant has another write mode, `--synchronize-deletes`,  which is relevant only for delta-snapshot mode (incremental replication) of operation. When replicant is started in delta-snapshot mode and you specify the `--synchronize-deletes` write mode, Replicant deletes all rows from a target table which are not present in the respective source table. Once the row synchronization is done, Replicant shuts down. Replicant can be started again in `resume mode` by taking off this write mode, after which Replicant will resume the incremental replication that it was performing.
 
-## Additional Replicant Commands
+## Test connection
+Replicant can perform validation checks on the connection configuration file of a database using the `test-connection` CLI option. This allows you to confirm that you possess a valid connection configuration file and Replicant can connect to the database.
+
+To use this feature, follow these steps:
+
+1. Define the test cases for the validation checks in a YAML file. You need to provide Replicant the full path to this YAML file with the `--validate` argument. For example:
+
+    ```YAML
+    end-point-type: SRC
+    mode: FULL
+
+    validate-read-access-to-systemTables: true
+    validate-read-access-to-cdc-logs: true
+    validate-ddl-dml-permission: false
+    ```
+
+2. Run Replicant self-hosted CLI with the necessary options and arguments. For example, the following command validates a Oracle source connection configuration file. The command uses the `--validate` argument and provides full path to the file containing the validation test cases:
+
+    ```sh
+    ./bin/replicant test-connection conf/conn/oracle_src.yaml \
+    --validate conf/validate/validationchecks.yaml
+    ```
+
+## Additional Replicant commands
 * You can stop replication with the CTRL C signal.
 * If you stop replication for any reason, you can restart the job exactly where Replicant had stopped by replacing the `--overwrite` argument `by --resume` in the replicant command:
   ```BASH
