@@ -127,7 +127,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
       {{< hint "warning" >}}
   **Important:** 
   - Make sure that the `max_connections` in PostgreSQL exceeds the `max_connections` in the preceeding connection configuration file.
-  - `log-reader-type` is deprecated. Avoid specifying this parameter.
+  - From versions 23.03.01.12 and later, 23.03.31 and later, `log-reader-type` is deprecated. Avoid specifying this parameter.
     {{< /hint >}}
 
 
