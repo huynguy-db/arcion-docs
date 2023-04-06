@@ -57,7 +57,7 @@ type: KAFKA
 username: USERNAME
 password: PASSWORD
 
-auth-type: SASL_SSL
+auth-type: SASL
 ssl:
   enable: true
   trust-store:
@@ -84,7 +84,7 @@ Replace the following:
 - *`PATH_TO_TRUSTSTORE`*: path to the TrustStore with JKS type
 - *`TRUSTSTORE_PASSWORD`*: the TrustStore password
 
-To use this method, you must enable username and password-based authentication on Kafka broker. For more information, see [Security Tutorial](https://docs.confluent.io/platform/current/security/security_tutorial.html#security-tutorial).
+To use this method, you must enable username and password-based authentication and data encryption on Kafka broker. For more information, see [Security Tutorial](https://docs.confluent.io/platform/current/security/security_tutorial.html#security-tutorial).
 
 ### Connect without username and password with no data encryption
 This method allows you to connect without username and password with no data encryption. To use this method, specify the connection details in the following manner:
