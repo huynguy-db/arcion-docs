@@ -885,7 +885,7 @@ VALUE
 }
 ```
 
-The value for [the preceeding Tombstone key structure is the `"default"` string](#dml-message-structure):
+The value for [the preceeding Tombstone key structure is `null`](#dml-message-structure):
 
 ```JSON
 null
