@@ -218,17 +218,18 @@ After reaching the maximum number of re-attempts specified in [`max-retries`](#i
 <dt>During snapshot phase</dt>
 <dd>
 
-The [`skip-tables-on-failures` Applier configuration parameter]({{< ref "docs/references/applier-reference#skip-tables-on-failures" >}}) defaults to `true`. Therefore, Replicant excludes the table from the replication rather than stopping the Replicant process by throwing an exception. This behavior prevents the rest of the tables from going into an inconsistent state. 
+The [`skip-tables-on-failures` Applier configuration parameter]({{< ref "docs/references/applier-reference#skip-tables-on-failures" >}}) defaults to `true`. Therefore, Replicant excludes the table from the replication rather than stopping the Replicant process by throwing an exception. This behavior prevents the rest of the tables from going into an inconsistent state. Using the [dynamic reinitialization feature]({{< ref "docs/references/dynamic-reinitialization" >}}), you can add the tables Replicant excludes from replication. 
 
-You can add the tables Replicant excluded from replication using the [dynamic reinitialization feature]({{< ref "docs/references/dynamic-reinitialization" >}}). You can also disable [`skip-tables-on-failures`]({{< ref "docs/references/applier-reference#skip-tables-on-failures" >}}). In that case, Replicant throws an exception and performs snapshot recovery in the auto-resumed run.
+You can also disable [`skip-tables-on-failures`]({{< ref "docs/references/applier-reference#skip-tables-on-failures" >}}). In that case, Replicant throws an exception and performs snapshot recovery when you resume replication with [the `--resume` option]({{< ref "docs/running-replicant#various-replication-options-explanation" >}}).
+
 </dd>
 
 <dt>During realtime phase with eventual replay consistency</dt>
 <dd>
 
-The [`skip-tables-on-failures` Applier configuration parameter]({{< ref "docs/references/applier-reference#skip-tables-on-failures" >}}) defaults to `true`. Therefore, Replicant excludes the table from the replication rather than stopping the Replicant process by throwing an exception. This behavior prevents the rest of the tables from going into an inconsistent state. 
+The [`skip-tables-on-failures` Applier configuration parameter]({{< ref "docs/references/applier-reference#skip-tables-on-failures" >}}) defaults to `true`. Therefore, Replicant excludes the table from the replication rather than stopping the Replicant process by throwing an exception. This behavior prevents the rest of the tables from going into an inconsistent state. Using the [dynamic reinitialization feature]({{< ref "docs/references/dynamic-reinitialization" >}}), you can add the tables Replicant excludes from replication. 
 
-You can add the tables Replicant excluded from replication using the [dynamic reinitialization feature]({{< ref "docs/references/dynamic-reinitialization" >}}). You can also disable [`skip-tables-on-failures`]({{< ref "docs/references/applier-reference#skip-tables-on-failures" >}}). In that case, Replicant throws an exception and performs real-time recovery in the auto-resumed run.
+You can also disable [`skip-tables-on-failures`]({{< ref "docs/references/applier-reference#skip-tables-on-failures" >}}). In that case, Replicant throws an exception and performs real-time recovery when you resume replication with [the `--resume` option]({{< ref "docs/running-replicant#various-replication-options-explanation" >}}).
 </dd>
 
 <dt>During realtime phase with global replay consistency</dt>
