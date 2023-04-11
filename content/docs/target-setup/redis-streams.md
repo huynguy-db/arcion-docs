@@ -143,7 +143,6 @@ snapshot:
 
 realtime:
   threads: 16
-  replay-consistency: GLOBAL
   split-stream: false
 ```
 
@@ -212,37 +211,27 @@ Redis stream is like an append log that where each Stream entry has an ID for ea
 - For snapshot, we identify the failed rows in a given batch and retry those.
 - For realtime, since we need to maintain the order, we try to undo the committed rows in a given batch and retry the entire batch.
 
-### Streams for snapshot and CDC changes
-We publish snapshot changes to `<catalog>_<schema>_<tablename>` stream while CDC changes to `<catalog>_<schema>_<tablename>_cdc_logs` stream.
-
-### Schema dump
-For Replicant's internal usage, the schema dump is published to a special stream called `replicate_io_replication_schema_<replication_group>_<replication_id>`.
-
-### Use `fetch-schemas` for schema information
-If you want to get information about the schema of replicated tables, you can use [`fetch-schemas` mode]({{< relref "docs/running-replicant#fetch-schemas" >}}). `fetch-schemas` mode reads the internal schema dump and generates the `schemas.yaml` file. 
-
-To achieve this, run Replicant with the `fetch-schemas` option. For example:
-
-```sh
-./bin/replicant fetch-schemas conf/conn/redis_stream.yaml --id redis
-```
-You need to give the replication ID of the run that generated the schema dump via the `--id` argument so that Replicant can locate the appropriate stream.
-
 ### Replicant's behavior after reaching `max-retries `
 After reaching the maximum number of re-attempts specified in [`max-retries`](#i-set-up-connection-configuration), Replicant's behavior depends on the replication mode and [the type of transactional consistency](#transactional-consistency-in-realtime-mode). 
 
 <dl class="dl-indent">
 <dt>During snapshot phase</dt>
 <dd>
-Replicant skips the table from the replication run rather than stopping the replicant by throwing an exception. This prevents the rest of the tables from going into an inconsistent state.
-</dd>
 
-<dt>During realtime phase with global replay consistency</dt>
-<dd>
-Replicant skips the table from the replication rather than stopping the replicant by throwing an exception. This prevents the rest of the tables from going into an inconsistent state.
+The [`skip-tables-on-failures` Applier configuration parameter]({{< ref "docs/references/applier-reference#skip-tables-on-failures" >}}) defaults to `true`. Therefore, Replicant excludes the table from the replication rather than stopping the Replicant process by throwing an exception. This behavior prevents the rest of the tables from going into an inconsistent state. 
+
+You can add the tables Replicant excluded from replication using the [dynamic reinitialization feature]({{< ref "docs/references/dynamic-reinitialization" >}}). You can also disable [`skip-tables-on-failures`]({{< ref "docs/references/applier-reference#skip-tables-on-failures" >}}). In that case, Replicant throws an exception and performs snapshot recovery in the auto-resumed run.
 </dd>
 
 <dt>During realtime phase with eventual replay consistency</dt>
+<dd>
+
+The [`skip-tables-on-failures` Applier configuration parameter]({{< ref "docs/references/applier-reference#skip-tables-on-failures" >}}) defaults to `true`. Therefore, Replicant excludes the table from the replication rather than stopping the Replicant process by throwing an exception. This behavior prevents the rest of the tables from going into an inconsistent state. 
+
+You can add the tables Replicant excluded from replication using the [dynamic reinitialization feature]({{< ref "docs/references/dynamic-reinitialization" >}}). You can also disable [`skip-tables-on-failures`]({{< ref "docs/references/applier-reference#skip-tables-on-failures" >}}). In that case, Replicant throws an exception and performs real-time recovery in the auto-resumed run.
+</dd>
+
+<dt>During realtime phase with global replay consistency</dt>
 <dd>
 Replicant dumps the Stream entry IDs for the messages it couldn't delete programmatically in a file with the name <code>$REPLICANT_HOME/data/<replication_id>/bad_rows/replicate_io_indoubt_txn_log</code>. You need to clean up those entries manually and <a href="/docs/running-replicant#various-replication-options-explanation">resume the replication run</a>. You can use the following command for cleaning up the entries:
 
@@ -291,7 +280,7 @@ Each message has a key and a value. It has schema and payload following the sche
   "schema": {
     "type": "struct",
     "optional": false,
-    "name": "REDIS_STREAM_Connector.tpch_scale_0_01.region.Key",
+    "name": "REDIS_STREAM_Connector.tpch.region.Key",
     "fields": [
       {
         "type": "int32",
@@ -301,7 +290,7 @@ Each message has a key and a value. It has schema and payload following the sche
     ]
   },
   "payload": {
-    "r_regionkey": "10"
+    "r_regionkey": 10
   }
 }
 ```
@@ -312,13 +301,13 @@ Each message has a key and a value. It has schema and payload following the sche
   "schema": {
     "type": "struct",
     "optional": false,
-    "name": "REDIS_STREAM_Connector.tpch_scale_0_01.region.Envelope",
+    "name": "REDIS_STREAM_Connector.tpch.region.Envelope",
     "fields": [
       {
         "type": "struct",
         "optional": true,
         "field": "before",
-        "name": "REDIS_STREAM_Connector.tpch_scale_0_01.region.Value",
+        "name": "REDIS_STREAM_Connector.tpch.region.Value",
         "fields": [
           {
             "type": "int32",
@@ -341,7 +330,7 @@ Each message has a key and a value. It has schema and payload following the sche
         "type": "struct",
         "optional": true,
         "field": "after",
-        "name": "REDIS_STREAM_Connector.tpch_scale_0_01.region.Value",
+        "name": "REDIS_STREAM_Connector.tpch.region.Value",
         "fields": [
           {
             "type": "int32",
@@ -452,36 +441,34 @@ Each message has a key and a value. It has schema and payload following the sche
   },
   "payload": {
     "before": {
-      "r_regionkey": "10",
-      "r_comment": "ReplicationWorks",
-      "r_name": "Test_nation"
+      "r_regionkey": 10,
+      "r_name": "Test_nation",
+      "r_comment": "ReplicationWorks"
     },
     "after": {
-      "r_regionkey": "10",
-      "r_comment": "Test_Replication",
-      "r_name": "Test_nation"
+      "r_regionkey": 10,
+      "r_name": "Test_nation",
+      "r_comment": "TestReplication"
     },
     "source": {
-      "schema": null,
-      "query": "UPDATE tpch_scale_0_01.region SET r_regionkey=10 AND
-r_name=Test_nation AND r_comment=Test_Replication WHERE r_regionkey=10 AND
-r_name=Test_nation AND r_comment=ReplicationWorks",
-      "thread": 1643,
-      "server_id": "1",
-      "version": "5.7.24",
-      "file": "log-bin.000003",
+      "version": "5.7.41",
       "connector": "MYSQL",
-      "pos": 96759878,
       "name": "REDIS_STREAM_Connector",
-      "gtid": null,
-      "row": 1,
-      "ts_ms": 1678883820000,
-      "db": "tpch_scale_0_01",
+      "ts_ms": 1681129889000,
+      "db": "tpch",
+      "schema": null,
       "table": "region",
-      "snapshot": "false"
+      "snapshot": "false",
+      "server_id": "1",
+      "gtid": null,
+      "file": "mysql-log.000019",
+      "pos": 4436,
+      "row": 5,
+      "thread": 69,
+      "query": "UPDATE tpch.region SET r_regionkey=10 AND r_name=Test_nation AND r_comment=TestReplication WHERE r_regionkey=10 AND r_name=Test_nation AND r_comment=ReplicationWorks"
     },
     "op": "u",
-    "ts_ms": 1678864020928
+    "ts_ms": 1681110090233
   }
 }
 ```
