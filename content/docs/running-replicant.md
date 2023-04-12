@@ -145,28 +145,140 @@ Additionally, while using `--truncate-existing` or `--replace-existing`, a you c
 Replicant has another write mode, `--synchronize-deletes`,  which is relevant only for delta-snapshot mode (incremental replication) of operation. When replicant is started in delta-snapshot mode and you specify the `--synchronize-deletes` write mode, Replicant deletes all rows from a target table which are not present in the respective source table. Once the row synchronization is done, Replicant shuts down. Replicant can be started again in `resume mode` by taking off this write mode, after which Replicant will resume the incremental replication that it was performing.
 
 ## Test connection
-Replicant can perform validation checks on the connection configuration file of a database using the `test-connection` CLI option. This allows you to confirm that you possess a valid connection configuration file and Replicant can connect to the database.
+Replicant can perform validation checks on the connection configuration file of a database using the `test-connection` CLI option. This option checks the validity of credentials, host, port, and other connection parameters before you run the actual replication. This allows you to confirm that you possess a valid connection configuration file and Replicant can connect to the database.
 
 To use this feature, follow these steps:
 
-1. Define the test cases for the validation checks in a YAML file. You need to provide Replicant the full path to this YAML file with the `--validate` argument. For example:
+### 1. Define the validation configuration
+Define the configuration and test cases for the validation checks in a YAML file. You need to provide Replicant the full path to this YAML file with the `--validate` argument.
 
-    ```YAML
-    end-point-type: SRC
-    mode: FULL
+You can define the following parameters in the validation configuration file:
 
-    validate-read-access-to-systemTables: true
-    validate-read-access-to-cdc-logs: true
-    validate-ddl-dml-permission: false
-    ```
+#### `end-point-type`
+Specifies whether you want to perform validation checks on the source or the target database. Test connection feature supports the following `end-point-type`s:
 
-2. Run Replicant self-hosted CLI with the necessary options and arguments. For example, the following command validates a Oracle source connection configuration file. The command uses the `--validate` argument and provides full path to the file containing the validation test cases:
+- **`SRC`**. `test-connection` mode performs source-specific validation, such as read access to CDC logs.
+- **`DST`**. `test-connection` mode performs target-specific validation. For example, DDL and DML permission on target database.
 
-    ```sh
-    ./bin/replicant test-connection conf/conn/oracle_src.yaml \
-    --validate conf/validate/validationchecks.yaml
-    ```
+#### `mode`
+Specifies the replication mode. Test connection feature supports the following `mode`s:
 
+- `SNAPSHOT`
+- `FULL`
+- `REALTIME`
+
+`mode` tells `test-connection` to perform validation for that specific replication mode. For example, if you set `mode` to `SNAPSHOT`, then `test-connection` mode performs the validation checks for snapshot replication. These validation checks might include necessary database permissions, for example, [the global permissions for Oracle source]({{< ref "docs/source-setup/oracle/setup-guide/oracle-traditional-database#iv-set-up-global-permissions" >}}).
+
+#### `validate-read-access-to-systemTables`
+`true` or `false`.
+
+Whether to check for necessary access to [database system metadata tables]({{< ref "docs/source-setup/oracle/setup-guide/oracle-traditional-database#table-level-supplemental-logging" >}}).
+
+_Default: `true`._
+
+#### `validate-read-access-to-cdc-logs`
+`true` or `false`.
+
+Whether to check for necessary access to CDC logs, for example, Oracle's LogMiner.
+
+{{< hint "warning" >}}
+**Important:** This parameter only applies when you set `end-point-type` to `SRC`. Therefore, disable `validate-read-access-to-cdc-logs` if you specify `DST` as the `end-point-type`.
+{{< /hint >}}
+
+Defaults to `true` if you use `SRC` as the [`end-point-type`](#end-point-type) and use either `FULL` or `REALTIME` as the [`mode`](#mode).
+
+#### `validate-ddl-dml-permission`
+`true` or `false`.
+
+Whether to check for necessary access to DDL and DML permissions on target database. For example, `CREATE ANY TABLE` and `INSERT ANY TABLE` for [Oracle target]({{< ref "docs/target-setup/oracle" >}}). 
+
+{{< hint "warning" >}}
+**Important:** This parameter only applies when you set `end-point-type` to `DST`. Therefore, disable `validate-ddl-dml-permission` if you specify `SRC` as the `end-point-type`.
+{{< /hint >}}
+
+_Default: `true` for `DST` as the [`end-point-type`](#end-point-type)._
+
+The following sample shows a sample validation configuration:
+
+```YAML
+end-point-type: SRC
+mode: FULL
+
+validate-read-access-to-systemTables: true
+validate-read-access-to-cdc-logs: true
+validate-ddl-dml-permission: false
+```
+
+### 2. Run Replicant self-hosted CLI with the necessary options and arguments
+The following command validates a MySQL source connection configuration file. The command uses the `--validate` argument and provides full path to the file containing the validation test cases:
+
+```sh
+./bin/replicant test-connection conf/conn/mysql.yaml \
+--validate conf/validate/validate.yaml
+```
+
+The `mysql.yaml` file for example can contain the following configuration:
+
+```YAML
+type: MYSQL
+
+host: localhost
+port: 3306
+
+username: "replicate"
+password: "Replicate#123"
+
+slave-server-ids: [1]
+max-connections: 30
+
+max-retries: 10
+retry-wait-duration-ms: 1000
+```
+
+The `validate.yaml` file for example can contain the following validation test cases:
+
+```YAML
+end-point-type: SRC
+mode: FULL
+
+validate-read-access-to-systemTables: true
+validate-read-access-to-cdc-logs: true
+validate-ddl-dml-permission: false
+```
+
+### 3. Evaluate the report
+The `test-connection` mode generates a validation report in JSON format under the `data/replicationID` directory. 
+
+The following sample illustrates how contents of a `test-connection` report looks like:
+
+```json
+{
+  "hostPortReachable" : "PASSED",
+  "credentialCheck" : "PASSED",
+  "healthStatus" : "RUNNING",
+  "readAccessToSystemTables" : "PASSED",
+  "missingPermissions" : { },
+  "errorMessages" : { },
+  "urlReachable" : "SKIPPED"
+}
+```
+In the preceeding sample validation report, the following fields illustrate different aspects of the  report:
+
+- `hostPortReachable` indicates whether Replicant can reach the host and port.
+- `credentialCheck` indicates the validity of the `username` and `password` you specify in the connection configuration file.
+- `healthStatus` (available for [Databricks]({{< ref "docs/target-setup/databricks" >}}) only) describes the Databricks cluster state.
+- `readAccessToSystemTables` indicates if the `username` of the connection configuration file possesses read access to CDC logs
+- `missingPermissions` lists any missing permissions.
+- `errorMessages` lists error or exceptions that might occur during validations.
+
+{{< hint "info" >}}
+**Note:**
+- If you intend to do replication using superuser, then disable the following validation test cases since metadata tables doesn't always store superuser permissions:  
+   - `validate-read-access-to-systemTables`
+   - `validate-read-access-to-cdc-logs`
+   - `validate-ddl-dml-permission`
+- If source database doesn’t support CDC, then `test-connection` mode internally ignores `validate-read-access-to-cdc-logs`.
+{{< /hint >}}
 ## Additional Replicant commands
 * You can stop replication with the CTRL C signal.
 * If you stop replication for any reason, you can restart the job exactly where Replicant had stopped by replacing the `--overwrite` argument `by --resume` in the replicant command:
