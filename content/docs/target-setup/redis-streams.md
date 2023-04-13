@@ -43,7 +43,7 @@ Replace the following:
 - *`USERNAME`*: the username to connect to the Redis server
 - *`PASSWORD`*: the password associated with *`USERNAME`*
 
-In the preceeding sample:
+In the preceding sample:
 
 - `max-connections` is the maximum number of connections Replicant can open in Redis. 
 - `max-retries` is the number of times any failed operation on the system will be re-attempted.
@@ -77,7 +77,7 @@ Replace the following:
 - *`TRUSTSTORE_PASSWORD`*: the TrustStore password
 - *`TRUSTSTORE_TYPE`*: the TrustStore type—for example, `PKCS12`
 
-In the preceeding sample:
+In the preceding sample:
 
 - `max-connections` is the maximum number of connections Replicant can open in Redis. 
 - `max-retries` is the number of times any failed operation on the system will be re-attempted.
@@ -122,7 +122,7 @@ Replace the following:
 - *`KEYSTORE_TYPE`*: the KeyStore type—for example, `PKCS12`
 
   
-In the preceeding sample:
+In the preceding sample:
 
 - `max-connections` is the maximum number of connections Replicant can open in Redis. 
 - `max-retries` is the number of times any failed operation on the system will be re-attempted.
