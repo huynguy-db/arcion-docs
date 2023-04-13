@@ -262,7 +262,7 @@ The following sample illustrates how contents of a `test-connection` report look
   "urlReachable" : "SKIPPED"
 }
 ```
-In the preceeding sample validation report, the following fields describe different aspects of the  report:
+In the preceding sample validation report, the following fields describe different aspects of the  report:
 
 - `hostPortReachable` indicates whether Replicant can reach the host and port.
 - `credentialCheck` indicates the validity of the `username` and `password` you specify in the connection configuration file.
