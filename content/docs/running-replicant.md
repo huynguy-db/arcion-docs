@@ -182,7 +182,7 @@ _Default: `true`._
 Whether to check for necessary access to CDC logs, for example, Oracle's LogMiner.
 
 {{< hint "warning" >}}
-**Important:** This parameter only applies when you set `end-point-type` to `SRC`. Therefore, disable `validate-read-access-to-cdc-logs` if you specify `DST` as the `end-point-type`.
+**Important:** This parameter only applies when you set [`end-point-type`](#end-point-type) to `SRC`. Therefore, disable `validate-read-access-to-cdc-logs` if you specify `DST` as the [`end-point-type`](#end-point-type).
 {{< /hint >}}
 
 Defaults to `true` if you use `SRC` as the [`end-point-type`](#end-point-type) and use either `FULL` or `REALTIME` as the [`mode`](#mode).
@@ -193,7 +193,7 @@ Defaults to `true` if you use `SRC` as the [`end-point-type`](#end-point-type) a
 Whether to check for necessary access to DDL and DML permissions on target database. For example, `CREATE ANY TABLE` and `INSERT ANY TABLE` for [Oracle target]({{< ref "docs/target-setup/oracle" >}}). 
 
 {{< hint "warning" >}}
-**Important:** This parameter only applies when you set `end-point-type` to `DST`. Therefore, disable `validate-ddl-dml-permission` if you specify `SRC` as the `end-point-type`.
+**Important:** This parameter only applies when you set [`end-point-type`](#end-point-type) to `DST`. Therefore, disable `validate-ddl-dml-permission` if you specify `SRC` as the [`end-point-type`](#end-point-type).
 {{< /hint >}}
 
 _Default: `true` for `DST` as the [`end-point-type`](#end-point-type)._
@@ -262,7 +262,7 @@ The following sample illustrates how contents of a `test-connection` report look
   "urlReachable" : "SKIPPED"
 }
 ```
-In the preceeding sample validation report, the following fields illustrate different aspects of the  report:
+In the preceeding sample validation report, the following fields describe different aspects of the  report:
 
 - `hostPortReachable` indicates whether Replicant can reach the host and port.
 - `credentialCheck` indicates the validity of the `username` and `password` you specify in the connection configuration file.
@@ -273,11 +273,11 @@ In the preceeding sample validation report, the following fields illustrate diff
 
 {{< hint "info" >}}
 **Note:**
-- If you intend to do replication using superuser, then disable the following validation test cases since metadata tables doesn't always store superuser permissions:  
+- To carry out replication using superuser, disable the following validation test cases since metadata tables don't always store superuser permissions:  
    - `validate-read-access-to-systemTables`
    - `validate-read-access-to-cdc-logs`
    - `validate-ddl-dml-permission`
-- If source database doesn’t support CDC, then `test-connection` mode internally ignores `validate-read-access-to-cdc-logs`.
+- If the source database doesn’t support CDC, then `test-connection` mode internally ignores `validate-read-access-to-cdc-logs`.
 {{< /hint >}}
 ## Additional Replicant commands
 * You can stop replication with the CTRL C signal.
