@@ -342,7 +342,7 @@ cdc-log-config:
       interval-ms: 10000
   ```
 
-  In preceeding sample, notice the following details:
+  In preceding sample, notice the following details:
   
   - The `start-position` parameter specifi[es the starting log position for realtime replication. For more information, see [Db2 with MQ in Extractor Reference]({{< ref "docs/references/extractor-reference#db2-with-mq" >}}).
   - If you've set `message-format` to `DELIMITED`, set `replicate-empty-string-as-null` to `true`.

@@ -285,7 +285,7 @@ snapshot:
   fetch-create-sql : true
 ```
 
-The preceeding sample instructs Replicant to replicate generated columns with data, corresponding data types, and functions.
+The preceding sample instructs Replicant to replicate generated columns with data, corresponding data types, and functions.
 
 #### CLI option
 Replicant self-hosted CLI exposes a CLI option `create-sql`. `create-sql` yields the same outcome as setting `fetch-create-sql` to `true`.
@@ -303,7 +303,7 @@ The following is a sample command for running Replicant:
 --overwrite --create-sql
 ```
 
-The preceeding command instructs Replicant to replicate the generated columns with data, the corresponding data types, and functions.
+The preceding command instructs Replicant to replicate the generated columns with data, the corresponding data types, and functions.
 
 {{< hint "warning" >}}
 **Warning:** Replicant doesn't support `create-sql` for [heterogeneous pipelines](#replication-of-generated-columns-in-heterogeneous-pipeline). Any usage of `create-sql` in a heterogeneous pipeline raises Exception.

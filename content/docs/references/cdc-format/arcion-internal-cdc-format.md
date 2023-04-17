@@ -53,7 +53,7 @@ Consider the following DML for an insert operation:
 INSERT INTO tpch.region (r_regionkey,r_comment,r_name) VALUES(10,'India','India');
 ```
 
-The CSV file structure for the preceeding operation is as follows:
+The CSV file structure for the preceding operation is as follows:
 
 ```CSV
 India,NULL,1,India,NULL,1,10,NULL,1,I,"{""extractorId"":0,""nodeID"":""node1"",""/
@@ -71,7 +71,7 @@ Consider the following DML for an update operation:
 UPDATE tpch.region SET r_comment = 'USA' WHERE r_regionkey = 10;
 ```
 
-The CSV file structure for the preceeding operation is as follows:
+The CSV file structure for the preceding operation is as follows:
 
 ```CSV
 USA,NULL,1,NULL,NULL,0,NULL,10,2,U,"{""extractorId"":0,""nodeID"":""node1"",/
@@ -80,7 +80,7 @@ USA,NULL,1,NULL,NULL,0,NULL,10,2,U,"{""extractorId"":0,""nodeID"":""node1"",/
 "updateCount"":1,""deleteCount"":0,""replaceCount"":0}"/
 ```
 
-In the preceeding `UPDATE` statement, the `SET` section corresponds to NEW_VAL and the `WHERE` section corresponds to OLD_VAL. `r_name` has no presence in any section. That's why EXISTS_VAL is `0`.
+In the preceding `UPDATE` statement, the `SET` section corresponds to NEW_VAL and the `WHERE` section corresponds to OLD_VAL. `r_name` has no presence in any section. That's why EXISTS_VAL is `0`.
 
 #### Sample delete operation
 Consider the following DML for a delete operation:
@@ -89,7 +89,7 @@ Consider the following DML for a delete operation:
 DELETE FROM tpch.region WHERE r_regionkey = 10;
 ```
 
-The CSV file structure for the preceeding operation is as follows:
+The CSV file structure for the preceding operation is as follows:
 ```CSV
 NULL,NULL,0,NULL,NULL,0,NULL,10,2,D,"{""extractorId"":0,""nodeID"":""node1"/
 ",""timestamp"":1620787872370,""extractionTimestamp"":1620787872370,""dscI"":1620787053905,"/
@@ -176,7 +176,7 @@ Consider the following DML for an insert operation:
 INSERT INTO tpch_scale_0_01.nation values(100,"Testing name",2,"Testing comment");
 ```
 
-The JSON file structure for the preceeding operation is as follows:
+The JSON file structure for the preceding operation is as follows:
 
 ```JSON
 {
@@ -220,7 +220,7 @@ Consider the following DML for an update operation:
 UPDATE tpch_scale_0_01.nation set n_name="Updating test name" where n_nationkey=100;
 ```
 
-The JSON file structure for the preceeding operation is as follows:
+The JSON file structure for the preceding operation is as follows:
 
 ```JSON
 {
@@ -264,7 +264,7 @@ Consider the following DML for a delete operation:
 DELETE from tpch_scale_0_01.nation where n_nationkey=100;
 ```
 
-The JSON file structure for the preceeding operation is as follows:
+The JSON file structure for the preceding operation is as follows:
 
 ```JSON
 {
@@ -311,7 +311,7 @@ Consider the following DML for an insert operation:
 INSERT INTO tpch.region (r_regionkey,r_comment,r_name) VALUES(10,'India','India');
 ```
 
-The JSON file structure for the preceeding operation is as follows:
+The JSON file structure for the preceding operation is as follows:
 
 ```JSON
 {
@@ -353,7 +353,7 @@ Consider the following DML for an update operation:
 UPDATE tpch.region SET r_comment = 'USA' WHERE r_regionkey = 10;
 ```
 
-The JSON file structure for the preceeding operation is as follows:
+The JSON file structure for the preceding operation is as follows:
 
 ```JSON
 {
@@ -396,7 +396,7 @@ Consider the following DML for a delete operation:
 DELETE FROM tpch.region WHERE r_regionkey = 10;
 ```
 
-The JSON file structure for the preceeding operation is as follows:
+The JSON file structure for the preceding operation is as follows:
 
 ```JSON
 {

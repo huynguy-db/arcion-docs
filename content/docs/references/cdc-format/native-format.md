@@ -134,7 +134,7 @@ To represent change events in snapshot mode, a simple JSON structure is used. Fo
 ```
 {{< /details >}}
 
-In the preceeding samples, notice the following keys that correspond to various details about the event and the table:
+In the preceding samples, notice the following keys that correspond to various details about the event and the table:
 
 #### `tableName`
 The fully qualified name of the table.

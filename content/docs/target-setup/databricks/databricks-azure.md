@@ -68,7 +68,7 @@ To grant Databricks access to ADLS, follow one of the these methods:
 - [Access Azure Data Lake Storage Gen2 or Blob Storage using a SAS token](https://docs.databricks.com/storage/azure-storage.html#access-azure-data-lake-storage-gen2-or-blob-storage-using-a-sas-token).
 - [Access Azure Data Lake Storage Gen2 or Blob Storage using the account key](https://docs.databricks.com/storage/azure-storage.html#access-azure-data-lake-storage-gen2-or-blob-storage-using-the-account-key).
 
-The preceeding resources use Python to grant access. Instead of Python, you can use [Spark configuration properties](https://spark.apache.org/docs/latest/configuration.html) to access data in Azure storage account. 
+The preceding resources use Python to grant access. Instead of Python, you can use [Spark configuration properties](https://spark.apache.org/docs/latest/configuration.html) to access data in Azure storage account. 
 
 ### Spark configuration for cluster
 1. On the cluster configuration page, click the **Advanced Options** toggle.

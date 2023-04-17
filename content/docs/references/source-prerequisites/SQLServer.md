@@ -54,7 +54,7 @@ To install Arcion CDC Agent, run the installer `remote-replicant-mssql-cdc-agent
 
     After filling out the **Staging Directory** field, click on **Next**.
 
-5. The **Confirm Installation** screen appears. If the settings in the preceeding steps suit your requirements, click **Next** to start the installation.
+5. The **Confirm Installation** screen appears. If the settings in the preceding steps suit your requirements, click **Next** to start the installation.
 
 ## Securely connect to the CDC Agent 
 Arcion CDC Agent installer generates a certificate for TLS/SSL communication. This certificate encrypts the connections to the CDC Agent. By default, Replicant trusts all CDC Agent connections. To ensure that Replicant connects to a trusted Agent, you must take the following measures:
@@ -68,7 +68,7 @@ The following sample command shows how to import the certificate.
 sudo keytool -import -alias arcion -keystore $JAVA_HOME/jre/lib/security/cacerts -file replicant.cert
 ```
 
-The preceeding command prompts you for the KeyStore password. If you don't change the KeyStore password, use the default password `changeit`.
+The preceding command prompts you for the KeyStore password. If you don't change the KeyStore password, use the default password `changeit`.
 
 You can find the `replicant.cert` file in the `INSTALLATION_PATH\Arcion\Replicant for Microsoft SQL Server\certs\` directory. `INSTALLATION_PATH` indicates where you install Arcion CDC Agent. If you install Arcion CDC Agent in the default location, the certificate occupies the `c:\Program Files\Arcion\Replicant for Microsoft SQL Server\certs\` directory.
 
@@ -250,5 +250,5 @@ Replicant uses this `username` user for the snapshot phase. The `username` user 
     - `sp_statistics`
 
 {{< hint "info" >}}
-You need the preceeding permissions only once at the start of a fresh replication.
+You need the preceding permissions only once at the start of a fresh replication.
 {{< /hint >}}

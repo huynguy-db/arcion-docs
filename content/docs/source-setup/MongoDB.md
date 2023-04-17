@@ -95,7 +95,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
       - Within `lineitem`, only the `item_one` and `item_two` columns will be replicated.
       - From the `ng_test` table, only the `test_one` and `test_two` columns will be replicated as long as they meet the condition specified in `conditions`.
 
-      The preceeding sample follows the followig format. You must adhere to this format for specifying your filters.
+      The preceding sample follows the followig format. You must adhere to this format for specifying your filters.
 
       ```YAML
       allow:

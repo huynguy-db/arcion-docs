@@ -177,7 +177,7 @@ Specify your table name here. Under the table name, specify your table-specific 
 
 </dl>
 
-You can configure as many tables as necessary and specify them under each other using the preceeding format we discussed. For example, configuring two tables would look like the following:
+You can configure as many tables as necessary and specify them under each other using the preceding format we discussed. For example, configuring two tables would look like the following:
 
 ```YAML
 first_table:

@@ -152,7 +152,7 @@ Install a compatible `mysqlbinlog` utility (compatible with the source MySQL ser
       - From the `ORDERS` table, only the `product` and `service` columns will be replicated as long as they meet the condition you specified in `conditions`.
       - Since the `PART` column doesn't specify any table, all of its tables will be replicated.
 
-      The preceeding sample follows the followig generic format. You must adhere to this format for specifying your filters.
+      The preceding sample follows the followig generic format. You must adhere to this format for specifying your filters.
 
       ```YAML
       allow:

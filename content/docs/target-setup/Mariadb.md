@@ -54,7 +54,7 @@ The database/schema of your choice on a different instance of your choice name c
     - *`PASSWORD`*: the password associated with *`USERNAME`*
 
     ### Connect using SSL
-    If you use SSL for connection, you don't need to provide the `host`, `port`, `username`, and `password` parameters separately like the preceeding sample. Rather, specify a single connection URL that connects to the MariaDB server containing the necessary credentials. You can specify this URL with the `url` parameter in the connection configuration file.
+    If you use SSL for connection, you don't need to provide the `host`, `port`, `username`, and `password` parameters separately like the preceding sample. Rather, specify a single connection URL that connects to the MariaDB server containing the necessary credentials. You can specify this URL with the `url` parameter in the connection configuration file.
 
     The connection URL has the following syntax:
 

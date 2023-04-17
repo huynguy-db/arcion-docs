@@ -94,7 +94,7 @@ config-password: 'Rocket0128'
 config-auth-type: NATIVE
 ```
 
-The three parameters in the preceeding sample describe a _configuration user_. Arcion CDC Agent uses this configuration user to set up replication. You can specify these parameters either [in plain text form](#using-a-connection-configuration-file) or [in a KeyStore](#use-keystore-for-credentials).
+The three parameters in the preceding sample describe a _configuration user_. Arcion CDC Agent uses this configuration user to set up replication. You can specify these parameters either [in plain text form](#using-a-connection-configuration-file) or [in a KeyStore](#use-keystore-for-credentials).
 
 If you specify `config-username`, Arcion CDC Agent uses this user to set up replication. If you don't specify `config-username`, Arcion CDC Agent uses the [main `username`](#username). 
 
@@ -146,7 +146,7 @@ Note that [the following parameters]({{< ref "docs/references/source-prerequisit
 - `config-password`
 </dd>
 </dl>
-KeyStore entries for usernames and passwords of the preceeding parameters follow this structure:
+KeyStore entries for usernames and passwords of the preceding parameters follow this structure:
 
 ```
 <key-prefix> + “sql-proxy-connection-”
@@ -164,7 +164,7 @@ credential-store:
   password: test01 
 ```
 
-For the preceeding configuration, you need to add KeyStore entries in the following manner:
+For the preceding configuration, you need to add KeyStore entries in the following manner:
 
 <dl class="dl-indent" >
 <dt>
@@ -277,7 +277,7 @@ The name of the schema to which the view belongs to.
 ### `auxiliary-object-prefix`
 The prefix to use for the name of each view.
 
-For example, the following connection configuration for SQL Server uses the preceeding parameters to set the view properties:
+For example, the following connection configuration for SQL Server uses the preceding parameters to set the view properties:
 
 ```YAML
 type: SQLSERVER

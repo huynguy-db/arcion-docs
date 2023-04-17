@@ -196,7 +196,7 @@ rules:
       - io_blitzz
 ```
 
-In the preceeding Mapper sample, Replicant maps source catalogs `tpch` and `io_blitzz` to `arcion`. So Replicant creates each source table under `tpch` and `io_blitzz` catalogs inside `arcion` database.
+In the preceding Mapper sample, Replicant maps source catalogs `tpch` and `io_blitzz` to `arcion`. So Replicant creates each source table under `tpch` and `io_blitzz` catalogs inside `arcion` database.
 
 ### Mapping in Unity Catalog
 Unity Catalog provides a three-level namespace:
@@ -229,4 +229,4 @@ rules:
       - io_blitzz
 ```
 
-In the preceeding Mapper sample, Replicant maps source catalogs `tpch` and `io_blitzz` to `arcion.io`. So Replicant creates each source table under `tpch` and `io_blitzz` catalogs inside `arcion.io`.
+In the preceding Mapper sample, Replicant maps source catalogs `tpch` and `io_blitzz` to `arcion.io`. So Replicant creates each source table under `tpch` and `io_blitzz` catalogs inside `arcion.io`.

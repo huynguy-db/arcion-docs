@@ -45,7 +45,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     ```
 
     {{< hint "warning" >}}
-  **Important:** Make sure that the `max_connections` in PostgreSQL is greater than the `max_connections` in the preceeding connection configuration file.
+  **Important:** Make sure that the `max_connections` in PostgreSQL is greater than the `max_connections` in the preceding connection configuration file.
     {{< /hint >}}
 
     The `socket-timeout-s` parameter is only supported for versions 22.02.12.16 and newer.

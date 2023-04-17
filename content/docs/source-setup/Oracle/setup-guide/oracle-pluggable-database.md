@@ -237,7 +237,7 @@ As the last step, run Replicant with the necessary options and arguments. Rememb
 --src-schemas ./output/oracle_schema.yaml
 ```
 
-In the preceeding example, we run Replicant with the following options and arguments:
+In the preceding example, we run Replicant with the following options and arguments:
 
 - The connection configuration files of the source and the target
 - The Extractor configuration file with the `--extractor` option

@@ -126,7 +126,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     The value of `log-reader-type` defaults to `STREAM`. If you choose `STREAM`, Replicant captures CDC data through `PgReplicationStream`. If you choose `SQL`, PostgreSQL server periodically receives SQL statements for CDC data extraction.
       {{< hint "warning" >}}
   **Important:** 
-  - Make sure that the `max_connections` in PostgreSQL exceeds the `max_connections` in the preceeding connection configuration file.
+  - Make sure that the `max_connections` in PostgreSQL exceeds the `max_connections` in the preceding connection configuration file.
   - From versions 23.03.01.12 and later, 23.03.31 and later, `log-reader-type` is deprecated. Avoid specifying this parameter.
     {{< /hint >}}
 

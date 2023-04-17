@@ -119,7 +119,7 @@ keyspaces:
     enable-cdc: {true|false}
 ```
 
-In the preceeding format:
+In the preceding format:
 
 - *`KEYSPACE_NAME`*: The keyspace name.
 - *`REPLICATION_PROPERTIES`*: The replication strategy. Corresponds to `REPLICATION` in the [CREATE KEYSPACE docs](https://docs.datastax.com/en/cql-oss/3.3/cql/cql_reference/cqlCreateKeyspace.html).
