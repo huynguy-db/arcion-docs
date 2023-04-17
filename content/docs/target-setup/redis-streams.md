@@ -265,13 +265,11 @@ Realtime replication is performed with eventual consistency. Replay is done per 
 Set the realtime configuration parameter `replay-consistency` to whatever mode you want [under the `realtime` section of the Applier configuration file](#configure-realtime-mode).
 
 ## DML message structure
-Each message has a key and a value. It has schema and payload following the schema definition. The key is used to uniquely identify the change. 
-
-1. Primary key, unique keys, or row identifier key columns are used to form key structure. If there is no such key, we use the `“default“` string as a key. 
-
-2. For an update on the columns used to uniquely identify records DELETE and INSERT records are generated. 
-
-3. For each delete operation, there is a tombstone event generated with the key same as the previous delete operation and value set to `“default“`.
+1. Each message contains a key and a value. The key uniquely identifies the change.
+2. Each message contains a schema and a payload. The payload follows the schema definition.
+3. Replicant uses primary key, unique key, or row identifier key column to form key structure. In the absence of primary key, unique key, or row identifier key column, Replicant uses the `"default"` string for the key. 
+4. Whenever a column that uniquely identifies a record is updated, instead of creating an update event, Replicant generates delete and insert events. The delete event deletes existing record and insert event inserts a new record. 
+5. For each delete operation, Replicant generates a tombstone event. Replicant assigns the event the same key as the previous delete operation and sets the value to `"default"`.
 
 {{< details title="Click to see sample key and value structure" open=false >}}
 
