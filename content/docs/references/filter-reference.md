@@ -17,7 +17,7 @@ There are sample filter configuration files for different source databases insid
 The following configuration parameters are available that you can use to lay out your filters:
 
 ### `allow`
-What database, collections, or documents to replicate. This is the entrypoint of the filter configuration file. The following parameters are available under `allow`: 
+What database, collections, or documents to replicate. `allow` marks the entry point of the filter configuration file. You can specify the following parameters under `allow`: 
 
 <dl class="dl-indent">
 
@@ -33,7 +33,7 @@ The source database schema that needs to be replicated. Each schema must have a 
 
 <dt><code>types</code></dt>
 <dd>
-The data type(s) to be replicated from the source catalog <code>catalog</code> enclosed in square brackets. The following types are supported:
+The data type(s) to be replicated from the source catalog <code>catalog</code> enclosed in square brackets. Arcion Replicant supports the following types:
 
 - `TABLE`
 - `VIEW`
@@ -55,12 +55,12 @@ Specify the collection or table names that should be replicated from <code>catal
 
 <dt><code>allow</code></dt>
 <dd>
-A list of columns in the table <code>TABLE_NAME</code> which should be replicated. If you don't specify anything, all columns are replicated.
+A list of columns in the table <code>TABLE_NAME</code>. These columns undergo replication. If you don't specify anything, Replicant replicates all columns.
 </dd>
 
 <dt><code>conditions</code></dt>
 <dd>
-A predicate for filtering the data while extracting from the source. If the source system is an SQL system, you can specify the exact SQL predicate which Replicant should use while extracting data. Please note that the same predicate is executed on both the source and target systems to achieve the required end to end filtering of data during replication.
+A predicate for filtering the data while extracting from the source. If the source system supports SQL, you can specify the exact SQL predicate that Replicant uses while extracting data. Please note that Replicant executes the same predicate on both the source and target systems to achieve end-to-end filtering of data during replication.
 </dd>
 
 <dt><code>src-conditions</code></dt>
@@ -75,12 +75,12 @@ Same as <code>src-conditions</code>.
 
 <dt><code>allow-update-any</code> <i>[v20.05.12.3]</i></dt>
 <dd>
-This option is relevant for realtime (CDC-based) replication. It contains a list of columns. Replicant publishes update operations on this table only if <em>any</em> of the columns you specify here have been modified. Replicant looks for modifications in the UPDATE logs it receives from the source system.
+This option applies to realtime (CDC-based) replication. It contains a list of columns. Replicant publishes update operations on this table only if <em>any</em> of the columns you specify here have been modified. Replicant looks for modifications in the UPDATE logs it receives from the source system.
 </dd>
 
 <dt><code>allow-update-all</code> <i>[v20.05.12.3]</i></dt>
 <dd>
-This option is relevant for realtime (CDC-based) replication. It contains a list of columns. Replicant publishes update operations on this table only if <em>all</em> of the columns you specify here have been modified. Replicant looks for modifications in the UPDATE logs it receives from the source system.
+This option applies to realtime (CDC-based) replication. It contains a list of columns. Replicant publishes update operations on this table only if <em>all</em> of the columns you specify here have been modified. Replicant looks for modifications in the UPDATE logs it receives from the source system.
 </dd>
 
 </dl>
@@ -88,7 +88,7 @@ This option is relevant for realtime (CDC-based) replication. It contains a list
 </dl>
 
 {{< hint "warning" >}}
-**Important:** We recommend that you create an index on the columns of the target table which are part of `dst-conditions`.
+**Important:** We recommend that you create an index on the target table columns when those columns are part of `dst-conditions`.
 {{< /hint >}}
 
 ## Run Replicant
@@ -103,7 +103,7 @@ conf/conn/oracle_src.yaml conf/conn/databricks.yaml \
 ```
 
 ## Filter queries
-If you're [replicating source queries]({{< relref "src-queries" >}}), you need to whitelist them in the filter file. To do so, include the special tag `QUERY` inside your filter `types` list. This instructs Replicant to allow all the queries under that specific catalog or schema. For example:
+If you [replicate source queries]({{< relref "src-queries" >}}), you must whitelist them in the filter file. To do so, include the special tag `QUERY` inside your filter `types` list. The `QUERY` tag instructs Replicant to allow all the queries under that specific catalog or schema. For example:
 
 ```YAML
 allow:
@@ -111,7 +111,7 @@ allow:
   types: [QUERY]
 ```
 
-If the filter `types` list contains any other type besides `QUERY`, you must explicitly specify the logical names under the `allow` field. These logical names are [`MACRO_NAME`]({{< relref "src-queries#macros" >}}) and [`QUERY_NAME`]({{< relref "src-queries#queries" >}}) that you defined in [the `src-queries` configuration file]({{< relref "src-queries#configure-src-queries-parameters" >}}). For example, the following sample specifies the `ng_test_tbd_sql` query and the tables under the `allow` field.
+If the filter `types` list contains any other type besides `QUERY`, you must explicitly specify the logical names under the `allow` field. You define these logical names in [the `src-queries` configuration file]({{< relref "src-queries#configure-src-queries-parameters" >}}) as [`MACRO_NAME`]({{< relref "src-queries#macros" >}}) and [`QUERY_NAME`]({{< relref "src-queries#queries" >}}) . For example, the following sample specifies the `ng_test_tbd_sql` query and the tables under the `allow` field.
 
 ```YAML
 allow:
