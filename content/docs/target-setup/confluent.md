@@ -1,7 +1,7 @@
 ---
 pageTitle: Documentation for Confluent as target
 title: Confluent
-description: "Seamlessly integrate Confluent as data Target with other platforms using Arcion. Connect via SASL or SSL and configure Applier for real-time data loading."
+description: "Seamlessly integrate Confluent as data Target with other platforms using Arcion. Connect via SASL and configure Applier for real-time data loading."
 bookHidden: true
 bookSearchExclude: true
 ---
