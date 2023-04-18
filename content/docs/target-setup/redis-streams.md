@@ -195,8 +195,10 @@ _Default: `true`._
 ### Supported platforms
 Arcion Replicant supports the following sources for Redis Streams as target:
 
- - [MySQL]({{< relref "docs/source-setup/mysql" >}}) 
- - [PostgreSQL]({{< relref "docs/source-setup/postgresql" >}})
+ - [MySQL]({{< ref "docs/source-setup/mysql" >}}) 
+ - [Oracle]({{< ref "docs/source-setup/oracle" >}})
+ - [PostgreSQL]({{< ref "docs/source-setup/postgresql" >}})
+ - [SAP ASE]({{< ref "docs/source-setup/sap_ase" >}})
 
   For MySQL, you can also enable [Global Transaction ID (GTID) based logging](https://dev.mysql.com/doc/refman/5.7/en/replication-options-gtids.html#sysvar_gtid_mode) and [enforce GTID consistency](https://dev.mysql.com/doc/refman/5.7/en/replication-options-gtids.html#sysvar_enforce_gtid_consistency) if Redis messages require them. To do so, add the following to your MySQL option file `my.cnf`:
 
