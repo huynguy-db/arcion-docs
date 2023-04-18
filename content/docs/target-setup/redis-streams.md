@@ -18,7 +18,7 @@ For connecting to Redis, you can choose between two methods for an authenticated
   - Using SSL
 
 ### Connect with username and password
-For connecting to Redis via basic username and password authentication, you can specify your credentials in the connection configuration file. Follow these instructions based on whether or not you have SSL encryption enabled for Redis connection.
+For connecting to Redis with basic username and password authentication, you can specify your credentials in the connection configuration file. Follow these instructions based on whether or not you have SSL encryption enabled for Redis connection.
 
 {{< tabs "username-pwd-authentication" >}}
 {{< tab "Without SSL encryption for connection" >}}
