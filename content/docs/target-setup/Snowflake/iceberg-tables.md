@@ -11,11 +11,11 @@ bookHidden: false
 **Note:** This feature is only available in [Arcion self-hosted CLI](https://www.arcion.io/self-hosted).
 {{< /hint >}}
 
-From version 23.01.05.3, Arcion supports [Snowflake Iceberg tables]((https://docs.snowflake.com/en/LIMITEDACCESS/tables-iceberg.html)) as target for both snapshot-based and realtime replication. To use Snowflake Iceberg tables as target, follow the instructions in the following sections.
+From version 23.01.05.3, Arcion supports [Snowflake Iceberg tables]((https://docs.snowflake.com/en/LIMITEDACCESS/tables-iceberg.html)) as target for both snapshot-based and realtime replication. To use Snowflake Iceberg tables as target, follow these instructions.
 
 ## Prerequisites
 
-1. Create an Amazon S3 bucket (if it doesn't exist).
+1. Create an Amazon S3 bucket if it doesn't exist.
 
 2. Create external volume in Snowflake for your AWS S3 bucket using the `CREATE EXTERNAL VOLUME` command:
 
@@ -35,14 +35,14 @@ From version 23.01.05.3, Arcion supports [Snowflake Iceberg tables]((https://doc
     Replace the following:
 
     - *`<volume_name>`*: the name of the new external volume
-    - *`<iam_role>`*: the Amazon Resource Name (ARN) of the IAM role you created
-    - *`<path>`*: an optional path that can provide granular control over objects in the bucket 
+    - *`<iam_role>`*: the Amazon Resource Name (ARN) of the IAM role
+    - *`<path>`*: an optional path that provides granular control over objects in the bucket 
 
 For more information on granting Snowflake access to your Amazon S3 bucket, see [Accessing Amazon S3 Using External Volumes
 ](https://docs.snowflake.com/en/LIMITEDACCESS/table-external-volume-s3.html).
 
 ## Specify Iceberg as table type in Applier configuration file
-In [your Applier configuration file]({{< ref "setup-guide#ii-set-up-applier-configuration" >}}), you need to set the `table-type` property to `ICEBERG` under [the `per-table-config` configuration]({{< ref "docs/references/applier-reference#per-table-config" >}}). For example, look at the following sample Applier configuration:
+In [your Applier configuration file]({{< ref "setup-guide#ii-set-up-applier-configuration" >}}), you need to set the `table-type` property to `ICEBERG` under [the `per-table-config` configuration]({{< ref "docs/references/applier-reference#per-table-config" >}}). For example, notice the following sample Applier configuration:
 
 ```YAML
 snapshot:
@@ -63,5 +63,5 @@ snapshot:
     save-file-on-error: true
 ```
 
-{{< hint "warning" >}} **Attention:** In realtime replication, Replicant first creates the destination tables with a one-time data snapshot to transfer all existing data from the source. In this "snapshot phase", Replicant needs to know beforehand whether or not you're using Iceberg tables. For this reason, you _must always_ use the `snapshot` section of the Applier configuration file to specify your `per-table-config` parameters, including what the `table-type` is. For more information about how different Replicant modes work, see [Running Replicant]({{< ref "docs/running-replicant" >}}).
+{{< hint "warning" >}} **Attention:** In realtime replication, Replicant first creates the destination tables with a one-time data snapshot to transfer all existing data from the source. In this "snapshot phase", Replicant needs to know beforehand whether or not you're using Iceberg tables. For this reason, you _must always_ use the `snapshot` section of the Applier configuration file to specify your `per-table-config` parameters, including the value of `table-type`. For more information about how different Replicant modes work, see [Running Replicant]({{< ref "docs/running-replicant" >}}).
 {{< /hint >}}
