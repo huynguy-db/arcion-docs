@@ -45,8 +45,8 @@ Replace the following:
 
 In the preceding sample:
 
-- `max-connections` is the maximum number of connections Replicant can open in Redis. 
-- `max-retries` is the number of times any failed operation on the system will be re-attempted.
+- `max-connections` specifies the maximum number of connections Replicant can open in Redis. 
+- `max-retries` specifies the number of times any failed operation on the system will be re-attempted.
 
 Feel free to change these two values as you need.
 {{< /tab >}}
@@ -79,15 +79,15 @@ Replace the following:
 
 In the preceding sample:
 
-- `max-connections` is the maximum number of connections Replicant can open in Redis. 
-- `max-retries` is the number of times any failed operation on the system will be re-attempted.
+- `max-connections` specifies the maximum number of connections Replicant can open in Redis. 
+- `max-retries` specifies the number of times any failed operation on the system will be re-attempted.
 
 Feel free to change these two values as you need.
 
 {{< /tab >}}
 {{< /tabs >}}
 ### Connect using SSL
-If both client authentication and data encryption is done using SSL, you need to specify both TrustStore and KeyStore details in the connection configuration file. For example:
+If you prefer both client authentication and data encryption using SSL, specify both TrustStore and KeyStore details in the connection configuration file. For example:
 
 ```YAML
 type: REDIS_STREAM
@@ -124,8 +124,8 @@ Replace the following:
   
 In the preceding sample:
 
-- `max-connections` is the maximum number of connections Replicant can open in Redis. 
-- `max-retries` is the number of times any failed operation on the system will be re-attempted.
+- `max-connections` specifies the maximum number of connections Replicant can open in Redis. 
+- `max-retries` specifies the number of times any failed operation on the system will be re-attempted.
 
 Feel free to change these two values as you need.
 
@@ -208,10 +208,10 @@ Arcion Replicant supports the following sources for Redis Streams as target:
   ```
 
 ### Failures and rollbacks
-Redis stream is like an append log that where each Stream entry has an ID for each message and allows deleting messages with a given Stream entry ID. However, Redis does not support rollback functionality with transactions. So, if some rows in a batch fail, the entire transaction is not rolled back. Due to this behavior we proceed in the following manner: 
+Redis stream acts like an append log that where each Stream entry has an ID for each message and allows deleting messages with a given Stream entry ID. However, Redis does not support rollback functionality with transactions. So, if some rows in a batch fail, the entire transaction is not rolled back. Due to this behavior, Replicant follows this strategy: 
 
-- For snapshot, we identify the failed rows in a given batch and retry those.
-- For realtime, since we need to maintain the order, we try to undo the committed rows in a given batch and retry the entire batch.
+- For snapshot, Replicant identifies the failed rows in a given batch and retries those failed rows.
+- For realtime, since Replicant must maintain the order, Replicant tries to undo the committed rows in a given batch and retries the entire batch.
 
 ### Replicant's behavior after reaching `max-retries `
 After reaching the maximum number of re-attempts specified in [`max-retries`](#i-set-up-connection-configuration), Replicant's behavior depends on the replication mode and [the type of transactional consistency](#transactional-consistency-in-realtime-mode). 
@@ -254,12 +254,12 @@ Realtime mode supports the following two consistency modes.
 
 <dt><code>GLOBAL</code></dt>
 <dd>
-Realtime replication is performed with global transactional consistency. There is a single stream holding CDC logs in transaction order.
+Replicant carries out real-time replication with global transactional consistency. A single stream holds CDC logs in transaction order.
 </dd>
 
 <dt><code>EVENTUAL</code></dt>
 <dd>
-Realtime replication is performed with eventual consistency. Replay is done per table and there's a stream object for each table.
+Replicant carries out real-time replication with eventual consistency. Replicant also carries out replay per table and a stream object exists for each table.
 </dd>
 
 </dl>
