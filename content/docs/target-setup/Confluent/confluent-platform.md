@@ -1,19 +1,20 @@
 ---
-pageTitle: Documentation for Confluent as target
-title: Confluent
-description: "Seamlessly integrate Confluent as data Target with other platforms using Arcion. Connect via SASL and configure Applier for real-time data loading."
+pageTitle: Documentation for Confluent Platform as target
+title: Confluent Platform
+description: "Seamlessly ingest data into Confluent Platform for real-time data flow and processing using Arcion."
+weight: 2
 bookHidden: true
 bookSearchExclude: true
 ---
 
-# Destination Confluent
+# Destination Confluent Platform
 
 In the following steps, we refer [the extracted `replicant-cli`]({{< ref "docs/quickstart#ii-get-arcion-self-hosted" >}}) as the `$REPLICANT_HOME` directory.
 
 ## I. Set up connection configuration
-{{< tabs "confluent-connection-config-in-cli-cloud" >}}
+{{< tabs "confluent-cloud-connection-config-in-cli-cloud" >}}
 {{< tab "Arcion self-hosted CLI" >}}
-Specify your Confluent connection details to Replicant with a connection configuration file. You can find a sample connection configuration file `confluent.yaml` in the `$REPLICANT_HOME/conf/conn` directory.
+Specify your Confluent Platform connection details to Replicant with a connection configuration file. You can find a sample connection configuration file `confluent.yaml` in the `$REPLICANT_HOME/conf/conn` directory.
 
 Specify your connection in the following manner:
 
@@ -39,7 +40,7 @@ Replace the following:
 - *`BOOTSTRAP_SERVER_NAME`*: [the bootstrap server name for your cluster](https://docs.confluent.io/cloud/current/clusters/broker-config.html#access-cluster-settings-in-the-ccloud-console).
 - *`PORT_NUMBER`*: [the bootstrap server port for your cluster](https://docs.confluent.io/cloud/current/clusters/broker-config.html#access-cluster-settings-in-the-ccloud-console).
 
-In the preceding configuration, `max-connections` specifies the maximum number of connections Replicant can open in Confluent. Feel free to change its value as you need.
+In the preceding configuration, `max-connections` specifies the maximum number of connections Replicant can open in Confluent Platform. Feel free to change its value as you need.
 {{< /tab >}}
 
 {{< tab "Arcion Cloud and Arcion on-premises UI" >}}
@@ -48,7 +49,7 @@ In Arcion Cloud, fill up the connection details in the **Connection form** tab. 
 - Enter a name for your connection in the **Connection name** field.
 - Enter the [resource-specific API key](https://docs.confluent.io/cloud/current/access-management/authenticate/api-keys/api-keys.html#resource-specific-api-keys) to access your Kafka cluster in the **Key** field.
 - Enter the secret associated with your **Key** in the **Secret** field.
-- Specify the maximum number of connections Replicant can open in Confluent in the **Max connections** field. Defaults to `30`. 
+- Specify the maximum number of connections Replicant can open in Confluent Platform in the **Max connections** field. Defaults to `30`. 
 - Specify the duration in milliseconds Replicant waits before retrying a failed operation in the **Retry wait durations in ms** field. Defaults to `1000`.
 - Specify the number of times Replicant retries a failed operation in the **Max retries** field. Defaults to `30`.
 - Inside the **Brokers** section, specify each broker with the broker's **Name**, **Host**, and **Port**.
@@ -56,24 +57,24 @@ In Arcion Cloud, fill up the connection details in the **Connection form** tab. 
 {{< /tabs >}}
 
 ## II. Configure mapper file (optional)
-If you want to define data mapping from your source to Confluent, specify the mapping rules in the mapper file. For more information on how to define the mapping rules and run Replicant CLI with the mapper file, see [Mapper Configuration]({{< ref "/docs/references/mapper-reference" >}}).
+If you want to define data mapping from your source to Confluent Platform, specify the mapping rules in the mapper file. For more information on how to define the mapping rules and run Replicant CLI with the mapper file, see [Mapper Configuration]({{< ref "/docs/references/mapper-reference" >}}).
 
 When mapping source object names to Kafka topics, you can choose between two delimiters for topic names. For more information, see [Delimiter in Kafka topic and Redis stream names]({{< ref "/docs/references/mapper-reference#delimiter-in-kafka-topic-and-redis-stream-names" >}}).
 
 ## III. Set up Applier configuration    
 
-1. From `$REPLICANT_HOME`, naviagte to the sample Confluent Applier configuration file:
+1. From `$REPLICANT_HOME`, naviagte to the sample Confluent Platform Applier configuration file:
    ```BASH
    vi conf/dst/confluent.yaml
    ```
-2. The configuration file can contain global Applier parameters followed by snapshot and realtime parameters:
+2. The configuration file contains global Applier parameters, with snapshot and realtime parameters following the global parameters:
 
     - [Global configuration parameters](#global-configuration-parameters)
     - [Parameters related to snapshot mode](#parameters-related-to-snapshot-mode)
     - [Parameters related to realtime mode](#parameters-related-to-realtime-mode)
 
     ### Global configuration parameters
-    Global configuration parameters live at the topmost level of the Applier configuration file. So you _must_ specify them at the topmost place of the Applier configuration file. Since these parameters are defined globally, they affect both snapshot and real-time replication.
+    Global configuration parameters live at the topmost level of the Applier configuration file. So you _must_ specify them at the topmost place of the Applier configuration file. The global configuration parameters affect both snapshot and real-time replication.
     
     The following global Applier configuration parameters are available.
 
@@ -86,7 +87,7 @@ When mapping source object names to Kafka topics, you can choose between two del
     - [`JSON`]({{< ref "docs/references/cdc-format/json-cdc-format" >}})
 
     ### Parameters related to snapshot mode
-    For snapshot mode, the following Confluent-specific parameters are available:
+    For snapshot mode, the following Confluent Platform-specific parameters are available:
 
     #### `replication-factor` *[v21.12.02.6]*
     Replication factor for data topics. For Kafka cluster setup this defines the factor in which Kafka topic partitions are replicated on different brokers. We pass this config value to Kafka and Kafka drives the partition level replication.
