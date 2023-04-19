@@ -37,15 +37,15 @@ To enable Type-2 CDC for your Snowflake target, follow these steps:
 
     ```YAML
     realtime:
-        enable-type2-cdc: true
-        replay-strategy: NONE
+      enable-type2-cdc: true
+      replay-strategy: NONE
     ```
 
 2. In the Extractor configuration file of source, add the following parameter under the `snapshot` section:
 
     ```YAML
     snapshot:
-        csv-publish-method: READ
+      csv-publish-method: READ
     ```
 
 For a detailed explanation of configuration parameters in the Applier file, see [Applier Reference]({{< ref "/docs/references/applier-reference" >}}).
