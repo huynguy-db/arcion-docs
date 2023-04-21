@@ -30,7 +30,7 @@ Arcion supports the following metadata related to source-specific fields:
 - `EXTRACTION_TIMESTAMP`: Time when Replicant detects the DML from logs.
 - `OPERATION_TYPE`: Type of the operation (INSERT, UPDATE, or DELETE).
 
-You must enable *enable full row logging* in the source to use Type-2 CDC.
+You *must enable full row logging* in the source to use Type-2 CDC.
 
 ## Limitations
 Support for Type-2 CDC possesses the following limitations: 
