@@ -280,7 +280,7 @@ The following steps refer [the extracted Arcion self-hosted CLI download]({{< re
       After executing the preceding command, you can select table with lowercase names by surrounding the names with double quotation marks.
 
     ### Enable Type-2 CDC
-    From version 22.07.19.3 onwards, Arcion supports Type-2 CDC for Snowflake as the target. For more information, see [Type-2 CDC]({{< ref "docs/references/type-2-cdc" >}}).
+    From version 22.07.19.3 onwards, Arcion supports Type-2 CDC for Snowflake as the target. For more information, see [Type-2 CDC]({{< ref "docs/references/type-2-cdc" >}}) and [`cdc-metadata-type`]({{< relref "docs/references/applier-reference#cdc-metadata-type" >}}).
 
     
 

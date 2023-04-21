@@ -264,11 +264,16 @@ In these situations, Replicant falls back to the default behavior for recovery.
 {{< /hint >}}
 
 ### `cdc-metadata-type`
-`cdc-metadata-type` allows you to add extra information columns to the CDC row.
+This parameter allows you to add extra information columns to the CDC row.
 
-Support `cdc-metadata-type` possesses the following limitations: 
+Support for `cdc-metadata-type` possesses the following limitations: 
 - `cdc-metadata-type` works on sources that support CDC.
 - `cdc-metadata-type` works in [`realtime`]({{< ref "docs/running-replicant#replicant-realtime-mode" >}}) and [`full`]({{< ref "docs/running-replicant#replicant-full-mode" >}}) modes.
+
+Arcion supports this parameter for the following targets:
+
+- [Databricks]({{< ref "docs/target-setup/databricks" >}})
+- [Snowflake]({{< ref "docs/target-setup/snowflake" >}})
 
 You can set `cdc-metadata-type` to one of the following values:
 
