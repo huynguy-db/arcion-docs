@@ -13,6 +13,5 @@ This section contains everything you need to get the most out of Arcion's Snowfl
 ## In this section
 
 - [Setup guide]({{< relref "setup-guide" >}})
-- [Type-2 CDC support]({{< relref "type-2-cdc" >}})
 - [Stage configuration]({{< relref "stage-configuration" >}})
 - [Snowflake Iceberg tables]({{< relref "iceberg-tables" >}})
