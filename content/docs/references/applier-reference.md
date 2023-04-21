@@ -262,3 +262,43 @@ Upsert-based recovery doesn't work in the following situations:
 
 In these situations, Replicant falls back to the default behavior for recovery.
 {{< /hint >}}
+
+### `cdc-metadata-type`
+`cdc-metadata-type` allows you to add extra information columns to the CDC row.
+
+Support `cdc-metadata-type` possesses the following limitations: 
+- `cdc-metadata-type` works on sources that support CDC.
+- `cdc-metadata-type` works in [`realtime`]({{< ref "docs/running-replicant#replicant-realtime-mode" >}}) and [`full`]({{< ref "docs/running-replicant#replicant-full-mode" >}}) modes.
+
+You can set `cdc-metadata-type` to one of the following values:
+
+<dl class="dl-indent">
+<dt>
+
+`NONE`
+</dt>
+<dd>
+
+Default value of `cdc-metadata-type`. CDC works in the normal manner.
+</dd>
+
+<dt>
+
+`TYPE2_CDC`</dt>
+<dd>
+
+With this value, all operations become append only and Arcion uses Type-2 CDC. For more information, see [Type-2 CDC]({{< relref "type-2-cdc" >}}).
+
+</dd>
+
+<dt>
+
+`ADD_METADATA_CDC`</dt>
+<dd>
+With this value, insert, update, and delete operations work in the normal manner but each row contains two additional fields: 
+
+- **`ARCION_SOURCE_EXTRACTION_TIMESTAMP`**.  Time when Replicant detects the DML from logs.
+- **`ARCION_SOURCE_OPERATION_TYPE`**. Type of the operation (INSERT, UPDATE, or DELETE). Delete operation deletes the row.
+
+Each update operation updates the preceding fields and insert operation inserts a new row with the preceding fields.
+</dd>
