@@ -47,6 +47,7 @@ In the preceding configuration, `max-connections` specifies the maximum number o
 In Arcion Cloud, fill up the connection details in the **Connection form** tab. The **Connection form** requires the same set of connection details as Arcion self-hosted CLI:
 
 - Enter a name for your connection in the **Connection name** field.
+- Enter the [bootstrap hostname and port number](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#bootstrap-servers) in the **Bootstrap Host** and **Port** fields respectively.
 - Enter the [resource-specific API key](https://docs.confluent.io/cloud/current/access-management/authenticate/api-keys/api-keys.html#resource-specific-api-keys) to access your Kafka cluster in the **Key** field.
 - Enter the secret associated with your **Key** in the **Secret** field.
 - Specify the maximum number of connections Replicant can open in Confluent Platform in the **Max connections** field. Defaults to `30`. 
