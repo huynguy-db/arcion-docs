@@ -3,8 +3,7 @@ pageTitle: Documentation for Confluent target connector
 title: Confluent
 description: "Arcion offers fast, real-time data ingestion into Confluent Cloud and Confluent Platform, empowering scalable cloud-native data streaming and processing."
 bookCollapseSection: true
-bookHidden: true
-bookSearchExclude: true
+bookHidden: false
 ---
 
 # Destination Confluent

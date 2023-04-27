@@ -3,8 +3,7 @@ pageTitle: Documentation for Confluent Platform as target
 title: Confluent Platform
 description: "Seamlessly ingest data into Confluent Platform for real-time data flow and processing using Arcion."
 weight: 2
-bookHidden: true
-bookSearchExclude: true
+bookHidden: false
 ---
 
 # Destination Confluent Platform
@@ -53,7 +52,6 @@ In Arcion Cloud, fill up the connection details in the **Connection form** tab. 
 - Specify the maximum number of connections Replicant can open in Confluent Platform in the **Max connections** field. Defaults to `30`. 
 - Specify the duration in milliseconds Replicant waits before retrying a failed operation in the **Retry wait durations in ms** field. Defaults to `1000`.
 - Specify the number of times Replicant retries a failed operation in the **Max retries** field. Defaults to `30`.
-- Inside the **Brokers** section, specify each broker with the broker's **Name**, **Host**, and **Port**.
 {{< /tab >}}
 {{< /tabs >}}
 
