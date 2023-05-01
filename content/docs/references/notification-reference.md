@@ -1,4 +1,3 @@
-
 ---
 pageTitle: Configure notifications from Replicant
 title: Notification Configuration

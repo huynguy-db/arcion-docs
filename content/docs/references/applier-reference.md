@@ -2,7 +2,7 @@
 pageTitle: Reference for Applier configuration parameters
 title: Applier Configuration
 description: "Learn about all the Applier configuration paramters available to configure Target databases in Arcion."
-weight: 3
+weight: 1
 ---
 # Applier Configuration
 

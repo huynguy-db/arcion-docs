@@ -3,7 +3,7 @@ pageTitle: Type-2 CDC support in Arcion
 title: Type-2 CDC
 description: "Learn how to use Type-2 CDC for Snowflake and Databricks in Arcion."
 bookHidden: false
-weight: 5
+weight: 18
 ---
 
 # Use Type-2 CDC

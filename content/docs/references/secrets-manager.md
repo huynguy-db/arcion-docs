@@ -2,7 +2,7 @@
 pageTitle: Use AWS Secrets Manager
 title: Use AWS Secrets Manager
 description: "Learn how to use AWS Secrets Manager with Arcion Replicant. Replicant can retrieve credentials from Secrets Manager instead of reading from YAML files."
-weight: 5
+weight: 16
 ---
 
 # Retrieve credentials from AWS Secrets Manager

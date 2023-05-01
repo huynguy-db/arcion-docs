@@ -2,7 +2,7 @@
 pageTitle: Distributed Replication
 title: Distributed Replication
 description: "Learn how Arcion Replicant can carry out distributed replication across multiple nodes. We have a hands-on example walking you through the whole process."
-weight: 7
+weight: 9
 ---
 
 # Configure Distributed Replication

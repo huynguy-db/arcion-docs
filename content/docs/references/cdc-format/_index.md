@@ -3,7 +3,7 @@ bookCollapseSection: true
 pageTitle: Change data capture Format
 title: "Change Data Capture Format"
 description: "Arcion uses its own CDC format to represent CDC change events. This format is supported for Amazon S3, along with the JSON CDC format for Kafka as target."
-weight: 10
+weight: 13
 ---
 
 # Change data capture format

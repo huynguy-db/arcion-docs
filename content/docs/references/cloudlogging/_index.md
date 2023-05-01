@@ -3,7 +3,7 @@ bookCollapseSection: true
 pageTitle: Cloud Logging
 title: "Cloud Logging"
 description: "Learn how to collect replication statistics and logs into cloud logging platforms like New Relic, enabling powerful log management and analysis."
-weight: 12
+weight: 17
 ---
 
 # Cloud logging

@@ -2,8 +2,8 @@
 pageTitle: Replicate custom queries, macros, UDFs, stored procedures
 title: Replication of source queries
 description: "Learn how to replicate the results of custom-queries, macros, UDFs, stored procedures from source to the target database systems."
-weight: 13
 bookHidden: false
+weight: 11
 ---
 
 # Replication of source queries

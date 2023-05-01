@@ -2,7 +2,7 @@
 pageTitle: Maintaining replication related metadata
 title: Metadata Configuration
 description: "Arcion Replicant maintains its own metadata for distributed and fault-tolerant replication. You can configure where to store those metadata in."
-weight: 11
+weight: 5
 ---
 
 # Metadata configuration
