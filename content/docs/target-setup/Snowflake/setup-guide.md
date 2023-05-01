@@ -65,11 +65,14 @@ The following steps refer [the extracted Arcion self-hosted CLI download]({{< re
     
     Replace the following:
     
-    - *`SNOWFLAKE_HOSTNAME`*: the Snowflake hostname. The hostname follows the format `ACCOUNT_NAME.REGION_ID.snowflakecomputing.com` or `ACCOUNT_NAME.snowflakecomputing.com`—for example, `replicate_partner.snowflakecomputing.com`.
-    - *`PORT_NUMBER`*: the port number of Snowflake host
-    - *`WAREHOUSE_NAME`*: the name of the [Snowflake warehouse](https://docs.snowflake.com/en/sql-reference/ddl-virtual-warehouse.html#warehouse-resource-monitor-ddl)
-    - *`USERNAME`*: the username to connect to the Snowflake server
-    - *`PASSWORD`*: the password associated with *`USERNAME`*
+    - *`SNOWFLAKE_HOSTNAME`*: The Snowflake hostname. To find your Snowflake hostname, follow these steps:
+      1. Go to the [Snowflake web interface](https://app.snowflake.com/) and sign in into your account.
+      2. Click the **Account selector** toolbar in [the bottom of the left navigation menu](https://docs.snowflake.com/en/user-guide/ui-snowsight-gs#snowsight-gs-left-nav).
+      3. Hover the mouse over your account and click **<span aria-hidden="true" translate="no"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#040022" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></span> Copy account URL** in the items list.
+    - *`PORT_NUMBER`*: The port number of Snowflake host.
+    - *`WAREHOUSE_NAME`*: The name of the [Snowflake warehouse](https://docs.snowflake.com/en/sql-reference/ddl-virtual-warehouse.html#warehouse-resource-monitor-ddl).
+    - *`USERNAME`*: The username to connect to the Snowflake server.
+    - *`PASSWORD`*: The password associated with *`USERNAME`*.
 
     ### Additional parameters
     #### `credential-store`
