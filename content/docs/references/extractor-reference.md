@@ -94,6 +94,21 @@ Extraction using the DataStax Bulk Loader (DSBulk) tool. Supported only for Cass
 </dd>
 </dl>
 
+### `enable-extraction-governor` *[v23.03.31.1]*
+`true` or `false`
+
+Whether to throttle the Extractor when memory consumption of Replicant hits threshold limit. Throttling prevents out of memory (OOM) errors and allows the Applier to catch up and free up  memory. 
+
+If you enable this feature, it monitors the memory usage of Replicant. If Replicant's memory usage goes over 80%, the Extractor slows down. This allows the Applier threads to finish applying data to the target database and free up memory.
+
+_Default: `false`._
+
+### `extraction-governor-wait-ms` *[v23.03.31.1]*
+Duration in milliseconds you want Extractor threads to sleep for. Use this parameter in conjunction with [`enable-extraction-governor`](#enable-extraction-governor-v2303311).
+
+_Default: `100`._
+
+
 ### `tpt-num-files-per-job` *[v20.07.02.1]*
 This parameter is only applicable when the `extraction-method` is `TPT`. It indicates how many CSV files should be exported by each TPT job (default value set to 16).
   
