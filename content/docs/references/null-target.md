@@ -36,7 +36,7 @@ To use `/dev/null` as target, follow these steps:
     ```
 
     In the preceding command:
-    1. We run Replicantt `snapshot` mode for [snapshot replication]({{< ref "docs/source-setup/sqlserver/snapshot-replication" >}}).
+    1. We run Replicant in `snapshot` mode for [snapshot replication]({{< ref "docs/source-setup/sqlserver/snapshot-replication" >}}).
     2. We specify the path to [the connection configuration file of the source]({{< ref "docs/source-setup/sqlserver/snapshot-replication#ii-set-up-connection-configuration" >}}) and the null target.
     3. We specify the path to [the Extractor configuration file]({{< ref "docs/source-setup/sqlserver/snapshot-replication#iii-set-up-extractor-configuration" >}}) using the `--extractor` argument.
 
