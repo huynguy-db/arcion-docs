@@ -9,11 +9,11 @@ bookHidden: false
 
 The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory.
 
-## I. Install mysqlbinlog Utility on Replicate Host
+## I. Install `mysqlbinlog` utility on Replicant host
 
-Install a compatible `mysqlbinlog` utility (compatible with the source MySQL server) on the machine where Replicant runs.
+Install an appropriate version of the  `mysqlbinlog` utility on the machine where Replicant runs. The utility must be compatible with the source MySQL server.
 
-Install the same MySQL server version as your source MySQL system. This ensures that you possess the appropriate version of `mysqlbinlog` utility. After installation, you can stop the MySQL server running on Replicant's host using the following command:
+To ensure that you possess the appropriate version of `mysqlbinlog` utility, install the same MySQL server version as your source MySQL system. After installation, you can stop the MySQL server running on Replicant's host using the following command:
   ```BASH
   sudo systemctl stop mysql
   ```
@@ -66,7 +66,7 @@ Install the same MySQL server version as your source MySQL system. This ensures 
     7 rows in set (0.011 sec)
     ```
 
-## III. Set up MySQL User for Replicant
+## III. Set up MySQL user for Replicant
 1.	Create MySQL user
     ```SQL
     CREATE USER 'username'@'replicate_host' IDENTIFIED BY 'password';
@@ -94,7 +94,7 @@ Install the same MySQL server version as your source MySQL system. This ensures 
     4 rows in set (0.001 sec)
     ```
 
-## IV. Set up Connection Configuration
+## IV. Set up connection configuration
 
 1. From ```$REPLICANT_HOME```, navigate to the connection configuration file
     ```BASH
@@ -117,7 +117,7 @@ Install the same MySQL server version as your source MySQL system. This ensures 
     max-connections: 30 #Maximum number of connections replicant can open in MySQL
     ```
 
-## V. Setup Filter Configuration
+## V. Se tup filter configuration
 
 1. From ```$REPLICANT_HOME```, navigate to the filter configuration file
     ```BASH
@@ -168,7 +168,7 @@ Install the same MySQL server version as your source MySQL system. This ensures 
     ```
 For a detailed explanation of configuration parameters in the filter file, read: [Filter Reference]({{< ref "/docs/references/filter-reference" >}} "Filter Reference")
 
-## VI. Set up Extractor Configuration
+## VI. Set up Extractor configuration
 
 For real-time replication, you must create a heartbeat table in the source MySQL
 
