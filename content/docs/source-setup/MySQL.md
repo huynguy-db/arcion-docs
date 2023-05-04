@@ -11,11 +11,12 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
 ## I. Install mysqlbinlog Utility on Replicate Host
 
-1. Install a compatible mysqlbinlog utility (compatible with the source MySQL server) on the machine where replicate will be running
-  * **Note**: The easiest way to install the correct mysqlbin log utility is to install the the the same MySQL server version as your source MySQL System. After installation, you can stop this MySQL server running on replicate’s host using the command
-    ```BASH
-    sudo systemctl stop mysql
-    ```
+Install a compatible `mysqlbinlog` utility (compatible with the source MySQL server) on the machine where Replicant runs.
+
+Install the same MySQL server version as your source MySQL system. This ensures that you possess the appropriate version of `mysqlbinlog` utility. After installation, you can stop the MySQL server running on Replicant's host using the following command:
+  ```BASH
+  sudo systemctl stop mysql
+  ```
 
 ## II. Enable binary logging in MySQL server
 
@@ -25,8 +26,16 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     [mysqld]
     log-bin=mysql-log.bin
     binlog_format=ROW
+    binlog_row_image=full
     ```
-    The first line [specifies the base name to use for binary log files](https://dev.mysql.com/doc/refman/8.0/en/replication-options-binary-log.html#option_mysqld_log-bin). The second line [sets the binary logging format](https://dev.mysql.com/doc/refman/8.0/en/replication-options-binary-log.html#sysvar_binlog_format).
+
+    The preceding option file specifies the following binary logging options:
+
+    i. The first line [specifies the base name to use for binary log files](https://dev.mysql.com/doc/refman/8.0/en/replication-options-binary-log.html#option_mysqld_log-bin).
+
+    ii. The second line [sets the binary logging format](https://dev.mysql.com/doc/refman/8.0/en/replication-options-binary-log.html#sysvar_binlog_format).
+    
+    iii. The third line [specifies how the server writes row images to the binary log](https://dev.mysql.com/doc/refman/5.7/en/replication-options-binary-log.html#sysvar_binlog_row_image). In `full` mode, the server logs all columns in both the before image and the after image.
 
 2. Export `$MYSQL_HOME` path with the following command:
     ```SQL
