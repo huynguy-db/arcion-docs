@@ -136,3 +136,12 @@ kbd {
    font-feature-settings: 'liga';
    -webkit-font-smoothing: antialiased;
 }
+
+.no-select {
+   -webkit-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+   margin: 0;
+   padding: 0;
+}
