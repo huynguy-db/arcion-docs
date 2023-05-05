@@ -61,22 +61,30 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     To connect to SingleStore using SSL, follow these steps:
 
     1. Configure the server-side requirements by following the instructions in [Server Configuration for Secure Client and Intra-Cluster Connections](https://docs.singlestore.com/db/v8.0/en/security/encryption/ssl-secure-connections/server-configuration-for-secure-client-and-intra-cluster-connections.html).
-    2. Specify the SSL parameters to Replicant using the `ssl` section in the connection configuration file for SingleStore. For example:
+    2. Specify the SSL parameters to Replicant in the `ssl` section of the connection configuration file in the following format:
 
         ```YAML
-        type: SINGLESTORE
-
         ssl:
           enable: true
-          trust-store:
-            path: "PATH_TO_CA_CERTIFICATE_FILE"
-
-        max-connections: 30
-        max-retries: 10
-        retry-wait-duration-ms: 1000
+          root-cert: "PATH_TO_CA_CERTIFICATE_FILE" 
+          hostname-verification: {true|false}      
+          trust-store:                    
+            path: PATH_TO_CA_TRUSTSTORE
+            password: TRUSTSTORE_PASSWORD
+          key-store:                       
+            path: PATH_TO_KEYSTORE
+            password: KEYSTORE_PASSWORD
+          ssl-key-password: KEYSTORE_CERT_PASSWORD
         ```
 
-        Replace *`PATH_TO_CA_CERTIFICATE_FILE`* with the full path to your SSL CA certificate file—for example, `"/home/alex/workspace/ca-cert.pem"`.
+        In the preceding configuration:
+        - `root-cert` holds the full path to your SSL CA certificate file—for example, `"/home/alex/workspace/ca-cert.pem"`. Keep in mind that the `trust-store` configuration overrides `root-cert`.
+        - `hostname-verifcation` enables hostname verification against the server identity according to the specification in the server's certificate.
+        - `trust-store` holds the SSL CA certificate that the client uses to authenticate the server. This configuration overrides `root-cert`. 
+        
+          Replace *`PATH_TO_CA_TRUSTSTORE`* and *`TRUSTSTORE_PASSWORD`* with the path to the TrustStore and the TrustStore password respectively.
+        - The server uses `key-store` to authenticate the client. Replace *`PATH_TO_KEYSTORE`* and *`KEYSTORE_PASSWORD`* with the path to the KeyStore and the KeyStore password respectively.
+        - As an optional parameter, `ssl-key-password` holds the password of the certificate inside the KeyStore.
    
 ## II. Set up Extractor Configuration
 
