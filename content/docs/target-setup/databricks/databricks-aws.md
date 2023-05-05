@@ -222,13 +222,34 @@ If you want to define data mapping from your source to Databricks AWS, specify t
 
     ```YAML
     realtime:
-      threads: 4 #Maximum number of threads Replicant should use for writing to the target
+      threads: 4
+
+      txn-size-rows: 100000
+      _traceDBTasks: true
+      skip-tables-on-failures : false
+      enable-dependency-tracking: true
+      
+      reuse-temp-table: true
     ```
+
+    #### Additional parameters
+    <dl class="dl-indent">
+    <dt><code>reuse-temp-table</code></dt>
+    <dd>
+
+    `true` or `false`.
+
+    Enables reusing temporary tables instead of creating and dropping each time the Applier ingests CDC operations.
+
+    The Applier creates temporary table using target table schema to ingest CDC operations to target table. Creating and dropping temporary tables on each CDC replay may slow down CDC ingestion. Enabling this parameter allows you to make CDC ingestion faster by telling the Applier to reuse the temporary tables.
+
+    _Default: `false`._
+    </dd>
 
     ### Enable Type-2 CDC
     From version 22.07.19.3 onwards, Arcion supports Type-2 CDC for Databricks as the target. For more information, see [Type-2 CDC]({{< ref "docs/references/type-2-cdc" >}}) and [`cdc-metadata-type`]({{< relref "docs/references/applier-reference#cdc-metadata-type" >}}).
 
-  For a detailed explanation of configuration parameters in the Applier file, read [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference").
+  For a detailed explanation of configuration parameters in the Applier file, see [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference").
 
 ## Databricks Unity Catalog Support (Beta)
 
