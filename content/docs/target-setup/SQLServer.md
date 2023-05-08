@@ -77,7 +77,7 @@ snapshot:
   identity-column-insert: false
 ```
 
-#### Additional parameters
+#### Additional `snapshot` parameters
 <dl class="dl-indent">
   <dt><code>identity-insert-column</code></dt>
   <dd>
@@ -143,7 +143,7 @@ realtime:
   identity-column-insert: false
 ```
 
-#### Additional parameters
+#### Additional `realtime` parameters
 <dl class="dl-indent">
   <dt><code>identity-insert-column</code></dt>
   <dd>
