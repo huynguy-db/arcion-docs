@@ -84,6 +84,8 @@ snapshot:
 
   `true` or `false`.
 
+  _Default: `false`._
+
   Controls how Replicant handles identity columns in the following manner: 
 
   - **`true`**. Replicant copies the values of identity columns from source to target.  
@@ -150,6 +152,8 @@ realtime:
 
   `true` or `false`.
 
+  _Default: `false`._
+
   Controls how Replicant handles identity columns in the following manner:
 
   - **`true`**. Replicant copies the values of identity columns from source to target.  
@@ -172,6 +176,7 @@ realtime:
           tableName:
             identity-column-insert: false
   ```
+  {{< hint "warning" >}}**Important:** Make sure to set `identity-insert-column` to `true` when you use identity column as primary key in `realtime` mode.{{< /hint >}}
   </dd>
 
 </dl>
