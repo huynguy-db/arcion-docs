@@ -74,7 +74,41 @@ snapshot:
   threads: 32
   batch-size-rows: 10_000
   txn-size-rows: 1_000_000
+  identity-column-insert: false
 ```
+
+#### Additional parameters
+<dl class="dl-indent">
+  <dt><code>identity-insert-column</code></dt>
+  <dd>
+
+  `true` or `false`.
+
+  Controls how Replicant handles identity columns in the following manner: 
+
+  - **`true`**. Replicant copies the values of identity columns from source to target.  
+  - **`false`**. Replicant doesn't copy the values of identity columns from source to target. Instead, Replicant generates the values of identity columns in the target.
+
+  You can use this parameter both globally and in [`per-table-config`]({{< ref "docs/references/applier-reference#per-table-config-1" >}})s. For example, the following sample disables `identity-insert-column` globally and enables `identity-insert-column` for a table `tableName`:
+
+  ```YAML
+  snapshot:
+    threads: 32
+    batch-size-rows: 10_000
+    txn-size-rows: 1_000_000
+
+    identity-column-insert: false
+
+    per-table-config:
+    - catalog: catalogName
+      schema: schemaName
+      tables:
+        tableName:
+          identity-column-insert: true
+  ```
+  </dd>
+
+</dl>
 
 #### Use bulk loading
 If you want to use bulk loading in snapshot mode, use the `bulk-load` section to specify your configuration. For example:
@@ -106,7 +140,42 @@ realtime:
   threads: 8
   txn-size-rows: 10000
   batch-size-rows: 1000
+  identity-column-insert: false
 ```
+
+#### Additional parameters
+<dl class="dl-indent">
+  <dt><code>identity-insert-column</code></dt>
+  <dd>
+
+  `true` or `false`.
+
+  Controls how Replicant handles identity columns in the following manner:
+
+  - **`true`**. Replicant copies the values of identity columns from source to target.  
+  - **`false`**. Replicant doesn't copy the values of identity columns from source to target. Instead, Replicant generates the values of identity columns in the target.
+
+  You can use this parameter both globally and in [`per-table-config`]({{< ref "docs/references/applier-reference#per-table-config-1" >}})s. For example, the following sample enables `identity-insert-column` globally and disables `identity-insert-column` for a table `tableName`:
+
+  ```YAML
+  realtime:
+    threads: 8
+    txn-size-rows: 10000
+    batch-size-rows: 1000
+
+    identity-column-insert: true
+
+    per-table-config:
+      - catalog: catalogName
+        schema: schemaName
+        tables:
+          tableName:
+            identity-column-insert: false
+  ```
+  </dd>
+
+</dl>
+
 For more information about the configuration parameters for `realtime` mode, see [Realtime Mode]({{< ref "/docs/references/applier-reference#realtime-mode" >}}).
 
 ## Delta-snapshot modes
