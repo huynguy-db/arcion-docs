@@ -46,7 +46,7 @@ To ensure that you possess the appropriate version of `mysqlbinlog` utility, ins
     ```BASH
     sudo systemctl restart mysql
     ```
-4. Verify if binlogging is turned on with the following command:
+4. Verify that you successfully enabled binary logging with the following command:
     ```BASH
     mysql -u root -p
     ```
@@ -71,7 +71,7 @@ To ensure that you possess the appropriate version of `mysqlbinlog` utility, ins
     ```SQL
     CREATE USER 'username'@'replicate_host' IDENTIFIED BY 'password';
     ```
-2.	Grant below privileges on all tables involved in replication
+2.	Grant the following privileges on all tables involved in replication
     ```SQL
     GRANT SELECT ON "<user_database>"."<table_name>" TO 'username'@'replicate_host';
     ```
@@ -103,7 +103,7 @@ To ensure that you possess the appropriate version of `mysqlbinlog` utility, ins
 
 2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/references/secrets-manager). 
     
-    Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
+    Otherwise, you can put your credentials like usernames and passwords in plain form like the following sample:
     ```YAML
     type: MYSQL
 
@@ -117,37 +117,41 @@ To ensure that you possess the appropriate version of `mysqlbinlog` utility, ins
     max-connections: 30 #Maximum number of connections replicant can open in MySQL
     ```
 
-## V. Se tup filter configuration
+## V. Set up filter configuration
 
 1. From ```$REPLICANT_HOME```, navigate to the filter configuration file
     ```BASH
     vi filter/mysql_filter.yaml
     ```
 
-2. In accordance to you replication needs, specify the data which is to be replicated. Use the format of the example explained below.  
+2. According to your requirements, specify the data you want to replicate. Use the following format:  
 
     ```yaml
     allow:
-      #In this example, data of object type Table in the catalog tpch will be replicated
       catalog: "tpch"
       types: [TABLE]
 
-      #From catalog tpch, only the NATION, ORDERS, and PART tables will be replicated.
-      #Note: Unless specified, all tables in the catalog will be replicated
       allow:
         NATION:
-           #Within NATION, only the US and AUS columns will be replicated
            allow: ["US, AUS"]
 
         ORDERS:  
-           #Within ORDERS, only the product and service columns will be replicated as long as they meet the condition o_orderkey < 5000
            allow: ["product", "service"]
            conditions: "o_orderkey < 5000"
 
-        PART: #All columns in the table PART will be replicated without any predicates
+        PART:
     ```
 
-    The following is a template of the format you must follow:
+      The preceding sample consists of the following elements:
+
+      - Data of object type `TABLE` in the schema `tpch` goes through replication.
+      - From catalog `tpch`, only the `NATION`, `ORDERS`, and `PART` tables go through replication.
+      - From `NATION` table, only the `US` and `AUS` columns go through replication.
+      - From the `ORDERS` table, only the `product` and `service` columns go through replication as long as those columns meet the condition in `conditions`.
+    
+    {{< hint "info" >}}**Note:** Unless you specify, Replicant replicates all tables in the catalog.{{< /hint >}}
+
+    The following illustrates the format you must follow:
 
     ```YAML
     allow:
@@ -166,69 +170,90 @@ To ensure that you possess the appropriate version of `mysqlbinlog` utility, ins
 
         <your_table_name>:
     ```
-For a detailed explanation of configuration parameters in the filter file, read: [Filter Reference]({{< ref "/docs/references/filter-reference" >}} "Filter Reference")
+For a thorough explanation of configuration parameters in the filter file, read: [Filter Reference]({{< ref "/docs/references/filter-reference" >}} "Filter Reference")
 
 ## VI. Set up Extractor configuration
+To configure replication according to your requirements, specify your configuration in the Extractor configuration file. You can find a sample Extractor configuration file `mysql.yaml` in the `$REPLICANT_HOME/conf/src` directory. For a thorough explanation of the configuration parameters in the Extractor file, see [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference").
 
-For real-time replication, you must create a heartbeat table in the source MySQL
+You can configure the following [replication modes]({{< ref "running-replicant" >}}) by specifying the parameters under their respective sections in the configuration file:
 
-1. Create a heartbeat table in the catalog/schema you are going to replicate with the following DDL:
+- `snapshot`
+- `realtime`
+  
+See the following sections for more information.
+
+### Configure `snapshot` replication
+The following illustrates a sample configuration for operating in [`snapshot` mode]({{< ref "running-replicant#replicant-snapshot-mode" >}}):
+
+```YAML
+    snapshot:
+      threads: 16
+      fetch-size-rows: 15_000
+
+      per-table-config:
+      - catalog: tpch
+        tables:
+          ORDERS:
+            num-jobs: 1
+          LINEITEM:
+            row-identifier-key: [L_ORDERKEY]
+            split-key: l_orderkey
+```
+
+For more information about the configuration parameters for `snapshot` mode, see [Snapshot Mode]({{< ref "/docs/references/extractor-reference#snapshot-mode" >}}).
+
+### Configure `realtime` replication
+To operate in [`realtime` mode]({{< ref "running-replicant#replicant-realtime-mode" >}}), follow these steps:
+
+1. For real-time replication, you must create a heartbeat table in the source MySQL. To create a heartbeat table in the catalog or schema you want to replicate, use the following DDL:
    
     ```SQL
     CREATE TABLE `<user_database>`.`replicate_io_cdc_heartbeat`(
       timestamp BIGINT NOT NULL,
       PRIMARY KEY(timestamp));
     ```
-    Replace `<user_database>` with the name of your specific database.
+    Replace `<user_database>` with the name of your specific database—for example, `tpch`.
 
-2. Grant ```INSERT```, ```UPDATE```, and ```DELETE``` privileges for the heartbeat table to the user configured for replication
+2. Grant `INSERT`, `UPDATE`, and `DELETE` privileges to the user for the heartbeat table.
 
-3. From ```$REPLICANT_HOME```, navigate to the extractor configuration file
-   ```BASH
-   vi conf/src/mysql.yaml
-   ```
-4. Under the Realtime Section, make the necessary changes as follows:
+3. Specify your configuration under the `realtime` section of the Extractor configuration file. For example:
     ```YAML
-    realtime:
-      heartbeat:
-        enable: true
-        catalog: tpch #Replace tpch with the name of the database containing your heartbeat table
-        table-name: replicate_io_cdc_heartbeat #Replace replicate_io_cdc_heartbeat with your heartbeat table's name if applicable
-        column-name: timestamp #Replace timestamp with your heartbeat table's column name if applicable
-    ```
-5. Below is a sample extractor file with commonly used configuration parameters:
-    ```YAML
-    snapshot:
-      threads: 16
-      fetch-size-rows: 15_000
-
-    #  per-table-config:
-    #  - catalog: tpch
-    #    tables:
-    #      ORDERS:
-    #        num-jobs: 1
-    #      LINEITEM:
-    #        row-identifier-key: [L_ORDERKEY]
-    #        split-key: l_orderkey
-
     realtime:
       threads: 4
       fetch-size-rows: 10_000
+      fetch-duration-per-extractor-slot-s: 3
+      _traceDBTasks: true
 
       heartbeat:
         enable: true
         catalog: tpch
-        interval-ms: 10000
+        table-name: replicate_io_cdc_heartbeat
+        column-name: timestamp
     ```
-  {{< hint "info" >}}
-  If you want to use the Source Column Transformation feature of Replicant for a **MySQL-to-Databricks** pipeline, please see [Source Column Transformation](/docs/references/source-column-transformation).
-  {{< /hint >}}
-For a detailed explanation of configuration parameters in the extractor file, read: [Extractor Reference]({{< ref "/docs/references/extractor-reference" >}} "Extractor Reference")
+
+    In the preceding example, notice the following about the `heartbeat` configuration corresponding to the heartbeat table in the first step:
+    <ol type="a">
+    <li>
+    
+    `tpch` represents the name of the database that contains the heartbeat table.</li>
+    <li>
+    
+    `replicate_io_cdc_heartbeat` represents the heartbeat table's name.</li>
+    <li>
+    
+    `timestamp` represents the heartbeat table's column name.</li>
+    </ol>
+
+For more information about the configuration parameters for `realtime` mode, see [Realtime Mode]({{< ref "/docs/references/extractor-reference#realtime-mode" >}}).
+
+{{< hint "info" >}}
+If you want to use the Source Column Transformation feature of Replicant for a **MySQL-to-Databricks** pipeline, please see [Source Column Transformation](/docs/references/source-column-transformation).
+{{< /hint >}}
 
 ## Replication of generated columns
 Replicant supports replication of generated columns from MySQL to either a different database platform, or another MySQL database.
 
-Replication of generated columns is supported for the following Replicant modes:
+Arcion supports replication of generated columns for the following Replicant modes:
 
 - [`snapshot`]({{< ref "docs/running-replicant#replicant-snapshot-mode" >}})
 - [`realtime`]({{< ref "docs/running-replicant#replicant-realtime-mode" >}})
@@ -244,7 +269,6 @@ Use the following [Extractor configuration parameters](#extractor-parameters) an
 {{< hint "warning" >}}
 **Warning:**  If you specify [`create-sql`](#cli-option) or `fetch-create-sql`, only use schema name or database name in [Mapper file]({{< ref "docs/references/mapper-reference" >}}). Any Mapper rule with column names, table names, or others raises Exception.
 {{< /hint >}}
-
 
 #### Extractor parameters
 You can specify these parameters in the Extractor configuration file of MySQL.
@@ -267,7 +291,7 @@ The behavior of `BLOCK` and `UNBLOCK` depends on the type of replication pipelin
 
 `fetch-create-sql`</dt>
 <dd>
-This is a boolean parameter supporting the following two values:
+A boolean parameter supporting the following two values:
 
 - **`true`**. Replicant replicates the generated columns to the target without skipping data types and functions. This means that the tables possess the same definitions as the source.
 - **`false`**. Replicant replicates generated columns with the following characteristics:
@@ -281,7 +305,7 @@ This is a boolean parameter supporting the following two values:
 
 </dd>
 
-The following is a sample Extractor configuration for a [homogeneous pipeline](#replication-of-generated-columns-in-homogeneous-pipeline):
+The following shows a sample Extractor configuration for a [homogeneous pipeline](#replication-of-generated-columns-in-homogeneous-pipeline):
 
 ```YAML
 snapshot:  
@@ -301,7 +325,7 @@ Replicant self-hosted CLI exposes a CLI option `create-sql`. `create-sql` yields
 
 `create-sql` holds a higher precedence than the Extractor parameter `fetch-create-sql`. If you run Replicant with the `create-sql` option, Replicant ignores the value of `fetch-create-sql`.
 
-The following is a sample command for running Replicant:
+The following shows a sample command for running Replicant:
 
 ```sh
 ./bin/replicant full conf/conn/mysql_src.yaml conf/conn/mysql_dst.yaml \
@@ -335,7 +359,7 @@ Replicant replicates generated columns from source MySQL with the following cave
 ### Replication of generated columns in homogeneous pipeline
 A homogeneous pipeline means replication between two identical database platforms. For example, a MySQL-to-MySQL replication pipeline.
 
-For a homogeneous pipeline, the behavior of `computed-columns` is the following. The behavior depends on the usage of the [`create-sql`](#cli-option) or `fetch-create-sql` parameters:
+For a homogeneous pipeline, `computed-columns` behaves in the following manner. The behavior depends on the usage of the [`create-sql`](#cli-option) or `fetch-create-sql` parameters:
 
 <dl class="dl-indent" >
 <dt>
@@ -352,4 +376,4 @@ If you set `fetch-create-sql` to `true` or specify [the `create-sql` CLI option]
 With `fetch-create-sql` or `create-sql` disabled</dt>
 <dd>
 
-If you set `fetch-create-sql` to `false` or omit [the `create-sql` CLI option](#cli-option), the behavior is the same as for a [heterogeneous pipeline](#replication-of-generated-columns-in-heterogeneous-pipeline).
+If you set `fetch-create-sql` to `false` or omit [the `create-sql` CLI option](#cli-option), the behavior follows the same pattern as a [heterogeneous pipeline](#replication-of-generated-columns-in-heterogeneous-pipeline).
