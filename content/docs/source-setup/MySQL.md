@@ -30,12 +30,19 @@ To ensure that you possess the appropriate version of `mysqlbinlog` utility, ins
     ```
 
     The preceding option file specifies the following binary logging options:
-
-    i. The first line [specifies the base name to use for binary log files](https://dev.mysql.com/doc/refman/8.0/en/replication-options-binary-log.html#option_mysqld_log-bin).
-
-    ii. The second line [sets the binary logging format](https://dev.mysql.com/doc/refman/8.0/en/replication-options-binary-log.html#sysvar_binlog_format).
+    <ol type="i">
+    <li>
     
-    iii. The third line [specifies how the server writes row images to the binary log](https://dev.mysql.com/doc/refman/5.7/en/replication-options-binary-log.html#sysvar_binlog_row_image). In `full` mode, the server logs all columns in both the before image and the after image.
+    The first line [specifies the base name to use for binary log files](https://dev.mysql.com/doc/refman/8.0/en/replication-options-binary-log.html#option_mysqld_log-bin).</li>
+
+    <li>
+    
+    The second line [sets the binary logging format](https://dev.mysql.com/doc/refman/8.0/en/replication-options-binary-log.html#sysvar_binlog_format).</li>
+    
+    <li>
+    
+    The third line [specifies how the server writes row images to the binary log](https://dev.mysql.com/doc/refman/5.7/en/replication-options-binary-log.html#sysvar_binlog_row_image). In `full` mode, the server logs all columns in both the before image and the after image.</li>
+    </ol>
 
 2. Export `$MYSQL_HOME` path with the following command:
     ```SQL
