@@ -251,6 +251,17 @@ To operate in [`realtime` mode]({{< ref "running-replicant#replicant-realtime-mo
     `timestamp` represents the heartbeat table's column name.</li>
     </ol>
 
+#### Additional `realtime` parameters
+<dl class="dl-indent">
+<dt><code>bin-log-idle-timeout-s</code></dt>
+<dd>
+
+In some cases, a `mysqlbinlog` process might not produce any output. This parameter specifies after how many seconds the replication restarts such a `mysqlbinlog` process.
+
+_Default: `600`._
+</dd>
+</dl>
+
 For more information about the configuration parameters for `realtime` mode, see [Realtime Mode]({{< ref "/docs/references/extractor-reference#realtime-mode" >}}).
 
 {{< hint "info" >}}
