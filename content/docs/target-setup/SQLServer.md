@@ -152,7 +152,7 @@ realtime:
 
   `true` or `false`.
 
-  _Default: `false`._
+  _Default: `true`._
 
   Controls how Replicant handles identity columns in the following manner:
 
