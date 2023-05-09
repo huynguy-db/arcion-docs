@@ -2,7 +2,7 @@
 pageTitle: Using the Arcion Replicant CLI 
 title: Running Replicant
 description: "Explore the Arcion Replicant CLI, its different modes, and replication options. Learn how to fetch or infer schemas, how to encrypt Replicant, and more."
-weight: 3
+weight: 4
 ---
 # Running Replicant
 
@@ -90,7 +90,7 @@ conf/conn/target_database_name_dst.yaml \
 
 The delta snapshot is a recurring snapshot which replicates the *delta* of the records which have been inserted/updated since the previous delta snapshot iteration. In this mode, Replicant uses the delta-snapshot key column and the recovery table to identify the set of delta records which have been inserted/updated/deleted since the previous delta snapshot iteration. 
 
-To know how you can specify delta snapshot parameters in Extractor configuration file, see [Delta Snapshot Mode in Extractor Configuration](/docs/references/extractor-reference/#delta-snapshot-mode).
+To know how you can specify delta snapshot parameters in Extractor configuration file, see [Delta Snapshot Mode in Extractor Configuration](docs/sources/configuration-files/extractor-reference/#delta-snapshot-mode).
 
 ## Replicant initialization mode
 
@@ -167,12 +167,12 @@ Specifies the replication mode. Test connection feature supports the following `
 - `FULL`
 - `REALTIME`
 
-`mode` tells `test-connection` to perform validation for that specific replication mode. For example, if you set `mode` to `SNAPSHOT`, then `test-connection` mode performs the validation checks for snapshot replication. These validation checks might include necessary database permissions, for example, [the global permissions for Oracle source]({{< ref "docs/source-setup/oracle/setup-guide/oracle-traditional-database#iv-set-up-global-permissions" >}}).
+`mode` tells `test-connection` to perform validation for that specific replication mode. For example, if you set `mode` to `SNAPSHOT`, then `test-connection` mode performs the validation checks for snapshot replication. These validation checks might include necessary database permissions, for example, [the global permissions for Oracle source]({{< ref "docs/sources/source-setup/oracle/setup-guide/oracle-traditional-database#iv-set-up-global-permissions" >}}).
 
 #### `validate-read-access-to-systemTables`
 `true` or `false`.
 
-Whether to check for necessary access to [database system metadata tables]({{< ref "docs/source-setup/oracle/setup-guide/oracle-traditional-database#table-level-supplemental-logging" >}}).
+Whether to check for necessary access to [database system metadata tables]({{< ref "docs/sources/source-setup/oracle/setup-guide/oracle-traditional-database#table-level-supplemental-logging" >}}).
 
 _Default: `true`._
 
@@ -190,7 +190,7 @@ Defaults to `true` if you use `SRC` as the [`end-point-type`](#end-point-type) a
 #### `validate-ddl-dml-permission`
 `true` or `false`.
 
-Whether to check for necessary access to DDL and DML permissions on target database. For example, `CREATE ANY TABLE` and `INSERT ANY TABLE` for [Oracle target]({{< ref "docs/target-setup/oracle" >}}). 
+Whether to check for necessary access to DDL and DML permissions on target database. For example, `CREATE ANY TABLE` and `INSERT ANY TABLE` for [Oracle target]({{< ref "docs/targets/target-setup/oracle" >}}). 
 
 {{< hint "warning" >}}
 **Important:** This parameter only applies when you set [`end-point-type`](#end-point-type) to `DST`. Therefore, disable `validate-ddl-dml-permission` if you specify `SRC` as the [`end-point-type`](#end-point-type).
@@ -266,7 +266,7 @@ In the preceding sample validation report, the following fields describe differe
 
 - `hostPortReachable` indicates whether Replicant can reach the host and port.
 - `credentialCheck` indicates the validity of the `username` and `password` you specify in the connection configuration file.
-- `healthStatus` (available for [Databricks]({{< ref "docs/target-setup/databricks" >}}) only) describes the Databricks cluster state.
+- `healthStatus` (available for [Databricks]({{< ref "docs/targets/target-setup/databricks" >}}) only) describes the Databricks cluster state.
 - `readAccessToSystemTables` indicates if the `username` of the connection configuration file possesses read access to CDC logs
 - `missingPermissions` lists any missing permissions.
 - `errorMessages` lists error or exceptions that might occur during validations.

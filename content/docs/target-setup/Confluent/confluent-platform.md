@@ -56,9 +56,9 @@ In Arcion Cloud, fill up the connection details in the **Connection form** tab. 
 {{< /tabs >}}
 
 ## II. Configure mapper file (optional)
-If you want to define data mapping from your source to Confluent Platform, specify the mapping rules in the mapper file. For more information on how to define the mapping rules and run Replicant CLI with the mapper file, see [Mapper Configuration]({{< ref "/docs/references/mapper-reference" >}}).
+If you want to define data mapping from your source to Confluent Platform, specify the mapping rules in the mapper file. For more information on how to define the mapping rules and run Replicant CLI with the mapper file, see [Mapper Configuration]({{< ref "docs/targets/configuration-files/mapper-reference" >}}).
 
-When mapping source object names to Kafka topics, you can choose between two delimiters for topic names. For more information, see [Delimiter in Kafka topic and Redis stream names]({{< ref "/docs/references/mapper-reference#delimiter-in-kafka-topic-and-redis-stream-names" >}}).
+When mapping source object names to Kafka topics, you can choose between two delimiters for topic names. For more information, see [Delimiter in Kafka topic and Redis stream names]({{< ref "docs/targets/configuration-files/mapper-reference#delimiter-in-kafka-topic-and-redis-stream-names" >}}).
 
 ## III. Set up Applier configuration    
 
@@ -285,9 +285,9 @@ When mapping source object names to Kafka topics, you can choose between two del
 
 - Replicant doesn’t address realtime changes for views when replicating from the following databases to Kafka:
 
-  - [Informix]({{< ref "docs/source-setup/informix" >}})
+  - [Informix]({{< ref "docs/sources/source-setup/informix" >}})
 
-  - [PostgreSQL]({{< ref "docs/source-setup/postgresql" >}})
+  - [PostgreSQL]({{< ref "docs/sources/source-setup/postgresql" >}})
 {{< /hint >}}
 
-For a detailed explanation of configuration parameters in the applier file, see [Applier Reference]({{< ref "/docs/references/applier-reference" >}} "Applier Reference").
+For a detailed explanation of configuration parameters in the applier file, see [Applier Reference]({{< ref "/docs/targets/configuration-files" >}} "Applier Reference").

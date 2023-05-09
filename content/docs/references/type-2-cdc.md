@@ -13,8 +13,8 @@ From version 22.07.19.3 onwards, Arcion supports Type-2 CDC. Type-2 CDC enables 
 ## Supported platforms
 Arcion supports Type-2 CDC for the following targets:
 
-- [Databricks]({{< ref "docs/target-setup/databricks" >}})
-- [Snowflake]({{< ref "docs/target-setup/snowflake" >}})
+- [Databricks]({{< ref "docs/targets/target-setup/databricks" >}})
+- [Snowflake]({{< ref "docs/targets/target-setup/snowflake" >}})
 
 ## Overview
 
@@ -38,7 +38,7 @@ Support for Type-2 CDC possesses the following limitations:
 - Type-2 CDC works in [`realtime`]({{< ref "docs/running-replicant#replicant-realtime-mode" >}}) and [`full`]({{< ref "docs/running-replicant#replicant-full-mode" >}}) modes.
 
 ## Enable Type-2 CDC
-1. Set [`cdc-metadata-type`]({{< relref "docs/references/applier-reference#cdc-metadata-type" >}}) and `replay-strategy` to the following values under the `realtime` section of the [Applier]({{< relref "applier-reference" >}}) configuration file:
+1. Set [`cdc-metadata-type`]({{< relref "docs/targets/configuration-files#cdc-metadata-type" >}}) and `replay-strategy` to the following values under the `realtime` section of the [Applier]({{< relref "applier-reference" >}}) configuration file:
 
     ```YAML
     realtime:

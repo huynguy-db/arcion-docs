@@ -6,9 +6,9 @@ weight: 3
 ---
 
 # NATIVE format for Kafka
-Arcion Replicant uses the NATIVE format to represent CDC changes for [Kafka target]({{< ref "docs/target-setup/kafka" >}}).
+Arcion Replicant uses the NATIVE format to represent CDC changes for [Kafka target]({{< ref "docs/targets/target-setup/kafka" >}}).
 
-To use NATIVE format, set [the global Applier parameter `replication-format` to `NATIVE`]({{< relref "docs/target-setup/kafka#replication-format" >}}) in your Applier configuration file.
+To use NATIVE format, set [the global Applier parameter `replication-format` to `NATIVE`]({{< relref "docs/targets/target-setup/kafka#replication-format" >}}) in your Applier configuration file.
 
 ## Structure and examples
 In this section, we'll explore how insert, update, and delete events look like in NATIVE format for snapshot and realtime mode.

@@ -13,7 +13,7 @@ In UNIX and Linux systems, the `/dev/null` device file discards everything we wr
 ## How to use `/dev/null` as target
 To use `/dev/null` as target, follow these steps:
 
-1. Choose and configure a source platform, for example, [Microsoft SQL Server]({{< ref "docs/source-setup/sqlserver/" >}}). 
+1. Choose and configure a source platform, for example, [Microsoft SQL Server]({{< ref "docs/sources/source-setup/sqlserver/" >}}). 
 {{< hint "info" >}}
 **Tip:** To see the available sources, visit our [connectors page](https://www.arcion.io/connectors). For documentation on the available sources, expand the **Source setup** section in the left navigation menu by clicking the <span class="expander-arrow-icon" aria-hidden="true" translate="no">▾</span> expander arrow.
 {{< /hint >}}
@@ -36,9 +36,9 @@ To use `/dev/null` as target, follow these steps:
     ```
 
     In the preceding command:
-    1. We run Replicant in `snapshot` mode for [snapshot replication]({{< ref "docs/source-setup/sqlserver/snapshot-replication" >}}).
-    2. We specify the path to [the connection configuration file of the source]({{< ref "docs/source-setup/sqlserver/snapshot-replication#ii-set-up-connection-configuration" >}}) and the null target.
-    3. We specify the path to [the Extractor configuration file]({{< ref "docs/source-setup/sqlserver/snapshot-replication#iii-set-up-extractor-configuration" >}}) using the `--extractor` argument.
+    1. We run Replicant in `snapshot` mode for [snapshot replication]({{< ref "docs/sources/source-setup/sqlserver/snapshot-replication" >}}).
+    2. We specify the path to [the connection configuration file of the source]({{< ref "docs/sources/source-setup/sqlserver/snapshot-replication#ii-set-up-connection-configuration" >}}) and the null target.
+    3. We specify the path to [the Extractor configuration file]({{< ref "docs/sources/source-setup/sqlserver/snapshot-replication#iii-set-up-extractor-configuration" >}}) using the `--extractor` argument.
 
-    The preceding command illustrates a very basic use case of running Replicant with the null target. According to your requirements, you can include [filter]({{< ref "docs/references/filter-reference" >}}), [mapper]({{< ref "docs/references/mapper-reference" >}}), [notification]({{< ref "docs/references/notification-reference" >}}), and other configuration files by specifying different CLI options and arguments. With `/dev/null` as target, you can tune performance and test your source requirements freely. For more information on different Replicant CLI options, see [Running Replicant]({{< relref "running-replicant" >}}).
+    The preceding command illustrates a very basic use case of running Replicant with the null target. According to your requirements, you can include [filter]({{< ref "docs/sources/configuration-files/filter-reference" >}}), [mapper]({{< ref "docs/targets/configuration-files/mapper-reference" >}}), [notification]({{< ref "docs/notifications-and-logging/notification-reference" >}}), and other configuration files by specifying different CLI options and arguments. With `/dev/null` as target, you can tune performance and test your source requirements freely. For more information on different Replicant CLI options, see [Running Replicant]({{< relref "running-replicant" >}}).
  

@@ -13,7 +13,7 @@ Arcion uses two formats to represent CDC change events:
 - Arcion internal CDC format
 - JSON CDC format
 
-A change event can be any row change due to an insert, update, or a delete operation. We use our internal CDC format to replicate data to Amazon S3 in realtime. For [Apache Kafka as target]({{< relref "../../target-setup/s3" >}}), we use the JSON CDC format and NATIVE format instead.
+A change event can be any row change due to an insert, update, or a delete operation. We use our internal CDC format to replicate data to Amazon S3 in realtime. For [Apache Kafka as target]({{< relref "../../targets/target-setup/s3" >}}), we use the JSON CDC format and NATIVE format instead.
 
 In this section, we discuss how our internal CDC format works with examples for different replication modes such as snapshot and real-time. We also discuss how we support Kafka as target using the JSON CDC and NATIVE format with examples.
 

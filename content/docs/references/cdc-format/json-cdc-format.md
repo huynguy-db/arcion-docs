@@ -6,18 +6,18 @@ weight: 2
 ---
 
 # JSON CDC format for Kafka
-Arcion Replicant uses the JSON CDC format to represent CDC changes for [Kafka target]({{< ref "docs/target-setup/kafka" >}}).
+Arcion Replicant uses the JSON CDC format to represent CDC changes for [Kafka target]({{< ref "docs/targets/target-setup/kafka" >}}).
 
 ## Overview
 Replicant supports JSON CDC format for the following sources:
 
-- [MySQL]({{< ref "docs/source-setup/mysql" >}})
-- [PostgreSQL]({{< ref "docs/source-setup/postgresql" >}})
-- [Oracle]({{< ref "docs/source-setup/oracle" >}})
-- [SAP ASE]({{< ref "docs/source-setup/sap_ase" >}})
-- [Microsoft SQL Server]({{< ref "docs/source-setup/sqlserver" >}})
+- [MySQL]({{< ref "docs/sources/source-setup/mysql" >}})
+- [PostgreSQL]({{< ref "docs/sources/source-setup/postgresql" >}})
+- [Oracle]({{< ref "docs/sources/source-setup/oracle" >}})
+- [SAP ASE]({{< ref "docs/sources/source-setup/sap_ase" >}})
+- [Microsoft SQL Server]({{< ref "docs/sources/source-setup/sqlserver" >}})
 
-To use JSON CDC format, set [the global Applier parameter `replication-format` to `JSON`]({{< relref "docs/target-setup/kafka#replication-format" >}}) in your Applier configuration file.
+To use JSON CDC format, set [the global Applier parameter `replication-format` to `JSON`]({{< relref "docs/targets/target-setup/kafka#replication-format" >}}) in your Applier configuration file.
 
 ### DML message structure
 1. Each message contains a key and a value. The key uniquely identifies the change.
