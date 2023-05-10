@@ -177,11 +177,8 @@ To ensure that you possess the appropriate version of `mysqlbinlog` utility, ins
 
         <your_table_name>:
     ```
-<<<<<<< HEAD:content/docs/sources/source-setup/MySQL.md
-For a thorough explanation of configuration parameters in the filter file, read: [Filter Reference]({{< ref "docs/sources/configuration-files/filter-reference" >}} "Filter Reference")
-=======
-For a detailed explanation of configuration parameters in the filter file, read: [Filter Reference]({{< ref "../configuration-files/filter-reference" >}} "Filter Reference")
->>>>>>> 2a1d529 ([WIP]refactor of docs):content/docs/sources/source-setup/MySQL.md
+
+For a thorough explanation of the configuration parameters in the filter file, see [Filter Reference]({{< ref "docs/sources/configuration-files/filter-reference" >}} "Filter Reference").
 
 ## VI. Set up Extractor configuration
 To configure replication according to your requirements, specify your configuration in the Extractor configuration file. You can find a sample Extractor configuration file `mysql.yaml` in the `$REPLICANT_HOME/conf/src` directory. For a thorough explanation of the configuration parameters in the Extractor file, see [Extractor Reference]({{< ref "docs/sources/configuration-files/extractor-reference" >}} "Extractor Reference").
@@ -241,7 +238,6 @@ To operate in [`realtime` mode]({{< ref "running-replicant#replicant-realtime-mo
         table-name: replicate_io_cdc_heartbeat
         column-name: timestamp
     ```
-<<<<<<< HEAD:content/docs/sources/source-setup/MySQL.md
 
     In the preceding example, notice the following about the `heartbeat` configuration corresponding to the heartbeat table in the first step:
     <ol type="a">
@@ -270,7 +266,7 @@ _Default: `600`._
 For more information about the configuration parameters for `realtime` mode, see [Realtime Mode]({{< ref "docs/sources/configuration-files/extractor-reference#realtime-mode" >}}).
 
 {{< hint "info" >}}
-If you want to use the Source Column Transformation feature of Replicant for a **MySQL-to-Databricks** pipeline, please see [Source Column Transformation](/docs/references/source-column-transformation).
+If you want to use the Source Column Transformation feature of Replicant for a **MySQL-to-Databricks** pipeline, see [Source Column Transformation](/docs/sources/configuration-files/source-column-transformation).
 {{< /hint >}}
 
 ## Replication of generated columns
@@ -400,9 +396,3 @@ With `fetch-create-sql` or `create-sql` disabled</dt>
 <dd>
 
 If you set `fetch-create-sql` to `false` or omit [the `create-sql` CLI option](#cli-option), the behavior follows the same pattern as a [heterogeneous pipeline](#replication-of-generated-columns-in-heterogeneous-pipeline).
-=======
-  {{< hint "info" >}}
-  If you want to use the Source Column Transformation feature of Replicant for a **MySQL-to-Databricks** pipeline, please see [Source Column Transformation](/../../references/source-column-transformation).
-  {{< /hint >}}
-For a detailed explanation of configuration parameters in the extractor file, read: [Extractor Reference]({{< ref "../configuration-files/extractor-reference" >}} "Extractor Reference")
->>>>>>> 2a1d529 ([WIP]refactor of docs):content/docs/sources/source-setup/MySQL.md

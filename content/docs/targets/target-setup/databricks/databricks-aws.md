@@ -44,14 +44,10 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
     - Parameters related to stage configuration.
 
     ### Parameters related to Target Databricks server connection
-<<<<<<< HEAD:content/docs/targets/target-setup/databricks/databricks-aws.md
     {{< hint "info" >}}
   **Note:** All communications with Databricks happen through port 443, the standard port for HTTPS. So all data is encrypted and secure with SSL by default.
     {{< /hint >}}
     If you store your Databricks server connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/security/secrets-manager). 
-=======
-    If you store your Databricks server connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
->>>>>>> 2a1d529 ([WIP]refactor of docs):content/docs/targets/target-setup/databricks/databricks-aws.md
     
     Otherwise, you can put your credentials in plain form like the sample below:
 
@@ -251,35 +247,9 @@ If you want to define data mapping from your source to Databricks AWS, specify t
     </dd>
 
     ### Enable Type-2 CDC
-    From version 22.07.19.3 onwards, Arcion supports Type-2 CDC for Databricks as the target. For more information, see [Type-2 CDC]({{< ref "docs/references/type-2-cdc" >}}) and [`cdc-metadata-type`]({{< relref "docs/targets/configuration-files#cdc-metadata-type" >}}).
+    From version 22.07.19.3 onwards, Arcion supports Type-2 CDC for Databricks as the target. For more information, see [Type-2 CDC]({{< ref "docs/references/type-2-cdc" >}}) and [`cdc-metadata-type`]({{< ref "docs/targets/configuration-files/applier-reference#cdc-metadata-type" >}}).
 
-<<<<<<< HEAD:content/docs/targets/target-setup/databricks/databricks-aws.md
   For a detailed explanation of configuration parameters in the Applier file, see [Applier Reference]({{< ref "/docs/targets/configuration-files" >}} "Applier Reference").
-=======
-   {{< hint "info" >}}
-  Support for Type-2 CDC is limited to the following cases: 
-  - Sources that support CDC.
-  - `realtime` and `full` modes.
-   {{< /hint >}}
-
-    To enable Type-2 CDC for your Databricks target, follow the steps below:
-    
-    1. Add the following two parameters under the `realtime` section of the Databricks Applier configuration file:
-
-        ```YAML
-        realtime:
-          enable-type2-cdc: true
-          replay-strategy: NONE
-        ```
-
-    2. In the Extractor configuration file of Source, add the following parameter under the `snapshot` section:
-
-        ```YAML
-        snapshot:
-          csv-publish-method: READ
-        ```
-  For a detailed explanation of configuration parameters in the Applier file, read [Applier Reference]({{< ref "../../configuration-files/applier-reference" >}} "Applier Reference").
->>>>>>> 2a1d529 ([WIP]refactor of docs):content/docs/targets/target-setup/databricks/databricks-aws.md
 
 ## Databricks Unity Catalog Support (Beta)
 

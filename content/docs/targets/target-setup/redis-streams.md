@@ -159,20 +159,16 @@ snapshot:
   batch-size-rows: 10_000
   txn-size-rows: 10_000
 ```
-For more information about the Applier parameters for `snapshot` mode, see [Snapshot Mode]({{< ref "/docs/targets/configuration-files#snapshot-mode" >}}).
 
-#### Additional parameters
+#### Additional `snapshot` parameters
 
 ##### `log-row-level-errors`
 `true` or `false`.
 
 During snapshot replication, if a given batch fails, Replicant retries the failed rows. You can set this parameter to `true` if you want to log the failed rows in [the trace.log file]({{< ref "../../references/troubleshooting#the-log-files" >}}).
 
-<<<<<<< HEAD:content/docs/targets/target-setup/redis-streams.md
-=======
-For more information about the Applier parameters for `snapshot` mode, see [Snapshot Mode]({{< ref "../configuration-files/applier-reference#snapshot-mode" >}}).
+For more information about the Applier parameters for `snapshot` mode, see [Snapshot Mode]({{< relref "../configuration-files/applier-reference#snapshot-mode" >}}).
 
->>>>>>> 2a1d529 ([WIP]refactor of docs):content/docs/targets/target-setup/redis-streams.md
 ### Configure `realtime` mode
 For operating in realtime mode, specify your configuration under the `realtime` section of the conifiguration file. For example:
 
@@ -184,9 +180,7 @@ realtime:
   batch-size-rows: 10_000
 ```
 
-For more information about the configuration parameters for `realtime` mode, see [Realtime Mode]({{< ref "../configuration-files/applier-reference#realtime-mode" >}}).
-
-#### Additional parameters
+#### Additional `realtime` parameters
 
 ##### `split-stream`
 `true` or `false`.
@@ -195,20 +189,17 @@ Creates a separate stream for snapshot and CDC data if `true`. If `false`, a sin
 
 _Default: `true`._
 
+For more information about the configuration parameters for `realtime` mode, see [Realtime Mode]({{< ref "../configuration-files/applier-reference#realtime-mode" >}}).
+
 ## Design considerations
 
 ### Supported platforms
 Arcion Replicant supports the following sources for Redis Streams as target:
 
-<<<<<<< HEAD:content/docs/targets/target-setup/redis-streams.md
- - [MySQL]({{< ref "docs/sources/source-setup/mysql" >}}) 
- - [Oracle]({{< ref "docs/sources/source-setup/oracle" >}})
- - [PostgreSQL]({{< ref "docs/sources/source-setup/postgresql" >}})
- - [SAP ASE]({{< ref "docs/sources/source-setup/sap_ase" >}})
-=======
- - [MySQL]({{< relref "../../sources/source-setup/mysql" >}}) 
+ - [MySQL]({{< relref "../../sources/source-setup/mysql" >}})
+ - [Oracle]({{< relref "../../sources/source-setup/oracle" >}})
  - [PostgreSQL]({{< relref "../../sources/source-setup/postgresql" >}})
->>>>>>> 2a1d529 ([WIP]refactor of docs):content/docs/targets/target-setup/redis-streams.md
+ - [SAP ASE]({{< relref "../../sources/source-setup/sap_ase" >}})
 
   For MySQL, you can also enable [Global Transaction ID (GTID) based logging](https://dev.mysql.com/doc/refman/5.7/en/replication-options-gtids.html#sysvar_gtid_mode) and [enforce GTID consistency](https://dev.mysql.com/doc/refman/5.7/en/replication-options-gtids.html#sysvar_enforce_gtid_consistency) if Redis messages require them. To do so, add the following to your MySQL option file `my.cnf`:
 
@@ -230,27 +221,30 @@ After reaching the maximum number of re-attempts specified in [`max-retries`](#i
 <dt>During snapshot phase</dt>
 <dd>
 
-The [`skip-tables-on-failures` Applier configuration parameter]({{< ref "docs/targets/configuration-files#skip-tables-on-failures" >}}) defaults to `true`. Therefore, Replicant excludes the table from the replication rather than stopping the Replicant process by throwing an exception. This behavior prevents the rest of the tables from going into an inconsistent state. Using the [dynamic reinitialization feature]({{< ref "docs/references/dynamic-reinitialization" >}}), you can add the tables Replicant excludes from replication. 
+The [`skip-tables-on-failures` Applier configuration parameter]({{< ref "docs/targets/configuration-files/applier-reference#skip-tables-on-failures" >}}) defaults to `true`. Therefore, Replicant excludes the table from the replication rather than stopping the Replicant process by throwing an exception. This behavior prevents the rest of the tables from going into an inconsistent state. Using the [dynamic reinitialization feature]({{< ref "docs/references/dynamic-reinitialization" >}}), you can add the tables Replicant excludes from replication. 
 
-You can also disable [`skip-tables-on-failures`]({{< ref "docs/targets/configuration-files#skip-tables-on-failures" >}}). In that case, Replicant throws an exception and performs snapshot recovery when you resume replication with [the `--resume` option]({{< ref "docs/running-replicant#various-replication-options-explanation" >}}).
+You can also disable [`skip-tables-on-failures`]({{< ref "docs/targets/configuration-files/applier-reference#skip-tables-on-failures" >}}). In that case, Replicant throws an exception and performs snapshot recovery when you resume replication with [the `--resume` option]({{< ref "docs/running-replicant#various-replication-options-explanation" >}}).
 
 </dd>
 
 <dt>During realtime phase with eventual replay consistency</dt>
 <dd>
-<<<<<<< HEAD:content/docs/targets/target-setup/redis-streams.md
 
-The [`skip-tables-on-failures` Applier configuration parameter]({{< ref "docs/targets/configuration-files#skip-tables-on-failures" >}}) defaults to `true`. Therefore, Replicant excludes the table from the replication rather than stopping the Replicant process by throwing an exception. This behavior prevents the rest of the tables from going into an inconsistent state. Using the [dynamic reinitialization feature]({{< ref "docs/references/dynamic-reinitialization" >}}), you can add the tables Replicant excludes from replication. 
+The [`skip-tables-on-failures` Applier configuration parameter]({{< ref "docs/targets/configuration-files/applier-reference#skip-tables-on-failures" >}}) defaults to `true`. Therefore, Replicant excludes the table from the replication rather than stopping the Replicant process by throwing an exception. This behavior prevents the rest of the tables from going into an inconsistent state. Using the [dynamic reinitialization feature]({{< ref "docs/references/dynamic-reinitialization" >}}), you can add the tables Replicant excludes from replication. 
 
-You can also disable [`skip-tables-on-failures`]({{< ref "docs/targets/configuration-files#skip-tables-on-failures" >}}). In that case, Replicant throws an exception and performs real-time recovery when you resume replication with [the `--resume` option]({{< ref "docs/running-replicant#various-replication-options-explanation" >}}).
+You can also disable [`skip-tables-on-failures`]({{< ref "docs/targets/configuration-files/applier-reference#skip-tables-on-failures" >}}). In that case, Replicant throws an exception and performs real-time recovery when you resume replication with [the `--resume` option]({{< ref "docs/running-replicant#various-replication-options-explanation" >}}).
 </dd>
 
 <dt>During realtime phase with global replay consistency</dt>
 <dd>
-Replicant dumps the Stream entry IDs for the messages it couldn't delete programmatically in a file with the name <code>$REPLICANT_HOME/data/<replication_id>/bad_rows/replicate_io_indoubt_txn_log</code>. You need to clean up those entries manually and <a href="/docs/running-replicant#various-replication-options-explanation">resume the replication run</a>. You can use the following command for cleaning up the entries:
-=======
-Replicant dumps the Stream entry IDs for the messages it couldn't delete programmatically in a file with the name <code>$REPLICANT_HOME/data/<replication_id>/bad_rows/replicate_io_indoubt_txn_log</code>. You need to clean up those entries manually and <a href="/docs/new-doc-layout/running-replicant#various-replication-options-explanation">resume the replication run</a>. You can use the following command for cleaning up the entries:
->>>>>>> 2a1d529 ([WIP]refactor of docs):content/docs/targets/target-setup/redis-streams.md
+
+Replicant dumps the Stream entry IDs for the messages it couldn't delete programmatically in the following file: 
+
+```
+$REPLICANT_HOME/data/<replication_id>/bad_rows/replicate_io_indoubt_txn_log
+````
+
+You need to clean up those entries manually and [resume the replication run]({{< ref "/docs/running-replicant#various-replication-options-explanation" >}}). You can use the following command for cleaning up the entries:
 
 ```sh
 redis-cli XDEL STREAM_NAME STREAM_ENTRY_ID_FROM_FILE [,STREAM_ENTRY_ID_FROM_FILE]

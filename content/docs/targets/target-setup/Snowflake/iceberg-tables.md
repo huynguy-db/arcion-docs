@@ -42,11 +42,7 @@ For more information on granting Snowflake access to your Amazon S3 bucket, see 
 ](https://docs.snowflake.com/en/LIMITEDACCESS/table-external-volume-s3.html).
 
 ## Specify Iceberg as table type in Applier configuration file
-<<<<<<< HEAD:content/docs/targets/target-setup/Snowflake/iceberg-tables.md
-In [your Applier configuration file]({{< ref "setup-guide#ii-set-up-applier-configuration" >}}), you need to set the `table-type` property to `ICEBERG` under [the `per-table-config` configuration]({{< ref "docs/targets/configuration-files#per-table-config" >}}). For example, notice the following sample Applier configuration:
-=======
 In [your Applier configuration file]({{< ref "setup-guide#ii-set-up-applier-configuration" >}}), you need to set the `table-type` property to `ICEBERG` under [the `per-table-config` configuration]({{< ref "../../configuration-files/applier-reference#per-table-config" >}}). For example, look at the following sample Applier configuration:
->>>>>>> 2a1d529 ([WIP]refactor of docs):content/docs/targets/target-setup/Snowflake/iceberg-tables.md
 
 ```YAML
 snapshot:

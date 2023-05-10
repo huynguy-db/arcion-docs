@@ -11,25 +11,13 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
 ## I. Set up connection configuration
 
-<<<<<<< HEAD:content/docs/targets/target-setup/kafka.md
 Specify your Kafka connection details to Replicant with a connection configuration file. You can find a sample connection configuration file `kafka.yaml` in the `$REPLICANT_HOME/conf/conn` directory.
-=======
-1. From `$REPLICANT_HOME`, navigate to the sample Kafka connection configuration file:
-    ```BASH
-    vi conf/conn/kafka.yaml
-    ```
-2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
-    
-    Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
-    ```YAML
-    type: KAFKA
->>>>>>> 2a1d529 ([WIP]refactor of docs):content/docs/targets/target-setup/Kafka.md
 
 The following sections discuss how to connect to Kafka. In general, Arcion supports four methods of connection. Note that these methods depend on the corresponding settings in Kafka.
 
 ### Connect with username and password without any data encryption
 This method allows you to connect with username and password without any data encryption. To use this method, specify the connection details in the following manner:
-<!-- To connect with username and password while no data encryption, specify your configuration in the following manner: -->
+
 
 ```YAML
 type: KAFKA

@@ -21,15 +21,7 @@ If SingleStore user does not have create database permission then you must creat
     vi conf/conn/singlestore.yaml
     ```
 
-<<<<<<< HEAD:content/docs/targets/target-setup/SingleStore.md
 2. For connecting to the SingleStore server, you can choose between two methods for an authenticated connection:
-=======
-2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
-    
-    Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
-    ```YAML
-    type: SINGLESTORE
->>>>>>> 2a1d529 ([WIP]refactor of docs):content/docs/targets/target-setup/SingleStore.md
 
     - [Using basic username and password authentication](#connect-with-username-and-password).
     - [Using SSL](#connect-using-ssl).

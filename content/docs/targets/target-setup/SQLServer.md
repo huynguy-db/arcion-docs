@@ -144,7 +144,6 @@ realtime:
   batch-size-rows: 1000
   identity-column-insert: false
 ```
-<<<<<<< HEAD:content/docs/targets/target-setup/SQLServer.md
 
 #### Additional `realtime` parameters
 <dl class="dl-indent">
@@ -183,9 +182,6 @@ realtime:
 </dl>
 
 For more information about the configuration parameters for `realtime` mode, see [Realtime Mode]({{< ref "/docs/targets/configuration-files#realtime-mode" >}}).
-=======
-For more information about the configuration parameters for `realtime` mode, see [Realtime Mode]({{< ref "../configuration-files/applier-reference#realtime-mode" >}}).
->>>>>>> 2a1d529 ([WIP]refactor of docs):content/docs/targets/target-setup/SQLServer.md
 
 ## Delta-snapshot modes
 Arcion Replicant supports the following `delta-snapshot` modes:

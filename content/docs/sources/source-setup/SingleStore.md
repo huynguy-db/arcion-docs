@@ -18,7 +18,6 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
    vi conf/conn/singlestore.yaml
    ```
 
-<<<<<<< HEAD:content/docs/sources/source-setup/SingleStore.md
 2. For connecting to the SingleStore server, you can choose between two methods for an authenticated connection:
 
     - [Using basic username and password authentication](#connect-with-username-and-password).
@@ -57,9 +56,6 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
   If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/security/secrets-manager). 
     {{< /tab >}}
     {{< /tabs >}}
-=======
-2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
->>>>>>> 2a1d529 ([WIP]refactor of docs):content/docs/sources/source-setup/SingleStore.md
     
     ### Connect using SSL
     To connect to SingleStore using SSL, follow these steps:

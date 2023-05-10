@@ -48,13 +48,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
   **Important:** Make sure that the `max_connections` in PostgreSQL is greater than the `max_connections` in the preceding connection configuration file.
     {{< /hint >}}
 
-<<<<<<< HEAD:content/docs/targets/target-setup/Postgresql.md
     The `socket-timeout-s` parameter is only supported for versions 22.02.12.16 and newer.
-=======
-        {{< hint "info" >}} The database/schema of your choice on a different instance of your choice name can be configured using the metadata config feature. For more information, see [Metadata Configuration](/../../references/metadata-reference).{{< /hint >}}
-
-        {{< hint "info" >}} The `socket-timeout-s` parameter has been introduced in *v22.02.12.16* and isn't available in previous versions.{{< /hint >}}
->>>>>>> 2a1d529 ([WIP]refactor of docs):content/docs/targets/target-setup/Postgresql.md
 
 ## II. Configure mapper file (optional)
 If you want to define data mapping from source to your target PostgreSQL, specify the mapping rules in the mapper file. The following is a sample mapper configuration for a **MySQL-to-PostgreSQL** pipeline:
