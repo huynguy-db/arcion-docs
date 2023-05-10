@@ -79,7 +79,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
 
         In the preceding configuration:
         - `root-cert` holds the full path to your SSL CA certificate file—for example, `"/home/alex/workspace/ca-cert.pem"`. Keep in mind that the `trust-store` configuration overrides `root-cert`.
-        - `hostname-verifcation` enables hostname verification against the server identity according to the specification in the server's certificate. Defaults to `true`.
+        - `hostname-verification` enables hostname verification against the server identity according to the specification in the server's certificate. Defaults to `true`.
         - `trust-store` holds the SSL CA certificate that the client uses to authenticate the server. This configuration overrides `root-cert`. 
         
           Replace *`PATH_TO_CA_TRUSTSTORE`* and *`TRUSTSTORE_PASSWORD`* with the path to the TrustStore and the TrustStore password respectively.
