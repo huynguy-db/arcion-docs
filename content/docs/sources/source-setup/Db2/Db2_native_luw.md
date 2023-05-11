@@ -26,7 +26,7 @@ You may want to use [db2ReadLog API](https://www.ibm.com/docs/en/db2/11.1?topic=
 
     e. `SYSIBM.SQLCOLUMNS`
     
-    f. `SYSCAT.COLUMNS` (required for [`fetch-schemas`](/docs/new-doc-layout/running-replicant/#fetch-schemas) mode).
+    f. `SYSCAT.COLUMNS` (required for [`fetch-schemas`](/docs/running-replicant/#fetch-schemas) mode).
 
 3. The user should have execute permissions on the following system procedures:
 
@@ -127,13 +127,10 @@ If you're performing CDC-based replication from the source Db2 server, please fo
     db2 connect to <DATABASE> user <USER>
     ```
 
-## IV. Configure Replicant
+## IV. Configure Replicant connection
+1. Specify your Db2 connection details to Replicant with a connection configuration file. You can find a sample connection configuration file `db2_src.yaml` in the `$REPLICANT_HOME/conf/conn` directory.
 
-You also need to configure Replicant's Db2 connection configuration file:
-
-1. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
-
-    Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below: 
+    The following shows a sample configuration: 
 
     ```yaml
     type: DB2
@@ -153,15 +150,14 @@ You also need to configure Replicant's Db2 connection configuration file:
     retry-wait-duration-ms: 1000
     ```
 
-    Notice the property called `node`. It represents the name of the Db2 node you're connecting to. It can go anywhere in the root of the file. The default node name is the Db2 user’s name.
+    Notice the `node` property. It represents the name of the Db2 node you are connecting to. It can go anywhere in the root of the file. The default node name is the Db2 user’s name.
 
-2. Set the value of `cdc-log-storage` to `READ_LOG` in the connection configuration file. This tells Replicant that you want to use the native db2ReadLog as the CDC log reader:
+2. Set the value of `cdc-log-storage` to `READ_LOG` in the connection configuration file. This instructs Replicant to use the native db2ReadLog as the CDC log reader:
 
     ```yaml
     cdc-log-config:
         cdc-log-storage: READ_LOG
     ```
-
 
 ## V. Set up Extractor Configuration
 
