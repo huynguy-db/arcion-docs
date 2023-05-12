@@ -36,15 +36,15 @@ Replace *`PATH_TO_TRANSACTION_STORAGE`* with the path to a temporary location on
 Replicant user should have the following permissions granted for them in order to use the native Oracle log reader.
 
   ```SQL
-  GRANT SELECT ON gv_$instance TO USERNAME;
-  GRANT SELECT ON v_$log TO USERNAME;
-  GRANT SELECT ON v_$logfile TO USERNAME;
-  GRANT SELECT ON v_$archived_log to USERNAME;
-  GRANT SELECT ON dba_objects TO USERNAME;
-  GRANT SELECT ON v_$transportable_platform TO USERNAME;
+  GRANT SELECT ON gv_$instance TO <USERNAME>;
+  GRANT SELECT ON v_$log TO <USERNAME>;
+  GRANT SELECT ON v_$logfile TO <USERNAME>;
+  GRANT SELECT ON v_$archived_log to <USERNAME>;
+  GRANT SELECT ON dba_objects TO <USERNAME>;
+  GRANT SELECT ON v_$transportable_platform TO <USERNAME>;
   ```
 
-  Replace *`USERNAME`* with your Oracle username.
+  Replace *`<USERNAME>`* with your Oracle username.
 
 
 ## Choose How to Access Logs
@@ -60,7 +60,7 @@ Replicant supports using Oracle Automatic Storage Management (ASM) for logs. To 
     GRANT SELECT ON gv_$asm_client TO USERNAME
     ```
   
-    Replace *`USERNAME`* with your ASM username.
+    Replace *`<USERNAME>`* with your ASM username.
 
 2. In [your Oracle connection configuration file]({{< relref "setup-guide#vi-set-up-connection-configuration" >}}), create a new section `asm-connection`.  This section will have the necessary ASM connection configuration. Below is a sample connection configuration file with ASM connection details specified as well:
 
