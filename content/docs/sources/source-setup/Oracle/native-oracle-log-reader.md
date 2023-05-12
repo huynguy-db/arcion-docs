@@ -40,8 +40,8 @@ Replicant user should have the following permissions granted for them in order t
   GRANT SELECT ON v_$log TO USERNAME;
   GRANT SELECT ON v_$logfile TO USERNAME;
   GRANT SELECT ON v_$archived_log to USERNAME;
-  GRANT SELECT ON dba_objects TO <USERNAME>;
-  GRANT SELECT ON v_$transportable_platform TO <USERNAME>;
+  GRANT SELECT ON dba_objects TO USERNAME;
+  GRANT SELECT ON v_$transportable_platform TO USERNAME;
   ```
 
   Replace *`USERNAME`* with your Oracle username.
