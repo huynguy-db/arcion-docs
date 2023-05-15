@@ -20,8 +20,13 @@ Make sure that you possess the following object privileges for CDC-based replica
 
 ## Limitations
 - Streams may become stale over time. For more information, see [Data Retention Period and Staleness
-](https://docs.snowflake.com/en/user-guide/streams-intro#data-retention-period-and-staleness).
+](https://docs.snowflake.com/en/user-guide/streams-intro#data-retention-period-and-staleness). 
 - Snowflake can extract data on a per-table basis. Therefore, you don't need to create heartbeat table manually.
+
+{{< hint "danger" >}}
+**Warning:** If a stream goes stale, Replicant drops and recreates the stream. This might cause data loss. So we highly recommend that you take necessary measures so that streams don't become stale.
+{{< /hint >}}
+
 
 ## I. Set up Connection Configuration
 
