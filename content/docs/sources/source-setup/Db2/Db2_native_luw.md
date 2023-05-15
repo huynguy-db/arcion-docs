@@ -8,13 +8,13 @@ bookHidden: false
 
 # Source IBM Db2 with Native LUW
 
-You may want to use [db2ReadLog API](https://www.ibm.com/docs/en/db2/11.1?topic=apis-db2readlog-read-log-records) to read log records from the Db2 database logs, or query the Log Manager for current log state information. This page describes how to do that in Arcion when using Db2 as source.
+You may want to use the [db2ReadLog API](https://www.ibm.com/docs/en/db2/11.1?topic=apis-db2readlog-read-log-records) to read log records from the Db2 database logs, or query the Log Manager for current log state information. This page describes how to use the db2ReadLog API in Arcion when using Db2 as source.
 
-## I. Check Permissions
+## I. Check permissions
+The user must possess the following permissions:
 
-1. The user should have read access on all the databases, schemas, and tables to be replicated.
-
-2. The user should have read access to following system tables and views:
+1. Read access on all the databases, schemas, and tables that the user wants to replicate.
+2. Read access to following system tables and views:
 
     a. `SYSIBM.SYSTABLES`
 
@@ -27,8 +27,7 @@ You may want to use [db2ReadLog API](https://www.ibm.com/docs/en/db2/11.1?topic=
     e. `SYSIBM.SQLCOLUMNS`
     
     f. `SYSCAT.COLUMNS` (required for [`fetch-schemas`](/docs/running-replicant/#fetch-schemas) mode).
-
-3. The user should have execute permissions on the following system procedures:
+3. Execute permissions on the following system procedures:
 
     a. `SYSIBM.SQLTABLES`
 
@@ -42,28 +41,28 @@ You may want to use [db2ReadLog API](https://www.ibm.com/docs/en/db2/11.1?topic=
 Users need these permissions only once at the start of a fresh replication.
 {{< /hint >}}
 
-## II. Create the Heartbeat Table
+## II. Create the heartbeat table
 
-For CDC replication, you must create the heartbeat table on the Source database with the following DDL:
+For CDC replication, you must create the heartbeat table on the source database with the following DDL:
 
 ```SQL
 CREATE TABLE "tpch"."replicate_io_cdc_heartbeat"("timestamp" BIGINT NOT NULL, 
 CONSTRAINT "cdc_heartbeat_id_default_default" PRIMARY KEY("timestamp"))
 ```
 
-## III. Enable CDC-based Replication
+## III. Enable CDC-based Rreplication
 
-If you're performing CDC-based replication from the source Db2 server, please follow the steps below:
+If you want CDC-based replication from the source Db2 server, follow these steps:
 
 ### On system running source Db2 server:
 
-1. For any tables being replicated, run the following command:
+1. For each table that you want to replicate, run the following command:
 
     ```SQL
     ALTER TABLE <TABLE> DATA CAPTURE CHANGES
     ```
 
-2. Check if the database is recoverable by running the followingg command:
+2. Check if the database is recoverable by running the following command:
 
     ```shell
     db2 get db cfg for <DATABASE> show detail | grep -i "logarch"
@@ -72,32 +71,34 @@ If you're performing CDC-based replication from the source Db2 server, please fo
 
     {{< hint "info" >}}Skip the next step if the database is already recoverable.{{< /hint >}}
 
-3. Update the db2 logging method by running the following command:
+3. Update the Db2 logging method by running the following command:
 
     ```shell
     db2 update db cfg for <DATABASE> using LOGARCHMETH1 LOGRETAIN
     ```
-    Updating the logging methods leaves the database in a *Backup Pending* state. To recover from this, you need to backup the database with:
+    The database enters a _backup pending_ state after updating the logging method. To recover from this state, you need to backup the database with the following:
     ```shell
     db2 backup db <DATABASE> to <DESTINATION>
     ```
+    Make sure to restart the database using [`db2stop`](https://www.ibm.com/docs/en/db2/11.5?topic=commands-db2stop-stop-db2) and [`db2start`](https://www.ibm.com/docs/en/db2/11.5?topic=commands-db2start-start-db2) commands respectively before running the `backup` command.
+     
 ### On system running Arcion Replicant:
 
-{{< hint "info" >}}Skip steps 2-6 if Replicant is running from the same system as the source Db2 database.{{< /hint >}}
+{{< hint "info" >}}Skip steps 2-6 if Replicant runs from the same system as the source Db2 database.{{< /hint >}}
 
 1. Configure the `JAVA_OPTS` environment variable with:
     ```shell
     export JAVA_OPTS=-Djava.library.path=lib
     ```
 
-2. Install Db2 Data Server Client Prerequisites by running the following commands:
+2. Install Db2 Data Server Client prerequisites by running the following commands:
 
     ```shell
     sudo dpkg --add-architecture i386
     sudo apt install libaio1 libstdc++6:i386 libpam0g:i386
     sudo apt install binutils
     ```
-3. Install Db2 Data Server Client:
+3. Install Db2 Data Server Client by following these steps:
 
     a. Download latest version of [Db2 Data Server Client from IBM](https://www.ibm.com/support/pages/download-initial-version-115-clients-and-drivers).
 
@@ -105,9 +106,9 @@ If you're performing CDC-based replication from the source Db2 server, please fo
 
     c. Select **Custom** installation.
 
-    d. Check the **Base Application Development tools** option on page 2 of the installation wizard.
+    d. Check the **Base Application Development tools** option on the seconf page of the installation wizard.
     
-    e. Leave remaining options as default and complete the installation.
+    e. Leave the remaining options as default and complete the installation.
 
 4. Catalog the source Db2 Server node by running the following:
 
@@ -161,16 +162,19 @@ If you're performing CDC-based replication from the source Db2 server, please fo
 
 ## V. Set up Extractor Configuration
 
-1. From `$REPLICANT_HOME`, navigate to the Extractor configuration file:
+1. From `$REPLICANT_HOME`, navigate to the sample Extractor configuration file:
    ```BASH
    vi conf/src/db2.yaml
    ```
 
-2. The Extractor configuration file has three parts:
+2. The Extractor configuration file contains three parts:
 
     - Parameters related to snapshot mode.
     - Parameters related to delta snapshot mode.
     - Parameters related to realtime mode.
+
+
+    To know about different Replicant modes, see [Running Replicant]({{< ref "docs/running-replicant" >}}).
 
     ### Parameters related to snapshot mode
     For snapshot mode, you can make use of the following sample:
@@ -237,8 +241,6 @@ If you're performing CDC-based replication from the source Db2 server, please fo
       #fetch-interval-s: 0
       replicate-empty-string-as-null: true
 
-    #  start-position:
-    #    commit-time: '2020-08-24 08:16:38.019002'
     # idempotent-replay: false
 
       heartbeat:
@@ -250,13 +252,4 @@ If you're performing CDC-based replication from the source Db2 server, please fo
         interval-ms: 10000
     ```
 
-    In the sample above, notice the following details:
-    
-    - The parameter `commit-time` specifies the timestamp in UTC under `start-position`, which indicates the starting log position for realtime replication. To get a timestamp in UTC, you can execute the following query:
-
-      ```SQL
-      SELECT CURRENT TIMESTAMP - CURRENT TIMEZONE AS UTC_TIMESTAMP FROM SYSIBM.SYSDUMMY1
-      ```
-    - If you've set `message-format` to `DELIMITED`, set `replicate-empty-string-as-null` to `true`.
-
-For a detailed explanation of configuration parameters in the Extractor file, read [Extractor Reference]({{< ref "../../configuration-files/extractor-reference" >}} "Extractor Reference").
+For a detailed explanation of configuration parameters in the Extractor file, read [Extractor Reference]({{< ref "docs/references/extractor-reference" >}} "Extractor Reference").
