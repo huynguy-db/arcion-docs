@@ -7,18 +7,23 @@ bookHidden: false
 ---
 
 # Source Snowflake
+The following steps refer [the extracted Arcion self-hosted CLI download]({{< ref "docs/quickstart/arcion-self-hosted#downloading-replicant-and-creating-replicant_home" >}}) as the `$REPLICANT_HOME` directory.
 
-The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
+## Prerequisites for CDC-based replication
+Make sure that you possess the following object privileges for CDC-based replication:
 
-## I. Create Streams
-To create streams for tracking individual table changes for CDC, follow the instructions in [Streams](/docs/sources/source-prerequisites/snowflake/#streams).
+| Object   | Privilege |
+|----------|-----------|
+| `DATABASE` | `USAGE`                                        |
+| `SCHEMA`   | `USAGE`, `CREATE`                              |
+| `TABLE`    | `SELECT`, `CREATE STREAM`,  `CREATE TABLE`     |
 
-## II. Create Stage Table
+## Limitations
+- Streams may become stale over time. For more information, see [Data Retention Period and Staleness
+](https://docs.snowflake.com/en/user-guide/streams-intro#data-retention-period-and-staleness).
+- Snowflake can extract data on a per-table basis. Therefore, you don't need to create heartbeat table manually.
 
-To create stage table as an intermediate buffer of the CDC process, follow the instructions in [Stage Tables](/docs/sources/source-prerequisites/snowflake/#stage-tables).
-
-
-## III. Set up Connection Configuration
+## I. Set up Connection Configuration
 
 1. From `$REPLICANT_HOME`, navigate to the sample connection configuration file:
 
@@ -72,8 +77,6 @@ To create stage table as an intermediate buffer of the CDC process, follow the i
     - *`WAREHOUSE_NAME`*: The name of the [Snowflake warehouse](https://docs.snowflake.com/en/sql-reference/ddl-virtual-warehouse.html#warehouse-resource-monitor-ddl).
     - *`USERNAME`*: The username to connect to the Snowflake server.
     - *`PASSWORD`*: The password associated with *`USERNAME`*.
-      
-    {{< hint "warning" >}} **Note:** Make sure the specified user has `CREATE TABLE` and `CREATE STREAM` privileges on the catalogs/schemas from which tables need to be replicated. {{< /hint >}}
 
     ### Additional parameters
     - `credential-store`: Replicant supports consuming `username` and `password` configurations from a _credentials store_ rather than having users specify them in plain text config file. You can use keystores to store your credentials related to your Snowflake server connections.The following parameters are available:
@@ -198,48 +201,45 @@ To create stage table as an intermediate buffer of the CDC process, follow the i
 
     {{< hint "info" >}} If you specify the `private-key-path` and `private-key-passphrase` parameters, you don't need to specify the `password` parameter in the connection configuration file. {{< /hint >}}
 
-## IV. Set up Extractor Configuration
+## II. Set up Extractor Configuration
+To configure replication mode according to your requirements, specify your configuration in the Extractor configuration file. You can find a sample Extractor configuration file `snowflake.yaml` in the `$REPLICANT_HOME/conf/src` directory. For example:
 
-1. From `$REPLICANT_HOME`, navigate to the Applier configuration file:
-   ```BASH
-   vi conf/src/snowflake.yaml
-   ```
-2. Make the necessary changes as follows:
+### Sample `snapshot` mode configuration
 
-  ```YAML
-  snapshot:
-    threads: 32
-      #  fetch-size-rows: 5_000
+```YAML
+snapshot:
+  threads: 32
+  fetch-size-rows: 100000
+  min-job-size-rows: 1000000
+  max-jobs-per-chunk: 32
+  _traceDBTasks : true
 
-      #  min-job-size-rows: 1_000_000
-      #  max-jobs-per-chunk: 32
+  per-table-config:
+    - catalog: DEMO_DB
+      schema: tpch
+      tables:
+        CUSTOMER:
+          num-jobs: 32
+          split-key: C_CUSTKEY
+          row-identifier-key: [ C_CUSTKEY ]
+        ORDERS:
+          num-jobs: 32
+          split-key: O_ORDERKEY
+          row-identifier-key: [ O_ORDERKEY ]
+        split-hints:
+          row-count-estimate: 15000
+```
 
-      #native-extract-options:
-      #control-chars:
-      #delimiter: ','
-      #quote: '"'
-      #escape: "\u0000"
-      #null-string: "NULL"
-    #line-end: "\n"
+For more information about the configuration parameters for `snapshot` mode, see [Snapshot mode]({{< ref "docs/sources/configuration-files/extractor-reference#snapshot-mode" >}}).
 
-    _traceDBTasks : true
+### Sample `realtime` mode configuration
 
-    per-table-config:
-      - catalog: DEMO_DB
-        schema: tpch
-        tables:
-          orders:
-  #        num-jobs: 2
-  #        split-hints:
-  #          row-count-estimate: 15000
+```YAML
+realtime:
+  threads: 32
+  fetch-size-rows: 100000
+  _traceDBTasks: true
+  fetch-interval-s: 0
+```
 
-  realtime:
-    threads: 8
-    fetch-size-rows: 10000
-    _traceDBTasks: true
-    #fetch-interval-s: 0
-    #create-stream: true
-    #create-stage-table: true
-  ```
-
-For a detailed explanation of configuration parameters in the extractor file, read [Extractor Reference]({{< ref "docs/sources/configuration-files/extractor-reference" >}} "Extractor Reference").
+For more information about the configuration parameters for `realtime` mode, see [Realtime mode]({{< ref "docs/sources/configuration-files/extractor-reference#realtime-mode" >}}).
