@@ -252,4 +252,4 @@ If you want CDC-based replication from the source Db2 server, follow these steps
         interval-ms: 10000
     ```
 
-For a detailed explanation of configuration parameters in the Extractor file, read [Extractor Reference]({{< ref "docs/references/extractor-reference" >}} "Extractor Reference").
+For a detailed explanation of configuration parameters in the Extractor file, read [Extractor Reference]({{< ref "docs/sources/configuration-files/extractor-reference" >}} "Extractor Reference").
