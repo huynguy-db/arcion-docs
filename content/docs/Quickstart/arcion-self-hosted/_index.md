@@ -1,59 +1,55 @@
 ---
 pageTitle: Get started with Arcion Self-hosted 
 title: Arcion Self-hosted
-description: "Quickly get started with Arcion Self-hosted. Learn about hardware requirements, download Arcion Replicant, and set up Sources and Targets."
+description: "Quickly get started with Arcion self-hosted. Learn about hardware requirements, download Arcion Replicant, and set up sources and targets."
 weight: 2
 ---
 
-# Arcion Self-hosted Quickstart
+# Arcion self-hosted quickstart
 
-## Host Machine/Server Requirements
+## Host machine requirements
 
-In order to run Replicant, we recommend that the machine that it will be running on meet a set of minimum requirements. Failing to meet these requirements could impact performance or may stop Replicant from being able to run at all.
+In order to run Replicant, we recommend that the machine Replicant runs on meet a set of minimum requirements. Failing to meet these requirements might impact performance or might stop Replicant from being able to run at all.
 
-Please ensure your host machine/server where Replicant will be running meets the minimum hardware and software requirements listed below.
+Please ensure your host machine or server where Replicant runs on meets the following minimum hardware and software requirements.
 
-### Minimum Hardware Requirements
+### Minimum hardware requirements
 * 16 CPU cores and 32GB of memory
 * 100GB-200GB of SSD/NVMe storage space
 
-### Minimum System Requirements
+### Minimum system requirements
 * Linux (CentOS/Ubuntu/Redhat)
 * JDK 8 (JRE or JDK installation)
 
 {{< hint "info" >}}
-**Note:** The storage requirements may increase depending on your source-target pair and method of replication. For more info, check out the documentation for each specific source/target you will be using or reach out to our support team.
+**Note:** The storage requirements may increase depending on your source-target pair and method of replication. For more information, check out the documentation for each specific source and target you need to use or reach out to [our support team](https://support.arcion.io/hc/en-us).
 {{< /hint >}}
 
-## Downloading Replicant and Creating REPLICANT_HOME
+## Download Replicant and create `REPLICANT_HOME`
 
-Replicant is available through a .zip file which must be downloaded to the machine/server where it will be hosted. If you do not already have the .zip file and/or an Arcion license, [contact our team](http://www.arcion.io/contact) to get access.
+Replicant is available through a ZIP file that you must download to the machine or server where you want to host Replicant. If you do not already have the ZIP file and/or an Arcion license, [contact our team](http://www.arcion.io/contact) to get access.
 
-2. Unzip the downloaded archive
+Once you have access to the ZIP file, download it to the  directory of your choice on the host machine or server and unzip it:
 
-Once you have downloaded Replicant to the directory of your choice on the host machine/server, you'll need to unzip it. An example can be seen below in a Bash script.
+```BASH
+unzip replicant-cli-<version>.zip
+```
 
-   ```BASH
-   unzip replicant-cli-<version>.zip
-   ```
+Unzipping the archive creates a directory ```replicant-cli```. We refer this directory as ```$REPLICANT_HOME``` throughout the documentation and Arcion website. 
 
-Once it is unzipped, this will create a directory named ```replicant-cli```. This directory will be referred to as ```REPLICANT_HOME``` throughout the docs and Arcion website. 
+## Adding a license
 
-## Adding a License
+Before running Replicant, you need to add a license file to the ```REPLICANT_HOME``` directory. You must name the license file `replicant.lic` so that Replicant can detect the license when Replicant starts.  
 
-Before running Replicant, you will need to add a license file to the ```REPLICANT_HOME``` directory. {{<hint "warning" >}} The license file must be named replicant.lic in order to be picked up by Replicant when it is started{{< /hint >}}.  
+If you require a license file, [contact our team](http://www.arcion.io/contact) to get one. We will happily provide users with a 30-day free trial license to try out the product or run a POC.
 
-{{< hint "info" >}}
-**Note:** If you require a license file, [contact our team](http://www.arcion.io/contact) to get one. We will happily provide users with a 30-day free trial license to try out the product or run a POC
-{{< /hint >}}
+To add the license file, follow these steps:
 
-To add the license file, do the following:
+1. Obtain an Arcion license file.
+2. Rename the license file to `replicant.lic`.
+3. Move or copy the `replicant.lic` file into the ```REPLICANT_HOME``` directory. You must copy the `replicant.lic` file into the root directory, not in the `licenses` folder of Replicant.
 
-1. Attain an Arcion license file
-2. Rename the license file to `replicant.lic`
-3. Move or copy the `replicant.lic` file into the ```REPLICANT_HOME``` directory. {{<hint "warning" >}}You must copy the `replicant.lic` file into the root directory, not in the `licenses` folder of Replicant.{{< /hint >}}
-
-## Setting Up The Source Connector
+## Set up a source database
 
 After getting Replicant downloaded and adding the license, you can create your source connector. The source connector will be the database where data will be migrated or replicated from.
 
@@ -111,7 +107,7 @@ To set up a source connector, you'll need to do the following:
 
    ```
 
-## V. Target Database Setup
+## V. Set up target database
 
 1. From ```REPLICANT_HOME``` navigate to the sample connection configuration file of the target database:
 
@@ -140,7 +136,7 @@ To set up a source connector, you'll need to do the following:
     For database specific examples, please refer to one of our Target database setup pages.
 
 
-## VI. Run Replicant Snapshot
+## VI. Run Replicant in snapshot mode
 
 Replicant is now ready to run in snapshot mode. The snapshot will only transfer existing data from the source database to the target database. If you would like to transfer real-time changes in addition to the snapshot, skip step VI and proceed to steps VII and VIII to run Replicant in full mode.
 
@@ -156,7 +152,7 @@ Replicant is now ready to run in snapshot mode. The snapshot will only transfer 
 
 The proceeding steps are only required if you intend to run Replicant in real-time mode.
 
-## VII. Heartbeat table setup
+## VII. Set up heartbeat table
 
 1. Create a heartbeat table in the catalog/schema you are going to replicate with the following DDL:
 
@@ -207,9 +203,9 @@ To get the most out of your upgrades, follow the tips below:
 
 ## Database Specific Setup Overview
 
-Different source and target databases may have slightly more specific and different setup instructions than the general guidelines provided in this Quickstart Guide. Follow the six steps below for a pipeline specific setup for Replicant:
+Different source and target databases might have slightly more specific and different setup instructions than the general guidelines provided in this quickstart guide. Follow these six steps for a pipeline-specific setup for Replicant:
 
-1. Source Database Setup
-2. Target Database Setup  
-3. Running Replicant
-4. Performance Enhancing and Troubleshoot
+1. Setting up the source database.
+2. Setting up the target database. 
+3. Running Replicant.
+4. Performance enhancing and troubleshoot.
