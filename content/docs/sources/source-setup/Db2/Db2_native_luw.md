@@ -82,7 +82,7 @@ If you want CDC-based replication from the source Db2 server, follow these steps
     ```
     Make sure to restart the database using [`db2stop`](https://www.ibm.com/docs/en/db2/11.5?topic=commands-db2stop-stop-db2) and [`db2start`](https://www.ibm.com/docs/en/db2/11.5?topic=commands-db2start-start-db2) commands respectively before running the `backup` command.
      
-### On system running Arcion Replicant:
+### On system running Arcion Replicant
 
 {{< hint "info" >}}Skip steps 2-6 if Replicant runs from the same system as the source Db2 database.{{< /hint >}}
 
@@ -102,13 +102,15 @@ If you want CDC-based replication from the source Db2 server, follow these steps
 
     a. Download latest version of [Db2 Data Server Client from IBM](https://www.ibm.com/support/pages/download-initial-version-115-clients-and-drivers).
 
-    b. Extract and start the installer by running `db2_setup`.
+    b. Extract and start the installer by running `db2setup`.
 
-    c. Select **Custom** installation.
+    c. Select **Custom** installation in the **Configuration** window.
 
-    d. Check the **Base Application Development tools** option on the seconf page of the installation wizard.
+    d. Select the **Base application development tools** checkbox in the **Select Features** window.
     
-    e. Leave the remaining options as default and complete the installation.
+    e. In the **Instance Owner** window, specify user information for the Db2 instance owner. You can either create a new user, or use an existing user. In both cases, note down the user configuration and make sure to run Replicant as the same user.
+    
+    f. Leave the remaining installation options as default and complete the installation.
 
 4. Catalog the source Db2 Server node by running the following:
 
