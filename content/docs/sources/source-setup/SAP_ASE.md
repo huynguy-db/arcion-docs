@@ -56,120 +56,7 @@ If you store your connection credentials in AWS Secrets Manager, you can tell Re
 {{< /tabs >}}
 
 ### Connect using SSL
-To connect to ASE using SSL, follow these instructions:
-
-#### Server setup
-Follow these steps to set up the ASE server for SSL communication.
-{{< details title="Click to see server setup instructions" open=false >}}
-
-1. Create the root SSL key:
-    
-    ```sh
-    openssl genrsa -passout pass:sybase -out root.key 4096
-    ```
-2. Create the root certificate request:
-    ```sh
-    openssl req -new -key root.key -passin pass:sybase -out root.csr -subj "/C=US/ST=Chaos/L=TimeNSpace/O=None/CN=root"
-    ```
-3. Create the root SSL certificate:
-    ```sh
-    openssl x509 -req -days 3650 -in root.csr -signkey root.key -passin pass:sybase -out root.crt
-    ```
-4. Create the ASE SSL key:
-    ```sh
-    openssl genrsa -des3 -passout pass:sybase -out MYSYBASE.key 2048
-    ```
-5. Create the ASE certificate request:
-    ```sh
-    openssl req -new -key MYSYBASE.key -passin pass:sybase -out MYSYBASE.csr -subj "/C=US/ST=Chaos/L=TimeNSpace/O=None/CN=MYSYBASE"
-    ```
-6. Create the ASE SSL certificate:
-    ```sh
-    openssl x509 -req -days 3650 -in MYSYBASE.csr -CA root.crt -CAkey root.key -passin pass:sybase -set_serial 1 -out MYSYBASE.crt
-    ```
-7. Create the ASE `servername.crt` file. This file includes the last part of the chain key file and certificate:
-    ```sh
-    cat MYSYBASE.crt MYSYBASE.key > /opt/sybase/ASE-16_0/certificates/MYSYBASE.crt
-    ```
-
-8. Create the client SSL file. This allows clients to connect to the SSL-encrypted ASE:
-    ```sh
-    cat root.crt > $SYBASE/$SYBASE_ASE/certificates/MYSYBASE.txt
-    ```
-
-    To test OpenSSL certificates outside of ASE, use the following command from the `certificates` directory:
-    ```sh
-    openssl verify -CAfile MYSYBASE.txt MYSYBASE.crt
-    ```
-    The preceding command yields the following output after a successful verification:
-    ```
-    servername.txt: OK
-    ```
-
-9. Add the SSL certificates to `$SYBASE/config/trusted.txt` or `%SYBASE%/ini/trusted.txt` file:
-    ```sh
-    cp /opt/sybase/ASE-16_0/certificates/MYSYBASE.txt /opt/sybase/config/trusted.txt
-    ```
-10. Modify the interfaces file `/opt/sybase/interfaces` to add SSL:
-    ```
-    MYSYBASE
-            master tcp ether 0.0.0.0 5000 ssl="CN=MYSYBASE"
-            query tcp ether 127.0.0.1 5000 ssl="CN=MYSYBASE"
-
-    MYSYBASE_BS
-            master tcp ether 0.0.0.0 5001
-            query tcp ether 127.0.0.1 5001
-    ```
-11. To enable SSL on the ASE server, you must possess a security and directory service license.
-Run the following configuration command to turn SSL on:
-    ```sh
-    sp_configure "enable ssl", 1
-    ```
-12.  Add the SSL certificate into the ASE:
-      ```sh
-      sp_ssladmin addcert, "/opt/sybase/ASE-16_0/certificates/MYSYBASE.crt", "sybase"
-      ```
-      Make sure to provide the full path to the certificate file and don't use the environment variables in the preceding command.
-
-13. Reboot ASE and check the ASE error log file in the `/opt/sybase/ASE-16_0/install/` directory for a message similar to the following:
-    ```
-    kernel  network name <host>, interface IPv4, address <ip address>, type ssltcp, port <portnumber>, filter ssl="CN=<commonname>"
-    ```
-{{< /details >}}
-
-#### Client setup
-Follow these steps to connect Replicant as the client application to the ASE server using SSL:
-{{< details title="Click to see client setup instructions" open=false >}}
-
-1. Copy the certificate to the client's shared location. 
-    When you set up the SSL ASE server, the following location contains the certificates and other files:
-    ```
-    /opt/sybase/ASE-16_0/certificates/MYSYBASE.txt
-    ```
-2. Add an authorized certificate to the client’s JVM keystore.
-
-    After copying the certificate to the client's shared location in the previous step, import the certificate into the client’s JVM using the Java `keytool` utility:
-
-      <ol type="a">
-
-      <li>
-      
-      On the client side, import the certificate into the client's JVM:
-      ```sh
-      sudo keytool -import -trustcacerts -file MYSYBASE.txt -alias ase -keystore /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/cacerts
-      ```
-      </li>
-      <li>
-
-      Enter the KeyStore password (defaults to `changeit`).</li>
-
-      <li>
-      
-      The `keytool` command displays the certificate information and asks you to verify the information. Type `yes` to indicate that you trust the certificate.</li>
-{{< /details >}}
-
-#### Enable SSL in Replicant connection configuration file
-Finally, enable SSL in Replicant's connection configuration file:
+To connect to ASE using SSL, simply enable SSL in Replicant's connection configuration file:
 
 ```YAML
 ssl:
@@ -182,19 +69,19 @@ If you want to add certificate to other KeyStore, specify the KeyStore's locatio
 ssl:
   enable: true
   trust-store:
-    path: "PATH_TO_TRUSTSTORE_JKS_FILE"
+    path: "PATH_TO_TRUSTSTORE"
     password: "TRUSTSTORE_PASSWORD"
     ssl-store-type: 'TRUSTSTORE_TYPE'
   key-store:
-    path: "PATH_TO_KEYSTORE_JKS_FILE"
+    path: "PATH_TO_KEYSTORE"
     password: "KEYSTORE_PASSWORD"
 ```
 
 Replace the following:
-- *`PATH_TO_TRUSTSTORE_JKS_FILE`*: path to the TrustStore
+- *`PATH_TO_TRUSTSTORE`*: path to the TrustStore
 - *`TRUSTSTORE_PASSWORD`*: the TrustStore password
 - *`TRUSTSTORE_TYPE`*: the TrustStore type—for example, `JKS`, `PKCS12`
-- *`PATH_TO_KEYSTORE_JKS_FILE`*: path to the KeyStore
+- *`PATH_TO_KEYSTORE`*: path to the KeyStore
 - *`KEYSTORE_PASSWORD`*: the KeyStore password
 
 ## II. Set up Extractor configuration
