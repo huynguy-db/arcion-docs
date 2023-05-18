@@ -18,7 +18,7 @@ For connecting to ASE, you can choose between two methods for an authenticated c
   - Using SSL
 
 ### Connect with username and password
-For connecting to Redis with basic username and password authentication, you have the following two options:
+For connecting to SAP ASE with basic username and password authentication, you have the following two options:
 
 {{< tabs "username-pwd-auth" >}}
 {{< tab "Specify credentials in plain text" >}}
