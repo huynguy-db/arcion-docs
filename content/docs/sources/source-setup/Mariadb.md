@@ -2,7 +2,7 @@
 pageTitle: MariaDB Source Connector Documentation
 title: MariaDB
 description: "Get detailed guide on how to set up MariaDB as data Source on Arcion platform for your data pipelines."
-
+url: docs/source-setup/mariadb
 bookHidden: false
 ---
 
@@ -97,7 +97,7 @@ Install a compatible `mysqlbinlog` utility (compatible with the source MySQL ser
     vi conf/conn/mariadb_src.yaml
     ```
 
-2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
+2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
     
     Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
     ```YAML

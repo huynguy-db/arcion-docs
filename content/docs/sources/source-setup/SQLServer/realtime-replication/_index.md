@@ -4,6 +4,7 @@ title: "Real-time replication"
 description: "In-depth guide for setting up real-time replication from SQL Server, using change tracking and Arcion CDC Agent."
 bookCollapseSection: true
 weight: 2
+url: docs/source-setup/sqlserver/realtime-replication
 ---
 
 # Real-time replication from SQL Server

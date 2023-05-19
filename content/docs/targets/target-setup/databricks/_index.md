@@ -2,7 +2,7 @@
 pageTitle: Documentation for Databricks Target connector
 title: Databricks Delta Lake
 description: "Arcion offers fast, real-time data ingestion into Databricks Lakehouse on Azure and AWS, boasting features like Unity Catalog, Type-2 CDC, and more."
-
+url: docs/target-setup/databricks
 bookCollapseSection: true
 ---
 

@@ -3,6 +3,7 @@ pageTitle: Maintaining replication related metadata
 title: Metadata Configuration
 description: "Arcion Replicant maintains its own metadata for distributed and fault-tolerant replication. You can configure where to store those metadata in."
 weight: 5
+url: docs/references/metadata-reference
 ---
 
 # Metadata configuration
@@ -32,7 +33,7 @@ The catalog Replicant would use for storing metadata.
 The schema Replicant would use for storing metadata.
 
 ## Sample metadata configuration
-You can find some sample metadata configuration files inside the `conf/metadata` directory of [your Arcion self-hosted download]({{< relref "../quickstart#ii-download-replicant-and-create-a-home-repository">}}). Below is a sample for MySQL as the metadata database:
+You can find some sample metadata configuration files inside the `conf/metadata` directory of [your Arcion self-hosted download]({{< relref "docs/quickstart/arcion-self-hosted/#download-replicant-and-create-replicant_home" >}}). Below is a sample for MySQL as the metadata database:
 
 ```YAML
 type: MYSQL

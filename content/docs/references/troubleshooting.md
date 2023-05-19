@@ -3,6 +3,7 @@ pageTitle: How to troubleshoot a Replicant issue
 title: Troubleshooting
 description: "Learn to troubleshoot Replicant issues by following a step-by-step process. Learn about Replicant log files and go through two practical examples."
 weight: 100
+url: docs/references/troubleshooting
 ---
 
 # Troubleshoot Arcion Replicant
@@ -181,7 +182,7 @@ In this section, you'll go through two examples of troubleshooting. You'll use t
           at tech.replicant.Main.main(SourceFile:50550)
   2022-09-17 01:28:53.988 DEBUG [Thread-3] t.r.n.NotificationManager: Shutting down Notification Manager.</code></pre>
 
-- Decide whether you can fix the issue by yourself, or you need to contact the [Arcion Support Team](support.arcion.io). 
+- Decide whether you can fix the issue by yourself, or you need to contact the [Arcion Support Team](https://support.arcion.io). 
   - In this case, it's apparent from the first `ERROR` messsage that the issue is related to the heartbeat table:
 
     ```

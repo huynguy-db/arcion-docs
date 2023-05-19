@@ -3,7 +3,8 @@ pageTitle: Requirements for using IBM Db2 as Source with MQ
 title: IBM Db2 MQ
 description: "Learn about the necessary permissions and how to enable CDC replication for Db2 Source by installing and configuring MQ."
 weight: 1
-bookHidden: false 
+bookHidden: false
+url: docs/references/source-prerequisites/db2
 ---
 
 This page describes the requirements for using IBM Db2 MQ as Source and how to set up CDC-based replication.
@@ -23,7 +24,7 @@ This page describes the requirements for using IBM Db2 MQ as Source and how to s
 
     e. `SYSIBM.SQLCOLUMNS`
     
-    f. `SYSCAT.COLUMNS` (needed for [`fetch-schemas`](/docs/new-doc-layout/running-replicant/#fetch-schemas) mode).
+    f. `SYSCAT.COLUMNS` (needed for [`fetch-schemas`]({{< ref "docs/running-replicant#fetch-schemas" >}}) mode).
 
 3. The user should have execute permissions on the following system procs:
 

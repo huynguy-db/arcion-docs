@@ -4,6 +4,7 @@ title: Confluent
 description: "Arcion offers fast, real-time data ingestion into Confluent Cloud and Confluent Platform, empowering scalable cloud-native data streaming and processing."
 bookCollapseSection: true
 bookHidden: false
+url: docs/target-setup/confluent
 ---
 
 # Destination Confluent

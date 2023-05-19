@@ -3,6 +3,7 @@ pageTitle: Use Arcion CDC Agent for real-time replication
 title: "Arcion CDC Agent"
 description: "Learn how to set up real-time replication from SQL Server using Arcion CDC Agent that uses efficient and secure CDC technology."
 weight: 2
+url: docs/source-setup/sqlserver/realtime-replication/arcion-cdc-agent
 ---
 
 # Real-time replication from SQL Server with Arcion CDC Agent
@@ -10,7 +11,7 @@ For real-time replicaiton from SQL Server, you can choose [Arcion CDC Agent]({{<
 
 ## I. Prerequisites
 ### Required permissions
-To allow replication, you need to first verify that the necessary permissions are in place on source SQL Server. For more information, see [SQL Server User Permissions](/docs/sources/source-prerequisites/sqlserver/#sql-server-user-permissions).
+To allow replication, you need to first verify that the necessary permissions are in place on source SQL Server. For more information, see [SQL Server User Permissions]({{< relref "../../../source-prerequisites/sqlserver#sql-server-user-permissions" >}}).
 
 ### Primary keys on tables
 For [full mode replication]({{< relref "../full-mode-replication" >}}) with Arcion CDC Agent, we recommend that all the tables that you need to replicate have primary keys. If it's not possible to define primary key on a table, follow the instructions in [Replicate tables without primary keys](#replicate-tables-without-primary-keys).
@@ -101,7 +102,7 @@ If you specify `config-username`, Arcion CDC Agent uses this user to set up repl
 We recommend that you explicitly specify these three parameters if you're using version 23.03.01.10 and later.
 
 ### AWS Secrets Manager
-If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/security/secrets-manager). 
+If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
 
 ### Use KeyStore for credentials
 Replicant supports consuming login credentials from a _credentials store_. Instead of specifying username and password [in plain text](#using-a-connection-configuration-file), you can keep credentials in a KeyStore and provide the KeyStore details in the connection configuration file:

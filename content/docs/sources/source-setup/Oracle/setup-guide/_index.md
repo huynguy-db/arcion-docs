@@ -4,6 +4,7 @@ pageTitle: Setup guide for Oracle Source connector
 title: "Setup guide"
 description: "Set up Oracle as both single tenant and multitenant source using Arcion's Oracle connector. Arcion supports both Oracle traditional and PDB database"
 bookCollapseSection: true
+url: docs/source-setup/oracle/setup-guide
 ---
 
 # Oracle setup guide

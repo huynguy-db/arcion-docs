@@ -2,7 +2,7 @@
 pageTitle: Documentation for Db2 LUW Source with db2ReadLog API
 title: Native LUW
 description: "Arcion supports IBM's Db2 for LUW as Source. Learn the setup fundamentals and how to use db2ReadLog API for log management."
-
+url: docs/source-setup/db2/db2_native_luw
 bookHidden: false
 ---
 
@@ -26,7 +26,7 @@ The user must possess the following permissions:
 
     e. `SYSIBM.SQLCOLUMNS`
     
-    f. `SYSCAT.COLUMNS` (required for [`fetch-schemas`](/docs/running-replicant/#fetch-schemas) mode).
+    f. `SYSCAT.COLUMNS` (required for [`fetch-schemas`]({{< ref "docs/running-replicant#fetch-schemas" >}}) mode).
 3. Execute permissions on the following system procedures:
 
     a. `SYSIBM.SQLTABLES`

@@ -4,6 +4,7 @@ title: Source Query Configuration
 description: "Learn how to replicate the results of custom-queries, macros, UDFs, stored procedures from source to the target database systems."
 bookHidden: false
 weight: 11
+url: docs/references/src-queries
 ---
 
 # Replication of source queries

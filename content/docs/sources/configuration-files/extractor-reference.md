@@ -3,6 +3,7 @@ pageTitle: Reference for Extractor configuration parameters
 title: Extractor Configuration
 description: "Get detailed descriptions of all the available Extractor configuration parameters that you can use to configure Source databases in Arcion."
 weight: 2
+url: docs/references/extractor-reference
 ---
 
 # Extractor Configuration

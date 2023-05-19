@@ -84,7 +84,7 @@ To set up a source connector, you'll need to do the following:
     retry-wait-duration-ms: 1000
     ```
 
-    Please note that certain databases might have additional configuration parameters. For example, [Oracle has the additional parameter ```service-name```](../../sources/source-setup/oracle/#vi-set-up-connection-configuration).
+    Please note that certain databases might have additional configuration parameters. For example, [Oracle has the additional parameter ```service-name```]({{< ref "docs/sources/source-setup/oracle/setup-guide/oracle-traditional-database#v-set-up-connection-configuration" >}}).
 
     For further database specific examples, please refer to one of our Source database setup pages.
 
@@ -198,7 +198,7 @@ You can grab the latest version of Replicant from our [Arcion Self-hosted page](
 To get the most out of your upgrades, follow the tips below:
 
 - Keep the configuration files isolated from the `replicant-cli` directory tree. During version upgrades, they might get overwritten.
-- After upgrade, copy your `replicant.lic` license file [to the new `REPLICANT_HOME`](#ii-download-replicant-and-create-a-home-repository).
+- After upgrade, copy your `replicant.lic` license file [to the new `REPLICANT_HOME`](#download-replicant-and-create-replicant_home).
 - Copy the contents of your older `$REPLICANT_HOME/lib` directory to the new version `lib` directory `$REPLICANT_HOME/lib`.
 
 ## Database Specific Setup Overview

@@ -2,7 +2,7 @@
 pageTitle: SQL Server Target Connector Documentation
 title: Microsoft SQL Server
 description: "Get realtime data replication into Microsoft SQL Server at scale. Choose from different replication modes and use bulk loading for faster ingestion."
-
+url: docs/target-setup/sqlserver
 bookHidden: false
 ---
 # Destination Microsoft SQL Server
@@ -32,7 +32,7 @@ The maximum number of connections Replicant uses to load data into the SQL Serve
 
 {{< hint "info" >}}
 #### For Arcion self-hosted only
-You can store your connection credentials in AWS Secrets Manager instead of putting them in plain form in the connection configuration file. In that case, you can tell Replicant to retrieve those credentials. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager).
+You can store your connection credentials in AWS Secrets Manager instead of putting them in plain form in the connection configuration file. In that case, you can tell Replicant to retrieve those credentials. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}).
 {{< /hint >}}
 
 The following is a sample connection configuration:

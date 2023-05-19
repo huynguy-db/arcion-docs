@@ -4,6 +4,7 @@ title: "Delta-snapshot replication"
 description: "Set up IBM Db2 as data Source using Arcion Db2 connector. Arcion supports Db2 on Kafka/MQ, Native LUW, and i Series AS/400 platforms."
 bookHidden: false
 weight: 2
+url: docs/source-setup/sqlserver/delta-snapshot-replication
 ---
 
 # Delta-snapshot replication from SQL Server
@@ -15,7 +16,7 @@ Follow the steps in the following sections to set up SQL Server for `delta-snaps
 
 ## I. Required Permissions
 
-To allow replication, you need to first verify that the necessary permissions are in place on source SQL Server. For more information, see [SQL Server User Permissions](/../../references/source-prerequisites/sqlserver/#sql-server-user-permissions).
+To allow replication, you need to first verify that the necessary permissions are in place on source SQL Server. For more information, see [SQL Server User Permissions]({{< relref "../../source-prerequisites/sqlserver#sql-server-user-permissions" >}}).
 
 ## II. Set up connection configuration
 Specify the connection details of your SQL Server instance to Replicant in one of the following two ways:
@@ -75,7 +76,7 @@ max-connections: MAX_NUMBER_OF_CONNECTIONS
 ```
 
 ### AWS Secrets Manager
-If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
+If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
 
 ### Use KeyStore for credentials
 Replicant supports consuming login credentials from a _credentials store_. Instead of specifying username and password [in plain form](#using-a-connection-configuration-file), you can keep them in a KeyStore and provide the KeyStore details in the connection configuration file like below:

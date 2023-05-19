@@ -4,6 +4,7 @@ title: Source Column Transformation
 description: "Know how to transform Source data using transformation rules in a configuration file."
 bookHidden: false
 weight: 12
+url: docs/references/source-column-transformation
 ---
 
 # Source Column Transformation

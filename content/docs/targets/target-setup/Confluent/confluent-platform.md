@@ -4,6 +4,7 @@ title: Confluent Platform
 description: "Seamlessly ingest data into Confluent Platform for real-time data flow and processing using Arcion."
 weight: 2
 bookHidden: false
+url: docs/target-setup/confluent/confluent-platform
 ---
 
 # Destination Confluent Platform

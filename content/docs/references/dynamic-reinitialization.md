@@ -3,6 +3,7 @@ pageTitle: Dynamic addition, removal, and reinitialization of tables
 title: Dynamic reinitialization
 description: "Learn how Arcion Replicant lets you to add, remove, and reinitialize tables in an ongoing replication job."
 weight: 8
+url: docs/references/dynamic-reinitialization
 ---
 
 # Dynamic reinitialization

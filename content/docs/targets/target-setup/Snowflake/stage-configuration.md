@@ -4,6 +4,7 @@ title: Stage configuration
 description: "Learn how to configure native or external stage in Snowflake target for bulk loading with Arcion."
 bookHidden: false
 weight: 2
+url: docs/target-setup/snowflake/stage-configuration
 ---
 
 # Stage configuration

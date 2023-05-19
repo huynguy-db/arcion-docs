@@ -4,6 +4,7 @@ title: Setup guide
 description: "Load terabyte-scale data into BigQuery. Build real-time data streams for real-time analytics and accelerate your business with Arcion BigQuery connector."
 bookHidden: false
 weight: 1
+url: docs/target-setup/bigquery/setup-guide
 ---
 
 # Setup guide for Google BigQuery target
@@ -26,7 +27,7 @@ To load data into BigQuery, you need to make sure you have the necessary IAM per
 Specify our BigQuery connection details to Replicant with a connection configuration file. You can find a sample connection configuration file `bigquery.yaml` in the `$REPLICANT_HOME/conf/conn` directory.
 
 ### Configure BigQuery server connection
-If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/security/secrets-manager). 
+If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
     
 Otherwise, you can put your credentials like usernames and passwords in plain form like the following sample:
 

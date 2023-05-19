@@ -4,6 +4,7 @@ pageTitle: Setup guide for Oracle traditional database source
 title: "Oracle traditional database"
 description: "Learn how to replicate data from Oracle traditional database using snapshot and realtime, CDC-based replication with Arcion."
 weight: 1
+url: docs/source-setup/oracle/setup-guide/oracle-traditional-database
 ---
 
 # Oracle Source Setup Guide

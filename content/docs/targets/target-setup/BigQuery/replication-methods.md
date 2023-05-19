@@ -4,6 +4,7 @@ title: Replication methods
 description: "Learn how Arcion performs data ingestion into BigQuery using BigQuery Storage Write API and conventional load job method."
 bookHidden: false
 weight: 2
+url: docs/target-setup/bigquery/replication-methods
 ---
 
 # Replication methods for BigQuery

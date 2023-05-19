@@ -2,7 +2,7 @@
 pageTitle: Teradata Source Connector Documentation
 title: Teradata
 description: "Step-by-step guide on how to mobilize data from Teradata"
-
+url: docs/source-setup/teradata
 bookHidden: false
 ---
 
@@ -18,7 +18,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
    vi conf/conn/teradata.yaml
    ```
 
-2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
+2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
     
    Otherwise, you can put your credentials in plain form like the sample below:
 

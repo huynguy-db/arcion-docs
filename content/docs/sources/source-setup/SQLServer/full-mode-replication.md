@@ -4,6 +4,7 @@ title: "Full mode replication"
 description: ""
 bookHidden: false
 weight: 3
+url: docs/source-setup/sqlserver/full-mode-replication
 ---
 
 # Full mode replication from SQL Server

@@ -3,6 +3,7 @@ pageTitle: Send replication statistics and logs to New Relic
 title: New Relic 
 description: "Replicant can send replication statistics and logs to New Relic. Learn how to configure New Relic connection and run Replicant with those configurations."
 weight: 5
+url: docs/references/cloud-logging/newrelic
 ---
 
 # Send replication statistics and logs to New Relic

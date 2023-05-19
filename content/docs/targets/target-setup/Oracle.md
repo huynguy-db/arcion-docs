@@ -3,6 +3,7 @@ pageTitle: Documentation for Oracle Target connector
 title: Oracle
 description: "Set up Oracle as Target for your data pipelines. Use Oracle's native Data Pump Import utility for homogenous pipelines."
 bookHidden: false
+url: docs/target-setup/oracle
 ---
 # Destination Oracle
 
@@ -52,7 +53,7 @@ The following step must be executed in an Oracle client.
     vi conf/conn/oracle_dst.yaml
     ```
 
-2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
+2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
     
     Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
       ```YAML

@@ -2,7 +2,7 @@
 pageTitle: Ingest data into MySQL
 title: MySQL
 description: "Using Arcion's high-performance replication engine, load data into MySQL. Securely connect with necessary permissions and enable native-fast bulk-loading."
-
+url: docs/target-setup/mysql
 bookHidden: false   
 ---
 # Destination MySQL
@@ -25,7 +25,7 @@ Pay attention to the following before configuring MySQL as the Target system:
 2. You can establish connection with Target MySQL using either SSL or plain username and password.
 
     ### Connect using username and password
-    If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
+    If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
         
       Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
       ```YAML

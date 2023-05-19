@@ -2,7 +2,7 @@
 pageTitle: Documentation for Databricks Source connector
 title: Databricks Delta Lake
 description: "Arcion offers fast, reliable, and real-time data ingestion for Databricks Lakehouse, supporting bleeding-edge features like Unity Catalog."
-
+url: docs/source-setup/databricks
 bookHidden: true
 bookSearchExclude: true
 ---
@@ -35,7 +35,7 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
     vi conf/conn/databricks.yaml
     ```
 
-2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
+2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
     
     Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
 

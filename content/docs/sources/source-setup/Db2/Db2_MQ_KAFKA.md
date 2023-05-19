@@ -2,7 +2,7 @@
 pageTitle: Documentation for Db2 Source with Kafka and MQ
 title: Kafka and MQ
 description: "Db2 connector by Arcion integrates natively with Kafka and IBM MQ, making it easier to manage CDC logs. Learn everything about it right here."
-
+url: docs/source-setup/db2/db2_mq_kafka
 bookHidden: false
 ---
 
@@ -13,11 +13,11 @@ This page describes how to set up Source Db2 with Kafka and MQ.
 The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` directory in the proceeding steps.
 
 ## I. Check Permissions
-You need to verify that the necessary permissions are in place on source Db2 in order to perform replication. To know about the permissions, see [IBM Db2 Permissions](/../../references/source-prerequisites/db2/#permissions).
+You need to verify that the necessary permissions are in place on source Db2 in order to perform replication. To know about the permissions, see [IBM Db2 Permissions]({{< ref "docs/sources/source-prerequisites/db2#permissions" >}}).
 
 ## II. Enable CDC Replication for Db2 MQ
 
-For enabling CDC-based replication from the Source Db2 MQ server, please follow the instructions in [Enabling CDC Replication for Db2 MQ](/../../references/source-prerequisites/db2/#enabling-cdc-replication).
+For enabling CDC-based replication from the Source Db2 MQ server, please follow the instructions in [Enabling CDC Replication for Db2 MQ]({{< ref "docs/sources/source-prerequisites/db2#enabling-cdc-replication" >}}).
 
 ## III. Create the Heartbeat Table
 
@@ -42,7 +42,7 @@ CONSTRAINT "cdc_heartbeat_id_default_default" PRIMARY KEY("timestamp"))
    * Parameters related to CDC logs and monitoring.
 
 ### Parameters Related to Source Db2 server connection
-If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
+If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
     
 Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
 

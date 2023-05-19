@@ -2,7 +2,7 @@
 pageTitle: IBM Informix Source Connector 
 title: IBM Informix
 description: "Get in-depth documentation for Informix as Source in Arcion. Set up CDC, configure logical logs, and use the latest Source Column Transformation feature."
-
+url: docs/source-setup/informix
 bookHidden: false
 ---
 
@@ -37,7 +37,7 @@ LOCK MODE ROW
    vi conf/conn/informix.yaml
    ```
 
-2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
+2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
     
     Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
     
@@ -155,7 +155,7 @@ LOCK MODE ROW
   - Informix to PostgreSQL
   - Informix to Kafka
   
-  For more information, see [Source Column Transformation](/../../references/source-column-transformation).
+  For more information, see [Source Column Transformation]({{< ref "docs/sources/configuration-files/source-column-transformation" >}}).
   
     {{< /hint >}}
 

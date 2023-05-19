@@ -2,7 +2,7 @@
 pageTitle: SAP HANA Source Connector Documentation
 title: SAP HANA
 description: "Arcion supports SAP HANA as data Source. Connect using native JDBC client and tune Extractor parameters to suit your requirements."
-
+url: docs/source-setup/hana
 bookHidden: false
 ---
 
@@ -21,7 +21,7 @@ Please download the SAP HANA JDBC Client from [SAP Development Tools](https://to
     vi conf/conn/hana.yaml
     ```
 
-2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
+2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
     
     Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
     ```YAML

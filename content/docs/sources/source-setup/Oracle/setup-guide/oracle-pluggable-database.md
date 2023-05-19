@@ -3,6 +3,7 @@ pageTitle: Setting up Oracle pluggable database as source
 title: "Oracle pluggable database"
 description: "Set up Oracle pluggable database as data source in Oracle multitenant architecture for your data pipelines using Arcion Oracle connector."
 weight: 2
+url: docs/source-setup/oracle/setup-guide/oracle-pluggable-database
 ---
 
 # Source Oracle pluggable database (PDB)

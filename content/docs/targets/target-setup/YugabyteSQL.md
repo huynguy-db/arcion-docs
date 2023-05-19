@@ -2,7 +2,7 @@
 pageTitle: Documentation for YugabyteSQL Target connector
 title: YugabyteSQL
 description: "Ingest data into YugabyteSQL in minutes with seamless schema conversion using Arcion Yugabyte connector."
-
+url: docs/target-setup/yugabyte_sql
 bookHidden: false
 ---
 # Destination YugabyteSQL
@@ -15,7 +15,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     ```BASH
     vi conf/conn/yugabytesql.yaml
     ```
-2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
+2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
     
     Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
 
@@ -51,7 +51,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     - If you want Replicant to create catalogs/schemas for you on the target YugabyteSQL system, then you also need to grant `CREATE DATABASE`/`CREATE SCHEMA` privileges to the user.
     - If this user does not have `CREATE DATABASE` privilege, then create a database manually with name `io` and grant all privileges for it to the user specified here. Replicant uses this database for internal checkpointing and metadata management.  
 
-        {{< hint "info" >}} The database or schema of your choice on a different instance of your choice name can be configured using the metadata config feature. For more information, see [Metadata Configuration](/../../references/metadata-reference).{{< /hint >}}
+        {{< hint "info" >}} The database or schema of your choice on a different instance of your choice name can be configured using the metadata config feature. For more information, see [Metadata Configuration]({{< ref "docs/references/metadata-reference" >}}).{{< /hint >}}
 
 ## II. Configure mapper file (optional)
 If you want to define data mapping from source to your target YugabyteSQL, specify the mapping rules in the mapper file. The following is a sample mapper configuration for a **Oracle-to-YugabyteSQL** pipeline:

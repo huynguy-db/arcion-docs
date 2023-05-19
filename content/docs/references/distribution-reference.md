@@ -3,6 +3,7 @@ pageTitle: Distributed Replication
 title: Distributed Replication
 description: "Learn how Arcion Replicant can carry out distributed replication across multiple nodes. We have a hands-on example walking you through the whole process."
 weight: 9
+url: docs/references/distribution-reference
 ---
 
 # Configure Distributed Replication
@@ -12,7 +13,7 @@ Arcion Replicant supports distributed multi-node replication. This allows you to
 Each replicant node in a particular logical replication group can carry out replication of a subset of databases, schemas, or tables. The subset depends on how you defined the [filter configuration]({{< relref "filter-reference" >}}) of individual nodes. In a replication group, one of multiple such nodes is designated as a _leader node_ and the rest as _worker nodes_ for that replication group. The leader node carries out some critical tasks, such as Arcion metadata table management, sending notifications (according to [the notification configuration file]({{< relref "notification-reference" >}})), and computing global replication lag. The worker nodes depend on the leader node for these activities and also provide their respective lag information to the leader node.
 
 ## The distribution configuration file
-The distribution configuration file defines the logical replication group, its leader, and worker nodes. You can find a sample distribution configuration file inside the `conf/distribution` directory of [your Arcion self-hosted download]({{< relref "../quickstart#ii-download-replicant-and-create-a-home-repository" >}}). It has the following parameters available:
+The distribution configuration file defines the logical replication group, its leader, and worker nodes. You can find a sample distribution configuration file inside the `conf/distribution` directory of [your Arcion self-hosted download]({{< ref "docs/quickstart/arcion-self-hosted#download-replicant-and-create-replicant_home" >}}). It has the following parameters available:
 
 ### group
 The replication group. Each group can be uniquely identified with an ID. See the example at the end of this section for better understanding.
@@ -22,16 +23,19 @@ You can configure each group with the following parameters:
 <dl class="dl-indent">
 <dt><code>id</code></dt>
 <dd> 
+
 A unique ID to identify the logical replication group—for example, <code>test-group</code>.
 </dd>
 
 <dt><code>leader</code></dt> 
 <dd>
+
 ID of the leader node. This ID must be the same ID that you specify with the <code>--id</code> parameter while running Replicant. For better understanding, see [A two-node example replication](#a-two-node-example-replication).
 </dd>
 
 <dt><code>workers</code></dt> 
 <dd>
+
 An array of IDs representing all the worker nodes. These IDs must be the same IDs that you specify with the <code>--id</code> parameter while running Replicant. For better understanding, see [A two-node example replication](#a-two-node-example-replication).
 </dd>
 
@@ -60,7 +64,7 @@ The source has the following properties:
 Now follow the steps below:
 
 ### Download Replicant
-[Download and extract Replicant Self-hosted]({{< relref "../quickstart#ii-download-replicant-and-create-a-home-repository" >}}) on the two machines N1 and N2. In the subsequent steps, `REPLICANT_HOME` means the `replicant-cli` directory that you extracted from your Replicant Self-hosted download.
+[Download and extract Replicant self-hosted]({{< relref "docs/quickstart/arcion-self-hosted/#download-replicant-and-create-replicant_home" >}}) on the two machines N1 and N2. In the subsequent steps, `REPLICANT_HOME` means the `replicant-cli` directory that you extracted from your Replicant Self-hosted download.
 
 ### Prepare the connection configuration files
 

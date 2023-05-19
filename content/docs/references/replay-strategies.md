@@ -4,6 +4,7 @@ title: Replay strategies
 description: "Learn how Arcion captures CDC changes for realtime data ingestion into BigQuery and Databricks."
 bookHidden: false
 weight: 12
+url: docs/references/replay-strategies
 ---
 
 # Replay strategies for BigQuery and Databricks targets

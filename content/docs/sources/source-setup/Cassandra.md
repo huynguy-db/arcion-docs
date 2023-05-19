@@ -2,7 +2,7 @@
 pageTitle: Cassandra Source Connector Documentation
 title: Cassandra
 description: "Read step-by-step instructions on how to set up fast, CDC-based data pipelines from Cassandra Sources using Arcion Cassandra connector."
-
+url: docs/source-setup/cassandra
 bookHidden: false
 ---
 # Source Cassandra
@@ -54,7 +54,7 @@ Arcion Replicant supports two mechanisms for accessing the Cassandra CDC log fil
     vi conf/conn/cassadra.yaml
     ```
 
-2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
+2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
     
     Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
     ```YAML

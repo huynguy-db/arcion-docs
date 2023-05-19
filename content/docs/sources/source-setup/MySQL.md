@@ -2,7 +2,7 @@
 pageTitle: MySQL Source Connector Documentation
 title: MySQL
 description: "Follow the step-by-step guide to migrate data from MySQL. Replicate generated columns and use Source Column Transformation."
-
+url: docs/source-setup/mysql
 bookHidden: false
 ---
 # Source MySQL
@@ -266,7 +266,7 @@ _Default: `600`._
 For more information about the configuration parameters for `realtime` mode, see [Realtime Mode]({{< ref "docs/sources/configuration-files/extractor-reference#realtime-mode" >}}).
 
 {{< hint "info" >}}
-If you want to use the Source Column Transformation feature of Replicant for a **MySQL-to-Databricks** pipeline, see [Source Column Transformation](/docs/sources/configuration-files/source-column-transformation).
+If you want to use the Source Column Transformation feature of Replicant for a **MySQL-to-Databricks** pipeline, see [Source Column Transformation]({{< ref "docs/sources/configuration-files/source-column-transformation" >}}).
 {{< /hint >}}
 
 ## Replication of generated columns

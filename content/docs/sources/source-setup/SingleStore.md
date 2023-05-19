@@ -2,7 +2,7 @@
 pageTitle: Documentation for SingleStore Source connector
 title: SingleStore
 description: "Set up SingleStore as Source for zero-maintenance data pipelines using Arcion SingleStore connector."
-
+url: docs/source-setup/singlestore
 bookHidden: false
 ---
 
@@ -53,7 +53,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     {{< /tab >}}
 
     {{< tab "Fetch credentials from AWS Secrets Manager" >}}
-  If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/security/secrets-manager). 
+  If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
     {{< /tab >}}
     {{< /tabs >}}
     

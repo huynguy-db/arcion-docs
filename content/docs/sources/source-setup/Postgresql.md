@@ -2,7 +2,7 @@
 pageTitle: PostgreSQL Source Connector Documentation
 title: PostgreSQL
 description: "Learn how to replicate data from Source PostgreSQL with Arcion PostgreSQL connector. Use Filters to have more control over your priorities."
-
+url: docs/source-setup/postgresql
 bookHidden: false
 ---
 # Source: PostgreSQL
@@ -95,7 +95,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     vi conf/conn/postgresql.yaml
     ```
 
-2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
+2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
     
     Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
     ```YAML

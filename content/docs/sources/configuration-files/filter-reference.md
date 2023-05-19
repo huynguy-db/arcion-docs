@@ -3,6 +3,7 @@ pageTitle: Using Filter file to specify filters
 title: Filter Configuration
 description: "Learn about the Filter configuration file containing filter rules. These rules tell Replicant which databases, collections, or documents to replicate."
 weight: 3
+url: docs/references/filter-reference
 ---
 
 # Filter Configuration

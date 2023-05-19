@@ -4,6 +4,7 @@ pageTitle: Documentation for Oracle Source connector
 title: "Oracle"
 description: "Set up Oracle as source for your data pipelines using Arcion Oracle connector, supporting Oracle redo log, Data Pump Export utility, and more."
 bookCollapseSection: true
+url: docs/source-setup/oracle
 ---
 
 # Source Oracle

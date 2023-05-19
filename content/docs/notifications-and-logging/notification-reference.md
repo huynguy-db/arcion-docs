@@ -3,6 +3,7 @@ pageTitle: Configure notifications from Replicant
 title: Notification Configuration
 description: "Replicant can send important notifications to the user. Learn about different notification features, what notifications you want, and how to configure them."
 weight: 5
+url: docs/references/notification-reference
 ---
 
 # Configure notifications

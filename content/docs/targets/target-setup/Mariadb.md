@@ -2,7 +2,7 @@
 pageTitle: Use MariaDB as Target
 title: MariaDB
 description: "Learn how to securely connect to, ensure database privileges on, and load data into MariaDB using Arcion."
-
+url: docs/target-setup/mariadb
 bookHidden: false
 ---
 # Destination MariaDB
@@ -18,7 +18,7 @@ Pay attention to the following before configuring MariaDB as the Target system:
 - If this user does not have `CREATE DATABASE` privilege, then create a database manually with name `io_blitzz` and grant all privileges for it to the user specified here. Replicant uses this database for internal checkpointing and metadata management.  
 
 {{< hint "info" >}}
-The database/schema of your choice on a different instance of your choice name can be configured using the metadata config feature. For more information, see [Metadata Configuration](/../../references/metadata-reference).
+The database/schema of your choice on a different instance of your choice name can be configured using the metadata config feature. For more information, see [Metadata Configuration]({{< ref "docs/references/metadata-reference" >}}).
 {{< /hint >}}
 
 
@@ -31,7 +31,7 @@ The database/schema of your choice on a different instance of your choice name c
 2. You can establish connection with Target MariaDB using either SSL or plain username and password.
 
     ### Connect using username and password
-    If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
+    If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
         
     Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
     ```YAML

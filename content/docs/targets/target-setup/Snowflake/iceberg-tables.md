@@ -4,6 +4,7 @@ title: Iceberg tables
 description: "Learn how to use Snowflake Iceberg tables as data target with Arcion."
 weight: 4
 bookHidden: false
+url: docs/target-setup/snowflake/iceberg-tables
 ---
 
 # Use Snowflake Iceberg Tables
@@ -11,7 +12,7 @@ bookHidden: false
 **Note:** This feature is only available in [Arcion self-hosted CLI](https://www.arcion.io/self-hosted).
 {{< /hint >}}
 
-From version 23.01.05.3, Arcion supports [Snowflake Iceberg tables]((https://docs.snowflake.com/en/LIMITEDACCESS/tables-iceberg.html)) as target for both snapshot-based and realtime replication. To use Snowflake Iceberg tables as target, follow these instructions.
+From version 23.01.05.3, Arcion supports [Snowflake Iceberg tables](https://docs.snowflake.com/en/LIMITEDACCESS/tables-iceberg.html) as target for both snapshot-based and realtime replication. To use Snowflake Iceberg tables as target, follow these instructions.
 
 ## Prerequisites
 

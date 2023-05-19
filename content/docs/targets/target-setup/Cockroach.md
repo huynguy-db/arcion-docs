@@ -2,7 +2,7 @@
 pageTitle: CockroachDB as Target
 title: Cockroach
 description: "Find out how you can get robust data ingestion into CockroachDB using Arcion. Learn about necessary database permissions, stage configuration, and more."
-
+url: docs/target-setup/cockroach
 bookHidden: false
 ---
 # Destination Cockroach
@@ -21,7 +21,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     - Parameters related to stage configuration.
 
     ### Parameters related to target Cockroach server connection
-    If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
+    If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
     
     Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
 
@@ -42,7 +42,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     - If you want Replicant to create catalogs/schemas for you on the target CockroachDB system, then you also need to grant `CREATE DATABASE`/`CREATE SCHEMA` privileges to the user.
     - If this user does not have `CREATE DATABASE` privilege, then create a database manually with name `io` and grant all privileges for it to the user specified here. Replicant uses this database for internal checkpointing and metadata management.  
 
-        {{< hint "info" >}} The database/schema of your choice on a different instance of your choice name can be configured using the metadata config feature. For more information, see [Metadata Configuration](/../../references/metadata-reference).{{< /hint >}}
+        {{< hint "info" >}} The database/schema of your choice on a different instance of your choice name can be configured using the metadata config feature. For more information, see [Metadata Configuration]({{< ref "docs/references/metadata-reference" >}}).{{< /hint >}}
 
     ### Parameters related to stage configuration
     It is possible to use a local, native, or an external stage like S3 to hold the data files and then load them on the target Cockroach database from there. This section allows you to specify the details Replicant needs to connect to and use a specific stage.

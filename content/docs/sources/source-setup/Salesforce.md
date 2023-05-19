@@ -2,7 +2,7 @@
 pageTitle: Salesforce Source Connector Documentation
 title: Salesforce
 description: "Arcion can help you get more growth out of Salesforce's CRM. Add Replicant as a Connected App, connect, and mobilize Salesforce data for all of your needs."
-
+url: docs/source-setup/salesforce
 bookHidden: false
 ---
 # Source Salesforce
@@ -45,7 +45,7 @@ Before you can use Replicant with Salesforce, you have to add it to Salesforce a
     vi conf/conn/salesforce.yaml
     ```
 
-2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
+2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
     
     Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
 

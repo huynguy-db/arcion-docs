@@ -3,6 +3,7 @@ pageTitle: Use SQL Server change tracking for real-time replication
 title: "Change tracking"
 description: "Use SQL Server Change Tracking as CDC Extractor to replicate data in realtime from Microsoft SQL Server."
 weight: 1
+url: docs/source-setup/sqlserver/realtime-replication/change-tracking
 ---
 
 # Real-time replication from SQL Server with change tracking
@@ -10,7 +11,7 @@ For real-time replicaiton from SQL Server, you can choose SQL Server Change Trac
 
 ## I. Prerequisites
 ### Required Permissions
-To allow replication, you need to first verify that the necessary permissions are in place on source SQL Server. For more information, see [SQL Server User Permissions](/../../references/source-prerequisites/sqlserver/#sql-server-user-permissions).
+To allow replication, you need to first verify that the necessary permissions are in place on source SQL Server. For more information, see [SQL Server User Permissions]({{< relref "../../../source-prerequisites/sqlserver#sql-server-user-permissions" >}}).
 
 ### Primary keys on tables
 For [full mode replication]({{< relref "../full-mode-replication" >}}) with change tracking, make sure that all the tables that you need to replicate have primary keys.
@@ -83,7 +84,7 @@ max-connections: MAX_NUMBER_OF_CONNECTIONS
 ```
 
 ### AWS Secrets Manager
-If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
+If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
 
 ### Use KeyStore for credentials
 Replicant supports consuming login credentials from a _credentials store_. Instead of specifying username and password [in plain form](#using-a-connection-configuration-file), you can keep them in a KeyStore and provide the KeyStore details in the connection configuration file like below:

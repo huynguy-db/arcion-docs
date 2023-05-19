@@ -4,6 +4,7 @@ title: Type-2 CDC
 description: "Learn how to use Type-2 CDC for Snowflake and Databricks in Arcion."
 bookHidden: false
 weight: 18
+url: docs/references/type-2-cdc
 ---
 
 # Use Type-2 CDC
@@ -38,7 +39,7 @@ Support for Type-2 CDC possesses the following limitations:
 - Type-2 CDC works in [`realtime`]({{< ref "docs/running-replicant#replicant-realtime-mode" >}}) and [`full`]({{< ref "docs/running-replicant#replicant-full-mode" >}}) modes.
 
 ## Enable Type-2 CDC
-1. Set [`cdc-metadata-type`]({{< relref "docs/targets/configuration-files#cdc-metadata-type" >}}) and `replay-strategy` to the following values under the `realtime` section of the [Applier]({{< relref "applier-reference" >}}) configuration file:
+1. Set [`cdc-metadata-type`]({{< relref "docs/targets/configuration-files/applier-reference#cdc-metadata-type" >}}) and `replay-strategy` to the following values under the `realtime` section of the [Applier]({{< relref "applier-reference" >}}) configuration file:
 
     ```YAML
     realtime:

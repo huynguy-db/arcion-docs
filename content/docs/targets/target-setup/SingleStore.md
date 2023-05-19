@@ -2,7 +2,7 @@
 pageTitle: Documentation for SingleStore Target connector
 title: SingleStore
 description: "Learn how to ingest data to SingleStore for analytics and ML, using Arcion's bleeding-edge CDC technology to keep data up-to-date."
-
+url: docs/target-setup/singlestore
 bookHidden: false
 ---
 # Destination SingleStore
@@ -58,7 +58,7 @@ You can specify your credentials in plain form in the connection configuration f
   {{< /tab >}}
 
   {{< tab "Fetch credentials from AWS Secrets Manager" >}}
-  If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/security/secrets-manager). 
+  If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
   {{< /tab >}}
   {{< /tabs >}}
 

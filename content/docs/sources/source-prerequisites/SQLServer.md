@@ -3,11 +3,12 @@ pageTitle: Using SQL Server as Source with Arcion CDC Agent
 title: Microsoft SQL Server
 description: "Learn how to set up Replicant Arcion CDC Agent for your Source SQL Server and enable CDC replication."
 weight: 3
-bookHidden: false 
+bookHidden: false
+url: docs/references/source-prerequisites/sqlserver
 ---
 
 # Arcion CDC Agent
-If you set [the `extractor` parameter to `LOG` for your Source SQL Server](/docs/sources/source-setup/sqlserver/#specify-cdc-extractor), Replicant uses the Arcion CDC Agent as CDC Extractor. This page describes how to install and configure Replicant Arcion CDC Agent.
+If you set [the `extractor` parameter to `LOG` for your Source SQL Server]({{< ref "docs/sources/source-setup/sqlserver/realtime-replication/arcion-cdc-agent#extractor" >}}), Replicant uses the Arcion CDC Agent as CDC Extractor. This page describes how to install and configure Replicant Arcion CDC Agent.
 
 ## Overview
 

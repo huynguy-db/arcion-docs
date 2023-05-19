@@ -2,7 +2,7 @@
 pageTitle: Documentation for Databricks Target on AWS
 title: Databricks on AWS
 description: "Learn how to set up Arcion with AWS Databricks. Leverage features like Type-2 CDC, Unity Catalog, and more."
-
+url: docs/target-setup/databricks/databricks-aws
 bookHidden: false
 ---
 
@@ -47,7 +47,7 @@ Replicant requires the Databricks JDBC Driver as a dependency. To obtain the app
     {{< hint "info" >}}
   **Note:** All communications with Databricks happen through port 443, the standard port for HTTPS. So all data is encrypted and secure with SSL by default.
     {{< /hint >}}
-    If you store your Databricks server connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/security/secrets-manager). 
+    If you store your Databricks server connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
     
     Otherwise, you can put your credentials in plain form like the sample below:
 

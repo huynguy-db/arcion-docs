@@ -4,6 +4,7 @@ title: Confluent Cloud
 description: "Connect and process your data to achieve cloud-native data streaming with Arcion and Confluent Cloud, in real-time."
 weight: 1
 bookHidden: false
+url: docs/target-setup/confluent/confluent-cloud
 ---
 
 # Destination Confluent Cloud

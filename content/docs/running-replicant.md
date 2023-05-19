@@ -90,7 +90,7 @@ conf/conn/target_database_name_dst.yaml \
 
 The delta snapshot is a recurring snapshot which replicates the *delta* of the records which have been inserted/updated since the previous delta snapshot iteration. In this mode, Replicant uses the delta-snapshot key column and the recovery table to identify the set of delta records which have been inserted/updated/deleted since the previous delta snapshot iteration. 
 
-To know how you can specify delta snapshot parameters in Extractor configuration file, see [Delta Snapshot Mode in Extractor Configuration](docs/sources/configuration-files/extractor-reference/#delta-snapshot-mode).
+To know how you can specify delta snapshot parameters in Extractor configuration file, see [Delta Snapshot Mode in Extractor Configuration]({{< ref "docs/sources/configuration-files/extractor-reference#delta-snapshot-mode" >}}).
 
 ## Replicant initialization mode
 

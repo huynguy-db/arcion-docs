@@ -2,7 +2,7 @@
 pageTitle: Cassandra Target Connector Documentation
 title: Cassandra
 description: "Learn all the conifgurations for fast data ingestion into your Cassandra databases, with support for bulk loading."
-
+url: docs/target-setup/cassandra
 bookHidden: false
 ---
 # Destination Cassandra
@@ -14,7 +14,7 @@ bookHidden: false
     vi conf/conn/cassandra.yaml
     ```
 
-2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
+2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
     
     Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
 

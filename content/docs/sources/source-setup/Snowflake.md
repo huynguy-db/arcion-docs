@@ -2,7 +2,7 @@
 pageTitle: Snowflake Source connector
 title: Snowflake
 description: "Get more out of Snowflake Data Cloud with Arcion. Use RSA key pair authentication, configure stage and Extractor, and enjoy fast, real-time replication."
-
+url: docs/source-setup/snowflake
 bookHidden: false
 ---
 
@@ -52,7 +52,7 @@ Make sure that you possess the following object privileges for CDC-based replica
     For connecting to Snowflake via basic username and password authentication, you have two options:
 
     #### Fetch credentials from AWS Secrets Manager
-    You can choose to store your username and password in AWS Secrets Manager, and tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/security/secrets-manager).
+    You can choose to store your username and password in AWS Secrets Manager, and tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}).
 
     #### Specify credentials in plain form
     You can also specify your credentials in plain form in the connection configuration file like the sample below:

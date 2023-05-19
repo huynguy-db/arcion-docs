@@ -2,7 +2,7 @@
 pageTitle: Documentation for YugabyteCQL Target connector
 title: YugabyteCQL
 description: "Learn everything you need to know for setting up YugabyteCQL as data Target for your data pipelines using Arcion Yugabyte connector."
-
+url: docs/target-setup/yugabyte_cql
 bookHidden: false
 ---
 # Destination YugabyteCQL
@@ -15,7 +15,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
     ```BASH
     vi conf/conn/yugabytecql.yaml
     ```
-2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
+2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
     
     Otherwise, you can put your credentials like usernames and passwords in plain form using the following format:
 

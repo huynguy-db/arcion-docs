@@ -3,6 +3,7 @@ pageTitle: Using Mapper file to map Source data
 title: Mapper Configuration
 description: "You can control the structure of Source data as it gets replicated to Target. Learn to map Source data using Mapper file rules."
 weight: 4
+url: docs/references/mapper-reference
 ---
 
 # Mapper Configuration
@@ -87,7 +88,7 @@ In the above example:
 - The flow sequence `[testdb, dbo, TestTB1]` under `source` represents the Source database name, Source schema name, and Source table name respectively. Pay attention to case sensitivity.
 - The key-value pair `col1_s: col1` maps Target column name to Source column name
 
-You can also find sample Mapper files for different pipelines in the `mapper` directory of your [Arcion Self-hosted download](/docs/quickstart/#ii-download-replicant-and-create-a-home-repository).
+You can also find sample Mapper files for different pipelines in the `mapper` directory of your [Arcion Self-hosted download]({{< ref "docs/quickstart/arcion-self-hosted#download-replicant-and-create-replicant_home" >}}).
 
 ## Dynamic trimming options
 

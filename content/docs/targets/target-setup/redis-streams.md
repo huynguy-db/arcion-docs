@@ -3,6 +3,7 @@ pageTitle: Documentation for Redis Streams as target
 title: Redis Streams
 description: "Get in-depth documentation on how to ingest data into Redis Streams with Arcion, from setting up secure connection to realtime replication."
 bookHidden: false
+url: docs/target-setup/redis-streams
 ---
 
 # Destination Redis Streams

@@ -2,7 +2,7 @@
 pageTitle: SAP ASE Source Connector Documentation
 title: SAP ASE
 description: "Learn how to extract data from Source SAP ASE database with Arcion, with support for ASE's bcp utility for faster, native data extraction."
-
+url: docs/source-setup/sap_ase
 bookHidden: false
 ---
 
@@ -51,7 +51,7 @@ If you want to use [the `bcp` utility](https://help.sap.com/docs/SAP_ASE/da6c1d1
 
 {{< /tab >}}
 {{< tab "Fetch credentials from AWS Secrets Manager" >}}
-If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/docs/security/secrets-manager).
+If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}).
 {{< /tab >}}
 {{< /tabs >}}
 

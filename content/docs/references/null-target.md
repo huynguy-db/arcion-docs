@@ -3,6 +3,7 @@ pageTitle: Use the null target to measure extraction performance
 title: The null target
 description: "Arcion Replicant supports using the /dev/null device file as target to measure source extraction performance and validate your configurations."
 weight: 10
+url: docs/references/null-target
 ---
 
 # The null target
@@ -15,7 +16,7 @@ To use `/dev/null` as target, follow these steps:
 
 1. Choose and configure a source platform, for example, [Microsoft SQL Server]({{< ref "docs/sources/source-setup/sqlserver/" >}}). 
 {{< hint "info" >}}
-**Tip:** To see the available sources, visit our [connectors page](https://www.arcion.io/connectors). For documentation on the available sources, expand the **Source setup** section in the left navigation menu by clicking the <span class="expander-arrow-icon" aria-hidden="true" translate="no">▾</span> expander arrow.
+**Tip:** To see the available sources, visit our [connectors page](https://www.arcion.io/connectors). For documentation on the available sources, expand the **Source Connector Setup** section in the left navigation menu by clicking the <span class="expander-arrow-icon" aria-hidden="true" translate="no">▾</span> expander arrow.
 {{< /hint >}}
 1. Specify the following configuration for the null target:
     ```YAML

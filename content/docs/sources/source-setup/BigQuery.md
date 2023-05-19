@@ -2,7 +2,7 @@
 pageTitle: Google BigQuery Source Connector
 title: Google BigQuery
 description: "Mobilize data from your BigQuery warehouse to other platforms of your choice using Arcion BigQuery connector."
-
+url: docs/source-setup/bigquery
 bookHidden: false
 ---
 # Source Google BigQuery
@@ -25,7 +25,7 @@ Replicant requires the JDBC driver for Google BigQuery as a dependency. To obtai
     vi conf/conn/bigquery_src.yaml
     ```
 
-2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
+2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
     
     Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
     ```YAML

@@ -4,6 +4,7 @@ title: Setup guide
 description: "Set up Snowflake target for snapshot and realtime replication. We discuss RSA authentication, clustering tables support, and more."
 bookHidden: false
 weight: 1
+url: docs/target-setup/snowflake/setup-guide
 ---
 
 # Destination Snowflake setup guide
@@ -43,7 +44,7 @@ The following steps refer [the extracted Arcion self-hosted CLI download]({{< re
     To connect to Snowflake with basic username and password authentication, you have two options:
 
     #### Fetch credentials from AWS Secrets Manager
-    You can choose to store your username and password in AWS Secrets Manager, and tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager).
+    You can choose to store your username and password in AWS Secrets Manager, and tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}).
 
     #### Specify credentials in plain form
     You can also specify your credentials in plain form in the connection configuration file like the following sample:
@@ -207,7 +208,7 @@ The following steps refer [the extracted Arcion self-hosted CLI download]({{< re
     ```
 
     #### Edit the connection configuration file
-    You need to modify [Replicant's connection configuration file for Snowflake](#parameters-related-to-target-snowflake-server-connection) and include RSA key information there. Specifically, add the following parameters to the connection configuration file:
+    You need to modify [Replicant's connection configuration file for Snowflake](#parameters-to-configure-target-snowflake-server-connection) and include RSA key information there. Specifically, add the following parameters to the connection configuration file:
 
     ```YAML
     private-key-path: "/PATH_TO_GENERATED_KEY/rsa_key.p8"
@@ -283,7 +284,7 @@ The following steps refer [the extracted Arcion self-hosted CLI download]({{< re
       After executing the preceding command, you can select table with lowercase names by surrounding the names with double quotation marks.
 
     ### Enable Type-2 CDC
-    From version 22.07.19.3 onwards, Arcion supports Type-2 CDC for Snowflake as the target. For more information, see [Type-2 CDC]({{< ref "docs/references/type-2-cdc" >}}) and [`cdc-metadata-type`]({{< relref "docs/targets/configuration-files#cdc-metadata-type" >}}).
+    From version 22.07.19.3 onwards, Arcion supports Type-2 CDC for Snowflake as the target. For more information, see [Type-2 CDC]({{< ref "docs/references/type-2-cdc" >}}) and [`cdc-metadata-type`]({{< relref "../../configuration-files/applier-reference#cdc-metadata-type" >}}).
 
     
 

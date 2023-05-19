@@ -2,7 +2,7 @@
 pageTitle: Apache Spark connector by Arcion
 title: Apache Spark
 description: "Get enterprise-grade data ingestion into Apache Spark's distributed analytics engine with native bulk loading support."
-
+url: docs/target-setup/spark
 bookHidden: false
 ---
 
@@ -18,7 +18,7 @@ The extracted `replicant-cli` will be referred to as the `$REPLICANT_HOME` direc
    vi conf/conn/spark.yaml
    ```
 
-2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager](/../../security/secrets-manager). 
+2. If you store your connection credentials in AWS Secrets Manager, you can tell Replicant to retrieve them. For more information, see [Retrieve credentials from AWS Secrets Manager]({{< ref "docs/security/secrets-manager" >}}). 
     
     Otherwise, you can put your credentials like usernames and passwords in plain form like the sample below:
 
