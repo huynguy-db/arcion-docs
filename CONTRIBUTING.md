@@ -34,7 +34,7 @@ Follow these steps to perform complex edits on multiple files:
 
 1.  Log in to your GitHub account and navigate to this repository.
 2.  Select **Fork** ito create a fork of the repo.
-3.  Open your fork. The fork now exists under your username (`<your_username>/arcion`).
+3.  Open your fork. The fork now exists under your username (`<your_username>/arcion-docs`).
 4.  Clone the repository to your machine using HTTPS or SSH.
 5.  Create a branch and checkout into that branch.
 6.  Edit the documentation using your favorite code editor.
@@ -110,4 +110,4 @@ To add an image, follow these steps:
 	```
 
 ### Write with the Arcion developer documentation style guide in mind
-Follow the [Arcion developer documentation style guide](docs-style-guide) while you work on your documentation edits.
+Follow the [Arcion developer documentation style guide](docs-style-guide.md) while you work on your documentation edits.
