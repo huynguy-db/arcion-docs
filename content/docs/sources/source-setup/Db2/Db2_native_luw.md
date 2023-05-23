@@ -98,19 +98,35 @@ If you want CDC-based replication from the source Db2 server, follow these steps
     sudo apt install libaio1 libstdc++6:i386 libpam0g:i386
     sudo apt install binutils
     ```
-3. Install Db2 Data Server Client by following these steps:
+3. If you want to install Db2 Data server Client as a non-root user, follow the instructions in 
+    [Installing DB2 database servers as a non-root user](https://www.ibm.com/docs/en/dscp/10.1.0?topic=SSSNY3_10.1.0/com.ibm.db2.luw.qb.server.doc/doc/t0050571.htm) 
+    first. Otherwise, proceed with the following steps to install Db2 Data Server Client:
 
-    a. Download latest version of [Db2 Data Server Client from IBM](https://www.ibm.com/support/pages/download-initial-version-115-clients-and-drivers).
+    <ol type="a">
+    <li>
 
-    b. Extract and start the installer by running `db2setup`.
+    Download latest version of [Db2 Data Server Client from IBM](https://www.ibm.com/support/pages/download-initial-version-115-clients-and-drivers).</li>
 
-    c. Select **Custom** installation in the **Configuration** window.
+    <li>
 
-    d. Select the **Base application development tools** checkbox in the **Select Features** window.
+    Extract and start the installer by running `db2setup`.</li>
+
+    <li>
+
+    Select **Custom** installation in the **Configuration** window.</li>
+
+    <li>
     
-    e. In the **Instance Owner** window, specify user information for the Db2 instance owner. You can either create a new user, or use an existing user. In both cases, note down the user configuration and make sure to run Replicant as the same user.
+    Select the **Base application development tools** checkbox in the **Select Features** window.</li>
     
-    f. Leave the remaining installation options as default and complete the installation.
+    <li>
+
+    In the **Instance Owner** window, specify user information for the Db2 instance owner. You can either create a new user, or use an existing user. In both cases, note down the user configuration and make sure to run Replicant as the same user.</li>
+    
+    <li>
+
+    Leave the remaining installation options as default and complete the installation.</li>
+    </ol>
 
 4. Catalog the source Db2 Server node by running the following:
 
