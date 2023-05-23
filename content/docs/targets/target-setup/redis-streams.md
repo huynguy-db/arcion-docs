@@ -197,6 +197,8 @@ For more information about the configuration parameters for `realtime` mode, see
 ### Supported platforms
 Arcion Replicant supports the following sources for Redis Streams as target:
 
+ - [Db2 LUW]({{< relref "../../sources/source-setup/db2/db2_native_luw" >}})
+ - [Microsoft SQL Server]({{< relref "../../sources/source-setup/sqlserver" >}})
  - [MySQL]({{< relref "../../sources/source-setup/mysql" >}})
  - [Oracle]({{< relref "../../sources/source-setup/oracle" >}})
  - [PostgreSQL]({{< relref "../../sources/source-setup/postgresql" >}})
