@@ -98,9 +98,9 @@ If you want CDC-based replication from the source Db2 server, follow these steps
     sudo apt install libaio1 libstdc++6:i386 libpam0g:i386
     sudo apt install binutils
     ```
-3. If you want to install Db2 Data server Client as a non-root user, follow the instructions in 
-    [Installing DB2 database servers as a non-root user](https://www.ibm.com/docs/en/dscp/10.1.0?topic=SSSNY3_10.1.0/com.ibm.db2.luw.qb.server.doc/doc/t0050571.htm) 
-    first. Otherwise, proceed with the following steps to install Db2 Data Server Client:
+3. You can install Db2 Data server Client as a root user or a non-root user. Non-root installations come with certain limitations. For more information, see [Installing DB2 database servers as a non-root user](https://www.ibm.com/docs/en/dscp/10.1.0?topic=SSSNY3_10.1.0/com.ibm.db2.luw.qb.server.doc/doc/t0050571.htm) 
+    
+    Follow these steps to install Db2 Data Server Client:
 
     <ol type="a">
     <li>
