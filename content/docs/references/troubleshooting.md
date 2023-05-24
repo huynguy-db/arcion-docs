@@ -13,7 +13,7 @@ This page describes a general guideline for troubleshooting Replicant when it fa
 To submit a support request to the Arcion team, please visit the [Arcion Help Center](https://support.arcion.io).
 
 {{< hint "info" >}}
-In the steps below, `$REPLICANT_HOME` represents the location of the `replicant-cli` folder after you've [downloaded and extracted Arcion Self-hosted](/docs/quickstart#ii-download-replicant-and-create-a-home-repository).
+In the steps below, `$REPLICANT_HOME` represents the location of the `replicant-cli` folder after you've [downloaded and extracted Arcion Self-hosted]({{< ref "docs/quickstart/arcion-self-hosted#download-replicant-and-create-replicant_home" >}}).
 {{< /hint >}}
 
 ## The log files

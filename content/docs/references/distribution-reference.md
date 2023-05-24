@@ -72,7 +72,7 @@ Now follow the steps below:
  
 2. In machine N2, create a new connection configuration file `mariadb_src_repl2.yaml` inside the `REPLICANT_HOME/conf/conn` directory.
 
-For more information about MariaDB's connection configuration files, see [MariaDB Connection Configuration]({{< relref "../sources/source-setup/mariadb#iv-set-up-connection-configuration" >}})
+For more information about MariaDB's connection configuration files, see [MariaDB Connection Configuration]({{< relref "../sources/source-setup/mariadb#iv-set-up-connection-configuration" >}}).
 
 ### Prepare the filter files
 1. In machine N1, create a new filter file `mariadb_filter_repl1.yaml` to specify databases or tables for replicating from N1. Put the filter file inside the `REPLICANT_HOME/filter` directory of N1.

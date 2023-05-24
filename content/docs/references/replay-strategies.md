@@ -19,7 +19,7 @@ Replay strategies apply to the following targets:
 
 Replicant automatically chooses the best replay strategy to use. So you don't always have to explicitly specify it.
 
-You can set the replay strategy using the `replay-strategy` realtime parameter. Arcion supports the following replay strategies for realtime [BigQuery]({{< ref "../targets/target-setup/bigquery" >}}) and [Databricks](({{< ref "../targets/target-setup/databricks" >}})) targets:
+You can set the replay strategy using the `replay-strategy` realtime parameter. Arcion supports the following replay strategies for realtime [BigQuery]({{< ref "../targets/target-setup/bigquery" >}}) and [Databricks]({{< ref "../targets/target-setup/databricks" >}}) targets:
 
 ### `NONE`
 When a set of upcoming operations arrives, the Applier buffers the operations and checks the following criteria: 

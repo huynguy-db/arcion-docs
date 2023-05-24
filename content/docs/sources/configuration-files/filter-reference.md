@@ -13,7 +13,7 @@ You can instruct Replicant which data collections, tables, or files to replicate
 ## The filter configuration file
 The filter configuration file contains a set of filter rules. Replicant follows these rules while carrying out replication. You can filter tables, views, and queries. 
 
-There are sample filter configuration files for different source databases inside the `filter` directory of [your Arcion self-hosted download]({{< relref "../../quickstart/arcion-self-hosted#ii-download-replicant-and-create-a-home-repository" >}}).
+There are sample filter configuration files for different source databases inside the `filter` directory of [your Arcion self-hosted download]({{< ref "docs/quickstart/arcion-self-hosted#download-replicant-and-create-replicant_home" >}}).
 
 The following configuration parameters are available that you can use to lay out your filters:
 

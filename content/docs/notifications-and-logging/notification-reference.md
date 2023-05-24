@@ -13,7 +13,7 @@ Replicant can send you important notifications regarding various replication sta
 You can choose to receive notifications through either emails, or use a custom script. See the following sections for more information on each.
 
 ## The notification configuration file
-The notification configuration file `notifications.yaml` specifies the types of notifications Replicant sends. You can find a sample notification configuration file inside the `conf/notification` directory of [your Arcion self-hosted download]({{< relref "../quickstart#ii-download-replicant-and-create-a-home-repository" >}}). To know about the available configuration parameters in the notification configuration file, see the following sections.
+The notification configuration file `notifications.yaml` specifies the types of notifications Replicant sends. You can find a sample notification configuration file inside the `conf/notification` directory of [your Arcion self-hosted download]({{< ref "docs/quickstart/arcion-self-hosted#download-replicant-and-create-replicant_home" >}}). To know about the available configuration parameters in the notification configuration file, see the following sections.
 
 ## Configure mail notifications
 If you choose to receive notifications by mail, you can configure them under the `mail-alert` section of the configuration file. For more information, see the sample at the end of this section. 
