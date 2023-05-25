@@ -9,6 +9,7 @@ Read through this page before submitting any pull request.
   - [Suggested workflow for edits](#suggested-workflow-for-edits)
   - [Folder structure of the repository](#folder-structure-of-the-repository)
     - [Create files or directories](#create-files-or-directories)
+  - [Open an issue](#open-an-issue)
   - [Edit the documentation](#edit-the-documentation)
     - [Use Markdown](#use-markdown)
     - [Add images (optional)](#add-images-optional)
@@ -86,6 +87,21 @@ weight = 10
 # (Optional) Set to hide nested sections or pages at that level.
 bookCollapseSection = true
 ```
+
+## Open an issue
+You can [open an issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue) if you find something incorrect or out-of-date in the content, or if the documentation does not match the actual functionality. Make sure you cover the following items in your issue description:
+
+- The relevant Arcion product or service
+  - Specify the relevant Arcion product or service the issue impacts or relates to.
+- Expected behavior  
+  - Provide a link to the documentation or explain what the outcome should be if you follow the documentation.
+- Actual behavior
+  - Explain what happens when you follow the documentation.
+- The part of the documentation that requires updating
+  - Provide a link to the page that needs updating. Specify which section requires updating.
+- Additional information
+  - Any other details or screenshots that you think might be relevant.
+- Issue labels
 
 ## Edit the documentation
 Follow these instructions to make edits:
