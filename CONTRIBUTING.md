@@ -89,7 +89,7 @@ bookCollapseSection = true
 ```
 
 ## Open an issue
-You can [open an issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue) if you find something incorrect or out-of-date in the content, or if the documentation does not match the actual functionality. Make sure you cover the following items in your issue description:
+You can [open an issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue) if you find something incorrect or out-of-date in the content, or if the documentation does not match the actual functionality. Try to cover the following details in your issue description:
 
 - The relevant Arcion product or service
   - Specify the relevant Arcion product or service the issue impacts or relates to.
