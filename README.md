@@ -1,5 +1,6 @@
 # Arcion documentation
-This repository contains the code and documentation for the products of [Arcion Labs, Inc.](https://arcion.io)
+This repository contains the documentation and its code for the products of [Arcion Labs, Inc.](https://arcion.io), hosted 
+at https://docs.arcion.io.
 
 ## License
 This repository is subject to the [Terms of Use specified in the Arcion Labs website](https://arcion.io/tos) and the [LICENSE](LICENSE) specific to this repository.
