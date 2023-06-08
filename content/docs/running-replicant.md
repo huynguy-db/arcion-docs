@@ -198,6 +198,13 @@ Whether to check for necessary access to DDL and DML permissions on target datab
 
 _Default: `true` for `DST` as the [`end-point-type`](#end-point-type)._
 
+#### `validate-snapshot-access`
+`true` or `false`.
+
+Checks whether the user (login user of the database) possesses appropriate permissions to read and extract data from the table in snapshot replication.
+
+_Default: `true` in [`snapshot` mode](#replicant-snapshot-mode) and `false` in [`full`](#replicant-full-mode) and [`realtime`](#replicant-realtime-mode) modes._
+
 The following sample shows a sample validation configuration:
 
 ```YAML
@@ -207,6 +214,7 @@ mode: FULL
 validate-read-access-to-systemTables: true
 validate-read-access-to-cdc-logs: true
 validate-ddl-dml-permission: false
+validate-snapshot-access: true
 ```
 
 ### 2. Run Replicant self-hosted CLI with the necessary options and arguments
