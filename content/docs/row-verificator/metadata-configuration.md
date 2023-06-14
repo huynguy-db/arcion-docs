@@ -1,6 +1,6 @@
 ---
 pageTitle: Configuring Verificator metadata 
-title: Metadata configuration
+title: Metadata Configuration
 description: "The Verificator maintains metadata for distributed and fault-tolerant verification. You can configure the metadata database, the catalog, and the schema."
 weight: 7
 ---

@@ -1,6 +1,6 @@
 ---
 pageTitle: General configuration for Replicate Row Verificator
-title: General configuration
+title: General Configuration
 description: "Set up a general configuration to use Replicate Row Verificator."
 weight: 3
 ---
