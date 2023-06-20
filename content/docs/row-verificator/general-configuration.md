@@ -88,13 +88,17 @@ If `true`, the Verificator only verifies if it finds the number of rows equal in
 Behaves in the same manner as [`global-check-row-count-only`](#global-check-row-count-only). However, you can only use it for a per-table basis. If you set this parameter at table level, the table-level value overrides the global value of  [`global-check-row-count-only`](#global-check-row-count-only).
 
 ## `global-delta-verify-key`
-Timestamp column that holds the CREATE DATE value. The Verificator uses this value for all tables.
+Applies to `delta-verify` mode only.
+
+Specifies the timestamp column that holds the CREATE DATE value. The Verificator uses this value for all tables.
 
 ## `global-delta-verify–interval-ms`
-The millisecond interval when verificator checks for inserted rows. The Verificator uses this value for all tables.
+Applies to `delta-verify` mode only.
+
+Specifies the millisecond interval when the Verificator checks for inserted rows. The Verificator uses this value for all tables.
 
 ## `src-per-table-config`
-Parameter to specify configurations for each table and column, facilitating the comparison process. You only need to specify this parameter for source tables and columns. The Verificator automatically maps the source tables and columns for destination.
+Allows you to specify configurations for each table and column, facilitating the comparison process. You only need to specify this parameter for source tables and columns. The Verificator automatically maps the source tables and columns for destination.
 
 <dl class="dl-indent">
 <dt><code>catalog</code></dt>

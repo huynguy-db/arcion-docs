@@ -1,7 +1,7 @@
 ---
 pageTitle: Learn how to Run Replicant Row Verificator 
 title: Run the Verificator
-description: "Learn how to run Replicant Row Verificator with basic and advanced configurations."
+description: "Learn how to run the Row Verificator CLI and how it shows important information on the dashboard about the verification process."
 weight: 6
 ---
 
@@ -97,3 +97,91 @@ You can stop the Verificator by pressing <kbd>Control</kbd> + <kbd>C</kbd> at an
 --map mapper/sqlserver_to_singlestore.yaml \
 --id ver1 --resume
 ```
+
+## Information dashboard
+The Verificator generates a dashboard illustrating various pieces of data on the verification process. The dashboard contains the following information columns:
+
+<dl class="dl-indent">
+<dt>
+
+`SOURCE_DATABSE_NAME`
+</dt>
+<dd>
+
+Lists all the source database tables that the Verificator verifies. The column 
+name depends on the source database name—for example, `SQLSERVER`.
+</dd>
+<dt>
+
+`TARGET_DATABSE_NAME`
+</dt>
+<dd>
+
+Lists all the target database tables that the Verificator verifies against respective source database tables. The column name depends on the target database—for example, `SINGLESTORE`.
+</dd>
+
+<dt>
+
+`Src Total`
+</dt>
+<dd>
+Lists all the rows in the corresponding table of the source database.
+</dd>
+<dt>
+
+`Dst Total`
+</dt>
+<dd>
+Lists all the rows in the corresponding table of the target database.
+</dd>
+
+<dt>
+
+`Success`
+</dt>
+<dd>
+
+Represents the success value for the verification of each corresponding source and target database tables.
+
+<dl class="dl-indent">
+<dt>&#10004;</dt>
+<dd>The Verificator has found identical data across the source and target database tables.</dd>
+<dt>&#10007;</dt>
+<dd>The Verificator has found data mismatches across source and the target database tables.</dd>
+<dt>-</dt>
+<dd>The Verificator has only performed row-count matching for the source and target database tables.</dd>
+</dl>
+
+</dd>
+
+<dt>
+
+`Matches`
+</dt>
+<dd>Lists the row-count matches.</dd>
+
+<dt>
+
+`Src Excl`
+</dt>
+<dd>
+Number of source-exclusive rows. These rows exist on the source database but not on the target database.
+</dd>
+
+<dt>
+
+`Dst Excl`
+</dt>
+<dd>
+Number of target-exclusive rows. These rows exist on the target database but not on the source database.
+</dd>
+
+<dt>
+
+`Changed`
+</dt>
+<dd>
+A particular primary key exists on both source and target database but some of the column values have changed. This column lists the number of those changes.
+</dd>
+</dl>
+
