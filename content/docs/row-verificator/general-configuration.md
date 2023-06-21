@@ -183,3 +183,7 @@ Millisecond interval at which the Verificator checks for new rows.</dd>
 </dd>
 
 </dl>
+
+{{< hint "warning" >}}
+**Important:** : For [`delta-verify` mode]({{< relref "running-the-verificator#verificator-modes" >}}), you must provide either `global-delta-verify-key` or `delta-verify-key` in a `per-table-config`. Also note that `row-identifier-key` in a `per-table-config` might be necessary if the table does not possess a primary key.
+{{< /hint >}}

@@ -50,5 +50,8 @@ The extraction creates a folder `replicate-row-verificator-VERSION_NUMBER` with 
 - The `conf/` folder contains sample configuration files.
 - The `filter/` folder contains sample [filter configurations]({{< relref "filter-configuration" >}}) for different database platforms.
 - The `mapper/` folder contains sample [Mapper configurations]({{< relref "mapper-configuration" >}}) for different database platforms.
-    </li>
+</li>
 </ol>
+
+## 7. Run the Verificator
+Follow the instructions in [Running the Row Verificator]({{< relref "running-the-verificator" >}}).
