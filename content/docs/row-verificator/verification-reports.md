@@ -89,7 +89,7 @@ The timestamp the Verificator stops checking for row changes and verification fo
 </dd>
 <dt>
 
-`Missing primary keys`
+Missing primary keys
 </dt>
 <dd>
 
