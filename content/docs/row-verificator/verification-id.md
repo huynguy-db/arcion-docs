@@ -2,7 +2,7 @@
 pageTitle: Learn how the Verificator uses unique IDs to ensure correct verification
 title: Verification ID
 description: "Each Verificator job relies on a unique ID to ensure correct verification."
-weight: 7
+weight: 9
 ---
 
 # Verification ID

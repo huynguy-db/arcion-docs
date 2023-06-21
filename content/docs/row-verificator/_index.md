@@ -1,5 +1,5 @@
 ---
 bookFlatSection: true
-title: Row Verificator
+title: Replicate Row Verificator
 weight: 9
 ---
