@@ -103,7 +103,7 @@ The following example shows one record of a `delta-verify` report:
 catalog.table   2022-12-20 21:13:01.0   2023-01-23 12:05:17.0   [8,9,11]
 ```
 ## Generated folders
-The Verificator creates folders for each table. The name of each folder follows the name as the corresponding source table name.
+The Verificator creates folders for each table. The name of each folder follows the corresponding source table name.
 
 Each folder contains the following files. In the following file names, `SRC_DB` and `DST_DB` corresponds to the source and destination database names respectively.
 
