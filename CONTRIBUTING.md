@@ -14,6 +14,8 @@ Read through this page before submitting any pull request.
     - [Use Markdown](#use-markdown)
     - [Add images (optional)](#add-images-optional)
     - [Write with the Arcion developer documentation style guide in mind](#write-with-the-arcion-developer-documentation-style-guide-in-mind)
+- [Set up Hugo](#set-up-hugo)
+  - [Linux](#linux)
 
 
 ## Prerequisites
@@ -24,17 +26,17 @@ Read through this page before submitting any pull request.
 
     b. Add the key to your OpenSSH authentication agent.
     
-    c. Add the public key file to your GitHub accountl
+    c. Add the public key file to your GitHub account.
 		
 See [The GitHub docs](https://docs.github.com/en/authentication/connecting-to-github-with-ssh) for instructions on how to perform these steps.
 
 ## Suggested workflow for edits
-The GitHub editing interface works well for quick edits. However, we recommend that you use a code editor and a local copy of your fork of this reporsitory for more complex edits or edits involving multiple files.
+The GitHub editing interface works well for quick edits. However, we recommend that you use a code editor and a local copy of your fork of this repository for more complex edits or edits involving multiple files.
 
 Follow these steps to perform complex edits on multiple files:
 
 1.  Log in to your GitHub account and navigate to this repository.
-2.  Select **Fork** ito create a fork of the repo.
+2.  Select **Fork** to create a fork of the repo's `dev` branch.
 3.  Open your fork. The fork now exists under your username (`<your_username>/arcion-docs`).
 4.  Clone the repository to your machine using HTTPS or SSH.
 5.  Create a branch and checkout into that branch.
@@ -127,3 +129,51 @@ To add an image, follow these steps:
 
 ### Write with the Arcion developer documentation style guide in mind
 Follow the [Arcion developer documentation style guide](docs-style-guide.md) while you work on your documentation edits.
+
+# Set up Hugo
+
+This section helps you set up Hugo on your machine so that you can run the website and verify your changes locally.
+
+
+## Linux
+
+These instructions apply to Ubuntu 22.04 and higher.
+For other Linux distributions, see the [Hugo Linux installation docs](https://gohugo.io/installation/linux/).
+
+
+1. Install Hugo using `apt-get`:
+  
+  Arcion docs theme requires Hugo extended, with version 0.79 or higher.
+  Not all releases of Ubuntu repositories provide such newer versions. 
+  For these cases, the recommended approach to install Hugo is to grab the appropriate prebuilt binary from the [Hugo releases page](https://github.com/gohugoio/hugo/releases). 
+  
+
+  ```bash
+  sudo apt-get install hugo
+
+  hugo version
+  hugo v0.92.2+extended linux/amd64 BuildDate=2023-01-31T11:11:57Z VendorInfo=ubuntu:0.92.2-1ubuntu0.1
+  ```
+
+2. Go inside your `arcion-docs` repository:
+
+  ```bash
+  cd arcion-docs/
+  ``````
+
+3. Start Hugo server:
+
+  ```bash
+  hugo server --config config-dev.toml
+  ```
+
+4. View Locally
+
+  `hugo server` builds the website and serves it using an HTTP server.
+  After you run hugo server, it displays the URL of the local build:
+
+  ```
+  Web Server is available at //localhost:1313/ (bind address 127.0.0.1)
+  ``````
+
+  You can make changes while the server is running. The server automatically detects any change you make in website content and and rebuilds the site.
