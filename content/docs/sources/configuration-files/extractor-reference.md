@@ -380,26 +380,15 @@ Specifies the timestamp for source Db2 Kafka. The following values are possible 
 For more information, see [the Db2 Kafka tab in Parameters related to realtime mode]({{< ref "../source-setup/db2/db2_mq_kafka#parameters-related-to-realtime-mode" >}})
 {{< /tab >}}
 
-{{< tab "Informix" >}}
-#### `sequence-number`
-`long` type value. 
-
-Specifies the start position from which replication should start.
-
-#### `timestamp-ms` 
-`long` type value. Causes Replicant to discard all transactions that were committed before this timestamp.
-
-#### `create-checkpoint` 
-`boolean` value.
-
-Creates a replication checkpoint.
-{{< /tab >}}
-
 {{< tab "MySQL" >}}
 #### `log`:
 Log file from where replication should start.
 #### `position`
 Position within the log file from where replication should start.
+#### `start-timestamp` _[v23.06.30.2]_
+Specifies the timestamp value from where Replicant starts replication from the appropriate log file and position. The timestamp follows the format `YYYY-MM-DD hh:mm: z`, where `z` stands for the time zone—for example, `PST`, `UTC`, or `IST`.
+#### `rewind-realtime-start-position-m` _[v23.06.30.2]_
+This parameter works together with the [`log`](#log) and [`position`](#position) parameters. It rewinds the `start-position` by the value you specify here and starts replication from this new `start-position`.
 {{< /tab >}}
 
 {{< tab "MongoDB" >}}
@@ -416,10 +405,20 @@ Specifies the increment for the given timestamp. It corresponds to [the incremen
 #### `start-scn`
 The SCN from which replication should start.
 {{< /tab >}}
+      
+{{< tab "Informix" >}}
+#### `sequence-number`
+`long` type value. 
 
-{{< tab "PostgreSQL" >}}
-#### `start-lsn`
-An Log Sequence Number-based (LSN) starting position for PostgreSQL—for example, `0/3261270`. Replicant starts replicating from `start-lsn`, rather than the current log position when you trigger Replicant in real-time mode, provided that the replication slot still has the LSN visible.
+Specifies the start position from which replication should start.
+
+#### `timestamp-ms` 
+`long` type value. Causes Replicant to discard all transactions that were committed before this timestamp.
+
+#### `create-checkpoint` 
+`boolean` value.
+
+Creates a replication checkpoint.
 {{< /tab >}}
 
 {{< tab "Others" >}}
