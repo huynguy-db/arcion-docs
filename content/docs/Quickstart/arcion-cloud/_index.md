@@ -72,7 +72,7 @@ This step involves setting up your source connection.
   You can also choose to tick the **Continuous Log Mining** checkbox to enable log mining for the operation.
 
   After filling in the form, click **Save Connection**.
-- If you haven't synced the connector yet, Open the **Sync Connector** tab and click on **Sync Connector** for it to be ready. If you've filled in your information correctly, the sync operation should complete successfully, showing all the schemas in the source database.
+- If you haven't synced the connector yet, Open the **Sync Connector** tab and click on **Sync Connector** for it to be ready. If you have filled in your information correctly, the sync operation should complete successfully, showing all the schemas in the source database.
   {{< hint "warning" >}}
   You must sync every source connector at least once, as a mandatory step in setting up a source.
   {{< /hint >}}
