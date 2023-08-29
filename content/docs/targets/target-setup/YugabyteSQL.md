@@ -74,7 +74,7 @@ database: 'DATABASE_NAME'
 username: 'USERNAME'
 password: 'PASSWORD'
 
-socket-timeout-s: 60 #The timeout value used for socket read operations. The timeout is specified in seconds and a value of zero means that it is disabled.
+socket-timeout-s: 60
 max-connections: 30
 max-retries: 10
 retry-wait-duration-ms: 1000
