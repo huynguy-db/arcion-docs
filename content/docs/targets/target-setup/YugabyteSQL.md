@@ -47,6 +47,7 @@ If the user does not have `CREATEDB` privilege, then follow these two steps:
 2. Grant all privileges for the `io` database to that user:
     ```SQL
     GRANT ALL ON DATABASE io TO alex;
+    ```
 
 ## I. Set up connection configuration
 
