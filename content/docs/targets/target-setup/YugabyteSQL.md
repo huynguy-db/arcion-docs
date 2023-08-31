@@ -54,11 +54,11 @@ If the user does not have `CREATEDB` privilege, then follow these two steps:
 Specify our Yugabyte SQL connection details to Replicant with a connection configuration file. You can find a sample connection configuration file `yugabytesql.yaml` in the `$REPLICANT_HOME/conf/conn` directory.
 
 For connecting to Yugabyte SQL, you can choose between two methods for an authenticated connection:
-  - [Using basic username and password authentication](#connect-with-username-and-password)
-  - [Using SSL](#connect-using-ssl)
+  - [Using username and password without SSL](#connect-using-username-and-password-without-ssl)
+  - [Using username and password with SSL](#connect-using-ssl)
 
-### Connect with username and password
-To connect to Yugabyte SQL using basic username and password authentication, you have the following two options:
+### Connect using username and password without SSL
+To connect to Yugabyte SQL using username and password without SSL, you have the following two options:
 
 {{< tabs "username-pwd-authentication" >}}
 {{< tab "Specify credentials in plain text" >}}
