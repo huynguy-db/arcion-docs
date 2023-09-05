@@ -122,8 +122,14 @@ When set to `LOWERCASE` or `UPPERCASE`, Replicant converts table or column names
 **Note:** If the table is explicitly mapped, then that mapping will override the convert-case behaviour. If a source table named `REGION` is mapped to destination table `region_lowercase`, then this mapping will override the `convert-case` rule for this table. So, on target the table name becomes `region_lowercase` instead of uppercase `REGION`.
 {{< /hint >}}
 
-## Delimiter in Kafka topic and Redis stream names
-Replicant supports either dot (`.`), or underscore (`_`) as the delimiter in Kafka topic and Redis stream names. This allows you to map your source database object names to the appropriate format in [Kafka]({{< ref "docs/targets/target-setup/kafka" >}}) and [Redis Streams]({{< ref "docs/targets/target-setup/redis-streams" >}}).
+## Delimiter in Kafka topic, Redis stream, and event hub names
+Replicant supports either dot (`.`), or underscore (`_`) as the delimiter in the following:
+
+- Kafka topic names
+- Redis stream names
+- Event hub names in Azure Event Hubs
+
+This allows you to map your source database object names to the appropriate format in [Kafka]({{< ref "docs/targets/target-setup/kafka" >}}), [Redis Streams]({{< ref "docs/targets/target-setup/redis-streams" >}}), and [Azure Event Hubs]({{< ref "docs/targets/target-setup/azure-event-hubs" >}}).
 
 To set the delimiter, set the `object-name-concat-delimiter` parameter to one of the following values in the Mapper file:
 
@@ -152,19 +158,7 @@ Use underscore (`_`) as the delimiter. Underscore is the default delimiter for K
 For example, source table name `<catalog>.<schema>.<table>` is mapped to `<catalog>_<schema>_<table>`.
 </dd>
 
-For example, notice the following Mapper sample for MySQL-to-Kafka pipeline:
-
-```YAML
-rules:
-  [topic_prefix_r]:
-    source:
-    - [io,replicate]
-  [topic_prefix_s]:
-    source:
-    - [tpch_scale_0_01]
-
-object-name-concat-delimiter: DOT
-```
+See the [example Mapper configurations](#examples) for better understanding.
 
 ## Mapper configuration in Databricks
 The Mapper file configuration in Databricks differs from other database platforms. The mapping system also varies between Legacy Databricks and Unity Catalog. 
@@ -231,3 +225,42 @@ rules:
 ```
 
 In the preceding Mapper sample, Replicant maps source catalogs `tpch` and `io_blitzz` to `arcion.io`. So Replicant creates each source table under `tpch` and `io_blitzz` catalogs inside `arcion.io`.
+
+## Examples
+
+### MySQL to Azure Event Hubs
+```YAML
+rules:
+  [prefix_s]:
+    source:
+    - [tpch]
+
+object-name-concat-delimiter: DOT
+```
+
+### MySQL to Kafka
+
+```YAML
+rules:
+  [topic_prefix_r]:
+    source:
+    - [io,replicate]
+  [topic_prefix_s]:
+    source:
+    - [tpch_scale_0_01]
+
+object-name-concat-delimiter: DOT
+```
+
+### MySQL to Redis Streams
+```YAML
+rules:
+  [topic_prefix_r]:
+    source:
+    - [io,replicate]
+  [topic_prefix_s]:
+    source:
+    - [tpch_scale_0_01]
+
+object-name-concat-delimiter: DOT
+```
