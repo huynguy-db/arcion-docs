@@ -329,6 +329,27 @@ For realtime replication, you must create a heartbeat table in the source Postgr
 
 For more information about the configuration parameters for `realtime` mode, see [Realtime mode]({{< ref "../configuration-files/extractor-reference#realtime-mode" >}}).
 
+#### Aditional real-time parameters
+
+`replicate-to-child-partition-table`
+
+: `{true|false}`.
+  
+  Controls how Replicant treats replication of child partition tables.
+
+  {{< columns >}} <!-- begin columns block -->
+  ##### `false`
+  If you add a parent partition table in the filter file, Replicant automatically replicates data of child partition tables and redirects data of child partition tables to the parent table in the destination. Therefore, the target database contains a single parent table.
+
+  <---> <!-- magic separator, between columns -->
+
+  ##### `true`
+  Replicant treats each partition as an independent table in the destination. This means you need to add a list of child partition tables you want to replicate in the filter file  so that Replicant can replicate them to the target. In real time, Replicant replicates data from each child partition table to the corresponding destination tables.
+  {{< /columns >}}
+
+
+  _Default: `false`._
+
 #### Support for DDL replication
 Replicant [supports DDL replication for real-time PostgreSQL source]({{< ref "docs/sources/ddl-replication" >}}). For more information, [contact us](https://arcion.io/contact).
 
