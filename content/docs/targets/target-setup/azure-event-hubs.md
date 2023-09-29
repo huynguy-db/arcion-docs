@@ -38,15 +38,11 @@ brokers:
   broker1:
     host: "BOOTSTRAP_SERVER_HOSTNAME"
     port: 9093
-
-max-connections: 30
 ```
 
 Replace the following:
 - *`NAMESPACE_CONNECTION_STRING`*: the [connection string](https://learn.microsoft.com/en-us/azure/event-hubs/event-hubs-get-connection-string) for your Event Hubs namespace—for example, `Endpoint=sb://mynamespace.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=ABCDHIJKPQRSTXYZ";`.
 - *`BOOTSTRAP_SERVER_NAME`*: the Bootstrap server's hostname. It follows the format `NAMESPACENAME.servicebus.windows.net`, where *`NAMESPACENAME`* means your Event Hubs namespace name.
-
-Feel free to change the value of `max-connections`. It sets the maximum number of connections Replicant opens in Event Hubs.
 
 You must specify the `username` and `password` fields for authentication. 
 
@@ -336,7 +332,7 @@ realtime:
   txn-size-rows: 10000
   before-image-format: ALL  # Allowed values : KEY, ALL
   after-image-format: ALL   # Allowed values : UPDATED, ALL
-  replay-consistency: GLOBAL # Enable this Config for Single Topic Kafka
+  replay-consistency: EVENTUAL # Enable this Config for Single Topic Kafka
   shard-key: id
   num-shards: 1
   shard-function: MOD
