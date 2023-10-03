@@ -299,14 +299,14 @@ For more information about the configuration parameters for `snapshot` mode, see
 
   {{< columns >}}
   ##### `true`
-  - If you add parent partition table in the [filter file](#set-up-filter-configuration-optional), Replicant replicates all child partition tables to the destination.
+  - If you add parent partition table in the [filter file](#set-up-filter-configuration-optional), Replicant replicates data from all child partition tables to the destination.
   - If you [enable INLINE DDL](#support-for-ddl-replication), Replicant fetches data from existing child table and new partitions at runtime _if_ you specify the corresponding parent table in the [filter file](#set-up-filter-configuration-optional).
 
   <--->
 
   ##### `false`
   - Replicant treats each partition as an independent table in the destination. Therefore, to replicate child partition tables, you must include them in the [filter file](#set-up-filter-configuration-optional).
-  - You cannot replicate parent partition table by adding it in the [filter file](#set-up-filter-configuration-optional).
+  - Replicant doesn't replicate parent partition table even if you add it in the [filter file](#set-up-filter-configuration-optional).
   {{< /columns >}}
 
 
