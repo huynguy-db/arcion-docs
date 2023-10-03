@@ -342,14 +342,14 @@ For more information about the configuration parameters for `realtime` mode, see
 
   {{< columns >}}
   ##### `true`
-  If you add a parent partition table in the filter file, Replicant automatically replicates data of child partition tables and redirects data of child partition tables to the parent table in the destination. Therefore, the target database contains a single parent table.
+  If you add a parent partition table in the [filter file](#set-up-filter-configuration-optional), Replicant automatically replicates data of child partition tables and redirects data of child partition tables to the parent table in the destination. Therefore, the target database contains a single parent table.
 
   Replciant redirects any DML you use on child table to the parent table on target.
 
   <--->
 
   ##### `false`
-  Replicant treats each partition as an independent table in the destination.
+  Replicant treats each partition as an independent table in the destination. Therefore, to repliate parent and child partition tables, you must include them in the [filter file](#set-up-filter-configuration-optional).
   {{< /columns >}}
 
 
