@@ -288,13 +288,34 @@ For more information about the configuration parameters for `snapshot` mode, see
 
 #### Aditional snapshot parameters
 
-`fetch-partition-tables` _[v23.08.31.1]_
+`fetch-partition-tables`
 
 : `{true|false}`.
-  
-  Whether to fetch partition tables.
+
+  This parameter dictates the following:
+
+  - Whether Replicant fetches partitioned tables.
+  - How replication of child partition tables occurs.
+
+  {{< columns >}}
+  ##### `true`
+  - If you add parent partition table in the [filter file](#set-up-filter-configuration-optional), Replicant replicates all child partition tables to the destination.
+  - If you [enable INLINE DDL](#support-for-ddl-replication), Replicant can fetch data from child partitions created during replication. As long as you specify the parent table in the [filter file](#set-up-filter-configuration-optional), you can replicate the child partition tables as well; you don't have to specify the child partitions explicitly in the filter file. 
+
+  <--->
+
+  ##### `false`
+  - You can only replicate child partition table and not parent partition table.
+  - Replicant replicates only those child partition tables that you specify in the [filter file](#set-up-filter-configuration-optional).
+  - You cannot replicate parent partition table by adding it in the [filter file](#set-up-filter-configuration-optional).
+  {{< /columns >}}
+
 
   _Default: `false`._
+
+  {{< hint "info" >}}
+  **Note:** Currently, Replicant fetches only partitions of the table and doesn't support any sub-partition.
+  {{< /hint >}}
 
 ### Configure `realtime` replication
 For realtime replication, you must create a heartbeat table in the source PostgreSQL database.
@@ -328,36 +349,6 @@ For realtime replication, you must create a heartbeat table in the source Postgr
     ```
 
 For more information about the configuration parameters for `realtime` mode, see [Realtime mode]({{< ref "../configuration-files/extractor-reference#realtime-mode" >}}).
-
-#### Aditional real-time parameters
-
-`fetch-partition-tables`
-
-: `{true|false}`.
-
-  In real time replication, this parameter dictates the following:
-
-  - Whether Replicant fetches partitioned tables.
-  - How replication of child partition tables occurs.
-
-  {{< columns >}}
-  ##### `true`
-  If you add a parent partition table in the [filter file](#set-up-filter-configuration-optional), Replicant automatically replicates data of child partition tables and redirects data of child partition tables to the parent table in the destination. Therefore, the target database contains a single parent table.
-
-  Replciant redirects any DML you use on child table to the parent table on target.
-
-  <--->
-
-  ##### `false`
-  Replicant treats each partition as an independent table in the destination. Therefore, to repliate parent and child partition tables, you must include them in the [filter file](#set-up-filter-configuration-optional).
-  {{< /columns >}}
-
-
-  _Default: `false`._
-
-  {{< hint "info" >}}
-  **Note:** Currently, Replicant fetches only partitions of the table and doesn't support any sub-partition.
-  {{< /hint >}}
 
 #### Support for DDL replication
 Replicant [supports DDL replication for real-time PostgreSQL source]({{< ref "docs/sources/ddl-replication" >}}). For more information, [contact us](https://arcion.io/contact).
