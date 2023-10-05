@@ -146,7 +146,7 @@ The value of `log-reader-type` defaults to `STREAM`. If you choose `STREAM`, Rep
 
 {{< hint "warning" >}}
 **Important:** 
-- Make sure that the `max_connections` in PostgreSQL exceeds the `max_connections` in the preceding connection configuration file.
+- Make sure that [`max_connections` in PostgreSQL](https://www.postgresql.org/docs/current/runtime-config-connection.html#GUC-MAX-CONNECTIONS) exceeds the `max-connections` parameter in the preceding connection configuration file.
 - From versions 23.03.01.12 and later, 23.03.31 and later, `log-reader-type` is deprecated. Avoid specifying this parameter.
 {{< /hint >}}
 
