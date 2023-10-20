@@ -8,10 +8,9 @@ bookSearchExclude: true
 ---
 
 # Bidirectional conflict resolution setup for PostgreSQL-to-PostgreSQL pipeline
+For bidirectional replication, both PostgreSQL instances function as source and destination. Therefore, both instances must possess the appropriate permissions. In addition, you must set up [replication origin](https://www.postgresql.org/docs/current/replication-origins.html) in both PostgreSQL nodes. 
 
-For bi-directional replication, both postgresql instances function as source and destination. So it is necessary to have appropriate permissions on both instances. In addition, PostgreSql origin set up is needed to be done on both postgresql nodes. 
-
-The following diagram shows bidirectional replication topology. 
+The following diagram shows bidirectional replication topology:
 
 {{< mermaid class="text-center" >}}
 flowchart LR
@@ -26,74 +25,61 @@ flowchart LR
 
 {{< /mermaid >}}
 
-This section describes PostgreSQL node setup as well as Replicant setup for bidirectional replication.
+The following sections describe how to set up PostgreSQL nodes, PostgreSQL tables, and Replicant for bidirectional replication.
 
-## PostgreSQL setup
+## Set up PostgreSQL
 
 ### First node
 
-1. Create database permission for replication user: 
+1. Provide superuser privilege to query replication origin:
     ```SQL
-    ALTER USER replicate CREATEDB;
+    ALTER USER replicate WITH SUPERUSER;
     ```
 
-2. Create replication permission to replicate user: 
-    ```SQL	
-    ALTER USER replicate REPLICATION;
-    ```
-
-3. Create replication slot: 
+2. Create replication slot: 
     ```SQL
     SELECT 'init' FROM pg_create_logical_replication_slot('io_replicate', 'wal2json');
     ```
 
-4. Create replication origin with other node name: 
+3. Create replication origin with the other node name: 
     ```SQL
     SELECT pg_replication_origin_create('node2');
     ```
 
-5. Super permission to query replication origin:
+### Second node
+1. Provide superuser privilege for permission to query replication origin:
     ```SQL
     ALTER USER replicate WITH SUPERUSER;
     ```
 
-### Second node
-
-1. Create database permission for replication user: 
-    ```SQL
-    ALTER USER replicate CREATEDB;
-    ```
-
-2. Create replication permission to replicate user: 
-    ```SQL	
-    ALTER USER replicate REPLICATION;
-    ```
-
-3. Create replication slot: 
+2. Create replication slot: 
     ```SQL
     SELECT 'init' FROM pg_create_logical_replication_slot('io_replicate', 'wal2json');
     ```
 
-4. Create replication origin with other node name: 
+3. Create replication origin with the other node name: 
     ```SQL
     SELECT pg_replication_origin_create('node1');
     ```
 
-5. Change to superuser for permission to query replication origin:
-    ```SQL
-    ALTER USER replicate WITH SUPERUSER;
-    ```
+### PostgreSQL tables
+Each table in bidirectional replication must possess a timestamp column. This column denotes insert and update timestamps of the row. Replicant uses this timestamp column to detect and resolve conflicts during replication. The applications must take responsibility to update the timpestamp column when status of the row changes. 
 
-## Replication configuration
-We need to specify replication names and filter node names in the Extractor configuration file for both directions. We use the following two parameters to specify node names and filter node names:
+You must also make sure that clocks in both PostgreSQL nodes stay in sync.  
 
-- **`node-name`**. Specifies the name of the node from which data is being extracted.
-- **`filter-node-name`**. Specifies the name of the node—records from this node are filtered out.
+## Configure replication
+For both directions, you must specify replication names and filter node names in the `realtime` section of the Extractor configuration file. Use the following two parameters to specify and filter node names:
 
-For better understanding, see the following samples for both nodes.
+`node-name`
+: Specifies the node name from which Replicant extracts data.
+
+`filter-node-name`
+: Specifies the node name from which Replicant filters out records.
+
+For better understanding, see the following samples for both nodes:
 
 ### First node
-```YAML
+```YAML {hl_lines=["6-7"]}
 realtime:
   threads: 4
   fetch-size-rows: 10000
@@ -104,7 +90,7 @@ realtime:
 ```
 
 ### Second node
-```YAML
+```YAML {hl_lines=["6-7"]}
 realtime:
   threads: 4
   fetch-size-rows: 10000
